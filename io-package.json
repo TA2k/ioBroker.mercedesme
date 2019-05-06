@@ -1,0 +1,80 @@
+{
+	"common": {
+		"name": "mercedesme",
+		"version": "0.0.1",
+		"news": {
+			"0.0.1": {
+				"en": "initial release",
+				"de": "Erstveröffentlichung",
+				"ru": "Начальная версия",
+				"pt": "lançamento inicial",
+				"nl": "Eerste uitgave",
+				"fr": "Première version",
+				"it": "Versione iniziale",
+				"es": "Versión inicial",
+				"pl": "Pierwsze wydanie",
+				"zh-cn": "首次出版"
+			}
+		},
+		"title": "Mercedes me",
+		"titleLang": {
+			"en": "Mercedes me",
+			"de": "Mercedes mich",
+			"ru": "Мерседес мне",
+			"pt": "Mercedes me",
+			"nl": "Mercedes mij",
+			"fr": "Mercedes moi",
+			"it": "Mercedes me",
+			"es": "Mercedes me",
+			"pl": "Mercedes me",
+			"zh-cn": "梅赛德斯我"
+		},
+		"desc": {
+			"en": "Mercedes me adapter for ioBroker",
+			"de": "Mercedes mir Adapter für ioBroker",
+			"ru": "Mercedes me адаптер для ioBroker",
+			"pt": "Mercedes me adaptador para ioBroker",
+			"nl": "Mercedes me-adapter voor ioBroker",
+			"fr": "Mercedes me adaptateur pour ioBroker",
+			"it": "Mercedes me adattatore per ioBroker",
+			"es": "Mercedes me adapta para ioBroker",
+			"pl": "Adapter Mercedes me do ioBroker",
+			"zh-cn": "梅赛德斯适用于ioBroker的适配器"
+		},
+		"authors": [
+			"tombox <tombox2020@gmail.com>"
+		],
+		"keywords": [
+			"mercedes",
+			"mercedes me",
+			"mercedes benz",
+			"daimler"
+		],
+		"license": "MIT",
+		"platform": "Javascript/Node.js",
+		"main": "main.js",
+		"icon": "mercedesme.png",
+		"enabled": true,
+		"extIcon": "https://raw.githubusercontent.com/ta2k/ioBroker.mercedesme/master/admin/mercedesme.png",
+		"readme": "https://github.com/ta2k/ioBroker.mercedesme/blob/master/README.md",
+		"loglevel": "info",
+		"mode": "daemon",
+		"type": "household",
+		"compact": true,
+		"materialize": true,
+		"dependencies": [
+			{
+				"admin": ">=3.0.0"
+			},
+			{
+				"js-controller": ">=1.4.2"
+			}
+		]
+	},
+	"native": {
+		"option1": true,
+		"option2": "42"
+	},
+	"objects": [],
+	"instanceObjects": []
+}
