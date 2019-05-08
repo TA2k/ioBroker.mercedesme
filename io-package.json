@@ -19,11 +19,11 @@
 		"title": "Mercedes me",
 		"titleLang": {
 			"en": "Mercedes me",
-			"de": "Mercedes mich",
-			"ru": "Мерседес мне",
+			"de": "Mercedes me",
+			"ru": "Мерседес me",
 			"pt": "Mercedes me",
-			"nl": "Mercedes mij",
-			"fr": "Mercedes moi",
+			"nl": "Mercedes me",
+			"fr": "Mercedes me",
 			"it": "Mercedes me",
 			"es": "Mercedes me",
 			"pl": "Mercedes me",
@@ -31,7 +31,7 @@
 		},
 		"desc": {
 			"en": "Mercedes me adapter for ioBroker",
-			"de": "Mercedes mir Adapter für ioBroker",
+			"de": "Mercedes me Adapter für ioBroker",
 			"ru": "Mercedes me адаптер для ioBroker",
 			"pt": "Mercedes me adaptador para ioBroker",
 			"nl": "Mercedes me-adapter voor ioBroker",
@@ -72,7 +72,8 @@
 	},
 	"native": {
 		"mail": "",
-		"password": ""
+		"password": "",
+		"interval": 60
 	},
 	"objects": [],
 	"instanceObjects": []
