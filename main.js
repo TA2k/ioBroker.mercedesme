@@ -52,6 +52,11 @@ class Mercedesme extends utils.Adapter {
 				this.getVehicleInfos().then(() => {}, () => {
 					this.log.error("Error getting Vehicle Infos via VHP");
 				});
+				setInterval(() => {
+					this.getVehicleInfos().then(() => {}, () => {
+						this.log.error("Error getting Vehicle Infos via VHP");
+					});
+				}, this.config.interval * 1000);
 			}, (
 
 			) => {
@@ -109,8 +114,7 @@ class Mercedesme extends utils.Adapter {
 	getVehicleInfos() {
 		return new Promise((resolve, reject) => {
 			this.vinArray.forEach(vin => {
-
-
+				this.log.debug("Get vehicle status");
 				request.get({
 					jar: this.jar,
 					url: "https://app.secure.mercedes-benz.com/backend/vehicles/" + vin + "/status"
@@ -281,11 +285,12 @@ class Mercedesme extends utils.Adapter {
 	login() {
 		return new Promise((resolve, reject) => {
 			this.loginVHPMBCON().then(() => {
-				this.loginSocketIo().then(() => {
-					resolve();
-				}, () => {
-					reject();
-				});
+				resolve();
+				// this.loginSocketIo().then(() => {
+				// 	resolve();
+				// }, () => {
+				// 	reject();
+				// });
 			}, () => {
 				reject();
 			});
