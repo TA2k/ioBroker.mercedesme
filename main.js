@@ -245,6 +245,9 @@ class Mercedesme extends utils.Adapter {
 				if (err) {
 					reject();
 				}
+				if (JSON.parse(body).vehicles.length === 0) {
+					this.log.warn("No vehicles found");
+				}
 				JSON.parse(body).vehicles.forEach(element => {
 					this.vinArray.push(element.vin);
 					this.setObjectNotExists(element.vin, {
