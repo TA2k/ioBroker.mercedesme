@@ -28,6 +28,7 @@ class Mercedesme extends utils.Adapter {
 		this.jar = request.jar();
 		this.socketIOCookie = "";
 		this.vinArray = [];
+		this.interval = null;
 	}
 
 	/**
@@ -52,7 +53,7 @@ class Mercedesme extends utils.Adapter {
 				this.getVehicleInfos().then(() => {}, () => {
 					this.log.error("Error getting Vehicle Infos via VHP");
 				});
-				setInterval(() => {
+				this.interval = setInterval(() => {
 					this.getVehicleInfos().then(() => {}, () => {
 						this.log.error("Error getting Vehicle Infos via VHP");
 					});
@@ -77,6 +78,7 @@ class Mercedesme extends utils.Adapter {
 	 */
 	onUnload(callback) {
 		try {
+			clearInterval(this.interval);
 			callback();
 		} catch (e) {
 			callback();
