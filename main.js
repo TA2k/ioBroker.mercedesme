@@ -145,7 +145,7 @@ class Mercedesme extends utils.Adapter {
 						if (value && value.indexOf && value.indexOf(":") === -1) {
 							value = isNaN(parseFloat(value)) === true ? value : parseFloat(value);
 						}
-						this.setState(vin + ".data." + element, value);
+						this.setState(vin + ".data." + element, value, true);
 					}
 					resolve();
 				});
@@ -187,7 +187,7 @@ class Mercedesme extends utils.Adapter {
 						if (value && value.indexOf && value.indexOf(":") === -1) {
 							value = isNaN(parseFloat(value)) === true ? value : parseFloat(value);
 						}
-						this.setState(vin + ".details." + element, value);
+						this.setState(vin + ".details." + element, value, true);
 					}
 					resolve();
 				});
@@ -227,7 +227,7 @@ class Mercedesme extends utils.Adapter {
 						if (value && value.indexOf && value.indexOf(":") === -1) {
 							value = isNaN(parseFloat(value)) === true ? value : parseFloat(value);
 						}
-						this.setState(vin + ".location." + element, value);
+						this.setState(vin + ".location." + element, value, true);
 					}
 					resolve();
 				});
@@ -274,10 +274,10 @@ class Mercedesme extends utils.Adapter {
 							native: {}
 						});
 						if (Array.isArray(element[key])) {
-							this.setState(element.vin + ".general." + key, JSON.stringify(element[key]));
+							this.setState(element.vin + ".general." + key, JSON.stringify(element[key]), true);
 						} else {
 
-							this.setState(element.vin + ".general." + key, element[key]);
+							this.setState(element.vin + ".general." + key, element[key], true);
 						}
 					}
 
