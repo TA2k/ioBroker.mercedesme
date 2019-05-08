@@ -55,15 +55,14 @@
 		"main": "main.js",
 		"icon": "mercedesme.png",
 		"enabled": true,
-		"extIcon": "https://raw.githubusercontent.com/ta2k/ioBroker.mercedesme/master/admin/mercedesme.png",
-		"readme": "https://github.com/ta2k/ioBroker.mercedesme/blob/master/README.md",
+		"extIcon": "https://raw.githubusercontent.com/TA2k/ioBroker.mercedesme/master/admin/mercedesme.png",
+		"readme": "https://github.com/TA2k/ioBroker.mercedesme/blob/master/README.md",
 		"loglevel": "info",
 		"mode": "daemon",
 		"type": "household",
 		"compact": true,
 		"materialize": true,
-		"dependencies": [
-			{
+		"dependencies": [{
 				"admin": ">=3.0.0"
 			},
 			{
@@ -72,8 +71,8 @@
 		]
 	},
 	"native": {
-		"option1": true,
-		"option2": "42"
+		"mail": "",
+		"password": ""
 	},
 	"objects": [],
 	"instanceObjects": []

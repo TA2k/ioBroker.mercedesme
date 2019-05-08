@@ -1,14 +1,15 @@
 ![Logo](admin/mercedesme.png)
+
 # ioBroker.mercedesme
 
 [![NPM version](http://img.shields.io/npm/v/iobroker.mercedesme.svg)](https://www.npmjs.com/package/iobroker.mercedesme)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.mercedesme.svg)](https://www.npmjs.com/package/iobroker.mercedesme)
-[![Dependency Status](https://img.shields.io/david/ta2k/iobroker.mercedesme.svg)](https://david-dm.org/ta2k/iobroker.mercedesme)
-[![Known Vulnerabilities](https://snyk.io/test/github/ta2k/ioBroker.mercedesme/badge.svg)](https://snyk.io/test/github/ta2k/ioBroker.mercedesme)
+[![Dependency Status](https://img.shields.io/david/TA2k/iobroker.mercedesme.svg)](https://david-dm.org/TA2k/iobroker.mercedesme)
+[![Known Vulnerabilities](https://snyk.io/test/github/TA2k/ioBroker.mercedesme/badge.svg)](https://snyk.io/test/github/TA2k/ioBroker.mercedesme)
 
 [![NPM](https://nodei.co/npm/iobroker.mercedesme.png?downloads=true)](https://nodei.co/npm/iobroker.mercedesme/)
 
-**Tests:**: [![Travis-CI](http://img.shields.io/travis/ta2k/ioBroker.mercedesme/master.svg)](https://travis-ci.org/ta2k/ioBroker.mercedesme)
+**Tests:**: [![Travis-CI](http://img.shields.io/travis/TA2k/ioBroker.mercedesme/master.svg)](https://travis-ci.org/TA2k/ioBroker.mercedesme)
 
 ## mercedesme adapter for ioBroker
 
@@ -17,9 +18,11 @@ Mercedes me adapter for ioBroker
 ## Changelog
 
 ### 0.0.1
-* (tombox) initial release
+
+- (tombox) initial release
 
 ## License
+
 MIT License
 
 Copyright (c) 2019 tombox

@@ -1,26 +1,41 @@
 {
-  "name": "iobroker.mercedesme",
-  "version": "0.0.1",
-  "description": "Mercedes me adapter for ioBroker",
+  "_from": "https://github.com/TA2k/ioBroker.mercedesme/tarball/master",
+  "_id": "iobroker.mercedesme@0.0.1",
+  "_inBundle": false,
+  "_integrity": "sha512-INset9RPVCfjqcsHWWRlezeMWJPKtPeG1ZKZTJJnj4fOYKLIrLNx0pl/1YbYbiGKoWZnO9szLfBFph1t3m7DiA==",
+  "_location": "/iobroker.mercedesme",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "remote",
+    "raw": "https://github.com/TA2k/ioBroker.mercedesme/tarball/master",
+    "rawSpec": "https://github.com/TA2k/ioBroker.mercedesme/tarball/master",
+    "saveSpec": "https://github.com/TA2k/ioBroker.mercedesme/tarball/master",
+    "fetchSpec": "https://github.com/TA2k/ioBroker.mercedesme/tarball/master"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://github.com/TA2k/ioBroker.mercedesme/tarball/master",
+  "_shasum": "57f548797b9f6d93e74f645bfb97a125cb29306e",
+  "_spec": "https://github.com/TA2k/ioBroker.mercedesme/tarball/master",
+  "_where": "/usr/local/iobroker",
   "author": {
     "name": "tombox",
     "email": "tombox2020@gmail.com"
   },
-  "homepage": "https://github.com/ta2k/ioBroker.mercedesme",
-  "license": "MIT",
-  "keywords": [
-    "mercedes",
-    "mercedes me",
-    "mercedes benz",
-    "daimler"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ta2k/ioBroker.mercedesme"
+  "bugs": {
+    "url": "https://github.com/TA2k/ioBroker.mercedesme/issues"
   },
+  "bundleDependencies": false,
   "dependencies": {
-    "@iobroker/adapter-core": "^1.0.3"
+    "@iobroker/adapter-core": "^1.0.3",
+    "jsdom": "^15.0.0",
+    "request": "^2.88.0",
+    "socket.io": "^2.2.0"
   },
+  "deprecated": false,
+  "description": "Mercedes me adapter for ioBroker",
   "devDependencies": {
     "@iobroker/testing": "^1.2.0",
     "@types/chai": "^4.1.7",
@@ -41,18 +56,28 @@
     "sinon": "^7.3.2",
     "sinon-chai": "^3.3.0"
   },
+  "homepage": "https://github.com/TA2k/ioBroker.mercedesme",
+  "keywords": [
+    "mercedes",
+    "mercedes me",
+    "mercedes benz",
+    "daimler"
+  ],
+  "license": "MIT",
   "main": "main.js",
+  "name": "iobroker.mercedesme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TA2k/ioBroker.mercedesme.git"
+  },
   "scripts": {
+    "lint": "npm run lint:js",
+    "lint:js": "eslint",
+    "test": "npm run test:js && npm run test:package",
+    "test:integration": "mocha test/integration --exit",
     "test:js": "mocha --opts test/mocha.custom.opts",
     "test:package": "mocha test/package --exit",
-    "test:unit": "mocha test/unit --exit",
-    "test:integration": "mocha test/integration --exit",
-    "test": "npm run test:js && npm run test:package",
-    "lint": "npm run lint:js",
-    "lint:js": "eslint"
+    "test:unit": "mocha test/unit --exit"
   },
-  "bugs": {
-    "url": "https://github.com/ta2k/ioBroker.mercedesme/issues"
-  },
-  "readmeFilename": "README.md"
+  "version": "0.0.1"
 }

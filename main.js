@@ -1,16 +1,15 @@
 "use strict";
-
 /*
  * Created with @iobroker/create-adapter v1.12.1
  */
 
-// The adapter-core module gives you access to the core ioBroker functions
-// you need to create an adapter
 const utils = require("@iobroker/adapter-core");
-
-// Load your modules here, e.g.:
-// const fs = require("fs");
-
+const io = require("socket.io-client");
+const request = require("request");
+const jsdom = require("jsdom");
+const {
+	JSDOM
+} = jsdom;
 class Mercedesme extends utils.Adapter {
 
 	/**
@@ -26,6 +25,9 @@ class Mercedesme extends utils.Adapter {
 		this.on("stateChange", this.onStateChange.bind(this));
 		// this.on("message", this.onMessage.bind(this));
 		this.on("unload", this.onUnload.bind(this));
+		this.jar = request.jar();
+		this.socketIOCookie = "";
+		this.vinArray = [];
 	}
 
 	/**
@@ -36,49 +38,32 @@ class Mercedesme extends utils.Adapter {
 
 		// The adapters config (in the instance object everything under the attribute "native") is accessible via
 		// this.config:
-		this.log.info("config option1: " + this.config.option1);
-		this.log.info("config option2: " + this.config.option2);
 
-		/*
-		For every state in the system there has to be also an object of type state
-		Here a simple template for a boolean variable named "testVariable"
-		Because every adapter instance uses its own unique namespace variable names can't collide with other adapters variables
-		*/
-		await this.setObjectAsync("testVariable", {
-			type: "state",
-			common: {
-				name: "testVariable",
-				type: "boolean",
-				role: "indicator",
-				read: true,
-				write: true,
-			},
-			native: {},
+		this.login().then(() => {
+			this.log.debug("Login successful");
+			this.setState("info.connection", true, true);
+			this.getVehicles().then(() => {
+				this.getVehicleDetails().then(() => {}, () => {
+					this.log.error("Error getting Vehicle Details via VHP");
+				});
+				this.getVehicleLocation().then(() => {}, () => {
+					this.log.error("Error getting Vehicle Location via VHP");
+				});
+				this.getVehicleInfos().then(() => {}, () => {
+					this.log.error("Error getting Vehicle Infos via VHP");
+				});
+			}, (
+
+			) => {
+				this.log.error("Error getting Vehicles");
+			});
+
+		}, () => {
+			this.log.error("Login Failed");
+			this.setState("info.connection", false, true);
 		});
 
-		// in this template all states changes inside the adapters namespace are subscribed
 		this.subscribeStates("*");
-
-		/*
-		setState examples
-		you will notice that each setState will cause the stateChange event to fire (because of above subscribeStates cmd)
-		*/
-		// the variable testVariable is set to true as command (ack=false)
-		await this.setStateAsync("testVariable", true);
-
-		// same thing, but the value is flagged "ack"
-		// ack should be always set to true if the value is received from or acknowledged from the target system
-		await this.setStateAsync("testVariable", { val: true, ack: true });
-
-		// same thing, but the state is deleted after 30s (getState will return null afterwards)
-		await this.setStateAsync("testVariable", { val: true, ack: true, expire: 30 });
-
-		// examples for the checkPassword/checkGroup functions
-		let result = await this.checkPasswordAsync("admin", "iobroker");
-		this.log.info("check user admin pw ioboker: " + result);
-
-		result = await this.checkGroupAsync("admin", "admin");
-		this.log.info("check group user admin group admin: " + result);
 	}
 
 	/**
@@ -87,7 +72,6 @@ class Mercedesme extends utils.Adapter {
 	 */
 	onUnload(callback) {
 		try {
-			this.log.info("cleaned everything up...");
 			callback();
 		} catch (e) {
 			callback();
@@ -102,10 +86,9 @@ class Mercedesme extends utils.Adapter {
 	onObjectChange(id, obj) {
 		if (obj) {
 			// The object was changed
-			this.log.info(`object ${id} changed: ${JSON.stringify(obj)}`);
 		} else {
 			// The object was deleted
-			this.log.info(`object ${id} deleted`);
+
 		}
 	}
 
@@ -117,30 +100,299 @@ class Mercedesme extends utils.Adapter {
 	onStateChange(id, state) {
 		if (state) {
 			// The state was changed
-			this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
+
 		} else {
 			// The state was deleted
-			this.log.info(`state ${id} deleted`);
+
 		}
 	}
+	getVehicleInfos() {
+		return new Promise((resolve, reject) => {
+			this.vinArray.forEach(vin => {
 
-	// /**
-	//  * Some message was sent to this instance over message box. Used by email, pushover, text2speech, ...
-	//  * Using this method requires "common.message" property to be set to true in io-package.json
-	//  * @param {ioBroker.Message} obj
-	//  */
-	// onMessage(obj) {
-	// 	if (typeof obj === "object" && obj.message) {
-	// 		if (obj.command === "send") {
-	// 			// e.g. send email or pushover or whatever
-	// 			this.log.info("send command");
 
-	// 			// Send response in callback if required
-	// 			if (obj.callback) this.sendTo(obj.from, obj.command, "Message received", obj.callback);
-	// 		}
-	// 	}
-	// }
+				request.get({
+					jar: this.jar,
+					url: "https://app.secure.mercedes-benz.com/backend/vehicles/" + vin + "/status"
+				}, (err, resp, body) => {
+					if (err) {
+						reject();
+					}
+					const data = JSON.parse(body).data;
+					for (const element in data) {
+						if (data[element].status === 4) {
+							//return;
+						}
+						this.setObjectNotExists(vin + ".data." + element, {
+							type: 'state',
+							common: {
+								name: element,
+								type: 'mixed',
+								role: 'indicator',
+								write: false,
+								read: true
+							},
+							native: {}
+						});
 
+						let value = data[element].value;
+						if (value && value.indexOf && value.indexOf(":") === -1) {
+							value = isNaN(parseFloat(value)) === true ? value : parseFloat(value);
+						}
+						this.setState(vin + ".data." + element, value);
+					}
+					resolve();
+				});
+			});
+
+		});
+	}
+
+	getVehicleDetails() {
+		return new Promise((resolve, reject) => {
+			this.vinArray.forEach(vin => {
+
+
+				request.get({
+					jar: this.jar,
+					url: "https://app.secure.mercedes-benz.com/backend/vehicles/" + vin + "/converant"
+				}, (err, resp, body) => {
+					if (err) {
+						reject();
+					}
+					const data = JSON.parse(body);
+					for (const element in data) {
+						if (data[element].status === 4) {
+							//return;
+						}
+						this.setObjectNotExists(vin + ".details." + element, {
+							type: 'state',
+							common: {
+								name: element,
+								type: 'mixed',
+								role: 'indicator',
+								write: false,
+								read: true
+							},
+							native: {}
+						});
+
+						let value = data[element];
+						if (value && value.indexOf && value.indexOf(":") === -1) {
+							value = isNaN(parseFloat(value)) === true ? value : parseFloat(value);
+						}
+						this.setState(vin + ".details." + element, value);
+					}
+					resolve();
+				});
+			});
+
+		});
+	}
+
+	getVehicleLocation() {
+		return new Promise((resolve, reject) => {
+			this.vinArray.forEach(vin => {
+				request.get({
+					jar: this.jar,
+					url: "https://app.secure.mercedes-benz.com/backend/vehicles/" + vin + "/location/v2"
+				}, (err, resp, body) => {
+					if (err) {
+						reject();
+					}
+					const data = JSON.parse(body).data;
+					for (const element in data) {
+						if (data[element].status === 4) {
+							//return;
+						}
+						this.setObjectNotExists(vin + ".location." + element, {
+							type: 'state',
+							common: {
+								name: element,
+								type: 'mixed',
+								role: 'indicator',
+								write: false,
+								read: true
+							},
+							native: {}
+						});
+
+						let value = data[element].value;
+						if (value && value.indexOf && value.indexOf(":") === -1) {
+							value = isNaN(parseFloat(value)) === true ? value : parseFloat(value);
+						}
+						this.setState(vin + ".location." + element, value);
+					}
+					resolve();
+				});
+			});
+		});
+	}
+	getVehicles() {
+		return new Promise((resolve, reject) => {
+			request.get({
+				jar: this.jar,
+				url: "https://app.secure.mercedes-benz.com/backend/users/identity"
+
+
+			}, (err, resp, body) => {
+				if (err) {
+					reject();
+				}
+				JSON.parse(body).vehicles.forEach(element => {
+					this.vinArray.push(element.vin);
+					this.setObjectNotExists(element.vin, {
+						type: "state",
+						common: {
+							name: element.licenceplate,
+							role: "indicator",
+							type: "mixed",
+							write: false,
+							read: true
+						},
+						native: {}
+					});
+					for (const key in element) {
+						this.setObjectNotExists(element.vin + ".general." + key, {
+							type: 'state',
+							common: {
+								name: key,
+								type: 'mixed',
+								role: 'indicator',
+								write: false,
+								read: true
+							},
+							native: {}
+						});
+						if (Array.isArray(element[key])) {
+							this.setState(element.vin + ".general." + key, JSON.stringify(element[key]));
+						} else {
+
+							this.setState(element.vin + ".general." + key, element[key]);
+						}
+					}
+
+				});
+				resolve();
+			});
+		});
+
+	}
+	login() {
+		return new Promise((resolve, reject) => {
+			this.loginVHPMBCON().then(() => {
+				this.loginSocketIo().then(() => {
+					resolve();
+				}, () => {
+					reject();
+				});
+			}, () => {
+				reject();
+			});
+		});
+
+	}
+	loginVHPMBCON() {
+		return new Promise((resolve, reject) => {
+			request.get({
+				jar: this.jar,
+				url: "https://app.secure.mercedes-benz.com//session/login?app-id=VHPMBCON.PRODEC",
+
+			}, (err, resp, body) => {
+
+				const dom = new JSDOM(body);
+				const form = {};
+				for (const formElement of dom.window.document.querySelector("#formLogin").children) {
+					if (formElement.type === "hidden") {
+						form[formElement.name] = formElement.value;
+					}
+				}
+				if (!this.config.mail || !this.config.password) {
+					this.log.error("Missing mail or password");
+					reject();
+				}
+				this.log.debug(JSON.stringify(form));
+				form["username"] = this.config.mail;
+				form["password"] = this.config.password;
+				form["remember-me"] = 1;
+				request.post({
+					jar: this.jar,
+					url: "https://login.secure.mercedes-benz.com/wl/login",
+					form: form,
+					followAllRedirects: true
+				}, (err, resp, body) => {
+					if (!this.jar._jar.store.idx["login.secure.mercedes-benz.com"]["/"] || !this.jar._jar.store.idx["login.secure.mercedes-benz.com"]["/"].SSOTOKEN) {
+						this.log.error("Login Failed. Password wrong or manual login required.");
+						reject();
+					}
+					const consentForm = {};
+					const dom = new JSDOM(body);
+					for (const formElement of dom.window.document.querySelector("form").children) {
+						if (formElement.type === "hidden") {
+							consentForm[formElement.name] = formElement.value;
+						}
+					}
+
+
+					this.log.debug(JSON.stringify(consentForm));
+					request.post({
+						jar: this.jar,
+						url: "https://api.secure.mercedes-benz.com/oidc10/auth/oauth/v2/authorize/consent",
+						form: consentForm,
+						followAllRedirects: true
+					}, (err, resp, body) => {
+						this.log.debug(body)
+						if (!err) {
+							resolve();
+						} else {
+							reject();
+						}
+					});
+				});
+			});
+		});
+	}
+	loginSocketIo() {
+		return new Promise((resolve, reject) => {
+			request.get({
+				jar: this.jar,
+				url: "https://frontend.meapp.secure.mercedes-benz.com/data-service/socket.io/?transport=polling"
+
+
+			}, (err, resp, body) => {
+				const consentForm = {};
+				const dom = new JSDOM(body);
+				for (const formElement of dom.window.document.querySelector("form").children) {
+					if (formElement.type === "hidden") {
+						consentForm[formElement.name] = formElement.value;
+					}
+				}
+
+
+				request.post({
+					jar: this.jar,
+					url: "https://api.secure.mercedes-benz.com/oidc10/auth/oauth/v2/authorize/consent",
+					form: consentForm,
+					followAllRedirects: true
+				}, (err, resp, body) => {
+					if (!err) {
+						const cookieLocation = this.jar._jar.store.idx["frontend.meapp.secure.mercedes-benz.com"]["/"];
+						if (cookieLocation && cookieLocation.MVPSESSIONID && cookieLocation.__VCAP_ID__ && cookieLocation["MVP-JSESSIONID"]) {
+							this.socketIOCookie = "MVPSESSIONID=" + cookieLocation.MVPSESSIONID.value;
+							this.socketIOCookie += ";__VCAP_ID__=" + cookieLocation.__VCAP_ID__.value;
+							this.socketIOCookie += ";MVP-JSESSIONID=" + cookieLocation["MVP-JSESSIONID"].value;
+						} else {
+							reject();
+						}
+						resolve();
+					} else {
+						reject();
+					}
+				});
+			});
+
+		});
+	}
 }
 
 if (module.parent) {
