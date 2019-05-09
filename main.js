@@ -63,6 +63,11 @@ class Mercedesme extends utils.Adapter {
 				this.interval = setInterval(() => {
 					this.getVehicleInfos().then(() => {}, () => {
 						this.log.error("Error getting Vehicle Infos via VHP");
+						this.loginVHPMBCON();
+					});
+					this.getVehicleLocation().then(() => {}, () => {
+						this.log.error("Error getting Vehicle Location via VHP");
+						this.loginVHPMBCON();
 					});
 				}, this.config.interval * 1000);
 			}, (
