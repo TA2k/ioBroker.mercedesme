@@ -17,6 +17,11 @@ Mercedes me adapter for ioBroker
 
 ## Changelog
 
+### 0.0.2
+
+- add remote control for Door lock, Window lock and preconditioning
+- Tür und Fenster öffnen und Vorklimatisierung hinzugefügt.
+
 ### 0.0.1
 
 - (tombox) initial release

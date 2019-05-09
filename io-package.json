@@ -1,8 +1,12 @@
 {
 	"common": {
 		"name": "mercedesme",
-		"version": "0.0.1",
+		"version": "0.0.2",
 		"news": {
+			"0.0.2": {
+				"en": "add remote control for Door lock, Window lock and preconditioning",
+				"de": "Tür und Fenster öffnen und Vorklimatisierung hinzugefügt."
+			},
 			"0.0.1": {
 				"en": "initial release",
 				"de": "Erstveröffentlichung",
