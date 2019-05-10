@@ -412,7 +412,7 @@ class Mercedesme extends utils.Adapter {
 						common: {
 							name: "Precondition",
 							type: "boolean",
-							role: "button",
+							role: "indicator",
 							write: true,
 						},
 						native: {}
@@ -423,7 +423,7 @@ class Mercedesme extends utils.Adapter {
 						common: {
 							name: "Door Lock",
 							type: "boolean",
-							role: "button",
+							role: "indicator",
 							write: true,
 						},
 						native: {}
@@ -433,7 +433,7 @@ class Mercedesme extends utils.Adapter {
 						common: {
 							name: "Window Lock",
 							type: "boolean",
-							role: "button",
+							role: "indicator",
 							write: true,
 						},
 						native: {}
