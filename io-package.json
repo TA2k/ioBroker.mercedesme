@@ -1,8 +1,12 @@
 {
 	"common": {
 		"name": "mercedesme",
-		"version": "0.0.2",
+		"version": "0.0.3",
 		"news": {
+			"0.0.3": {
+				"en": "fix no values after 1h bug, add realtime values like preconditioning",
+				"de": "Keine Daten nach 1h Bug gefixt. Echtzeitwerte hinzugefügt wie Vorklimatisierung"
+			},
 			"0.0.2": {
 				"en": "add remote control for Door lock, Window lock and preconditioning",
 				"de": "Tür und Fenster öffnen und Vorklimatisierung hinzugefügt."

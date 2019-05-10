@@ -17,6 +17,11 @@ Mercedes me adapter for ioBroker
 
 ## Changelog
 
+### 0.0.3
+
+- fix no values after 1h bug, add realtime values like preconditioning
+- Keine Daten nach 1h Bug gefixt. Echtzeitwerte hinzugefügt wie Vorklimatisierung
+
 ### 0.0.2
 
 - add remote control for Door lock, Window lock and preconditioning
