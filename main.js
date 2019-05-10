@@ -185,7 +185,7 @@ class Mercedesme extends utils.Adapter {
 					this.getStates("*", (err, states) => {
 						const pre = this.name + "." + this.instance;
 
-						if (states[pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending"].val) {
+						if (states[pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending"] && states[pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending"].val) {
 							return;
 						} else {
 							this.setState(vin + ".remote.DoorLock", state.val, true);
@@ -202,7 +202,7 @@ class Mercedesme extends utils.Adapter {
 						this.getStates("*", (err, states) => {
 							const pre = this.name + "." + this.instance;
 
-							if (states[pre + "." + vin + ".DOORLOCK_STATUS.switchWindows.isCommandPending"].val) {
+							if (states[pre + "." + vin + ".DOORLOCK_STATUS.switchWindows.isCommandPending"] && states[pre + "." + vin + ".DOORLOCK_STATUS.switchWindows.isCommandPending"].val) {
 								return;
 							} else {
 								if (states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontLeft"].val === 2 && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontRight"].val === 2 && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearLeft"].val === 2 && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearRight"].val === 2) {
