@@ -187,9 +187,9 @@ class Mercedesme extends utils.Adapter {
 
 						if (states[pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending"].val) {
 							return;
+						} else {
+							this.setState(vin + ".remote.DoorLock", state.val, true);
 						}
-
-						this.setState(vin + ".remote.DoorLock", state.val, true);
 					});
 				}
 				if (id.indexOf("isPrecondIllustrationActive") !== -1) {
@@ -204,9 +204,10 @@ class Mercedesme extends utils.Adapter {
 
 							if (states[pre + "." + vin + ".DOORLOCK_STATUS.switchWindows.isCommandPending"].val) {
 								return;
-							}
-							if (states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontLeft"].val === 2 && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontRight"].val === 2 && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearLeft"].val === 2 && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearRight"].val === 2) {
-								this.setState(vin + ".remote.WindowLock", true, true);
+							} else {
+								if (states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontLeft"].val === 2 && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontRight"].val === 2 && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearLeft"].val === 2 && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearRight"].val === 2) {
+									this.setState(vin + ".remote.WindowLock", true, true);
+								}
 							}
 						});
 					}
