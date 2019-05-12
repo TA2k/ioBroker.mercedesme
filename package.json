@@ -1,6 +1,6 @@
 {
   "_from": "https://github.com/TA2k/ioBroker.mercedesme/tarball/master",
-  "_id": "iobroker.mercedesme@0.0.3",
+  "_id": "iobroker.mercedesme@0.0.4",
   "_inBundle": false,
   "_integrity": "sha512-INset9RPVCfjqcsHWWRlezeMWJPKtPeG1ZKZTJJnj4fOYKLIrLNx0pl/1YbYbiGKoWZnO9szLfBFph1t3m7DiA==",
   "_location": "/iobroker.mercedesme",
@@ -79,5 +79,5 @@
     "test:package": "mocha test/package --exit",
     "test:unit": "mocha test/unit --exit"
   },
-  "version": "0.0.3"
+  "version": "0.0.4"
 }

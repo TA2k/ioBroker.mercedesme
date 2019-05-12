@@ -1,8 +1,12 @@
 {
 	"common": {
 		"name": "mercedesme",
-		"version": "0.0.3",
+		"version": "0.0.4",
 		"news": {
+			"0.0.4": {
+				"en": "relogin every hour, field to enter vin manually",
+				"de": "Relogin jede Stunde, Feld zum manuellen eintragen der FIN"
+			},
 			"0.0.3": {
 				"en": "fix no values after 1h bug, add realtime values like preconditioning",
 				"de": "Keine Daten nach 1h Bug gefixt. Echtzeitwerte hinzugefügt wie Vorklimatisierung"
@@ -81,6 +85,7 @@
 	"native": {
 		"mail": "",
 		"password": "",
+		"manuelvin": "",
 		"interval": 60
 	},
 	"objects": [],

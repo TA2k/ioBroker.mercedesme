@@ -30,6 +30,7 @@ class Mercedesme extends utils.Adapter {
 		this.vinArray = [];
 		this.socketConnections = {};
 		this.interval = null;
+		this.reAuthInterval = null;
 	}
 
 	/**
@@ -44,6 +45,10 @@ class Mercedesme extends utils.Adapter {
 		this.login().then(() => {
 			this.log.debug("Login successful");
 			this.setState("info.connection", true, true);
+
+			if (this.config.manuelvin) {
+				this.vinArray = this.config.manuelvin.split(/[ ,]+/);
+			}
 			this.getVehicles().then(() => {
 				this.vinArray.forEach((vin) => {
 					this.log.debug("Start " + vin);
@@ -70,6 +75,12 @@ class Mercedesme extends utils.Adapter {
 						this.loginVHPMBCON();
 					});
 				}, this.config.interval * 1000);
+				this.reAuthInterval = setInterval(() => {
+					this.reAuth().then(() => {
+						this.connectToSocketIo();
+					}, () => {});
+				}, 60 * 60 * 1000); //1h
+
 			}, (
 
 			) => {
@@ -91,6 +102,7 @@ class Mercedesme extends utils.Adapter {
 	onUnload(callback) {
 		try {
 			clearInterval(this.interval);
+			clearInterval(this.reAuthInterval);
 			callback();
 		} catch (e) {
 			callback();
@@ -288,31 +300,38 @@ class Mercedesme extends utils.Adapter {
 				}, (err, resp, body) => {
 					if (err) {
 						reject();
+						return;
 					}
-					const data = JSON.parse(body);
-					for (const element in data) {
-						if (data[element].status === 4) {
-							//return;
-						}
-						this.setObjectNotExists(vin + ".details." + element, {
-							type: "state",
-							common: {
-								name: element,
-								type: "mixed",
-								role: "indicator",
-								write: false,
-								read: true
-							},
-							native: {}
-						});
 
-						let value = data[element];
-						if (value && value.indexOf && value.indexOf(":") === -1) {
-							value = isNaN(parseFloat(value)) === true ? value : parseFloat(value);
+					try {
+						const data = JSON.parse(body);
+						for (const element in data) {
+							if (data[element].status === 4) {
+								//return;
+							}
+							this.setObjectNotExists(vin + ".details." + element, {
+								type: "state",
+								common: {
+									name: element,
+									type: "mixed",
+									role: "indicator",
+									write: false,
+									read: true
+								},
+								native: {}
+							});
+
+							let value = data[element];
+							if (value && value.indexOf && value.indexOf(":") === -1) {
+								value = isNaN(parseFloat(value)) === true ? value : parseFloat(value);
+							}
+							this.setState(vin + ".details." + element, value, true);
 						}
-						this.setState(vin + ".details." + element, value, true);
+						resolve();
+					} catch (error) {
+						reject()
+
 					}
-					resolve();
 				});
 			});
 
@@ -598,6 +617,9 @@ class Mercedesme extends utils.Adapter {
 	}
 
 	connectToSocketIo(vin) {
+		for (const sockets in this.socketConnections[vin]) {
+			this.socketConnections[vin][sockets].close();
+		}
 		this.socketConnections[vin] = {};
 		let doorSocket = null;
 		const zevSocket = io("https://frontend.meapp.secure.mercedes-benz.com", {
@@ -766,7 +788,7 @@ class Mercedesme extends utils.Adapter {
 	}
 
 	addSocketData(vin, name, data) {
-		this.log.debug("Parse: " + name)
+		this.log.debug("Parse: " + name + " " + vin)
 		try {
 			//const data = JSON.parse(dataString);
 			this.setObjectNotExists(vin + "." + name, {

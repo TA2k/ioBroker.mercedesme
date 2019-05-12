@@ -17,6 +17,11 @@ Mercedes me adapter for ioBroker
 
 ## Changelog
 
+### 0.0.4
+
+- relogin every hour, field to enter vin manually
+- Relogin jede Stunde, Feld zum manuellen eintragen der FIN
+
 ### 0.0.3
 
 - fix no values after 1h bug, add realtime values like preconditioning
