@@ -205,7 +205,6 @@ class Mercedesme extends utils.Adapter {
 								this.setState(vin + ".remote.DoorLock", state.val, true);
 							} else {
 								this.setState(vin + ".remote.DoorLock", states[pre + "." + vin + ".DOORLOCK_STATUS.overallLockStatus"], true);
-
 							}
 						}
 					});
@@ -224,9 +223,9 @@ class Mercedesme extends utils.Adapter {
 							if (states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontLeft"] && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontRight"] && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearLeft"] && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearRight"]) {
 								if (states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontLeft"].val === 2 && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontRight"].val === 2 && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearLeft"].val === 2 && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearRight"].val === 2) {
 									this.setState(vin + ".remote.WindowLock", true, true);
+								} else {
+									this.setState(vin + ".remote.WindowLock", false, true);
 								}
-							} else {
-								this.setState(vin + ".remote.WindowLock", false, true);
 							}
 						}
 					});
