@@ -132,6 +132,7 @@ class Mercedesme extends utils.Adapter {
 		if (state) {
 			const vin = id.split(".")[2];
 			if (!state.ack) {
+				this.log.debug(id + " " + state.val);
 				this.reAuth().then(() => {
 					if (id.indexOf("remote") !== -1 && !this.socketConnections[vin]) {
 						this.log.warn(JSON.stringify(this.socketConnections));
@@ -159,6 +160,7 @@ class Mercedesme extends utils.Adapter {
 								}
 							});
 						} else {
+							this.log.debug("unlock");
 							this.socketConnections[vin]["doorLock"].emit("command", {
 								"commandId": "DOORS_UNLOCK",
 								"data": {
@@ -179,6 +181,8 @@ class Mercedesme extends utils.Adapter {
 								}
 							});
 						} else {
+
+							this.log.debug("Wunlock");
 							this.socketConnections[vin]["doorLock"].emit("command", {
 								"commandId": "WINDOWS_OPEN",
 								"data": {
@@ -200,6 +204,7 @@ class Mercedesme extends utils.Adapter {
 						if (states[pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending"] && states[pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending"].val) {
 							return;
 						} else {
+							this.log.debug("Door:" + state.val + " " + states[pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending"].val);
 							this.setState(vin + ".remote.DoorLock", state.val, true);
 						}
 					});
@@ -217,6 +222,8 @@ class Mercedesme extends utils.Adapter {
 							if (states[pre + "." + vin + ".DOORLOCK_STATUS.switchWindows.isCommandPending"] && states[pre + "." + vin + ".DOORLOCK_STATUS.switchWindows.isCommandPending"].val) {
 								return;
 							} else {
+
+								this.log.debug("Window:" + state.val + " " + states[pre + "." + vin + ".DOORLOCK_STATUS.switchWindows.isCommandPending"].val);
 								if (states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontLeft"] && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontRight"] && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearLeft"] && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearRight"]) {
 									if (states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontLeft"].val === 2 && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontRight"].val === 2 && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearLeft"].val === 2 && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearRight"].val === 2) {
 										this.setState(vin + ".remote.WindowLock", true, true);
