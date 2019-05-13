@@ -132,7 +132,6 @@ class Mercedesme extends utils.Adapter {
 		if (state) {
 			const vin = id.split(".")[2];
 			if (!state.ack) {
-				this.log.debug(id + " " + state.val);
 				this.reAuth().then(() => {
 					if (id.indexOf("remote") !== -1 && !this.socketConnections[vin]) {
 						this.log.warn(JSON.stringify(this.socketConnections));
@@ -141,7 +140,7 @@ class Mercedesme extends utils.Adapter {
 					}
 					if (id.indexOf("Vorklimatisierung") !== -1) {
 						let command = "PRECOND_START";
-						if (state.val === false) {
+						if (!state.val || state.val === "false") {
 							command = "PRECOND_STOP";
 						}
 
@@ -151,16 +150,7 @@ class Mercedesme extends utils.Adapter {
 						});
 					}
 					if (id.indexOf("DoorLock") !== -1) {
-						if (state.val === true) {
-							this.socketConnections[vin]["doorLock"].emit("command", {
-								"commandId": "DOORS_LOCK",
-								"data": {
-									"message": "QUERY_STARTED_LOCK",
-									"sliderPosition": 0
-								}
-							});
-						} else {
-							this.log.debug("unlock");
+						if (!state.val || state.val === "false") {
 							this.socketConnections[vin]["doorLock"].emit("command", {
 								"commandId": "DOORS_UNLOCK",
 								"data": {
@@ -168,21 +158,19 @@ class Mercedesme extends utils.Adapter {
 									"sliderPosition": 1
 								}
 							});
+						} else {
+							this.socketConnections[vin]["doorLock"].emit("command", {
+								"commandId": "DOORS_LOCK",
+								"data": {
+									"message": "QUERY_STARTED_LOCK",
+									"sliderPosition": 0
+								}
+							});
 						}
 					}
 
 					if (id.indexOf("WindowLock") !== -1) {
-						if (state.val === true) {
-							this.socketConnections[vin]["doorLock"].emit("command", {
-								"commandId": "WINDOWS_CLOSE",
-								"data": {
-									"message": "QUERY_STARTED_CLOSED",
-									"sliderPosition": 0
-								}
-							});
-						} else {
-
-							this.log.debug("Wunlock");
+						if (!state.val || state.val === "false") {
 							this.socketConnections[vin]["doorLock"].emit("command", {
 								"commandId": "WINDOWS_OPEN",
 								"data": {
@@ -190,6 +178,15 @@ class Mercedesme extends utils.Adapter {
 									"sliderPosition": 1
 								}
 							});
+						} else {
+							this.socketConnections[vin]["doorLock"].emit("command", {
+								"commandId": "WINDOWS_CLOSE",
+								"data": {
+									"message": "QUERY_STARTED_CLOSED",
+									"sliderPosition": 0
+								}
+							});
+
 						}
 					}
 				}, () => {
@@ -197,14 +194,13 @@ class Mercedesme extends utils.Adapter {
 				});
 			} else {
 				//ACK Values
-				if (id.indexOf("overallLockStatus") !== -1) {
+				if (id.indexOf("overallLockStatus") !== -1 || id.indexOf("switchDoors.isCommandPending") !== -1) {
 					this.getStates("*", (err, states) => {
 						const pre = this.name + "." + this.instance;
 
 						if (states[pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending"] && states[pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending"].val) {
 							return;
 						} else {
-							this.log.debug("Door:" + state.val + " " + states[pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending"].val);
 							this.setState(vin + ".remote.DoorLock", state.val, true);
 						}
 					});
@@ -212,26 +208,24 @@ class Mercedesme extends utils.Adapter {
 				if (id.indexOf("isPrecondIllustrationActive") !== -1) {
 					this.setState(vin + ".remote.Vorklimatisierung", state.val, true);
 				}
-				if (id.indexOf("DOORLOCK_STATUS.windowStatus") !== -1) {
-					if (state.val !== 2) {
-						this.setState(vin + ".remote.WindowLock", false, true);
-					} else {
-						this.getStates("*", (err, states) => {
-							const pre = this.name + "." + this.instance;
+				if (id.indexOf("DOORLOCK_STATUS.windowStatus") !== -1 || id.indexOf("switchWindows.isCommandPending") !== -1) {
+					this.getStates("*", (err, states) => {
+						const pre = this.name + "." + this.instance;
 
-							if (states[pre + "." + vin + ".DOORLOCK_STATUS.switchWindows.isCommandPending"] && states[pre + "." + vin + ".DOORLOCK_STATUS.switchWindows.isCommandPending"].val) {
-								return;
-							} else {
+						if (states[pre + "." + vin + ".DOORLOCK_STATUS.switchWindows.isCommandPending"] && states[pre + "." + vin + ".DOORLOCK_STATUS.switchWindows.isCommandPending"].val) {
+							return;
+						} else {
 
-								this.log.debug("Window:" + state.val + " " + states[pre + "." + vin + ".DOORLOCK_STATUS.switchWindows.isCommandPending"].val);
-								if (states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontLeft"] && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontRight"] && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearLeft"] && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearRight"]) {
-									if (states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontLeft"].val === 2 && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontRight"].val === 2 && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearLeft"].val === 2 && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearRight"].val === 2) {
-										this.setState(vin + ".remote.WindowLock", true, true);
-									}
+							if (states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontLeft"] && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontRight"] && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearLeft"] && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearRight"]) {
+								if (states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontLeft"].val === 2 && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontRight"].val === 2 && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearLeft"].val === 2 && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearRight"].val === 2) {
+									this.setState(vin + ".remote.WindowLock", true, true);
 								}
+							} else {
+								this.setState(vin + ".remote.WindowLock", false, true);
 							}
-						});
-					}
+						}
+					});
+
 				}
 			}
 		} else {
@@ -411,6 +405,7 @@ class Mercedesme extends utils.Adapter {
 				if (err) {
 					reject();
 				}
+				this.log.debug(body)
 				if (!JSON.parse(body).vehicles || JSON.parse(body).vehicles.length === 0) {
 					this.log.warn("No vehicles found");
 				}
