@@ -201,7 +201,12 @@ class Mercedesme extends utils.Adapter {
 						if (states[pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending"] && states[pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending"].val) {
 							return;
 						} else {
-							this.setState(vin + ".remote.DoorLock", state.val, true);
+							if (id.indexOf("overallLockStatus") !== -1) {
+								this.setState(vin + ".remote.DoorLock", state.val, true);
+							} else {
+								this.setState(vin + ".remote.DoorLock", states[pre + "." + vin + ".DOORLOCK_STATUS.overallLockStatus"], true);
+
+							}
 						}
 					});
 				}
