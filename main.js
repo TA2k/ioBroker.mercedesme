@@ -78,7 +78,9 @@ class Mercedesme extends utils.Adapter {
 				this.reAuthInterval = setInterval(() => {
 					this.log.debug("Intervall reconnect");
 					this.reAuth().then(() => {
-						this.connectToSocketIo();
+						this.vinArray.forEach((vin) => {
+							this.connectToSocketIo(vin);
+						});
 					}, () => {});
 				}, 60 * 60 * 1000); //1h
 
