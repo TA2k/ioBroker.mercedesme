@@ -76,6 +76,7 @@ class Mercedesme extends utils.Adapter {
 					});
 				}, this.config.interval * 1000);
 				this.reAuthInterval = setInterval(() => {
+					this.log.debug("Intervall reconnect");
 					this.reAuth().then(() => {
 						this.connectToSocketIo();
 					}, () => {});
@@ -877,6 +878,7 @@ class Mercedesme extends utils.Adapter {
 				const dom = new JSDOM(body);
 				const form = {};
 				const formLogin = dom.window.document.querySelector("#formLogin");
+				let url = "https://login.secure.mercedes-benz.com/wl/login";
 				if (formLogin) {
 					this.log.debug("reAuthLogin");
 					for (const formElement of dom.window.document.querySelector("#formLogin").children) {
@@ -887,54 +889,58 @@ class Mercedesme extends utils.Adapter {
 					form["username"] = this.config.mail;
 					form["password"] = this.config.password;
 					form["remember-me"] = 1;
+				} else {
+
+					this.log.debug("reAuthNoForm");
+					url = "https://frontend.meapp.secure.mercedes-benz.com/reauthenticate";
+				}
+				request.post({
+					jar: this.jar,
+					url: url,
+					form: form,
+					followAllRedirects: true
+				}, (err, resp, body) => {
+
+					this.log.debug("reAuthConsent");
+					if (!this.jar._jar.store.idx["login.secure.mercedes-benz.com"]["/"] || !this.jar._jar.store.idx["login.secure.mercedes-benz.com"]["/"].SSOTOKEN) {
+						this.log.error("Login Failed. Password wrong or manual login required.");
+						reject();
+					}
+
+					const consentForm = {};
+					const dom = new JSDOM(body);
+					if (!dom.window.document.querySelector("form")) {
+						resolve();
+						return;
+					}
+					for (const formElement of dom.window.document.querySelector("form").children) {
+						if (formElement.type === "hidden") {
+							consentForm[formElement.name] = formElement.value;
+						}
+					}
 					request.post({
 						jar: this.jar,
-						url: "https://login.secure.mercedes-benz.com/wl/login",
-						form: form,
+						url: "https://api.secure.mercedes-benz.com/oidc10/auth/oauth/v2/authorize/consent",
+						form: consentForm,
 						followAllRedirects: true
 					}, (err, resp, body) => {
-						if (!this.jar._jar.store.idx["login.secure.mercedes-benz.com"]["/"] || !this.jar._jar.store.idx["login.secure.mercedes-benz.com"]["/"].SSOTOKEN) {
-							this.log.error("Login Failed. Password wrong or manual login required.");
+						this.log.debug("SocketIOCookies:" + this.socketIOCookie);
+						this.socketIOCookie = "";
+						const cookieLocation = this.jar._jar.store.idx["frontend.meapp.secure.mercedes-benz.com"]["/"];
+						for (const key in cookieLocation) {
+							this.socketIOCookie += key + "=" + cookieLocation[key].value + ";";
+						}
+
+						this.log.debug(this.socketIOCookie);
+						this.socketConnections[this.vinArray[0]]["doorLock"].io.engine.extraHeaders.cookie = this.socketIOCookie;
+						if (!err) {
+							resolve();
+						} else {
 							reject();
 						}
-
-						const consentForm = {};
-						const dom = new JSDOM(body);
-						if (!dom.window.document.querySelector("form")) {
-							resolve();
-							return;
-						}
-						for (const formElement of dom.window.document.querySelector("form").children) {
-							if (formElement.type === "hidden") {
-								consentForm[formElement.name] = formElement.value;
-							}
-						}
-						request.post({
-							jar: this.jar,
-							url: "https://api.secure.mercedes-benz.com/oidc10/auth/oauth/v2/authorize/consent",
-							form: consentForm,
-							followAllRedirects: true
-						}, (err, resp, body) => {
-							this.log.debug(this.socketIOCookie);
-							this.socketIOCookie = "";
-							const cookieLocation = this.jar._jar.store.idx["frontend.meapp.secure.mercedes-benz.com"]["/"];
-							for (const key in cookieLocation) {
-								this.socketIOCookie += key + "=" + cookieLocation[key].value + ";";
-							}
-
-							this.log.debug(this.socketIOCookie);
-							this.socketConnections[this.vinArray[0]]["doorLock"].io.engine.extraHeaders.cookie = this.socketIOCookie;
-							if (!err) {
-								resolve();
-							} else {
-								reject();
-							}
-						});
 					});
-				} else {
-					this.log.debug(body);
-					resolve();
-				}
+				});
+
 			});
 		});
 	}
