@@ -1,8 +1,12 @@
 {
 	"common": {
 		"name": "mercedesme",
-		"version": "0.0.4",
+		"version": "0.0.5",
 		"news": {
+			"0.0.5": {
+				"en": "fix issue no data after 1h",
+				"de": "Problem behoben, dass keine Daten nach 1h kommen."
+			},
 			"0.0.4": {
 				"en": "relogin every hour, field to enter vin manually",
 				"de": "Relogin jede Stunde, Feld zum manuellen eintragen der FIN"

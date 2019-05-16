@@ -934,7 +934,10 @@ class Mercedesme extends utils.Adapter {
 						}
 
 						this.log.debug(this.socketIOCookie);
-						this.socketConnections[this.vinArray[0]]["doorLock"].io.engine.extraHeaders.cookie = this.socketIOCookie;
+						if (this.socketConnections[this.vinArray[0]]["doorLock"]) {
+							this.socketConnections[this.vinArray[0]]["doorLock"].io.engine.extraHeaders.cookie = this.socketIOCookie;
+						}
+
 						if (!err) {
 							resolve();
 						} else {

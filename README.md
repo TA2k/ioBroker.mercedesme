@@ -17,6 +17,10 @@ Mercedes me adapter for ioBroker
 
 ## Changelog
 
+### 0.0.5
+
+- fix issue no data after 1h
+
 ### 0.0.4
 
 - relogin every hour, field to enter vin manually
