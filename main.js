@@ -748,7 +748,7 @@ class Mercedesme extends utils.Adapter {
 		});
 
 		preDoorSocket.on("connect", () => {
-			this.socketConnections[vin]["preDoorLock"] = preDoorSocket;
+			this.socketConnections[vin]["doorLock"] = preDoorSocket;
 		});
 
 		preDoorSocket.on("CLIENT_ID", (data) => {
