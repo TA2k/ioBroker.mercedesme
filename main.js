@@ -751,6 +751,15 @@ class Mercedesme extends utils.Adapter {
 			this.socketConnections[vin]["doorLock"] = preDoorSocket;
 		});
 
+
+		preDoorSocket.on("SET_DOORLOCK_DATA", (data) => {
+
+			this.addSocketData(vin, "DOORLOCK_STATUS", data.doorlockStatus);
+		});
+		preDoorSocket.on("ACP_ERROR_UNAUTHORIZED", (data) => {
+			this.log.debug("ACP_ERROR");
+			this.reAuth();
+		});
 		preDoorSocket.on("CLIENT_ID", (data) => {
 			this.log.debug("CLIENT_ID");
 			preDoorSocket.close();
