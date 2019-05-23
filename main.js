@@ -791,6 +791,7 @@ class Mercedesme extends utils.Adapter {
 			}, function (err, resp, body) {});
 
 			doorSocket.on("connect", () => {
+				this.socketConnections[vin]["doorLock"].close(); //close pre
 				this.socketConnections[vin]["doorLock"] = doorSocket;
 			});
 			doorSocket.on("SET_DOORLOCK_DATA", (data) => {
