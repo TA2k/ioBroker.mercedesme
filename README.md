@@ -17,6 +17,10 @@ Mercedes me adapter for ioBroker
 
 ## Changelog
 
+### 0.0.6
+
+- fix issue with door data
+
 ### 0.0.5
 
 - fix issue no data after 1h

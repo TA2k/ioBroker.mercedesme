@@ -1,8 +1,12 @@
 {
 	"common": {
 		"name": "mercedesme",
-		"version": "0.0.5",
+		"version": "0.0.6",
 		"news": {
+			"0.0.6": {
+				"en": "fix issue with door data",
+				"de": "Problem mit Türstatus behoben."
+			},
 			"0.0.5": {
 				"en": "fix issue no data after 1h",
 				"de": "Problem behoben, dass keine Daten nach 1h kommen."
