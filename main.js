@@ -136,62 +136,64 @@ class Mercedesme extends utils.Adapter {
 			const vin = id.split(".")[2];
 			if (!state.ack) {
 				this.reAuth().then(() => {
-					if (id.indexOf("remote") !== -1 && !this.socketConnections[vin]) {
-						this.log.warn(JSON.stringify(this.socketConnections));
-						this.log.warn("No socket connection found for " + vin);
-						return;
-					}
-					if (id.indexOf("Vorklimatisierung") !== -1) {
-						let command = "PRECOND_START";
-						if (!state.val || state.val === "false") {
-							command = "PRECOND_STOP";
+					this.connectDoorSockets(vin).then(() => {
+						if (id.indexOf("remote") !== -1 && !this.socketConnections[vin]) {
+							this.log.warn(JSON.stringify(this.socketConnections));
+							this.log.warn("No socket connection found for " + vin);
+							return;
 						}
+						if (id.indexOf("Vorklimatisierung") !== -1) {
+							let command = "PRECOND_START";
+							if (!state.val || state.val === "false") {
+								command = "PRECOND_STOP";
+							}
 
-						this.socketConnections[vin]["zev"].emit("command", {
-							"commandId": command,
-							"data": null
-						});
-					}
-					if (id.indexOf("DoorLock") !== -1) {
-						if (!state.val || state.val === "false") {
-							this.socketConnections[vin]["doorLock"].emit("command", {
-								"commandId": "DOORS_UNLOCK",
-								"data": {
-									"message": "QUERY_STARTED_UNLOCK",
-									"sliderPosition": 1
-								}
-							});
-						} else {
-							this.socketConnections[vin]["doorLock"].emit("command", {
-								"commandId": "DOORS_LOCK",
-								"data": {
-									"message": "QUERY_STARTED_LOCK",
-									"sliderPosition": 0
-								}
+							this.socketConnections[vin]["zev"].emit("command", {
+								"commandId": command,
+								"data": null
 							});
 						}
-					}
-
-					if (id.indexOf("WindowLock") !== -1) {
-						if (!state.val || state.val === "false") {
-							this.socketConnections[vin]["doorLock"].emit("command", {
-								"commandId": "WINDOWS_OPEN",
-								"data": {
-									"message": "QUERY_STARTED_OPEN",
-									"sliderPosition": 1
-								}
-							});
-						} else {
-							this.socketConnections[vin]["doorLock"].emit("command", {
-								"commandId": "WINDOWS_CLOSE",
-								"data": {
-									"message": "QUERY_STARTED_CLOSED",
-									"sliderPosition": 0
-								}
-							});
-
+						if (id.indexOf("DoorLock") !== -1) {
+							if (!state.val || state.val === "false") {
+								this.socketConnections[vin]["doorLock"].emit("command", {
+									"commandId": "DOORS_UNLOCK",
+									"data": {
+										"message": "QUERY_STARTED_UNLOCK",
+										"sliderPosition": 1
+									}
+								});
+							} else {
+								this.socketConnections[vin]["doorLock"].emit("command", {
+									"commandId": "DOORS_LOCK",
+									"data": {
+										"message": "QUERY_STARTED_LOCK",
+										"sliderPosition": 0
+									}
+								});
+							}
 						}
-					}
+
+						if (id.indexOf("WindowLock") !== -1) {
+							if (!state.val || state.val === "false") {
+								this.socketConnections[vin]["doorLock"].emit("command", {
+									"commandId": "WINDOWS_OPEN",
+									"data": {
+										"message": "QUERY_STARTED_OPEN",
+										"sliderPosition": 1
+									}
+								});
+							} else {
+								this.socketConnections[vin]["doorLock"].emit("command", {
+									"commandId": "WINDOWS_CLOSE",
+									"data": {
+										"message": "QUERY_STARTED_CLOSED",
+										"sliderPosition": 0
+									}
+								});
+
+							}
+						}
+					});
 				}, () => {
 					this.log.error("ReAuth Error");
 				});
@@ -631,6 +633,13 @@ class Mercedesme extends utils.Adapter {
 		}
 		this.socketConnections[vin] = {};
 		let doorSocket = null;
+		this.socketIOCookie = "";
+		const cookieLocation = this.jar._jar.store.idx["frontend.meapp.secure.mercedes-benz.com"]["/"];
+		for (const key in cookieLocation) {
+			if (key != "mvpClientId") {
+				this.socketIOCookie += key + "=" + cookieLocation[key].value + ";";
+			}
+		}
 		const zevSocket = io("https://frontend.meapp.secure.mercedes-benz.com", {
 			path: "/data-service/socket.io",
 			query: {
@@ -734,44 +743,16 @@ class Mercedesme extends utils.Adapter {
 			this.socketConnections[vin]["remoteStatusEcoScore"] = remoteStatusEcoScore;
 		});
 
-		const preDoorSocket = io("https://frontend.meapp.secure.mercedes-benz.com", {
-			path: "/data-service/socket.io",
-			query: {
-				currentCountryCode: "DE",
-				currentVehicleId: vin,
-				dp: "remoteStatusDoorlock",
-				locale: "de_DE"
-			},
-			extraHeaders: {
-				cookie: this.socketIOCookie
+		this.connectDoorSockets(vin);
+
+	}
+
+	connectDoorSockets(vin) {
+		return new Promise((resolve, reject) => {
+			if (this.socketConnections[vin]["doorLock"]) {
+				this.socketConnections[vin]["doorLock"].close();
 			}
-		});
-
-		preDoorSocket.on("connect", () => {
-			this.socketConnections[vin]["doorLock"] = preDoorSocket;
-		});
-
-
-		preDoorSocket.on("SET_DOORLOCK_DATA", (data) => {
-
-			this.addSocketData(vin, "DOORLOCK_STATUS", data.doorlockStatus);
-		});
-		preDoorSocket.on("ACP_ERROR_UNAUTHORIZED", (data) => {
-			this.log.debug("ACP_ERROR");
-			this.reAuth();
-		});
-		preDoorSocket.on("CLIENT_ID", (data) => {
-			this.log.debug("CLIENT_ID");
-			preDoorSocket.close();
-			const ck = request.cookie("mvpClientId");
-			ck.value = data.id;
-			ck.key = "mvpClientId";
-			ck.secure = true;
-			this.jar.setCookie(ck, "https://frontend.meapp.secure.mercedes-benz.com", function (error, cookie) {
-
-			});
-			this.socketIOCookie += "mvpClientId=" + data.id;
-			doorSocket = io("https://frontend.meapp.secure.mercedes-benz.com", {
+			const preDoorSocket = io("https://frontend.meapp.secure.mercedes-benz.com", {
 				path: "/data-service/socket.io",
 				query: {
 					currentCountryCode: "DE",
@@ -783,28 +764,60 @@ class Mercedesme extends utils.Adapter {
 					cookie: this.socketIOCookie
 				}
 			});
+			preDoorSocket.on("connect", () => {
+				this.socketConnections[vin]["doorLock"] = preDoorSocket;
 
-			request.get({
-				jar: this.jar,
-				url: "https://frontend.meapp.secure.mercedes-benz.com/reauthenticate",
-				followAllRedirects: true
-			}, function (err, resp, body) {});
-
-			doorSocket.on("connect", () => {
-				this.socketConnections[vin]["doorLock"].close(); //close pre
-				this.socketConnections[vin]["doorLock"] = doorSocket;
 			});
-			doorSocket.on("SET_DOORLOCK_DATA", (data) => {
-
+			preDoorSocket.on("SET_DOORLOCK_DATA", (data) => {
 				this.addSocketData(vin, "DOORLOCK_STATUS", data.doorlockStatus);
+				resolve();
 			});
-			doorSocket.on("ACP_ERROR_UNAUTHORIZED", (data) => {
+			preDoorSocket.on("ACP_ERROR_UNAUTHORIZED", (data) => {
 				this.log.debug("ACP_ERROR");
 				this.reAuth();
 			});
+			preDoorSocket.on("CLIENT_ID", (data) => {
+				this.log.debug("CLIENT_ID");
+				preDoorSocket.close();
+				const ck = request.cookie("mvpClientId");
+				ck.value = data.id;
+				ck.key = "mvpClientId";
+				ck.secure = true;
+				this.jar.setCookie(ck, "https://frontend.meapp.secure.mercedes-benz.com", function (error, cookie) {});
+				this.socketIOCookie += "mvpClientId=" + data.id;
+				const doorSocket = io("https://frontend.meapp.secure.mercedes-benz.com", {
+					path: "/data-service/socket.io",
+					query: {
+						currentCountryCode: "DE",
+						currentVehicleId: vin,
+						dp: "remoteStatusDoorlock",
+						locale: "de_DE"
+					},
+					extraHeaders: {
+						cookie: this.socketIOCookie
+					}
+				});
+				request.get({
+					jar: this.jar,
+					url: "https://frontend.meapp.secure.mercedes-benz.com/reauthenticate",
+					followAllRedirects: true
+				}, function (err, resp, body) {});
+				doorSocket.on("connect", () => {
+					this.socketConnections[vin]["doorLock"].close(); //close pre
+					this.socketConnections[vin]["doorLock"] = doorSocket;
+				});
+				doorSocket.on("SET_DOORLOCK_DATA", (data) => {
+					this.addSocketData(vin, "DOORLOCK_STATUS", data.doorlockStatus);
+					resolve();
+				});
+				doorSocket.on("ACP_ERROR_UNAUTHORIZED", (data) => {
+					this.log.debug("ACP_ERROR");
+					this.reAuth();
+				});
+			});
 		});
-
 	}
+
 
 	addSocketData(vin, name, data) {
 		this.log.debug("Parse: " + name + " " + vin)
@@ -944,9 +957,11 @@ class Mercedesme extends utils.Adapter {
 						}
 
 						this.log.debug(this.socketIOCookie);
-						if (this.socketConnections[this.vinArray[0]]["doorLock"]) {
-							this.socketConnections[this.vinArray[0]]["doorLock"].io.engine.extraHeaders.cookie = this.socketIOCookie;
-						}
+						this.vinArray.forEach(element => {
+							if (this.socketConnections[element]["doorLock"]) {
+								this.socketConnections[element]["doorLock"].io.engine.extraHeaders.cookie = this.socketIOCookie;
+							}
+						});
 
 						if (!err) {
 							resolve();
