@@ -82,7 +82,7 @@ class Mercedesme extends utils.Adapter {
 							this.connectToSocketIo(vin);
 						});
 					}, () => {});
-				}, 60 * 60 * 1000); //1h
+				}, 30 * 60 * 1000); //1h
 
 			}, (
 
@@ -136,64 +136,62 @@ class Mercedesme extends utils.Adapter {
 			const vin = id.split(".")[2];
 			if (!state.ack) {
 				this.reAuth().then(() => {
-					this.connectDoorSockets(vin).then(() => {
-						if (id.indexOf("remote") !== -1 && !this.socketConnections[vin]) {
-							this.log.warn(JSON.stringify(this.socketConnections));
-							this.log.warn("No socket connection found for " + vin);
-							return;
+					if (id.indexOf("remote") !== -1 && !this.socketConnections[vin]) {
+						this.log.warn(JSON.stringify(this.socketConnections));
+						this.log.warn("No socket connection found for " + vin);
+						return;
+					}
+					if (id.indexOf("Vorklimatisierung") !== -1) {
+						let command = "PRECOND_START";
+						if (!state.val || state.val === "false") {
+							command = "PRECOND_STOP";
 						}
-						if (id.indexOf("Vorklimatisierung") !== -1) {
-							let command = "PRECOND_START";
-							if (!state.val || state.val === "false") {
-								command = "PRECOND_STOP";
-							}
 
-							this.socketConnections[vin]["zev"].emit("command", {
-								"commandId": command,
-								"data": null
+						this.socketConnections[vin]["zev"].emit("command", {
+							"commandId": command,
+							"data": null
+						});
+					}
+					if (id.indexOf("DoorLock") !== -1) {
+						if (!state.val || state.val === "false") {
+							this.socketConnections[vin]["doorLock"].emit("command", {
+								"commandId": "DOORS_UNLOCK",
+								"data": {
+									"message": "QUERY_STARTED_UNLOCK",
+									"sliderPosition": 1
+								}
+							});
+						} else {
+							this.socketConnections[vin]["doorLock"].emit("command", {
+								"commandId": "DOORS_LOCK",
+								"data": {
+									"message": "QUERY_STARTED_LOCK",
+									"sliderPosition": 0
+								}
 							});
 						}
-						if (id.indexOf("DoorLock") !== -1) {
-							if (!state.val || state.val === "false") {
-								this.socketConnections[vin]["doorLock"].emit("command", {
-									"commandId": "DOORS_UNLOCK",
-									"data": {
-										"message": "QUERY_STARTED_UNLOCK",
-										"sliderPosition": 1
-									}
-								});
-							} else {
-								this.socketConnections[vin]["doorLock"].emit("command", {
-									"commandId": "DOORS_LOCK",
-									"data": {
-										"message": "QUERY_STARTED_LOCK",
-										"sliderPosition": 0
-									}
-								});
-							}
-						}
+					}
 
-						if (id.indexOf("WindowLock") !== -1) {
-							if (!state.val || state.val === "false") {
-								this.socketConnections[vin]["doorLock"].emit("command", {
-									"commandId": "WINDOWS_OPEN",
-									"data": {
-										"message": "QUERY_STARTED_OPEN",
-										"sliderPosition": 1
-									}
-								});
-							} else {
-								this.socketConnections[vin]["doorLock"].emit("command", {
-									"commandId": "WINDOWS_CLOSE",
-									"data": {
-										"message": "QUERY_STARTED_CLOSED",
-										"sliderPosition": 0
-									}
-								});
+					if (id.indexOf("WindowLock") !== -1) {
+						if (!state.val || state.val === "false") {
+							this.socketConnections[vin]["doorLock"].emit("command", {
+								"commandId": "WINDOWS_OPEN",
+								"data": {
+									"message": "QUERY_STARTED_OPEN",
+									"sliderPosition": 1
+								}
+							});
+						} else {
+							this.socketConnections[vin]["doorLock"].emit("command", {
+								"commandId": "WINDOWS_CLOSE",
+								"data": {
+									"message": "QUERY_STARTED_CLOSED",
+									"sliderPosition": 0
+								}
+							});
 
-							}
 						}
-					});
+					}
 				}, () => {
 					this.log.error("ReAuth Error");
 				});
@@ -465,6 +463,26 @@ class Mercedesme extends utils.Adapter {
 						common: {
 							name: "Window Lock",
 							type: "boolean",
+							role: "indicator",
+							write: true,
+						},
+						native: {}
+					});
+					this.setObjectNotExists(element.vin + ".remote.DoorLockStatus", {
+						type: "state",
+						common: {
+							name: "Door Lock Status",
+							type: "number",
+							role: "indicator",
+							write: false,
+						},
+						native: {}
+					});
+					this.setObjectNotExists(element.vin + ".remote.WindowLockStatus", {
+						type: "state",
+						common: {
+							name: "Window Lock Status",
+							type: "number",
 							role: "indicator",
 							write: true,
 						},
