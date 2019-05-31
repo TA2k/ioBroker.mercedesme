@@ -1,8 +1,12 @@
 {
 	"common": {
 		"name": "mercedesme",
-		"version": "0.0.6",
+		"version": "0.0.7",
 		"news": {
+			"0.0.7": {
+				"en": "improve door open functionality add detailed state for door status",
+				"de": "Tür öffnen verbessert. Besseren Türstatus hinzugefügt."
+			},
 			"0.0.6": {
 				"en": "fix issue with door data",
 				"de": "Problem mit Türstatus behoben."
@@ -82,7 +86,8 @@
 		"type": "household",
 		"compact": true,
 		"materialize": true,
-		"dependencies": [{
+		"dependencies": [
+			{
 				"admin": ">=3.0.0"
 			},
 			{
