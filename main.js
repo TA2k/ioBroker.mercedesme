@@ -31,6 +31,7 @@ class Mercedesme extends utils.Adapter {
 		this.socketConnections = {};
 		this.interval = null;
 		this.reAuthInterval = null;
+		this.doorInterval = null;
 	}
 
 	/**
@@ -82,7 +83,15 @@ class Mercedesme extends utils.Adapter {
 							this.connectToSocketIo(vin);
 						});
 					}, () => {});
-				}, 8 * 60 * 1000); //1h
+				}, 60 * 60 * 1000); //1h
+				this.doorInterval = setInterval(() => {
+					this.log.debug("door reconnect");
+					this.reAuth().then(() => {
+						this.vinArray.forEach((vin) => {
+							this.connectDoorSockets(vin);
+						});
+					}, () => {});
+				}, 7 * 60 * 1000); //7min
 
 			}, (
 
@@ -106,6 +115,7 @@ class Mercedesme extends utils.Adapter {
 		try {
 			clearInterval(this.interval);
 			clearInterval(this.reAuthInterval);
+			clearInterval(this.doorInterval);
 			callback();
 		} catch (e) {
 			callback();
