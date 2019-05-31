@@ -82,7 +82,7 @@ class Mercedesme extends utils.Adapter {
 							this.connectToSocketIo(vin);
 						});
 					}, () => {});
-				}, 30 * 60 * 1000); //1h
+				}, 8 * 60 * 1000); //1h
 
 			}, (
 
