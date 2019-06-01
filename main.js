@@ -83,7 +83,7 @@ class Mercedesme extends utils.Adapter {
 							this.connectToSocketIo(vin);
 						});
 					}, () => {});
-				}, 60 * 60 * 1000); //1h
+				}, 20 * 60 * 1000); //20min
 				this.doorInterval = setInterval(() => {
 					this.log.debug("door reconnect");
 					this.reAuth().then(() => {
