@@ -83,15 +83,15 @@ class Mercedesme extends utils.Adapter {
 							this.connectToSocketIo(vin);
 						});
 					}, () => {});
-				}, 20 * 60 * 1000); //20min
-				this.doorInterval = setInterval(() => {
-					this.log.debug("door reconnect");
-					this.reAuth().then(() => {
-						this.vinArray.forEach((vin) => {
-							this.connectDoorSockets(vin);
-						});
-					}, () => {});
 				}, 7 * 60 * 1000); //7min
+				// this.doorInterval = setInterval(() => {
+				// 	this.log.debug("door reconnect");
+				// 	this.reAuth().then(() => {
+				// 		this.vinArray.forEach((vin) => {
+				// 			this.connectDoorSockets(vin);
+				// 		});
+				// 	}, () => {});
+				// }, 7 * 60 * 1000); //7min
 
 			}, (
 

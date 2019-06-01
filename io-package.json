@@ -1,8 +1,12 @@
 {
 	"common": {
 		"name": "mercedesme",
-		"version": "0.0.7",
+		"version": "0.0.8",
 		"news": {
+			"0.0.8": {
+				"en": "decrease reconnect for all sockets",
+				"de": "decrease reconnect for all sockets"
+			},
 			"0.0.7": {
 				"en": "improve door open functionality add detailed state for door status",
 				"de": "Tür öffnen verbessert. Besseren Türstatus hinzugefügt."

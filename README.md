@@ -17,6 +17,10 @@ Mercedes me adapter for ioBroker
 
 ## Changelog
 
+### 0.0.8
+
+-   decrease reconnect for all sockets
+
 ### 0.0.7
 
 -   improve door open functionality add detailed state for door status
