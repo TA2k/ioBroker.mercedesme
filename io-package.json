@@ -103,7 +103,8 @@
 		"mail": "",
 		"password": "",
 		"manuelvin": "",
-		"interval": 60
+		"interval": 60,
+		"tank": ""
 	},
 	"objects": [],
 	"instanceObjects": []

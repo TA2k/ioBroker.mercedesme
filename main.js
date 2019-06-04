@@ -207,9 +207,82 @@ class Mercedesme extends utils.Adapter {
 				});
 			} else {
 				//ACK Values
+				const pre = this.name + "." + this.instance;
+				if (id.indexOf("travelDataBlock.tankLevelPercent") !== -1 || id.indexOf("travelDataBlock.soc") !== -1) {
+					this.getStates("*", (err, states) => {
+						let lastString = "tankLevelLast";
+						let status = "tankLevelStatus";
+						let before = "tankLevelBeforeFueling";
+						let jsonString = "tankLevelJSON";
+						if (id.indexOf("travelDataBlock.soc") !== -1) {
+							lastString = "socLevelLast";
+							status = "socStatus";
+							before = "socBeforeFueling";
+							jsonString = "socJSON";
+
+						}
+						if (!states[pre + "." + vin + ".history." + status]) {
+							this.setState(vin + ".history." + status, false, true);
+						}
+						if (!states[pre + "." + vin + ".history." + lastString]) {
+							this.setState(vin + ".history." + lastString, state.val, true);
+						}
+						if (states[pre + "." + vin + ".history." + status] && states[pre + "." + vin + ".history." + lastString]) {
+							if (state.val > states[pre + "." + vin + ".history." + lastString].val && !states[pre + "." + vin + ".history." + status].val) {
+								this.setState(vin + ".history." + before, states[pre + "." + vin + ".history." + lastString].val, true);
+								this.setState(vin + ".history." + status, true, true);
+							}
+							if (state.val === 100 || (state.val < states[pre + "." + vin + ".history." + lastString].val && states[pre + "." + vin + ".history." + status].val)) {
+								this.setState(vin + ".history." + status, false, true);
+								this.setState(vin + ".history." + before, states[pre + "." + vin + ".history." + lastString], true);
+								const d = new Date;
+								const dformat = [
+									d.getDate(),
+									d.getMonth() + 1,
+									d.getFullYear()
+								].join(".") + " " + [d.getHours(),
+									d.getMinutes()
+								].join(":");
+								const beforeValue = states[pre + "." + vin + ".history." + before] ? states[pre + "." + vin + ".history." + before].val : 0;
+								const diff = state.val - parseInt(beforeValue);
+								let quantity;
+								if (this.config.tank) {
+									const tankArray = this.config.tank.split(", ");
+									const tank = parseInt(tankArray[this.vinArray.indexOf(vin)]);
+									quantity = diff * tank / 100;
+								}
+								const fuelObject = {
+									start: beforeValue,
+									end: state.val,
+									date: dformat,
+									diff: diff,
+									quantity: quantity
+
+								};
+
+								const currenJsonHistoryState = states[pre + "." + vin + ".history." + jsonString];
+								let currenJsonHistory = [];
+								if (currenJsonHistory) {
+									try {
+										currenJsonHistory = JSON.parse(currenJsonHistoryState.val);
+									} catch (erro) {
+										currenJsonHistory = [];
+									}
+								}
+								const newJsonHistory = [fuelObject].concat(currenJsonHistory);
+								this.setState("history." + jsonString, JSON.stringify(newJsonHistory), true);
+
+							}
+						}
+						this.setState(vin + ".history." + lastString, state.val, true);
+
+					});
+
+				}
+
 				if (id.indexOf("overallLockStatus") !== -1 || id.indexOf("switchDoors.isCommandPending") !== -1) {
 					this.getStates("*", (err, states) => {
-						const pre = this.name + "." + this.instance;
+
 
 						if (states[pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending"] && states[pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending"].val) {
 							if (states[pre + "." + vin + ".remote.DoorLock"]) {
@@ -458,6 +531,102 @@ class Mercedesme extends utils.Adapter {
 						},
 						native: {}
 					});
+					this.setObjectNotExists(element.vin + ".history.tankLevelLast", {
+						type: "state",
+						common: {
+							name: "Last Tanklevel value",
+							type: "object",
+							role: "number",
+							write: false,
+							read: true,
+							unit: "%"
+						},
+						native: {}
+					});
+					this.setObjectNotExists(element.vin + ".history.tankLevelBeforeFueling", {
+						type: "state",
+						common: {
+							name: "Last Tanklevel before fueling",
+							type: "object",
+							role: "number",
+							write: false,
+							read: true,
+							unit: "%"
+						},
+						native: {}
+					});
+					this.setObjectNotExists(element.vin + ".history.tankLevelStatus", {
+						type: "state",
+						common: {
+							name: "Refueling/Tanken",
+							type: "object",
+							role: "boolean",
+							write: false,
+							read: true
+						},
+						native: {}
+					});
+					this.setObjectNotExists(element.vin + ".history.tankLevelJSON", {
+						type: "state",
+						common: {
+							name: "Tanklevel history as json",
+							type: "object",
+							role: "history",
+							write: false,
+							read: true
+						},
+						native: {}
+					});
+
+
+					this.setObjectNotExists(element.vin + ".history.socLevelLast", {
+						type: "state",
+						common: {
+							name: "Last Charging value",
+							type: "object",
+							role: "number",
+							write: false,
+							read: true,
+							unit: "%"
+						},
+						native: {}
+					});
+					this.setObjectNotExists(element.vin + ".history.socLevelBeforeFueling", {
+						type: "state",
+						common: {
+							name: "Last Charging value before charging",
+							type: "object",
+							role: "number",
+							write: false,
+							read: true,
+							unit: "%"
+						},
+						native: {}
+					});
+					this.setObjectNotExists(element.vin + ".history.socStatus", {
+						type: "state",
+						common: {
+							name: "Charging/Laden",
+							type: "object",
+							role: "boolean",
+							write: false,
+							read: true
+						},
+						native: {}
+					});
+					this.setObjectNotExists(element.vin + ".history.socJSON", {
+						type: "state",
+						common: {
+							name: "Charging history as json",
+							type: "object",
+							role: "history",
+							write: false,
+							read: true
+						},
+						native: {}
+					});
+
+
 					this.setObjectNotExists(element.vin + ".remote", {
 						type: "state",
 						common: {
@@ -894,7 +1063,7 @@ class Mercedesme extends utils.Adapter {
 				});
 
 				let value = data[element];
-				if (typeof value === 'object') {
+				if (typeof value === "object") {
 
 					for (const subElement in value) {
 
