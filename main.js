@@ -217,7 +217,7 @@ class Mercedesme extends utils.Adapter {
 						if (id.indexOf("travelDataBlock.soc") !== -1) {
 							lastString = "socLevelLast";
 							status = "socStatus";
-							before = "socBeforeFueling";
+							before = "socLevelBeforeFueling";
 							jsonString = "socJSON";
 
 						}
