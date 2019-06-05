@@ -514,16 +514,54 @@ class Mercedesme extends utils.Adapter {
 				if (err) {
 					reject();
 				}
-				this.log.debug(body)
-				if (!JSON.parse(body).vehicles || JSON.parse(body).vehicles.length === 0) {
-					this.log.warn("No vehicles found");
+				this.log.debug(body);
+				try {
+					if (!JSON.parse(body).vehicles || JSON.parse(body).vehicles.length === 0) {
+						this.log.warn("No vehicles found");
+					}
+					JSON.parse(body).vehicles.forEach(element => {
+						this.vinArray.push(element.vin);
+						this.setObjectNotExists(element.vin, {
+							type: "state",
+							common: {
+								name: element.licenceplate,
+								role: "indicator",
+								type: "mixed",
+								write: false,
+								read: true
+							},
+							native: {}
+						});
+						for (const key in element) {
+							this.setObjectNotExists(element.vin + ".general." + key, {
+								type: "state",
+								common: {
+									name: key,
+									type: "mixed",
+									role: "indicator",
+									write: false,
+									read: true
+								},
+								native: {}
+							});
+							if (Array.isArray(element[key])) {
+								this.setState(element.vin + ".general." + key, JSON.stringify(element[key]), true);
+							} else {
+
+								this.setState(element.vin + ".general." + key, element[key], true);
+							}
+						}
+					});
+
+				} catch (error) {
+					this.log.warn("Vehicle detection service not available please enter VIN/FIN manualy in the settings")
 				}
-				JSON.parse(body).vehicles.forEach(element => {
-					this.vinArray.push(element.vin);
-					this.setObjectNotExists(element.vin, {
+				this.vinArray = [...new Set(this.vinArray)];
+				this.vinArray.forEach(element => {
+					this.setObjectNotExists(element, {
 						type: "state",
 						common: {
-							name: element.licenceplate,
+							name: element,
 							role: "indicator",
 							type: "mixed",
 							write: false,
@@ -531,7 +569,7 @@ class Mercedesme extends utils.Adapter {
 						},
 						native: {}
 					});
-					this.setObjectNotExists(element.vin + ".history.tankLevelLast", {
+					this.setObjectNotExists(element + ".history.tankLevelLast", {
 						type: "state",
 						common: {
 							name: "Last Tanklevel value",
@@ -543,7 +581,7 @@ class Mercedesme extends utils.Adapter {
 						},
 						native: {}
 					});
-					this.setObjectNotExists(element.vin + ".history.tankLevelBeforeFueling", {
+					this.setObjectNotExists(element + ".history.tankLevelBeforeFueling", {
 						type: "state",
 						common: {
 							name: "Last Tanklevel before fueling",
@@ -555,7 +593,7 @@ class Mercedesme extends utils.Adapter {
 						},
 						native: {}
 					});
-					this.setObjectNotExists(element.vin + ".history.tankLevelStatus", {
+					this.setObjectNotExists(element + ".history.tankLevelStatus", {
 						type: "state",
 						common: {
 							name: "Refueling/Tanken",
@@ -566,7 +604,7 @@ class Mercedesme extends utils.Adapter {
 						},
 						native: {}
 					});
-					this.setObjectNotExists(element.vin + ".history.tankLevelJSON", {
+					this.setObjectNotExists(element + ".history.tankLevelJSON", {
 						type: "state",
 						common: {
 							name: "Tanklevel history as json",
@@ -579,7 +617,7 @@ class Mercedesme extends utils.Adapter {
 					});
 
 
-					this.setObjectNotExists(element.vin + ".history.socLevelLast", {
+					this.setObjectNotExists(element + ".history.socLevelLast", {
 						type: "state",
 						common: {
 							name: "Last Charging value",
@@ -591,7 +629,7 @@ class Mercedesme extends utils.Adapter {
 						},
 						native: {}
 					});
-					this.setObjectNotExists(element.vin + ".history.socLevelBeforeFueling", {
+					this.setObjectNotExists(element + ".history.socLevelBeforeFueling", {
 						type: "state",
 						common: {
 							name: "Last Charging value before charging",
@@ -603,7 +641,7 @@ class Mercedesme extends utils.Adapter {
 						},
 						native: {}
 					});
-					this.setObjectNotExists(element.vin + ".history.socStatus", {
+					this.setObjectNotExists(element + ".history.socStatus", {
 						type: "state",
 						common: {
 							name: "Charging/Laden",
@@ -627,7 +665,7 @@ class Mercedesme extends utils.Adapter {
 					});
 
 
-					this.setObjectNotExists(element.vin + ".remote", {
+					this.setObjectNotExists(element + ".remote", {
 						type: "state",
 						common: {
 							name: "Remote controls",
@@ -635,7 +673,7 @@ class Mercedesme extends utils.Adapter {
 						},
 						native: {}
 					});
-					this.setObjectNotExists(element.vin + ".remote.Vorklimatisierung", {
+					this.setObjectNotExists(element + ".remote.Vorklimatisierung", {
 						type: "state",
 						common: {
 							name: "Precondition",
@@ -646,7 +684,7 @@ class Mercedesme extends utils.Adapter {
 						native: {}
 					});
 
-					this.setObjectNotExists(element.vin + ".remote.DoorLock", {
+					this.setObjectNotExists(element + ".remote.DoorLock", {
 						type: "state",
 						common: {
 							name: "Door Lock",
@@ -656,7 +694,7 @@ class Mercedesme extends utils.Adapter {
 						},
 						native: {}
 					});
-					this.setObjectNotExists(element.vin + ".remote.WindowLock", {
+					this.setObjectNotExists(element + ".remote.WindowLock", {
 						type: "state",
 						common: {
 							name: "Window Lock",
@@ -666,7 +704,7 @@ class Mercedesme extends utils.Adapter {
 						},
 						native: {}
 					});
-					this.setObjectNotExists(element.vin + ".remote.DoorLockStatus", {
+					this.setObjectNotExists(element + ".remote.DoorLockStatus", {
 						type: "state",
 						common: {
 							name: "Door Lock Status",
@@ -676,7 +714,7 @@ class Mercedesme extends utils.Adapter {
 						},
 						native: {}
 					});
-					this.setObjectNotExists(element.vin + ".remote.WindowLockStatus", {
+					this.setObjectNotExists(element + ".remote.WindowLockStatus", {
 						type: "state",
 						common: {
 							name: "Window Lock Status",
@@ -686,30 +724,9 @@ class Mercedesme extends utils.Adapter {
 						},
 						native: {}
 					});
-
-					for (const key in element) {
-						this.setObjectNotExists(element.vin + ".general." + key, {
-							type: "state",
-							common: {
-								name: key,
-								type: "mixed",
-								role: "indicator",
-								write: false,
-								read: true
-							},
-							native: {}
-						});
-						if (Array.isArray(element[key])) {
-							this.setState(element.vin + ".general." + key, JSON.stringify(element[key]), true);
-						} else {
-
-							this.setState(element.vin + ".general." + key, element[key], true);
-						}
-					}
-
 				});
-				resolve();
 			});
+			resolve();
 		});
 
 	}
