@@ -270,7 +270,7 @@ class Mercedesme extends utils.Adapter {
 									}
 								}
 								const newJsonHistory = [fuelObject].concat(currenJsonHistory);
-								this.setState("history." + jsonString, JSON.stringify(newJsonHistory), true);
+								this.setState(vin + ".history." + jsonString, JSON.stringify(newJsonHistory), true);
 
 							}
 						}
@@ -610,7 +610,7 @@ class Mercedesme extends utils.Adapter {
 							name: "Tanklevel history as json",
 							type: "object",
 							role: "history",
-							write: false,
+							write: true,
 							read: true
 						},
 						native: {}
@@ -658,7 +658,7 @@ class Mercedesme extends utils.Adapter {
 							name: "Charging history as json",
 							type: "object",
 							role: "history",
-							write: false,
+							write: true,
 							read: true
 						},
 						native: {}
