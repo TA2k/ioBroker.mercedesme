@@ -1,8 +1,12 @@
 {
 	"common": {
 		"name": "mercedesme",
-		"version": "0.0.8",
+		"version": "0.0.9",
 		"news": {
+			"0.0.9": {
+				"en": "move code base to app add auxheat",
+				"de": "Auf App API umgestellt. Standheizung jetzt möglich."
+			},
 			"0.0.8": {
 				"en": "decrease reconnect for all sockets",
 				"de": "decrease reconnect for all sockets"
@@ -103,8 +107,13 @@
 		"mail": "",
 		"password": "",
 		"manuelvin": "",
-		"interval": 60,
-		"tank": ""
+		"interval": 30,
+		"tank": "",
+		"pin": "",
+		"atoken": "",
+		"rtoken": "",
+		"expires": "",
+		"scope": ""
 	},
 	"objects": [],
 	"instanceObjects": []

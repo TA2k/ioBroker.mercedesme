@@ -17,6 +17,11 @@ Mercedes me adapter for ioBroker
 
 ## Changelog
 
+### 0.0.9
+
+-   move code base to app add auxheat.
+-   Auf App API umgestellt. Standheizung jetzt möglich.
+
 ### 0.0.8
 
 -   decrease reconnect for all sockets

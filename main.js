@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 "use strict";
 /*
  * Created with @iobroker/create-adapter v1.12.1
@@ -7,6 +8,7 @@ const utils = require("@iobroker/adapter-core");
 const io = require("socket.io-client");
 const request = require("request");
 const jsdom = require("jsdom");
+const crypto = require('crypto');
 const {
 	JSDOM
 } = jsdom;
@@ -47,10 +49,9 @@ class Mercedesme extends utils.Adapter {
 			this.log.debug("Login successful");
 			this.setState("info.connection", true, true);
 
-			if (this.config.manuelvin) {
-				this.vinArray = this.config.manuelvin.split(/[ ,]+/);
-			}
+
 			this.getVehicles().then(() => {
+
 				this.vinArray.forEach((vin) => {
 					this.log.debug("Start " + vin);
 					this.connectToSocketIo(vin);
@@ -58,40 +59,34 @@ class Mercedesme extends utils.Adapter {
 				this.getVehicleDetails().then(() => {
 
 				}, () => {
-					this.log.error("Error getting Vehicle Details via VHP");
+					this.log.error("Error getting Vehicle Details");
 				});
-				this.getVehicleLocation().then(() => {}, () => {
-					this.log.error("Error getting Vehicle Location via VHP");
+				this.getVehicleStatus().then(() => {
+
+				}, () => {
+					this.log.error("Error getting Vehicle Status");
 				});
-				this.getVehicleInfos().then(() => {}, () => {
-					this.log.error("Error getting Vehicle Infos via VHP");
+				this.getVehicleLocation().then(() => {
+
+				}, () => {
+					this.log.error("Error getting Vehicle Location");
 				});
-				this.interval = setInterval(() => {
-					this.getVehicleInfos().then(() => {}, () => {
-						this.log.debug("Error getting Vehicle Infos via VHP");
-						this.loginVHPMBCON();
-					});
-					this.getVehicleLocation().then(() => {}, () => {
-						this.log.debug("Error getting Vehicle Location via VHP");
-						this.loginVHPMBCON();
-					});
-				}, this.config.interval * 1000);
 				this.reAuthInterval = setInterval(() => {
 					this.log.debug("Intervall reconnect");
+					this.refreshToken();
 					this.reAuth().then(() => {
 						this.vinArray.forEach((vin) => {
-							this.connectToSocketIo(vin);
+							this.connectDoorSockets(vin);
 						});
 					}, () => {});
-				}, 7 * 60 * 1000); //7min
-				// this.doorInterval = setInterval(() => {
-				// 	this.log.debug("door reconnect");
-				// 	this.reAuth().then(() => {
-				// 		this.vinArray.forEach((vin) => {
-				// 			this.connectDoorSockets(vin);
-				// 		});
-				// 	}, () => {});
-				// }, 7 * 60 * 1000); //7min
+				}, 45 * 60 * 1000); //45min
+
+				this.interval = setInterval(() => {
+					this.getVehicleStatus();
+					this.getVehicleLocation();
+				}, this.config.interval * 1000);
+
+
 
 			}, (
 
@@ -145,66 +140,78 @@ class Mercedesme extends utils.Adapter {
 		if (state) {
 			const vin = id.split(".")[2];
 			if (!state.ack) {
-				this.reAuth().then(() => {
-					if (id.indexOf("remote") !== -1 && !this.socketConnections[vin]) {
-						this.log.warn(JSON.stringify(this.socketConnections));
-						this.log.warn("No socket connection found for " + vin);
-						return;
-					}
-					if (id.indexOf("Vorklimatisierung") !== -1) {
-						let command = "PRECOND_START";
-						if (!state.val || state.val === "false") {
-							command = "PRECOND_STOP";
+				if (id.indexOf("remote") !== -1) {
+					this.refreshToken().then(() => {
+
+						let url = "https://vhs.meapp.secure.mercedes-benz.com/api/v1/vehicles/" + vin;
+						if (id.indexOf("Vorklimatisierung") !== -1) {
+							if (!state.val || state.val === "false") {
+								url += "/precond/stop";
+							} else {
+								url += "/precond/start";
+							}
+
+						}
+						if (id.indexOf("DoorLock") !== -1) {
+							if (!this.config.pin) {
+								this.log.warn("Missing pin in settings");
+							}
+							if (!state.val || state.val === "false") {
+								url += "/doors/unlock";
+							} else {
+								url += "/doors/lock";
+							}
 						}
 
-						this.socketConnections[vin]["zev"].emit("command", {
-							"commandId": command,
-							"data": null
+						if (id.indexOf("WindowLock") !== -1) {
+							if (!state.val || state.val === "false") {
+								url += "/windows/open";
+							} else {
+								url += "/windows/close";
+							}
+						}
+						if (id.indexOf("Auxheat") !== -1) {
+							if (!state.val || state.val === "false") {
+								url += "/auxheat/stop";
+							} else {
+								url += "/auxheat/start";
+							}
+						}
+						this.log.debug(id + " " + url)
+						request.post({
+							jar: this.jar,
+							url: url,
+							headers: {
+								"Accept-Language": "de_DE",
+								"Authorization": "Bearer " + this.config.atoken,
+								"country_code": "DE",
+								"Content-Type": "application/json;charset=UTF-8",
+								"Accept-Encoding": "br, gzip, deflate",
+								"User-Agent": "MercedesMe/2.13.2+639 (Android 5.1)",
+								"x-pin": this.config.pin
+							},
+							body: '{"type":"departure"}'
+						}, (err, resp, body) => {
+							if (err) {
+
+								return;
+							}
+
+							try {
+								this.log.debug(body);
+								if (body.indexOf("INVALID") !== -1) {
+									this.log.error(body);
+								}
+
+							} catch (error) {
+								this.log.error("Action not successful " + error);
+							}
 						});
-					}
-					if (id.indexOf("DoorLock") !== -1) {
-						if (!state.val || state.val === "false") {
-							this.socketConnections[vin]["doorLock"].emit("command", {
-								"commandId": "DOORS_UNLOCK",
-								"data": {
-									"message": "QUERY_STARTED_UNLOCK",
-									"sliderPosition": 1
-								}
-							});
-						} else {
-							this.socketConnections[vin]["doorLock"].emit("command", {
-								"commandId": "DOORS_LOCK",
-								"data": {
-									"message": "QUERY_STARTED_LOCK",
-									"sliderPosition": 0
-								}
-							});
-						}
-					}
 
-					if (id.indexOf("WindowLock") !== -1) {
-						if (!state.val || state.val === "false") {
-							this.socketConnections[vin]["doorLock"].emit("command", {
-								"commandId": "WINDOWS_OPEN",
-								"data": {
-									"message": "QUERY_STARTED_OPEN",
-									"sliderPosition": 1
-								}
-							});
-						} else {
-							this.socketConnections[vin]["doorLock"].emit("command", {
-								"commandId": "WINDOWS_CLOSE",
-								"data": {
-									"message": "QUERY_STARTED_CLOSED",
-									"sliderPosition": 0
-								}
-							});
-
-						}
-					}
-				}, () => {
-					this.log.error("ReAuth Error");
-				});
+					}, () => {
+						this.log.error("ReAuth Error");
+					});
+				}
 			} else {
 				//ACK Values
 				const pre = this.name + "." + this.instance;
@@ -240,8 +247,8 @@ class Mercedesme extends utils.Adapter {
 									d.getDate(),
 									d.getMonth() + 1,
 									d.getFullYear()
-								].join(".") + " " + [d.getHours(),
-									d.getMinutes()
+								].join(".") + " " + [d.getHours().toString().length < 2 ? "0" + d.getHours() : d.getHours(),
+									d.getMinutes().toString().length < 2 ? "0" + d.getMinutes() : d.getMinutes()
 								].join(":");
 								const beforeValue = states[pre + "." + vin + ".history." + before] ? states[pre + "." + vin + ".history." + before].val : 0;
 								const diff = state.val - parseInt(beforeValue);
@@ -251,26 +258,28 @@ class Mercedesme extends utils.Adapter {
 									const tank = parseInt(tankArray[this.vinArray.indexOf(vin)]);
 									quantity = diff * tank / 100;
 								}
-								const fuelObject = {
-									start: beforeValue,
-									end: state.val,
-									date: dformat,
-									diff: diff,
-									quantity: quantity
+								if (beforeValue != 100) {
+									const fuelObject = {
+										start: beforeValue,
+										end: state.val,
+										date: dformat,
+										diff: diff,
+										quantity: quantity
 
-								};
+									};
 
-								const currenJsonHistoryState = states[pre + "." + vin + ".history." + jsonString];
-								let currenJsonHistory = [];
-								if (currenJsonHistory) {
-									try {
-										currenJsonHistory = JSON.parse(currenJsonHistoryState.val);
-									} catch (erro) {
-										currenJsonHistory = [];
+									const currenJsonHistoryState = states[pre + "." + vin + ".history." + jsonString];
+									let currenJsonHistory = [];
+									if (currenJsonHistory) {
+										try {
+											currenJsonHistory = JSON.parse(currenJsonHistoryState.val);
+										} catch (erro) {
+											currenJsonHistory = [];
+										}
 									}
+									const newJsonHistory = [fuelObject].concat(currenJsonHistory);
+									this.setState(vin + ".history." + jsonString, JSON.stringify(newJsonHistory), true);
 								}
-								const newJsonHistory = [fuelObject].concat(currenJsonHistory);
-								this.setState(vin + ".history." + jsonString, JSON.stringify(newJsonHistory), true);
 
 							}
 						}
@@ -279,7 +288,6 @@ class Mercedesme extends utils.Adapter {
 					});
 
 				}
-
 				if (id.indexOf("overallLockStatus") !== -1 || id.indexOf("switchDoors.isCommandPending") !== -1) {
 					this.getStates("*", (err, states) => {
 
@@ -342,35 +350,32 @@ class Mercedesme extends utils.Adapter {
 
 		}
 	}
-	getVehicleInfos() {
+	getVehicleDetails() {
 		return new Promise((resolve, reject) => {
 			this.vinArray.forEach(vin => {
-				this.log.debug("Get vehicle status");
+
+				this.log.debug("Details")
 				request.get({
 					jar: this.jar,
-					url: "https://app.secure.mercedes-benz.com/backend/vehicles/" + vin + "/status"
+					url: "https://bff.meapp.secure.mercedes-benz.com/api/v2/dashboarddata/" + vin + "/vehicle",
+					headers: {
+						"Accept-Language": "de_DE",
+						"Authorization": "Bearer " + this.config.atoken,
+						"country_code": "DE",
+						"User-Agent": "MercedesMe/2.13.2+639 (Android 5.1)"
+					}
 				}, (err, resp, body) => {
 					if (err) {
 						reject();
+						return;
 					}
+
 					try {
-						this.setObjectNotExists(vin + ".data", {
-							type: "state",
-							common: {
-								name: "Values from update interval",
-								type: "mixed",
-								role: "indicator",
-								write: false,
-								read: true
-							},
-							native: {}
-						});
-						const data = JSON.parse(body).data;
-						for (const element in data) {
-							if (data[element].status === 4) {
-								//return;
-							}
-							this.setObjectNotExists(vin + ".data." + element, {
+						const data = JSON.parse(body);
+
+						Object.keys(data["staticVehicleData"]).forEach((element) => {
+
+							this.setObjectNotExists(vin + ".details." + element, {
 								type: "state",
 								common: {
 									name: element,
@@ -382,31 +387,157 @@ class Mercedesme extends utils.Adapter {
 								native: {}
 							});
 
-							let value = data[element].value;
+							let value = data["staticVehicleData"][element];
 							if (value && value.indexOf && value.indexOf(":") === -1) {
 								value = isNaN(parseFloat(value)) === true ? value : parseFloat(value);
 							}
-							this.setState(vin + ".data." + element, value, true);
-						}
+							this.setState(vin + ".details." + element, value, true);
+						});
+
+
+						Object.keys(data["metadata"]["appSections"]).forEach((element) => {
+
+							this.setObjectNotExists(vin + ".details." + element, {
+								type: "state",
+								common: {
+									name: element,
+									type: "mixed",
+									role: "indicator",
+									write: false,
+									read: true
+								},
+								native: {}
+							});
+
+							let value = data["metadata"]["appSections"][element];
+							if (value && value.indexOf && value.indexOf(":") === -1) {
+								value = isNaN(parseFloat(value)) === true ? value : parseFloat(value);
+							}
+							this.setState(vin + ".details." + element, value, true);
+						});
+						data["metadata"]["featureEnablements"].forEach((element) => {
+
+							this.setObjectNotExists(vin + ".features." + element.name, {
+								type: "state",
+								common: {
+									name: element.name,
+									type: "mixed",
+									role: "indicator",
+									write: false,
+									read: true
+								},
+								native: {}
+							});
+
+							let value = element.enablement;
+							if (value && value.indexOf && value.indexOf(":") === -1) {
+								value = isNaN(parseFloat(value)) === true ? value : parseFloat(value);
+							}
+							this.setState(vin + ".features." + element.name, value, true);
+						});
 						resolve();
+
 					} catch (error) {
-						this.log.debug(body)
 						reject();
+
 					}
 				});
 			});
 
 		});
 	}
-
-	getVehicleDetails() {
+	getVehicleStatus() {
 		return new Promise((resolve, reject) => {
 			this.vinArray.forEach(vin => {
 
+				request.get({
+					jar: this.jar,
+					url: "https://vhs.meapp.secure.mercedes-benz.com/api/v1/vehicles/" + vin + "/dynamic?forceRefresh=true",
+					headers: {
+						"Accept-Language": "de_DE",
+						"Authorization": "Bearer " + this.config.atoken,
+						"country_code": "DE",
+						"User-Agent": "MercedesMe/2.13.2+639 (Android 5.1)"
+					}
+				}, (err, resp, body) => {
+					if (err) {
+						reject();
+						return;
+					}
+
+					try {
+
+						const data = JSON.parse(body);
+
+						Object.keys(data["dynamic"]).forEach((element) => {
+
+							this.setObjectNotExists(vin + ".status." + element, {
+								type: "state",
+								common: {
+									name: element,
+									type: "mixed",
+									role: "indicator",
+									write: false,
+									read: true
+								},
+								native: {}
+							});
+
+							let value = data["dynamic"][element].value;
+							if (value && value.indexOf && value.indexOf(":") === -1) {
+								value = isNaN(parseFloat(value)) === true ? value : parseFloat(value);
+							}
+							this.setState(vin + ".status." + element, value, true);
+						});
+
+
+						Object.keys(data["aggregated"]["lastJourney"]).forEach((element) => {
+
+							this.setObjectNotExists(vin + ".lastjourney." + element, {
+								type: "state",
+								common: {
+									name: element,
+									type: "mixed",
+									role: "indicator",
+									write: false,
+									read: true
+								},
+								native: {}
+							});
+
+							let value = data["aggregated"]["lastJourney"][element];
+							if (value && value.indexOf && value.indexOf(":") === -1) {
+								value = isNaN(parseFloat(value)) === true ? value : parseFloat(value);
+							}
+							this.setState(vin + ".lastjourney." + element, value, true);
+						});
+
+						resolve();
+
+					} catch (error) {
+						reject();
+
+					}
+				});
+			});
+
+		});
+	}
+	getVehicleLocation() {
+		return new Promise((resolve, reject) => {
+			this.vinArray.forEach(vin => {
 
 				request.get({
 					jar: this.jar,
-					url: "https://app.secure.mercedes-benz.com/backend/vehicles/" + vin + "/converant"
+					url: "https://vhs.meapp.secure.mercedes-benz.com/api/v1/vehicles/" + vin + "/location",
+					headers: {
+						"Accept-Language": "de_DE",
+						"Authorization": "Bearer " + this.config.atoken,
+						"country_code": "DE",
+						"User-Agent": "MercedesMe/2.13.2+639 (Android 5.1)",
+						"lat": "1",
+						"lon": "1"
+					}
 				}, (err, resp, body) => {
 					if (err) {
 						reject();
@@ -415,11 +546,8 @@ class Mercedesme extends utils.Adapter {
 
 					try {
 						const data = JSON.parse(body);
-						for (const element in data) {
-							if (data[element].status === 4) {
-								//return;
-							}
-							this.setObjectNotExists(vin + ".details." + element, {
+						Object.keys(data).forEach((element) => {
+							this.setObjectNotExists(vin + ".location." + element, {
 								type: "state",
 								common: {
 									name: element,
@@ -435,80 +563,31 @@ class Mercedesme extends utils.Adapter {
 							if (value && value.indexOf && value.indexOf(":") === -1) {
 								value = isNaN(parseFloat(value)) === true ? value : parseFloat(value);
 							}
-							this.setState(vin + ".details." + element, value, true);
-						}
-						resolve();
-					} catch (error) {
-						reject()
-
-					}
-				});
-			});
-
-		});
-	}
-
-	getVehicleLocation() {
-		return new Promise((resolve, reject) => {
-			this.vinArray.forEach(vin => {
-				this.setObjectNotExists(vin + ".location", {
-					type: "state",
-					common: {
-						name: "Location from update interval",
-						type: "mixed",
-						role: "indicator",
-						write: false,
-						read: true
-					},
-					native: {}
-				});
-				request.get({
-					jar: this.jar,
-					url: "https://app.secure.mercedes-benz.com/backend/vehicles/" + vin + "/location/v2"
-				}, (err, resp, body) => {
-					if (err) {
-						reject();
-					}
-					try {
-
-
-						const data = JSON.parse(body).data;
-						for (const element in data) {
-							if (data[element].status === 4) {
-								//return;
-							}
-							this.setObjectNotExists(vin + ".location." + element, {
-								type: "state",
-								common: {
-									name: element,
-									type: "mixed",
-									role: "indicator",
-									write: false,
-									read: true
-								},
-								native: {}
-							});
-
-							let value = data[element].value;
-							if (value && value.indexOf && value.indexOf(":") === -1) {
-								value = isNaN(parseFloat(value)) === true ? value : parseFloat(value);
-							}
 							this.setState(vin + ".location." + element, value, true);
-						}
+						});
+
+
+
 						resolve();
+
 					} catch (error) {
 						reject();
+
 					}
 				});
 			});
+
 		});
 	}
 	getVehicles() {
 		return new Promise((resolve, reject) => {
 			request.get({
 				jar: this.jar,
-				url: "https://app.secure.mercedes-benz.com/backend/users/identity"
-
+				url: "https://bff.meapp.secure.mercedes-benz.com/api/v2/appdata",
+				headers: {
+					"Accept-Language": "en_DE",
+					"Authorization": "Bearer " + this.config.atoken
+				}
 
 			}, (err, resp, body) => {
 				if (err) {
@@ -520,11 +599,11 @@ class Mercedesme extends utils.Adapter {
 						this.log.warn("No vehicles found");
 					}
 					JSON.parse(body).vehicles.forEach(element => {
-						this.vinArray.push(element.vin);
-						this.setObjectNotExists(element.vin, {
+						this.vinArray.push(element.fin);
+						this.setObjectNotExists(element.fin, {
 							type: "state",
 							common: {
-								name: element.licenceplate,
+								name: element.licensePlate,
 								role: "indicator",
 								type: "mixed",
 								write: false,
@@ -533,7 +612,7 @@ class Mercedesme extends utils.Adapter {
 							native: {}
 						});
 						for (const key in element) {
-							this.setObjectNotExists(element.vin + ".general." + key, {
+							this.setObjectNotExists(element.fin + ".general." + key, {
 								type: "state",
 								common: {
 									name: key,
@@ -545,30 +624,20 @@ class Mercedesme extends utils.Adapter {
 								native: {}
 							});
 							if (Array.isArray(element[key])) {
-								this.setState(element.vin + ".general." + key, JSON.stringify(element[key]), true);
+								this.setState(element.fin + ".general." + key, JSON.stringify(element[key]), true);
 							} else {
 
-								this.setState(element.vin + ".general." + key, element[key], true);
+								this.setState(element.fin + ".general." + key, element[key], true);
 							}
 						}
 					});
 
 				} catch (error) {
-					this.log.warn("Vehicle detection service not available please enter VIN/FIN manualy in the settings")
+					this.log.warn("Vehicles not found please start the mercedes me app");
 				}
 				this.vinArray = [...new Set(this.vinArray)];
 				this.vinArray.forEach(element => {
-					this.setObjectNotExists(element, {
-						type: "state",
-						common: {
-							name: element,
-							role: "indicator",
-							type: "mixed",
-							write: false,
-							read: true
-						},
-						native: {}
-					});
+
 					this.setObjectNotExists(element + ".history.tankLevelLast", {
 						type: "state",
 						common: {
@@ -652,7 +721,7 @@ class Mercedesme extends utils.Adapter {
 						},
 						native: {}
 					});
-					this.setObjectNotExists(element.vin + ".history.socJSON", {
+					this.setObjectNotExists(element + ".history.socJSON", {
 						type: "state",
 						common: {
 							name: "Charging history as json",
@@ -677,6 +746,16 @@ class Mercedesme extends utils.Adapter {
 						type: "state",
 						common: {
 							name: "Precondition",
+							type: "boolean",
+							role: "indicator",
+							write: true,
+						},
+						native: {}
+					});
+					this.setObjectNotExists(element + ".remote.Auxheat", {
+						type: "state",
+						common: {
+							name: "Standheizung",
 							type: "boolean",
 							role: "indicator",
 							write: true,
@@ -725,98 +804,27 @@ class Mercedesme extends utils.Adapter {
 						native: {}
 					});
 				});
+				resolve();
 			});
-			resolve();
+
 		});
 
 	}
 	login() {
 		return new Promise((resolve, reject) => {
-			this.loginVHPMBCON().then(() => {
+			this.loginApp().then(() => {
 				//		resolve();
 				this.loginSocketIo().then(() => {
 					resolve();
 				}, () => {
 					reject();
 				});
+
 			}, () => {
 				reject();
 			});
 		});
 
-	}
-	loginVHPMBCON() {
-		return new Promise((resolve, reject) => {
-			this.log.debug("Login")
-
-			request.get({
-				jar: this.jar,
-				url: "https://app.secure.mercedes-benz.com//session/login?app-id=VHPMBCON.PRODEC",
-
-			}, (err, resp, body) => {
-				this.log.debug("app Login: " + body)
-				const dom = new JSDOM(body);
-				const form = {};
-				let url = "https://login.secure.mercedes-benz.com/wl/login";
-				if (dom.window.document.querySelector("#formLogin")) {
-
-					for (const formElement of dom.window.document.querySelector("#formLogin").children) {
-						if (formElement.type === "hidden") {
-							form[formElement.name] = formElement.value;
-						}
-					}
-
-					if (!this.config.mail || !this.config.password) {
-						this.log.error("Missing mail or password");
-						reject();
-					}
-					this.log.debug(JSON.stringify(form));
-					form["username"] = this.config.mail;
-					form["password"] = this.config.password;
-					form["remember-me"] = 1;
-				} else {
-					url = "https://app.secure.mercedes-benz.com//session/login?app-id=VHPMBCON.PRODEC"
-				}
-				request.post({
-					jar: this.jar,
-					url: url,
-					form: form,
-					followAllRedirects: true
-				}, (err, resp, body) => {
-
-					if (!this.jar._jar.store.idx["login.secure.mercedes-benz.com"]["/"] || !this.jar._jar.store.idx["login.secure.mercedes-benz.com"]["/"].SSOTOKEN) {
-						this.log.error("Login Failed. Password wrong or manual login required.");
-						reject();
-					}
-					const consentForm = {};
-					const dom = new JSDOM(body);
-					if (!dom.window.document.querySelector("form")) {
-						resolve();
-						return;
-					}
-					for (const formElement of dom.window.document.querySelector("form").children) {
-						if (formElement.type === "hidden") {
-							consentForm[formElement.name] = formElement.value;
-						}
-					}
-
-					this.log.debug("consent form: " + JSON.stringify(consentForm));
-					request.post({
-						jar: this.jar,
-						url: "https://api.secure.mercedes-benz.com/oidc10/auth/oauth/v2/authorize/consent",
-						form: consentForm,
-						followAllRedirects: true
-					}, (err, resp, body) => {
-						this.log.debug("consent result: " + body);
-						if (!err) {
-							resolve();
-						} else {
-							reject();
-						}
-					});
-				});
-			});
-		});
 	}
 	loginSocketIo() {
 		return new Promise((resolve, reject) => {
@@ -865,7 +873,7 @@ class Mercedesme extends utils.Adapter {
 			this.socketConnections[vin][sockets].close();
 		}
 		this.socketConnections[vin] = {};
-		let doorSocket = null;
+		const doorSocket = null;
 		this.socketIOCookie = "";
 		const cookieLocation = this.jar._jar.store.idx["frontend.meapp.secure.mercedes-benz.com"]["/"];
 		for (const key in cookieLocation) {
@@ -1051,9 +1059,8 @@ class Mercedesme extends utils.Adapter {
 		});
 	}
 
-
 	addSocketData(vin, name, data) {
-		this.log.debug("Parse: " + name + " " + vin)
+		this.log.debug("Parse: " + name + " " + vin);
 		try {
 			//const data = JSON.parse(dataString);
 			this.setObjectNotExists(vin + "." + name, {
@@ -1119,8 +1126,8 @@ class Mercedesme extends utils.Adapter {
 				}
 			}
 		} catch (error) {
-			this.log.error(error)
-			this.log.debug(JSON.stringify(data))
+			this.log.error(error);
+			this.log.debug(JSON.stringify(data));
 		}
 	}
 	reAuth() {
@@ -1206,6 +1213,217 @@ class Mercedesme extends utils.Adapter {
 
 			});
 		});
+	}
+	refreshToken() {
+		return new Promise((resolve, reject) => {
+			this.log.debug("refreshToken")
+			const clientID = "4390b0db-4be9-40e9-9147-5845df537beb";
+			const redirect = "https://cgw.meapp.secure.mercedes-benz.com/endpoint/api/v1/redirect";
+			request.post({
+				jar: this.jar,
+				url: "https://api.secure.mercedes-benz.com/oidc10/auth/oauth/v2/token?grant_type=refresh_token&redirect_uri=" + redirect + "&client_id=" + clientID + "&refresh_token=" + this.config.rtoken,
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+					'User-Agent': 'okhttp/3.9.0',
+				},
+				followAllRedirects: false
+			}, (err, resp, body) => {
+				try {
+					const token = JSON.parse(body);
+					this.log.debug(JSON.stringify(token));
+					this.config.atoken = token.access_token;
+					this.config.rtoken = token.refresh_token;
+					this.config.scope = token.scope;
+
+					const t = new Date();
+					t.setSeconds(t.getSeconds() + 3600);
+					this.config.expires = t.getTime();
+
+					resolve();
+
+				} catch (error) {
+					this.log.debug("refresh result: " + body);
+					reject();
+				}
+				if (!err) {
+					resolve();
+				} else {
+					reject();
+				}
+			});
+		});
+
+
+	}
+	loginApp() {
+		return new Promise((resolve, reject) => {
+			this.log.debug("Login");
+			const [code_verifier, codeChallange] = this.getCodeChallenge();
+
+			this.log.debug(codeChallange);
+			const clientID = "4390b0db-4be9-40e9-9147-5845df537beb";
+			const scope = 'mma:backend:all openid ciam-uid profile email';
+			const app_id = "MCMAPP.FE_PROD";
+			const userAgent = 'Mozilla/5.0 (Linux; Android 5.1; Google Nexus 5 Build/LMY47D) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/39.0.0.0 Mobile Safari/537.36';
+			const redirect = "https://cgw.meapp.secure.mercedes-benz.com/endpoint/api/v1/redirect";
+			const url01 = "https://api.secure.mercedes-benz.com/oidc10/auth/oauth/v2/authorize?response_type=code&client_id=" + clientID + "&code_challenge=" + codeChallange + "&code_challenge_method=S256&scope=" + scope + "&redirect_uri=" + redirect;
+			this.log.debug(url01);
+			request.get({
+				jar: this.jar,
+				url: url01,
+				headers: {
+					'Accept-Language': "en_DE",
+					'X-Requested-With': 'com.daimler.mm.android',
+					'Accept': '*/*',
+					'User-Agent': userAgent
+				}
+
+			}, (err, resp, body) => {
+				if (err) {
+					reject();
+				}
+
+				//	this.log.debug("author submit result: " + body);
+				request.get({
+					jar: this.jar,
+					url: "https://login.secure.mercedes-benz.com/wl/third-party-cookie?app-id=" + app_id,
+					followAllRedirects: true,
+					headers: {
+						'Accept-Language': "en_DE",
+						'X-Requested-With': 'com.daimler.mm.android',
+						'Accept': '*/*',
+						'User-Agent': userAgent,
+						'Origin': "https://login.secure.mercedes-benz.com",
+						'Cache-Control': 'max-age=0',
+						'Content-Type': 'application/x-www-form-urlencoded'
+					}
+
+
+				}, (err, resp, body) => {
+					this.log.debug("third submit result: " + body);
+				});
+
+				const dom = new JSDOM(body);
+				const form = {};
+				const formLogin = dom.window.document.querySelector("#formLogin");
+				let url = "https://login.secure.mercedes-benz.com/wl/login";
+				if (formLogin) {
+					this.log.debug("reAuthLogin");
+					for (const formElement of dom.window.document.querySelector("#formLogin").children) {
+						if (formElement.type === "hidden") {
+							form[formElement.name] = formElement.value;
+						}
+					}
+					form["username"] = this.config.mail;
+					form["password"] = this.config.password;
+					form["remember-me"] = 1;
+					//this.log.debug(JSON.stringify(form));
+				} else {
+
+					this.log.debug("reAuthNoForm");
+					url = "https://frontend.meapp.secure.mercedes-benz.com/reauthenticate";
+				}
+				request.post({
+					jar: this.jar,
+					url: url,
+					form: form,
+
+					headers: {
+						'Accept-Language': "en_DE",
+						'X-Requested-With': 'com.daimler.mm.android',
+						'Accept': '*/*',
+						'User-Agent': userAgent,
+						'Origin': "https://login.secure.mercedes-benz.com",
+						'Cache-Control': 'max-age=0',
+						'Content-Type': 'application/x-www-form-urlencoded'
+					},
+					followAllRedirects: true
+				}, (err, resp, body) => {
+
+					//this.log.debug("form submit result: " + body);
+					const consentForm = {};
+					const dom = new JSDOM(body);
+					if (!dom.window.document.querySelector("form")) {
+						this.log.debug("No Form found");
+						return;
+					}
+					for (const formElement of dom.window.document.querySelector("form").children) {
+						if (formElement.type === "hidden") {
+							consentForm[formElement.name] = formElement.value;
+						}
+					}
+
+					//this.log.debug("consent form: " + JSON.stringify(consentForm));
+					request.post({
+						jar: this.jar,
+						url: "https://api.secure.mercedes-benz.com/oidc10/auth/oauth/v2/authorize/consent",
+						form: consentForm,
+						headers: {
+							'Accept-Language': "en_DE",
+							'Accept': '*/*',
+							'Cache-Control': 'max-age=0',
+							'Content-Type': 'application/x-www-form-urlencoded',
+							'Origin': "https://login.secure.mercedes-benz.com",
+							'User-Agent': userAgent,
+							'Referer': 'https://login.secure.mercedes-benz.com/wl/login',
+							'X-Requested-With': 'com.daimler.mm.android'
+						},
+						followAllRedirects: false
+					}, (err, resp, body) => {
+
+						if (resp.headers.location) {
+							const code = resp.headers.location.split("=")[1];
+							this.log.debug("consent result: " + code);
+							request.post({
+								jar: this.jar,
+								url: "https://api.secure.mercedes-benz.com/oidc10/auth/oauth/v2/token?grant_type=authorization_code&redirect_uri=" + redirect + "&client_id=" + clientID + "&code_verifier=" + code_verifier + "&code=" + code,
+								form: consentForm,
+								headers: {
+									'Content-Type': 'application/x-www-form-urlencoded',
+									'User-Agent': 'okhttp/3.9.0',
+								},
+								followAllRedirects: false
+							}, (err, resp, body) => {
+								try {
+									const token = JSON.parse(body);
+									this.log.debug(JSON.stringify(token));
+									this.config.atoken = token.access_token;
+									this.config.rtoken = token.refresh_token;
+									this.config.scope = token.scope;
+
+									const t = new Date();
+									t.setSeconds(t.getSeconds() + 3600);
+									this.config.expires = t.getTime();
+									resolve();
+
+								} catch (error) {
+									this.log.debug("authori result: " + body);
+									reject();
+								}
+							});
+						}
+					});
+				});
+			});
+
+		});
+
+
+	}
+	getCodeChallenge() {
+		let hash = "";
+		let result = "";
+		while (hash === "" || hash.indexOf("+") !== -1 || hash.indexOf("/") !== -1 || hash.indexOf("=") !== -1 || result.indexOf("+") !== -1 || result.indexOf("/") !== -1) {
+			const chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+			result = "";
+			for (let i = 64; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+			result = Buffer.from(result).toString('base64');
+			result = result.replace(/=/g, '');
+			hash = crypto.createHash('sha256').update(result).digest('base64');
+			hash = hash.slice(0, hash.length - 1);
+
+		}
+		return [result, hash];
 	}
 }
 
