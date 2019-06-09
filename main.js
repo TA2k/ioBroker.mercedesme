@@ -76,7 +76,7 @@ class Mercedesme extends utils.Adapter {
 					this.refreshToken();
 					this.reAuth().then(() => {
 						this.vinArray.forEach((vin) => {
-							this.connectDoorSockets(vin);
+							this.connectToSocketIo(vin);
 						});
 					}, () => {});
 				}, 45 * 60 * 1000); //45min
@@ -599,41 +599,44 @@ class Mercedesme extends utils.Adapter {
 						this.log.warn("No vehicles found");
 					}
 					JSON.parse(body).vehicles.forEach(element => {
-						this.vinArray.push(element.fin);
-						this.setObjectNotExists(element.fin, {
-							type: "state",
-							common: {
-								name: element.licensePlate,
-								role: "indicator",
-								type: "mixed",
-								write: false,
-								read: true
-							},
-							native: {}
-						});
-						for (const key in element) {
-							this.setObjectNotExists(element.fin + ".general." + key, {
+						if (element.fin !== null && element.fin !== "null") {
+							this.vinArray.push(element.fin);
+							this.setObjectNotExists(element.fin, {
 								type: "state",
 								common: {
-									name: key,
-									type: "mixed",
+									name: element.licensePlate,
 									role: "indicator",
+									type: "mixed",
 									write: false,
 									read: true
 								},
 								native: {}
 							});
-							if (Array.isArray(element[key])) {
-								this.setState(element.fin + ".general." + key, JSON.stringify(element[key]), true);
-							} else {
+							for (const key in element) {
+								this.setObjectNotExists(element.fin + ".general." + key, {
+									type: "state",
+									common: {
+										name: key,
+										type: "mixed",
+										role: "indicator",
+										write: false,
+										read: true
+									},
+									native: {}
+								});
+								if (Array.isArray(element[key])) {
+									this.setState(element.fin + ".general." + key, JSON.stringify(element[key]), true);
+								} else {
 
-								this.setState(element.fin + ".general." + key, element[key], true);
+									this.setState(element.fin + ".general." + key, element[key], true);
+								}
 							}
 						}
 					});
 
+
 				} catch (error) {
-					this.log.warn("Vehicles not found please start the mercedes me app");
+					this.log.warn("Vehicles not found please start the mercedes me app: " + error);
 				}
 				this.vinArray = [...new Set(this.vinArray)];
 				this.vinArray.forEach(element => {
@@ -1282,8 +1285,6 @@ class Mercedesme extends utils.Adapter {
 				if (err) {
 					reject();
 				}
-
-				//	this.log.debug("author submit result: " + body);
 				request.get({
 					jar: this.jar,
 					url: "https://login.secure.mercedes-benz.com/wl/third-party-cookie?app-id=" + app_id,
@@ -1308,7 +1309,7 @@ class Mercedesme extends utils.Adapter {
 				const formLogin = dom.window.document.querySelector("#formLogin");
 				let url = "https://login.secure.mercedes-benz.com/wl/login";
 				if (formLogin) {
-					this.log.debug("reAuthLogin");
+					this.log.debug("acLogin");
 					for (const formElement of dom.window.document.querySelector("#formLogin").children) {
 						if (formElement.type === "hidden") {
 							form[formElement.name] = formElement.value;
@@ -1320,7 +1321,7 @@ class Mercedesme extends utils.Adapter {
 					//this.log.debug(JSON.stringify(form));
 				} else {
 
-					this.log.debug("reAuthNoForm");
+					this.log.debug("accNoForm");
 					url = "https://frontend.meapp.secure.mercedes-benz.com/reauthenticate";
 				}
 				request.post({
@@ -1341,6 +1342,10 @@ class Mercedesme extends utils.Adapter {
 				}, (err, resp, body) => {
 
 					//this.log.debug("form submit result: " + body);
+					if (body.indexOf("Login failed") !== -1) {
+						this.log.error("Logindaten fehlerhaft oder manueller Login auf der Webseite ist erforderlich");
+						reject();
+					}
 					const consentForm = {};
 					const dom = new JSDOM(body);
 					if (!dom.window.document.querySelector("form")) {
