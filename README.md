@@ -17,6 +17,10 @@ Mercedes me adapter for ioBroker
 
 ## Changelog
 
+### 0.0.10
+
+-   fix socket refresh
+
 ### 0.0.9
 
 -   move code base to app add auxheat.

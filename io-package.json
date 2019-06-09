@@ -1,8 +1,11 @@
 {
 	"common": {
 		"name": "mercedesme",
-		"version": "0.0.9",
+		"version": "0.0.10",
 		"news": {
+			"0.0.10": {
+				"en": "fix socket refresh"
+			},
 			"0.0.9": {
 				"en": "move code base to app add auxheat",
 				"de": "Auf App API umgestellt. Standheizung jetzt möglich."
