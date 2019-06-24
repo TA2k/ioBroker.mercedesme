@@ -79,7 +79,7 @@ class Mercedesme extends utils.Adapter {
 							this.connectToSocketIo(vin);
 						});
 					}, () => {});
-				}, 45 * 60 * 1000); //45min
+				}, 6 * 60 * 1000); //6min
 
 				this.interval = setInterval(() => {
 					this.getVehicleStatus();
@@ -142,20 +142,30 @@ class Mercedesme extends utils.Adapter {
 			if (!state.ack) {
 				if (id.indexOf("remote") !== -1) {
 					this.refreshToken().then(() => {
-
+						this.connectDoorSockets(vin); //.then(() => {
 						let url = "https://vhs.meapp.secure.mercedes-benz.com/api/v1/vehicles/" + vin;
+						let headers = {
+							"Accept-Language": "de_DE",
+							"Authorization": "Bearer " + this.config.atoken,
+							"country_code": "DE",
+							"Content-Type": "application/json;charset=UTF-8",
+							"Accept-Encoding": "br, gzip, deflate",
+							"User-Agent": "MercedesMe/2.13.2+639 (Android 5.1)",
+						};
+						let body = "";
 						if (id.indexOf("Vorklimatisierung") !== -1) {
 							if (!state.val || state.val === "false") {
 								url += "/precond/stop";
 							} else {
 								url += "/precond/start";
 							}
-
+							body = '{"type":"departure"}';
 						}
 						if (id.indexOf("DoorLock") !== -1) {
 							if (!this.config.pin) {
 								this.log.warn("Missing pin in settings");
 							}
+							headers["x-pin"] = this.config.pin;
 							if (!state.val || state.val === "false") {
 								url += "/doors/unlock";
 							} else {
@@ -164,11 +174,28 @@ class Mercedesme extends utils.Adapter {
 						}
 
 						if (id.indexOf("WindowLock") !== -1) {
-							if (!state.val || state.val === "false") {
-								url += "/windows/open";
-							} else {
-								url += "/windows/close";
-							}
+							this.reAuth().then(() => {
+								if (!state.val || state.val === "false") {
+									this.socketConnections[vin]["doorLock"].emit("command", {
+										"commandId": "WINDOWS_OPEN",
+										"data": {
+											"message": "QUERY_STARTED_OPEN",
+											"sliderPosition": 1
+										}
+									});
+								} else {
+									this.socketConnections[vin]["doorLock"].emit("command", {
+										"commandId": "WINDOWS_CLOSE",
+										"data": {
+											"message": "QUERY_STARTED_CLOSED",
+											"sliderPosition": 0
+										}
+									});
+
+								}
+							});
+							return;
+
 						}
 						if (id.indexOf("Auxheat") !== -1) {
 							if (!state.val || state.val === "false") {
@@ -177,20 +204,12 @@ class Mercedesme extends utils.Adapter {
 								url += "/auxheat/start";
 							}
 						}
-						this.log.debug(id + " " + url)
+						this.log.debug(id + " " + url);
 						request.post({
 							jar: this.jar,
 							url: url,
-							headers: {
-								"Accept-Language": "de_DE",
-								"Authorization": "Bearer " + this.config.atoken,
-								"country_code": "DE",
-								"Content-Type": "application/json;charset=UTF-8",
-								"Accept-Encoding": "br, gzip, deflate",
-								"User-Agent": "MercedesMe/2.13.2+639 (Android 5.1)",
-								"x-pin": this.config.pin
-							},
-							body: '{"type":"departure"}'
+							headers: headers,
+							body: body
 						}, (err, resp, body) => {
 							if (err) {
 
@@ -207,7 +226,7 @@ class Mercedesme extends utils.Adapter {
 								this.log.error("Action not successful " + error);
 							}
 						});
-
+						//	});
 					}, () => {
 						this.log.error("ReAuth Error");
 					});
@@ -302,20 +321,20 @@ class Mercedesme extends utils.Adapter {
 
 						if (states[pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending"] && states[pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending"].val) {
 							if (states[pre + "." + vin + ".remote.DoorLock"]) {
-								if (states[pre + "." + vin + ".remote.DoorLock"].val) {
-									this.setState(vin + ".remote.DoorLockStatus", 3, true);
-								} else {
-									this.setState(vin + ".remote.DoorLockStatus", 2, true);
-								}
+								// if (states[pre + "." + vin + ".remote.DoorLock"].val) {
+								// 	this.setState(vin + ".remote.DoorLockStatus", 3, true);
+								// } else {
+								// 	this.setState(vin + ".remote.DoorLockStatus", 2, true);
+								// }
 							}
 							return;
 						} else {
 							if (id.indexOf("overallLockStatus") !== -1) {
 								this.setState(vin + ".remote.DoorLock", state.val, true);
-								this.setState(vin + ".remote.DoorLockStatus", state.val ? 1 : 0, true);
+								//	this.setState(vin + ".remote.DoorLockStatus", state.val ? 1 : 0, true);
 							} else {
 								this.setState(vin + ".remote.DoorLock", states[pre + "." + vin + ".DOORLOCK_STATUS.overallLockStatus"], true);
-								this.setState(vin + ".remote.DoorLockStatus", states[pre + "." + vin + ".DOORLOCK_STATUS.overallLockStatus"] ? 1 : 0, true);
+								//	this.setState(vin + ".remote.DoorLockStatus", states[pre + "." + vin + ".DOORLOCK_STATUS.overallLockStatus"] ? 1 : 0, true);
 							}
 						}
 					});
@@ -329,11 +348,11 @@ class Mercedesme extends utils.Adapter {
 
 						if (states[pre + "." + vin + ".DOORLOCK_STATUS.switchWindows.isCommandPending"] && states[pre + "." + vin + ".DOORLOCK_STATUS.switchWindows.isCommandPending"].val) {
 							if (states[pre + "." + vin + ".remote.WindowLock"]) {
-								if (states[pre + "." + vin + ".remote.WindowLock"].val) {
-									this.setState(vin + ".remote.WindowLockStatus", 3, true);
-								} else {
-									this.setState(vin + ".remote.WindowLockStatus", 2, true);
-								}
+								// if (states[pre + "." + vin + ".remote.WindowLock"].val) {
+								// 	this.setState(vin + ".remote.WindowLockStatus", 3, true);
+								// } else {
+								// 	this.setState(vin + ".remote.WindowLockStatus", 2, true);
+								// }
 							}
 
 							return;
@@ -342,10 +361,10 @@ class Mercedesme extends utils.Adapter {
 							if (states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontLeft"] && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontRight"] && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearLeft"] && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearRight"]) {
 								if (states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontLeft"].val === 2 && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontRight"].val === 2 && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearLeft"].val === 2 && states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearRight"].val === 2) {
 									this.setState(vin + ".remote.WindowLock", true, true);
-									this.setState(vin + ".remote.WindowLockStatus", 1, true);
+									//this.setState(vin + ".remote.WindowLockStatus", 1, true);
 								} else {
 									this.setState(vin + ".remote.WindowLock", false, true);
-									this.setState(vin + ".remote.WindowLockStatus", 0, true);
+									//this.setState(vin + ".remote.WindowLockStatus", 0, true);
 								}
 							}
 						}
@@ -794,26 +813,26 @@ class Mercedesme extends utils.Adapter {
 						},
 						native: {}
 					});
-					this.setObjectNotExists(element + ".remote.DoorLockStatus", {
-						type: "state",
-						common: {
-							name: "Door Lock Status",
-							type: "number",
-							role: "indicator",
-							write: false,
-						},
-						native: {}
-					});
-					this.setObjectNotExists(element + ".remote.WindowLockStatus", {
-						type: "state",
-						common: {
-							name: "Window Lock Status",
-							type: "number",
-							role: "indicator",
-							write: true,
-						},
-						native: {}
-					});
+					// this.setObjectNotExists(element + ".remote.DoorLockStatus", {
+					// 	type: "state",
+					// 	common: {
+					// 		name: "Door Lock Status",
+					// 		type: "number",
+					// 		role: "indicator",
+					// 		write: false,
+					// 	},
+					// 	native: {}
+					// });
+					// this.setObjectNotExists(element + ".remote.WindowLockStatus", {
+					// 	type: "state",
+					// 	common: {
+					// 		name: "Window Lock Status",
+					// 		type: "number",
+					// 		role: "indicator",
+					// 		write: true,
+					// 	},
+					// 	native: {}
+					// });
 				});
 				resolve();
 			});
@@ -1028,6 +1047,7 @@ class Mercedesme extends utils.Adapter {
 				this.log.debug("ACP_ERROR");
 				this.reAuth();
 			});
+			// NEEDED FOR OPENING DOOR VIA SOCKET
 			preDoorSocket.on("CLIENT_ID", (data) => {
 				this.log.debug("CLIENT_ID");
 				preDoorSocket.close();
