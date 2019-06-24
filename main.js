@@ -253,12 +253,20 @@ class Mercedesme extends utils.Adapter {
 								const beforeValue = states[pre + "." + vin + ".history." + before] ? states[pre + "." + vin + ".history." + before].val : 0;
 								const diff = state.val - parseInt(beforeValue);
 								let quantity;
-								if (this.config.tank) {
-									const tankArray = this.config.tank.split(", ");
-									const tank = parseInt(tankArray[this.vinArray.indexOf(vin)]);
-									quantity = diff * tank / 100;
+								if (id.indexOf("travelDataBlock.soc") !== -1) {
+									if (this.config.capacity) {
+										const capacityArray = this.config.capacity.split(", ");
+										const capacity = parseFloat(capacityArray[this.vinArray.indexOf(vin)]);
+										quantity = diff * capacity / 100;
+									}
+								} else {
+									if (this.config.tank) {
+										const tankArray = this.config.tank.split(", ");
+										const tank = parseInt(tankArray[this.vinArray.indexOf(vin)]);
+										quantity = diff * tank / 100;
+									}
 								}
-								if (beforeValue != 100) {
+								if (beforeValue < 99 && diff > 0) {
 									const fuelObject = {
 										start: beforeValue,
 										end: state.val,

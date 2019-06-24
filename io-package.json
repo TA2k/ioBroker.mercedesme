@@ -1,8 +1,11 @@
 {
 	"common": {
 		"name": "mercedesme",
-		"version": "0.0.10",
+		"version": "0.0.11",
 		"news": {
+			"0.0.11": {
+				"en": "minor fixes"
+			},
 			"0.0.10": {
 				"en": "fix socket refresh"
 			},
@@ -112,6 +115,7 @@
 		"manuelvin": "",
 		"interval": 30,
 		"tank": "",
+		"capacity": "",
 		"pin": "",
 		"atoken": "",
 		"rtoken": "",
