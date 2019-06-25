@@ -273,6 +273,7 @@ class Mercedesme extends utils.Adapter {
 								const diff = state.val - parseInt(beforeValue);
 								let quantity;
 								let price = 0;
+								const odo = states[pre + "." + vin + ".status.odo"].val;
 								if (id.indexOf("travelDataBlock.soc") !== -1) {
 									if (this.config.capacity) {
 
@@ -302,7 +303,8 @@ class Mercedesme extends utils.Adapter {
 										date: dformat,
 										diff: diff,
 										quantity: quantity,
-										price: price
+										price: price,
+										odo: odo
 
 									};
 
