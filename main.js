@@ -933,7 +933,24 @@ class Mercedesme extends utils.Adapter {
 			this.socketConnections[vin]["zev"] = zevSocket;
 		});
 
-
+		const speedSocket = io("https://frontend.meapp.secure.mercedes-benz.com", {
+			path: "/data-service/socket.io",
+			query: {
+				currentCountryCode: "DE",
+				currentVehicleId: vin,
+				dp: "speedAlert",
+				locale: "de_DE"
+			},
+			extraHeaders: {
+				cookie: this.socketIOCookie
+			}
+		});
+		speedSocket.on("SET_SPEED_ALERT_DATA", (data) => {
+			this.addSocketData(vin, "SET_SPEED_ALERT_DATA", data);
+		});
+		speedSocket.on("connect", () => {
+			this.socketConnections[vin]["speed"] = speedSocket;
+		});
 
 		const mapSocket = io("https://frontend.meapp.secure.mercedes-benz.com", {
 			path: "/data-service/socket.io",
