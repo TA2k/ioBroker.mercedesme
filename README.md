@@ -17,6 +17,10 @@ Mercedes me adapter for ioBroker
 
 ## Changelog
 
+### 0.0.12
+
+-   add gas prices via tankerkönig
+
 ### 0.0.11
 
 -   minor fixes

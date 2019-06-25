@@ -235,7 +235,7 @@ class Mercedesme extends utils.Adapter {
 				//ACK Values
 				const pre = this.name + "." + this.instance;
 				if (id.indexOf("travelDataBlock.tankLevelPercent") !== -1 || id.indexOf("travelDataBlock.soc") !== -1) {
-					this.getStates("*", (err, states) => {
+					this.getStates("*", async (err, states) => {
 						let lastString = "tankLevelLast";
 						let status = "tankLevelStatus";
 						let before = "tankLevelBeforeFueling";
@@ -272,17 +272,26 @@ class Mercedesme extends utils.Adapter {
 								const beforeValue = states[pre + "." + vin + ".history." + before] ? states[pre + "." + vin + ".history." + before].val : 0;
 								const diff = state.val - parseInt(beforeValue);
 								let quantity;
+								let price = 0;
 								if (id.indexOf("travelDataBlock.soc") !== -1) {
 									if (this.config.capacity) {
 										const capacityArray = this.config.capacity.split(", ");
 										const capacity = parseFloat(capacityArray[this.vinArray.indexOf(vin)]);
 										quantity = diff * capacity / 100;
+										if (this.config.kwprice) {
+											price = parseFloat(this.config.kwprice) * quantity;
+										}
 									}
 								} else {
 									if (this.config.tank) {
 										const tankArray = this.config.tank.split(", ");
 										const tank = parseInt(tankArray[this.vinArray.indexOf(vin)]);
 										quantity = diff * tank / 100;
+
+										if (this.config.apiKey) {
+											price = await this.getGasPrice(vin);
+											price = price * quantity;
+										}
 									}
 								}
 								if (beforeValue < 99 && diff > 0) {
@@ -291,7 +300,8 @@ class Mercedesme extends utils.Adapter {
 										end: state.val,
 										date: dformat,
 										diff: diff,
-										quantity: quantity
+										quantity: quantity,
+										price: price
 
 									};
 
@@ -376,6 +386,34 @@ class Mercedesme extends utils.Adapter {
 			// The state was deleted
 
 		}
+	}
+	async getGasPrice(vin) {
+		return new Promise((resolve, reject) => {
+			const pre = this.name + "." + this.instance;
+			this.getStates(pre + "." + vin + ".location.*", (err, states) => {
+				this.log.debug("https://creativecommons.tankerkoenig.de/json/list.php?lat=" + states[pre + "." + vin + ".location.latitude"].val + "&lng=" + states[pre + "." + vin + ".location.longitude"].val + "&rad=4&sort=dist&type=" + this.config.gas + "&apikey=" + this.config.apiKey)
+				request.get({
+					url: "https://creativecommons.tankerkoenig.de/json/list.php?lat=" + states[pre + "." + vin + ".location.latitude"].val + "&lng=" + states[pre + "." + vin + ".location.longitude"].val + "&rad=4&sort=dist&type=" + this.config.gas + "&apikey=" + this.config.apiKey,
+					followAllRedirects: true
+				}, (err, resp, body) => {
+					if (err) {
+						resolve(0);
+					}
+					try {
+						this.log.debug(body);
+						const tankk = JSON.parse(body);
+						if (tankk.status === "error") {
+							resolve(0);
+						}
+						this.log.debug(tankk.stations[0].price);
+						resolve(tankk.stations[0].price);
+					} catch (error) {
+						resolve(0);
+
+					}
+				});
+			});
+		});
 	}
 	getVehicleDetails() {
 		return new Promise((resolve, reject) => {
