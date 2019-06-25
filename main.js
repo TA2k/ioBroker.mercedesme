@@ -667,6 +667,22 @@ class Mercedesme extends utils.Adapter {
 				}
 				this.vinArray = [...new Set(this.vinArray)];
 				this.vinArray.forEach(element => {
+					this.setObjectNotExists(element + ".status", {
+						type: "state",
+						common: {
+							name: "Vehiclestatus Fahrzeugstatus updated via Interval in Settings",
+							write: true,
+						},
+						native: {}
+					});
+					this.setObjectNotExists(element + ".history", {
+						type: "state",
+						common: {
+							name: "Fuel/Energy Tank/Lade History",
+							write: true,
+						},
+						native: {}
+					});
 
 					this.setObjectNotExists(element + ".history.tankLevelLast", {
 						type: "state",
