@@ -275,7 +275,8 @@ class Mercedesme extends utils.Adapter {
 								let price = 0;
 								if (id.indexOf("travelDataBlock.soc") !== -1) {
 									if (this.config.capacity) {
-										const capacityArray = this.config.capacity.split(", ");
+
+										const capacityArray = this.config.capacity.replace(/ /g, '').split(",");
 										const capacity = parseFloat(capacityArray[this.vinArray.indexOf(vin)]);
 										quantity = diff * capacity / 100;
 										if (this.config.kwprice) {
@@ -284,7 +285,7 @@ class Mercedesme extends utils.Adapter {
 									}
 								} else {
 									if (this.config.tank) {
-										const tankArray = this.config.tank.split(", ");
+										const tankArray = this.config.tank.replace(/ /g, '').split(", ");
 										const tank = parseInt(tankArray[this.vinArray.indexOf(vin)]);
 										quantity = diff * tank / 100;
 
