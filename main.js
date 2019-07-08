@@ -257,11 +257,13 @@ class Mercedesme extends utils.Adapter {
 							this.setState(vin + ".history." + lastString, state.val, true);
 						}
 						if (states[pre + "." + vin + ".history." + status] && states[pre + "." + vin + ".history." + lastString]) {
-							//check is charging via power plug
-							if (status === "socStatus" && states[pre + "." + vin + ".CHARGING_DATA.chargingStatus"].val >= 2) {
-								return;
-							}
+
+
 							if (state.val > states[pre + "." + vin + ".history." + lastString].val && !states[pre + "." + vin + ".history." + status].val) {
+								//check is charging via power plug
+								if (status === "socStatus" && states[pre + "." + vin + ".CHARGING_DATA.chargingStatus"].val >= 2) {
+									return;
+								}
 								this.setState(vin + ".history." + before, states[pre + "." + vin + ".history." + lastString].val, true);
 								this.setState(vin + ".history." + status, true, true);
 							}
