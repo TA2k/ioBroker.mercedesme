@@ -33,6 +33,7 @@ class Mercedesme extends utils.Adapter {
 		this.socketConnections = {};
 		this.interval = null;
 		this.reAuthInterval = null;
+		this.reconnectInterval = null;
 		this.doorInterval = null;
 	}
 
@@ -72,14 +73,23 @@ class Mercedesme extends utils.Adapter {
 					this.log.error("Error getting Vehicle Location");
 				});
 				this.reAuthInterval = setInterval(() => {
-					this.log.debug("Intervall reconnect");
+					this.log.debug("Intervall reauth");
 					this.refreshToken();
 					this.reAuth().then(() => {
 						this.vinArray.forEach((vin) => {
 							this.connectToSocketIo(vin);
 						});
 					}, () => {});
-				}, 6 * 60 * 1000); //6min
+				}, 4 * 60 * 1000); //4min
+
+				this.reconnectInterval = setInterval(() => {
+					this.log.debug("Intervall reconnect");
+					this.login().then(() => {
+						this.vinArray.forEach((vin) => {
+							this.connectToSocketIo(vin);
+						});
+					}, () => {});
+				}, 6 * 60 * 60 * 1000); //6h
 
 				this.interval = setInterval(() => {
 					this.getVehicleStatus();
@@ -110,6 +120,7 @@ class Mercedesme extends utils.Adapter {
 		try {
 			clearInterval(this.interval);
 			clearInterval(this.reAuthInterval);
+			clearInterval(this.reconnectInterval);
 			clearInterval(this.doorInterval);
 			callback();
 		} catch (e) {

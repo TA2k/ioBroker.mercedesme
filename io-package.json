@@ -1,8 +1,11 @@
 {
 	"common": {
 		"name": "mercedesme",
-		"version": "0.0.12",
+		"version": "0.0.13",
 		"news": {
+			"0.0.13": {
+				"en": "add hard reconnect after 6h for stream data"
+			},
 			"0.0.12": {
 				"en": "add gas prices via tankerkönig"
 			},

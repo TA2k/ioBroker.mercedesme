@@ -56,6 +56,9 @@
     "sinon": "^7.3.2",
     "sinon-chai": "^3.3.0"
   },
+  "engines": {
+    "node": ">=8"
+  },
   "homepage": "https://github.com/TA2k/ioBroker.mercedesme",
   "keywords": [
     "mercedes",
@@ -79,5 +82,5 @@
     "test:package": "mocha test/package --exit",
     "test:unit": "mocha test/unit --exit"
   },
-  "version": "0.0.12"
+  "version": "0.0.13"
 }
