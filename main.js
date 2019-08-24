@@ -80,7 +80,7 @@ class Mercedesme extends utils.Adapter {
 							this.connectToSocketIo(vin);
 						});
 					}, () => {});
-				}, 4 * 60 * 1000); //4min
+				}, 5 * 60 * 1000); //5min
 
 				this.reconnectInterval = setInterval(() => {
 					this.log.debug("Intervall reconnect");
@@ -189,23 +189,28 @@ class Mercedesme extends utils.Adapter {
 
 						if (id.indexOf("WindowLock") !== -1) {
 							this.reAuth().then(() => {
-								if (!state.val || state.val === "false") {
-									this.socketConnections[vin]["doorLock"].emit("command", {
-										"commandId": "WINDOWS_OPEN",
-										"data": {
-											"message": "QUERY_STARTED_OPEN",
-											"sliderPosition": 1
-										}
-									});
-								} else {
-									this.socketConnections[vin]["doorLock"].emit("command", {
-										"commandId": "WINDOWS_CLOSE",
-										"data": {
-											"message": "QUERY_STARTED_CLOSED",
-											"sliderPosition": 0
-										}
-									});
+								if (this.socketConnections[vin]["setDoorLock"]) {
+									if (!state.val || state.val === "false") {
+										this.socketConnections[vin]["setDoorLock"].emit("command", {
+											"commandId": "WINDOWS_OPEN",
+											"data": {
+												"message": "QUERY_STARTED_OPEN",
+												"sliderPosition": 1
+											}
+										});
+									} else {
 
+										this.socketConnections[vin]["setDoorLock"].emit("command", {
+											"commandId": "WINDOWS_CLOSE",
+											"data": {
+												"message": "QUERY_STARTED_CLOSED",
+												"sliderPosition": 0
+											}
+										});
+
+									}
+								} else {
+									this.log.warn("No Set Door Lock Socket found");
 								}
 							});
 							return;
@@ -1152,7 +1157,7 @@ class Mercedesme extends utils.Adapter {
 			// NEEDED FOR OPENING DOOR VIA SOCKET
 			preDoorSocket.on("CLIENT_ID", (data) => {
 				this.log.debug("CLIENT_ID");
-				preDoorSocket.close();
+				//preDoorSocket.close();
 				const ck = request.cookie("mvpClientId");
 				ck.value = data.id;
 				ck.key = "mvpClientId";
@@ -1177,8 +1182,10 @@ class Mercedesme extends utils.Adapter {
 					followAllRedirects: true
 				}, function (err, resp, body) {});
 				doorSocket.on("connect", () => {
-					this.socketConnections[vin]["doorLock"].close(); //close pre
-					this.socketConnections[vin]["doorLock"] = doorSocket;
+					if (this.socketConnections[vin]["setDoorLock"]) {
+						this.socketConnections[vin]["setDoorLock"].close(); //close pre
+					}
+					this.socketConnections[vin]["setDoorLock"] = doorSocket;
 				});
 				doorSocket.on("SET_DOORLOCK_DATA", (data) => {
 					this.addSocketData(vin, "DOORLOCK_STATUS", data.doorlockStatus);
@@ -1331,8 +1338,8 @@ class Mercedesme extends utils.Adapter {
 
 						this.log.debug(this.socketIOCookie);
 						this.vinArray.forEach(element => {
-							if (this.socketConnections[element]["doorLock"]) {
-								this.socketConnections[element]["doorLock"].io.engine.extraHeaders.cookie = this.socketIOCookie;
+							if (this.socketConnections[element]["setDoorLock"]) {
+								this.socketConnections[element]["setDoorLock"].io.engine.extraHeaders.cookie = this.socketIOCookie;
 							}
 						});
 
