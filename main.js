@@ -53,6 +53,11 @@ class Mercedesme extends utils.Adapter {
 
 			this.getVehicles().then(() => {
 
+				this.interval = setInterval(() => {
+					this.getVehicleStatus();
+					this.getVehicleLocation();
+				}, this.config.interval * 1000);
+
 				this.vinArray.forEach((vin) => {
 					this.log.debug("Start " + vin);
 					this.connectToSocketIo(vin);
@@ -91,10 +96,6 @@ class Mercedesme extends utils.Adapter {
 					}, () => {});
 				}, 6 * 60 * 60 * 1000); //6h
 
-				this.interval = setInterval(() => {
-					this.getVehicleStatus();
-					this.getVehicleLocation();
-				}, this.config.interval * 1000);
 
 
 
@@ -253,7 +254,7 @@ class Mercedesme extends utils.Adapter {
 			} else {
 				//ACK Values
 				const pre = this.name + "." + this.instance;
-				if (id.indexOf("travelDataBlock.tankLevelPercent") !== -1 || id.indexOf("travelDataBlock.soc") !== -1) {
+				if (id.indexOf("status.tankLevelPercent") !== -1 || id.indexOf("status.soc") !== -1) {
 					this.getStates("*", async (err, states) => {
 						let lastString = "tankLevelLast";
 						let status = "tankLevelStatus";
@@ -277,7 +278,7 @@ class Mercedesme extends utils.Adapter {
 
 							if (state.val > states[pre + "." + vin + ".history." + lastString].val && !states[pre + "." + vin + ".history." + status].val) {
 								//check is charging via power plug
-								if (status === "socStatus" && states[pre + "." + vin + ".CHARGING_DATA.chargingStatus"].val >= 2) {
+								if (status === "socStatus" && states[pre + "." + vin + ".status.chargingStatus"].val >= 2) {
 									return;
 								}
 								this.setState(vin + ".history." + before, states[pre + "." + vin + ".history." + lastString].val, true);
@@ -299,7 +300,7 @@ class Mercedesme extends utils.Adapter {
 								let quantity;
 								let price = 0;
 								const odo = states[pre + "." + vin + ".status.odo"].val;
-								if (id.indexOf("travelDataBlock.soc") !== -1) {
+								if (id.indexOf("status.soc") !== -1) {
 									if (this.config.capacity) {
 
 										const capacityArray = this.config.capacity.replace(/ /g, '').split(",");
