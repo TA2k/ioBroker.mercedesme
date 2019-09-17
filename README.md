@@ -17,6 +17,10 @@ Mercedes me adapter for ioBroker
 
 ## Changelog
 
+### 0.0.15
+
+-   fix soc history bug, add basic price and  adapter restart every 6h
+
 ### 0.0.14
 
 -   fix when webpage streams are not reachable

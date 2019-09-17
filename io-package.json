@@ -1,8 +1,11 @@
 {
 	"common": {
 		"name": "mercedesme",
-		"version": "0.0.14",
+		"version": "0.0.15",
 		"news": {
+			"0.0.15": {
+				"en": "fix soc history bug, add basic price and  adapter restart every 6h"
+			},
 			"0.0.14": {
 				"en": "fix when webpage streams are not reachable"
 			},

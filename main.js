@@ -88,12 +88,14 @@ class Mercedesme extends utils.Adapter {
 				}, 5 * 60 * 1000); //5min
 
 				this.reconnectInterval = setInterval(() => {
-					this.log.debug("Intervall reconnect");
-					this.login().then(() => {
-						this.vinArray.forEach((vin) => {
-							this.connectToSocketIo(vin);
-						});
-					}, () => {});
+					this.log.debug("Intervall restart");
+					this.restart();
+					// this.login().then(() => {
+					// 	this.vinArray.forEach((vin) => {
+					// 		this.connectToSocketIo(vin);
+					// 	});
+					// }
+					// , () => {});
 				}, 6 * 60 * 60 * 1000); //6h
 
 
@@ -300,6 +302,7 @@ class Mercedesme extends utils.Adapter {
 								let quantity;
 								let price = 0;
 								const odo = states[pre + "." + vin + ".status.odo"].val;
+								let basicPrice = 0;
 								if (id.indexOf("status.soc") !== -1) {
 									if (this.config.capacity) {
 
@@ -307,6 +310,7 @@ class Mercedesme extends utils.Adapter {
 										const capacity = parseFloat(capacityArray[this.vinArray.indexOf(vin)]);
 										quantity = diff * capacity / 100;
 										if (this.config.kwprice) {
+											basicPrice = parseFloat(this.config.kwprice);
 											price = parseFloat(this.config.kwprice) * quantity;
 										}
 									}
@@ -318,6 +322,7 @@ class Mercedesme extends utils.Adapter {
 
 										if (this.config.apiKey) {
 											price = await this.getGasPrice(vin);
+											basicPrice = price;
 											price = price * quantity;
 										}
 									}
@@ -329,8 +334,9 @@ class Mercedesme extends utils.Adapter {
 										date: dformat,
 										diff: diff,
 										quantity: quantity,
-										price: price,
-										odo: odo
+										price: price.toFixed(2),
+										odo: odo,
+										basicPrice: basicPrice,
 
 									};
 
