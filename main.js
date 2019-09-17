@@ -260,7 +260,7 @@ class Mercedesme extends utils.Adapter {
 						let status = "tankLevelStatus";
 						let before = "tankLevelBeforeFueling";
 						let jsonString = "tankLevelJSON";
-						if (id.indexOf("travelDataBlock.soc") !== -1) {
+						if (id.indexOf("status.soc") !== -1) {
 							lastString = "socLevelLast";
 							status = "socStatus";
 							before = "socLevelBeforeFueling";
