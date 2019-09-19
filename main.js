@@ -256,7 +256,7 @@ class Mercedesme extends utils.Adapter {
 			} else {
 				//ACK Values
 				const pre = this.name + "." + this.instance;
-				if (id.indexOf("status.tankLevelPercent") !== -1 || id.indexOf("status.soc") !== -1) {
+				if (id.indexOf("status.tanklevelpercent") !== -1 || id.indexOf("status.soc") !== -1) {
 					this.getStates("*", async (err, states) => {
 						let lastString = "tankLevelLast";
 						let status = "tankLevelStatus";
@@ -280,7 +280,7 @@ class Mercedesme extends utils.Adapter {
 
 							if (state.val > states[pre + "." + vin + ".history." + lastString].val && !states[pre + "." + vin + ".history." + status].val) {
 								//check is charging via power plug
-								if (status === "socStatus" && states[pre + "." + vin + ".status.chargingStatus"].val >= 2) {
+								if (status === "socStatus" && states[pre + "." + vin + ".status.chargingstatus"].val >= 2) {
 									return;
 								}
 								this.setState(vin + ".history." + before, states[pre + "." + vin + ".history." + lastString].val, true);

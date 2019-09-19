@@ -17,6 +17,10 @@ Mercedes me adapter for ioBroker
 
 ## Changelog
 
+### 0.0.16
+
+-   fix fueling will not recording probably
+
 ### 0.0.15
 
 -   fix soc history bug, add basic price and  adapter restart every 6h
