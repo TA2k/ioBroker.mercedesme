@@ -67,7 +67,7 @@ class Mercedesme extends utils.Adapter {
 						const pre = this.name + "." + this.instance;
 						this.getStates(pre + "." + vin + ".*", (err, states) => {
 							const allIds = Object.keys(states);
-							allIds.forEach( (keyName) => {
+							allIds.forEach((keyName) => {
 								if (
 									keyName.indexOf(".CHARGING_DATA") !== -1 ||
 									keyName.indexOf(".DOORLOCK_STATUS") !== -1 ||
@@ -495,7 +495,7 @@ class Mercedesme extends utils.Adapter {
 					}
 				}, (err, resp, body) => {
 					if (err) {
-						
+
 						this.log.debug(err);
 						reject();
 						return;
@@ -517,12 +517,45 @@ class Mercedesme extends utils.Adapter {
 								},
 								native: {}
 							});
-
+							const folder = "details";
 							let value = data["staticVehicleData"][element];
-							if (value && value.indexOf && value.indexOf(":") === -1) {
-								value = isNaN(parseFloat(value)) === true ? value : parseFloat(value);
+
+							if (typeof value === "object") {
+								for (const subElement in value) {
+
+									this.setObjectNotExists(vin + "." + folder + "." + element + "." + subElement, {
+										type: "state",
+										common: {
+											name: subElement,
+											type: "mixed",
+											role: "indicator",
+											write: false,
+											read: true
+										},
+										native: {}
+									});
+									let subValue = value[subElement]; {
+										if (Array.isArray(subValue)) {
+											this.setState(vin + "." + folder + "." + element + "." + subElement, JSON.stringify(subValue), true);
+										} else {
+											if (subValue && subValue.indexOf && subValue.indexOf(":") === -1) {
+												subValue = isNaN(parseFloat(subValue)) === true ? subValue : parseFloat(subValue);
+											}
+										}
+										this.setState(vin + "." + folder + "." + element + "." + subElement, subValue, true);
+
+									}
+								}
+							} else {
+								if (Array.isArray(value)) {
+									this.setState(vin + "." + folder + "." + element, JSON.stringify(value), true);
+								} else {
+									if (value && value.indexOf && value.indexOf(":") === -1) {
+										value = isNaN(parseFloat(value)) === true ? value : parseFloat(value);
+									}
+								}
+								this.setState(vin + "." + folder + "." + element, value, true);
 							}
-							this.setState(vin + ".details." + element, value, true);
 						});
 
 
@@ -600,7 +633,10 @@ class Mercedesme extends utils.Adapter {
 					try {
 
 						const data = JSON.parse(body);
-
+						if (Object.keys(data["dynamic"]).length === 0) {
+							this.log.info("No Dynamic Information from MercedesMe. Maybe you car is not activated for native mercedes me service. Information via OBD Adapter are not supported yet.");
+							reject();
+						}
 						Object.keys(data["dynamic"]).forEach((element) => {
 
 							this.setObjectNotExists(vin + ".status." + element, {
@@ -971,6 +1007,7 @@ class Mercedesme extends utils.Adapter {
 	}
 	login() {
 		return new Promise((resolve, reject) => {
+
 			this.loginApp().then(() => {
 				//		resolve();
 				if (this.config.disableSocket) {
