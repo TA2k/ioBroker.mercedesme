@@ -60,7 +60,34 @@ class Mercedesme extends utils.Adapter {
 
 				this.vinArray.forEach((vin) => {
 					this.log.debug("Start " + vin);
-					this.connectToSocketIo(vin);
+					if (!this.config.disableSocket) {
+						this.connectToSocketIo(vin);
+					} else {
+						//Delete stream states
+						const pre = this.name + "." + this.instance;
+						this.getStates(pre + "." + vin + ".*", (err, states) => {
+							const allIds = Object.keys(states);
+							allIds.forEach( (keyName) => {
+								if (
+									keyName.indexOf(".CHARGING_DATA") !== -1 ||
+									keyName.indexOf(".DOORLOCK_STATUS") !== -1 ||
+									keyName.indexOf(".JOURNEYS_DATA") !== -1 ||
+									keyName.indexOf(".MAINTENANCE_DATA") !== -1 ||
+									keyName.indexOf(".PRECONDITIONING_DATA") !== -1 ||
+									keyName.indexOf(".SET_MAP_DATA") !== -1 ||
+									keyName.indexOf(".SET_SPEED_ALERT_DATA") !== -1
+								) {
+									this.delObject(
+										keyName
+										.split(".")
+										.slice(2)
+										.join(".")
+									);
+								}
+							});
+						});
+
+					}
 				});
 				this.getVehicleDetails().then(() => {
 
@@ -80,11 +107,13 @@ class Mercedesme extends utils.Adapter {
 				this.reAuthInterval = setInterval(() => {
 					this.log.debug("Intervall reauth");
 					this.refreshToken();
-					this.reAuth().then(() => {
-						this.vinArray.forEach((vin) => {
-							this.connectToSocketIo(vin);
-						});
-					}, () => {});
+					if (!this.config.disableSocket) {
+						this.reAuth().then(() => {
+							this.vinArray.forEach((vin) => {
+								this.connectToSocketIo(vin);
+							});
+						}, () => {});
+					}
 				}, 5 * 60 * 1000); //5min
 
 				this.reconnectInterval = setInterval(() => {
@@ -941,11 +970,15 @@ class Mercedesme extends utils.Adapter {
 		return new Promise((resolve, reject) => {
 			this.loginApp().then(() => {
 				//		resolve();
-				this.loginSocketIo().then(() => {
+				if (this.config.disableSocket) {
 					resolve();
-				}, () => {
-					reject();
-				});
+				} else {
+					this.loginSocketIo().then(() => {
+						resolve();
+					}, () => {
+						reject();
+					});
+				}
 
 			}, () => {
 				reject();
