@@ -495,6 +495,8 @@ class Mercedesme extends utils.Adapter {
 					}
 				}, (err, resp, body) => {
 					if (err) {
+						
+						this.log.debug(err);
 						reject();
 						return;
 					}
@@ -567,6 +569,7 @@ class Mercedesme extends utils.Adapter {
 						resolve();
 
 					} catch (error) {
+						this.log.debug(body)
 						reject();
 
 					}
