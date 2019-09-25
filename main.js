@@ -800,6 +800,10 @@ class Mercedesme extends utils.Adapter {
 	}
 	getVehicleLocation() {
 		return new Promise((resolve, reject) => {
+			if (this.config.isAdapter) {
+				resolve();
+				return;
+			}
 			this.vinArray.forEach(vin => {
 
 				request.get({
