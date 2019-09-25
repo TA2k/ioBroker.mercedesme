@@ -17,6 +17,10 @@ Mercedes me adapter for ioBroker
 
 ## Changelog
 
+### 0.0.17
+
+-   add connection via ODB Adapter (Adapter App)
+
 ### 0.0.16
 
 -   fix fueling will not recording probably
