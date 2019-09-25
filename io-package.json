@@ -1,8 +1,11 @@
 {
 	"common": {
 		"name": "mercedesme",
-		"version": "0.0.16",
+		"version": "0.0.17",
 		"news": {
+			"0.0.17": {
+				"en": "add connection via ODB Adapter (Adapter App)"
+			},
 			"0.0.16": {
 				"en": "fix fueling will not recording probably"
 			},
@@ -139,7 +142,9 @@
 		"apiKey": "",
 		"gas": "",
 		"kwprice": "",
-		"disableSocket": false
+		"disableSocket": false,
+		"isAdapter" : false,
+		"ciam" : ""
 	},
 	"objects": [],
 	"instanceObjects": []
