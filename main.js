@@ -35,6 +35,7 @@ class Mercedesme extends utils.Adapter {
 		this.reAuthInterval = null;
 		this.reconnectInterval = null;
 		this.doorInterval = null;
+		this.tenant = "";
 	}
 
 	/**
@@ -61,7 +62,9 @@ class Mercedesme extends utils.Adapter {
 				this.vinArray.forEach((vin) => {
 					this.log.debug("Start " + vin);
 					if (!this.config.disableSocket) {
-						this.connectToSocketIo(vin);
+						if (!this.config.isAdapter) {
+							this.connectToSocketIo(vin);
+						}
 					} else {
 						//Delete stream states
 						const pre = this.name + "." + this.instance;
@@ -108,11 +111,13 @@ class Mercedesme extends utils.Adapter {
 					this.log.debug("Intervall reauth");
 					this.refreshToken();
 					if (!this.config.disableSocket) {
-						this.reAuth().then(() => {
-							this.vinArray.forEach((vin) => {
-								this.connectToSocketIo(vin);
-							});
-						}, () => {});
+						if (!this.config.isAdapter) {
+							this.reAuth().then(() => {
+								this.vinArray.forEach((vin) => {
+									this.connectToSocketIo(vin);
+								});
+							}, () => {});
+						}
 					}
 				}, 5 * 60 * 1000); //5min
 
@@ -185,9 +190,13 @@ class Mercedesme extends utils.Adapter {
 			if (!state.ack) {
 				if (id.indexOf("remote") !== -1) {
 					this.refreshToken().then(() => {
-						this.connectDoorSockets(vin); //.then(() => {
+						if (!this.config.disableSocket) {
+							if (!this.config.isAdapter) {
+								this.connectDoorSockets(vin); //.then(() => {
+							}
+						}
 						let url = "https://vhs.meapp.secure.mercedes-benz.com/api/v1/vehicles/" + vin;
-						let headers = {
+						const headers = {
 							"Accept-Language": "de_DE",
 							"Authorization": "Bearer " + this.config.atoken,
 							"country_code": "DE",
@@ -203,7 +212,7 @@ class Mercedesme extends utils.Adapter {
 								url += "/precond/start";
 							}
 							body = '{"type":"departure"}';
-							const now = new Date()
+							const now = new Date();
 							body = '{"currentDepartureTime":' + (now.getHours() * 60 + now.getMinutes()) + '}';
 							this.log.debug(body);
 						}
@@ -455,7 +464,7 @@ class Mercedesme extends utils.Adapter {
 		return new Promise((resolve, reject) => {
 			const pre = this.name + "." + this.instance;
 			this.getStates(pre + "." + vin + ".location.*", (err, states) => {
-				this.log.debug("https://creativecommons.tankerkoenig.de/json/list.php?lat=" + states[pre + "." + vin + ".location.latitude"].val + "&lng=" + states[pre + "." + vin + ".location.longitude"].val + "&rad=4&sort=dist&type=" + this.config.gas + "&apikey=" + this.config.apiKey)
+				this.log.debug("https://creativecommons.tankerkoenig.de/json/list.php?lat=" + states[pre + "." + vin + ".location.latitude"].val + "&lng=" + states[pre + "." + vin + ".location.longitude"].val + "&rad=4&sort=dist&type=" + this.config.gas + "&apikey=" + this.config.apiKey);
 				request.get({
 					url: "https://creativecommons.tankerkoenig.de/json/list.php?lat=" + states[pre + "." + vin + ".location.latitude"].val + "&lng=" + states[pre + "." + vin + ".location.longitude"].val + "&rad=4&sort=dist&type=" + this.config.gas + "&apikey=" + this.config.apiKey,
 					followAllRedirects: true
@@ -481,9 +490,13 @@ class Mercedesme extends utils.Adapter {
 	}
 	getVehicleDetails() {
 		return new Promise((resolve, reject) => {
+			if (this.config.isAdapter) {
+				resolve();
+				return;
+			}
 			this.vinArray.forEach(vin => {
 
-				this.log.debug("Details")
+				this.log.debug("Details");
 				request.get({
 					jar: this.jar,
 					url: "https://bff.meapp.secure.mercedes-benz.com/api/v2/dashboarddata/" + vin + "/vehicle",
@@ -602,7 +615,7 @@ class Mercedesme extends utils.Adapter {
 						resolve();
 
 					} catch (error) {
-						this.log.debug(body)
+						this.log.debug(body);
 						reject();
 
 					}
@@ -614,16 +627,36 @@ class Mercedesme extends utils.Adapter {
 	getVehicleStatus() {
 		return new Promise((resolve, reject) => {
 			this.vinArray.forEach(vin => {
-
+				let url = "https://vhs.meapp.secure.mercedes-benz.com/api/v1/vehicles/" + vin + "/dynamic?forceRefresh=true";
+				let headers = {
+					"Accept-Language": "de_DE",
+					"Authorization": "Bearer " + this.config.atoken,
+					"country_code": "DE",
+					"User-Agent": "MercedesMe/2.13.2+639 (Android 5.1)"
+				}
+				if (this.config.isAdapter) {
+					url = "https://connectme-adapter.mercedes-benz.com/services-dg/carlacsappapi/v2/tenants/" + this.tenant + "/vehicles/" + vin + "/status?filter=last";
+					headers = {
+						"Host": "connectme-adapter.mercedes-benz.com",
+						"Content-Type": "application/json",
+						"X-ClientInformations": "CarlaAppVersion/3.0.50 iOS/13.1 Apple/iPhone11,2",
+						"Cookie": "",
+						"User-Agent": "Live/3 CFNetwork/1107.1 Darwin/19.0.0",
+						"Accept": "application/json",
+						"Accept-Language": "de-de",
+						"Authorization": "Bearer " + this.config.atoken,
+						"Cache-Control": "no-cache",
+						"Accept-Encoding": "deflate",
+						"Connection": "keep-alive",
+						"cache-control": "no-cache"
+					}
+				}
 				request.get({
 					jar: this.jar,
-					url: "https://vhs.meapp.secure.mercedes-benz.com/api/v1/vehicles/" + vin + "/dynamic?forceRefresh=true",
-					headers: {
-						"Accept-Language": "de_DE",
-						"Authorization": "Bearer " + this.config.atoken,
-						"country_code": "DE",
-						"User-Agent": "MercedesMe/2.13.2+639 (Android 5.1)"
-					}
+					url: url,
+					gzip: true,
+					headers: headers
+
 				}, (err, resp, body) => {
 					if (err) {
 						reject();
@@ -632,12 +665,15 @@ class Mercedesme extends utils.Adapter {
 
 					try {
 
-						const data = JSON.parse(body);
-						if (Object.keys(data["dynamic"]).length === 0) {
+						let curObject = JSON.parse(body).dynamic;
+						if (this.config.isAdapter) {
+							curObject = JSON.parse(body)[0];
+						}
+						if (Object.keys(curObject).length === 0) {
 							this.log.info("No Dynamic Information from MercedesMe. Maybe you car is not activated for native mercedes me service. Information via OBD Adapter are not supported yet.");
 							reject();
 						}
-						Object.keys(data["dynamic"]).forEach((element) => {
+						Object.keys(curObject).forEach((element) => {
 
 							this.setObjectNotExists(vin + ".status." + element, {
 								type: "state",
@@ -645,44 +681,107 @@ class Mercedesme extends utils.Adapter {
 									name: element,
 									type: "mixed",
 									role: "indicator",
-									write: false,
+									write: true,
 									read: true
 								},
 								native: {}
 							});
-
-							let value = data["dynamic"][element].value;
+							let value = "";
+							if (!this.config.isAdapter) {
+								value = curObject[element].value;
+							} else {
+								value = curObject[element] || "";
+							}
+							
 							if (value && value.indexOf && value.indexOf(":") === -1) {
 								value = isNaN(parseFloat(value)) === true ? value : parseFloat(value);
 							}
 							this.setState(vin + ".status." + element, value, true);
 						});
 
+						if (this.config.isAdapter) {
+							curObject = JSON.parse(body)[0].vehicleParameterValues;
 
-						Object.keys(data["aggregated"]["lastJourney"]).forEach((element) => {
+							if (curObject) {
+								Object.keys(curObject).forEach((element) => {
 
-							this.setObjectNotExists(vin + ".lastjourney." + element, {
-								type: "state",
-								common: {
-									name: element,
-									type: "mixed",
-									role: "indicator",
-									write: false,
-									read: true
-								},
-								native: {}
-							});
+									this.setObjectNotExists(vin + ".status.vehicleParameterValues." + element, {
+										type: "state",
+										common: {
+											name: element,
+											type: "mixed",
+											role: "indicator",
+											write: false,
+											read: true
+										},
+										native: {}
+									});
 
-							let value = data["aggregated"]["lastJourney"][element];
-							if (value && value.indexOf && value.indexOf(":") === -1) {
-								value = isNaN(parseFloat(value)) === true ? value : parseFloat(value);
+									let value = curObject[element];
+									if (typeof value === "object") {
+
+										for (const subElement in value) {
+
+											this.setObjectNotExists(vin + ".status.vehicleParameterValues." + element + "." + subElement, {
+												type: "state",
+												common: {
+													name: subElement,
+													type: "mixed",
+													role: "indicator",
+													write: false,
+													read: true
+												},
+												native: {}
+											});
+											let subValue = value[subElement]; {
+												if (Array.isArray(subValue)) {
+													this.setState(vin + ".status.vehicleParameterValues." + element + "." + subElement, JSON.stringify(subValue), true);
+												} else {
+													if (subValue && subValue.indexOf && subValue.indexOf(":") === -1) {
+														subValue = isNaN(parseFloat(subValue)) === true ? subValue : parseFloat(subValue);
+													}
+												}
+												this.setState(vin + ".status.vehicleParameterValues." + element + "." + subElement, subValue, true);
+
+											}
+										}
+									}
+									if (value && value.indexOf && value.indexOf(":") === -1) {
+										value = isNaN(parseFloat(value)) === true ? value : parseFloat(value);
+									}
+									this.setState(vin + ".status.vehicleParameterValues." + element, value, true);
+								});
 							}
-							this.setState(vin + ".lastjourney." + element, value, true);
-						});
+						}
+						curObject = JSON.parse(body).aggregated;
+
+						if (curObject && curObject["lastJourney"]) {
+							Object.keys(curObject["lastJourney"]).forEach((element) => {
+
+								this.setObjectNotExists(vin + ".lastjourney." + element, {
+									type: "state",
+									common: {
+										name: element,
+										type: "mixed",
+										role: "indicator",
+										write: false,
+										read: true
+									},
+									native: {}
+								});
+
+								let value = curObject["lastJourney"][element];
+								if (value && value.indexOf && value.indexOf(":") === -1) {
+									value = isNaN(parseFloat(value)) === true ? value : parseFloat(value);
+								}
+								this.setState(vin + ".lastjourney." + element, value, true);
+							});
+						}
 
 						resolve();
 
 					} catch (error) {
+						this.log.error(error)
 						reject();
 
 					}
@@ -749,9 +848,17 @@ class Mercedesme extends utils.Adapter {
 	}
 	getVehicles() {
 		return new Promise((resolve, reject) => {
+			let url = "https://bff.meapp.secure.mercedes-benz.com/api/v2/appdata";
+			if (this.config.isAdapter) {
+				if (!this.config.ciam) {
+					this.log.error("Missing ciam ID. You can find the id in your Adapter app. Upper right 'i' -> App Support");
+					reject();
+				}
+				url = "https://connectme-adapter.mercedes-benz.com/services-dg/carlacsappapi/registeredUsers/" + this.config.ciam;
+			}
 			request.get({
 				jar: this.jar,
-				url: "https://bff.meapp.secure.mercedes-benz.com/api/v2/appdata",
+				url: url,
 				headers: {
 					"Accept-Language": "en_DE",
 					"Authorization": "Bearer " + this.config.atoken
@@ -766,13 +873,15 @@ class Mercedesme extends utils.Adapter {
 					if (!JSON.parse(body).vehicles || JSON.parse(body).vehicles.length === 0) {
 						this.log.warn("No vehicles found");
 					}
+					this.tenant = JSON.parse(body).tenantId;
 					JSON.parse(body).vehicles.forEach(element => {
 						if (element.fin !== null && element.fin !== "null") {
-							this.vinArray.push(element.fin);
-							this.setObjectNotExists(element.fin, {
+							const fin = element.fin || element.vin;
+							this.vinArray.push(fin);
+							this.setObjectNotExists(fin, {
 								type: "state",
 								common: {
-									name: element.licensePlate,
+									name: element.licensePlate || element.licencePlateNumber,
 									role: "indicator",
 									type: "mixed",
 									write: false,
@@ -781,7 +890,7 @@ class Mercedesme extends utils.Adapter {
 								native: {}
 							});
 							for (const key in element) {
-								this.setObjectNotExists(element.fin + ".general." + key, {
+								this.setObjectNotExists(fin + ".general." + key, {
 									type: "state",
 									common: {
 										name: key,
@@ -793,10 +902,10 @@ class Mercedesme extends utils.Adapter {
 									native: {}
 								});
 								if (Array.isArray(element[key])) {
-									this.setState(element.fin + ".general." + key, JSON.stringify(element[key]), true);
+									this.setState(fin + ".general." + key, JSON.stringify(element[key]), true);
 								} else {
 
-									this.setState(element.fin + ".general." + key, element[key], true);
+									this.setState(fin + ".general." + key, element[key], true);
 								}
 							}
 						}
@@ -1010,7 +1119,7 @@ class Mercedesme extends utils.Adapter {
 
 			this.loginApp().then(() => {
 				//		resolve();
-				if (this.config.disableSocket) {
+				if (this.config.disableSocket || this.config.isAdapter) {
 					resolve();
 				} else {
 					this.loginSocketIo().then(() => {
@@ -1436,16 +1545,22 @@ class Mercedesme extends utils.Adapter {
 	}
 	refreshToken() {
 		return new Promise((resolve, reject) => {
-			this.log.debug("refreshToken")
+			this.log.debug("refreshToken");
 			const clientID = "4390b0db-4be9-40e9-9147-5845df537beb";
 			const redirect = "https://cgw.meapp.secure.mercedes-benz.com/endpoint/api/v1/redirect";
+			const headers = {
+				'Content-Type': 'application/x-www-form-urlencoded',
+				'User-Agent': 'okhttp/3.9.0',
+			};
+			let url = "https://api.secure.mercedes-benz.com/oidc10/auth/oauth/v2/token?grant_type=refresh_token&redirect_uri=" + redirect + "&client_id=" + clientID + "&refresh_token=" + this.config.rtoken;
+			if (this.config.isAdapter) {
+				url = "https://connectme-adapter.mercedes-benz.com/oauth2/token?&grant_type=refresh_token&redirect_uri=https%3A%2F%2Fconnectme-adapter.mercedes-benz.com%2Fservices-dg%2Fmbfa&scope=acsbasicscope%20carlaApp%20mbfaCarla%20applogcrashlog%20openid&refresh_token=" + this.config.rtoken;
+				headers["Authorization"] = "Basic TmYzMGFQUWVSeGwyNGYwRkVydEFMWjZmcF93YTpWQklZUVJQRVVPX2w2bElwN2ZJM0JrVWRaT2Nh";
+			}
 			request.post({
 				jar: this.jar,
-				url: "https://api.secure.mercedes-benz.com/oidc10/auth/oauth/v2/token?grant_type=refresh_token&redirect_uri=" + redirect + "&client_id=" + clientID + "&refresh_token=" + this.config.rtoken,
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded',
-					'User-Agent': 'okhttp/3.9.0',
-				},
+				url: url,
+				headers: headers,
 				followAllRedirects: false
 			}, (err, resp, body) => {
 				try {
@@ -1484,13 +1599,18 @@ class Mercedesme extends utils.Adapter {
 			const clientID = "4390b0db-4be9-40e9-9147-5845df537beb";
 			const scope = 'mma:backend:all openid ciam-uid profile email';
 			const app_id = "MCMAPP.FE_PROD";
+
 			const userAgent = 'Mozilla/5.0 (Linux; Android 5.1; Google Nexus 5 Build/LMY47D) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/39.0.0.0 Mobile Safari/537.36';
 			const redirect = "https://cgw.meapp.secure.mercedes-benz.com/endpoint/api/v1/redirect";
-			const url01 = "https://api.secure.mercedes-benz.com/oidc10/auth/oauth/v2/authorize?response_type=code&client_id=" + clientID + "&code_challenge=" + codeChallange + "&code_challenge_method=S256&scope=" + scope + "&redirect_uri=" + redirect;
+			let url01 = "https://api.secure.mercedes-benz.com/oidc10/auth/oauth/v2/authorize?response_type=code&client_id=" + clientID + "&code_challenge=" + codeChallange + "&code_challenge_method=S256&scope=" + scope + "&redirect_uri=" + redirect;
+			if (this.config.isAdapter) {
+				url01 = "https://connectme-adapter.mercedes-benz.com/oauth2/authorize?client_id=Nf30aPQeRxl24f0FErtALZ6fp_wa&redirect_uri=https%3A%2F%2Fconnectme-adapter.mercedes-benz.com%2Fservices-dg%2Fmbfa&response_type=code&prompt=login&scope=acsbasicscope%20carlaApp%20mbfaCarla%20applogcrashlog%20openid";
+			}
 			this.log.debug(url01);
 			request.get({
 				jar: this.jar,
 				url: url01,
+				followAllRedirects: true,
 				headers: {
 					'Accept-Language': "en_DE",
 					'X-Requested-With': 'com.daimler.mm.android',
@@ -1502,25 +1622,26 @@ class Mercedesme extends utils.Adapter {
 				if (err) {
 					reject();
 				}
-				request.get({
-					jar: this.jar,
-					url: "https://login.secure.mercedes-benz.com/wl/third-party-cookie?app-id=" + app_id,
-					followAllRedirects: true,
-					headers: {
-						'Accept-Language': "en_DE",
-						'X-Requested-With': 'com.daimler.mm.android',
-						'Accept': '*/*',
-						'User-Agent': userAgent,
-						'Origin': "https://login.secure.mercedes-benz.com",
-						'Cache-Control': 'max-age=0',
-						'Content-Type': 'application/x-www-form-urlencoded'
-					}
+				if (!this.config.isAdapter) {
+					request.get({
+						jar: this.jar,
+						url: "https://login.secure.mercedes-benz.com/wl/third-party-cookie?app-id=" + app_id,
+						followAllRedirects: true,
+						headers: {
+							'Accept-Language': "en_DE",
+							'X-Requested-With': 'com.daimler.mm.android',
+							'Accept': '*/*',
+							'User-Agent': userAgent,
+							'Origin': "https://login.secure.mercedes-benz.com",
+							'Cache-Control': 'max-age=0',
+							'Content-Type': 'application/x-www-form-urlencoded'
+						}
 
 
-				}, (err, resp, body) => {
-					this.log.debug("third submit result: " + body);
-				});
-
+					}, (err, resp, body) => {
+						this.log.debug("third submit result: " + body);
+					});
+				}
 				const dom = new JSDOM(body);
 				const form = {};
 				const formLogin = dom.window.document.querySelector("#formLogin");
@@ -1590,20 +1711,33 @@ class Mercedesme extends utils.Adapter {
 							'Referer': 'https://login.secure.mercedes-benz.com/wl/login',
 							'X-Requested-With': 'com.daimler.mm.android'
 						},
-						followAllRedirects: false
+						followAllRedirects: this.config.isAdapter
 					}, (err, resp, body) => {
 
-						if (resp.headers.location) {
-							const code = resp.headers.location.split("=")[1];
+						if (resp.headers.location || this.config.isAdapter) {
+							let code = "";
+							if (this.config.isAdapter) {
+								code = resp.request.path.split("=")[1];
+							} else {
+
+								code = resp.headers.location.split("=")[1];
+
+							}
 							this.log.debug("consent result: " + code);
+							const headers = {
+								'Content-Type': 'application/x-www-form-urlencoded',
+								'User-Agent': 'okhttp/3.9.0',
+							};
+							let url = "https://api.secure.mercedes-benz.com/oidc10/auth/oauth/v2/token?grant_type=authorization_code&redirect_uri=" + redirect + "&client_id=" + clientID + "&code_verifier=" + code_verifier + "&code=" + code;
+							if (this.config.isAdapter) {
+								url = "https://connectme-adapter.mercedes-benz.com/oauth2/token?code=" + code + "&grant_type=authorization_code&redirect_uri=https%3A%2F%2Fconnectme-adapter.mercedes-benz.com%2Fservices-dg%2Fmbfa&scope=acsbasicscope%20carlaApp%20mbfaCarla%20applogcrashlog%20openid";
+								headers["Authorization"] = "Basic TmYzMGFQUWVSeGwyNGYwRkVydEFMWjZmcF93YTpWQklZUVJQRVVPX2w2bElwN2ZJM0JrVWRaT2Nh";
+							}
 							request.post({
 								jar: this.jar,
-								url: "https://api.secure.mercedes-benz.com/oidc10/auth/oauth/v2/token?grant_type=authorization_code&redirect_uri=" + redirect + "&client_id=" + clientID + "&code_verifier=" + code_verifier + "&code=" + code,
+								url: url,
 								form: consentForm,
-								headers: {
-									'Content-Type': 'application/x-www-form-urlencoded',
-									'User-Agent': 'okhttp/3.9.0',
-								},
+								headers: headers,
 								followAllRedirects: false
 							}, (err, resp, body) => {
 								try {
