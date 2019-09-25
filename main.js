@@ -294,7 +294,7 @@ class Mercedesme extends utils.Adapter {
 			} else {
 				//ACK Values
 				const pre = this.name + "." + this.instance;
-				if (id.indexOf("status.tanklevelpercent") !== -1 || id.indexOf("status.soc") !== -1) {
+				if (id.indexOf("status.tanklevelpercent") !== -1 || id.indexOf("status.soc") !== -1 || id.indexOf("status.vehicleParameterValues.fuelVolume.value") !== -1) {
 					this.getStates("*", async (err, states) => {
 						let lastString = "tankLevelLast";
 						let status = "tankLevelStatus";
@@ -353,11 +353,19 @@ class Mercedesme extends utils.Adapter {
 										}
 									}
 								} else {
-									if (this.config.tank) {
+									if (this.config.tank ) {
 										const tankArray = this.config.tank.replace(/ /g, '').split(", ");
 										const tank = parseInt(tankArray[this.vinArray.indexOf(vin)]);
 										quantity = diff * tank / 100;
 
+										if (this.config.apiKey) {
+											price = await this.getGasPrice(vin);
+											basicPrice = price;
+											price = price * quantity;
+										}
+									}
+									if (this.config.isAdapter ) {
+										quantity = diff;
 										if (this.config.apiKey) {
 											price = await this.getGasPrice(vin);
 											basicPrice = price;
