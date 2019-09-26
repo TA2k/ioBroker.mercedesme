@@ -634,6 +634,7 @@ class Mercedesme extends utils.Adapter {
 	}
 	getVehicleStatus() {
 		return new Promise((resolve, reject) => {
+			this.log.debug("Update started");
 			this.vinArray.forEach(vin => {
 				let url = "https://vhs.meapp.secure.mercedes-benz.com/api/v1/vehicles/" + vin + "/dynamic?forceRefresh=true";
 				let headers = {
@@ -671,6 +672,7 @@ class Mercedesme extends utils.Adapter {
 						return;
 					}
 
+					this.log.debug("Update received");
 					try {
 
 						let curObject = JSON.parse(body).dynamic;
@@ -678,7 +680,7 @@ class Mercedesme extends utils.Adapter {
 							curObject = JSON.parse(body)[0];
 						}
 						if (Object.keys(curObject).length === 0) {
-							this.log.info("No Dynamic Information from MercedesMe. Maybe you car is not activated for native mercedes me service. Information via OBD Adapter are not supported yet.");
+							this.log.info("No Dynamic Information from MercedesMe. Maybe you car is not activated for native mercedes me service. For ODB Adapter you have to activate the option.");
 							reject();
 						}
 						Object.keys(curObject).forEach((element) => {
