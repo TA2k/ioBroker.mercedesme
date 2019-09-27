@@ -671,6 +671,16 @@ class Mercedesme extends utils.Adapter {
 						reject();
 						return;
 					}
+					if (resp.statusCode >= 400) {
+						if (resp.statusCode === 401) {
+							this.log.info("401 Error try to refresh accesstoken.");
+							this.refreshToken();
+							return;
+						}
+						this.log.error(resp.statusCode + " " + resp.statusMessage + " " + body);
+						reject();
+						return;
+					} 
 
 					this.log.debug("Update received");
 					try {
@@ -792,6 +802,7 @@ class Mercedesme extends utils.Adapter {
 
 					} catch (error) {
 						this.log.error(error)
+						this.log.error(JSON.stringify(error))
 						reject();
 
 					}
