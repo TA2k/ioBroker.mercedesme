@@ -721,7 +721,7 @@ class Mercedesme extends utils.Adapter {
 
 						if (this.config.isAdapter) {
 							curObject = JSON.parse(body)[0].vehicleParameterValues;
-
+							this.log.debug("Mileage: " + JSON.stringify(curObject.mileage))
 							if (curObject) {
 								Object.keys(curObject).forEach((element) => {
 
