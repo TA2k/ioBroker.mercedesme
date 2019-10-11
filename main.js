@@ -99,7 +99,9 @@ class Mercedesme extends utils.Adapter {
 				});
 				this.getVehicleStatus().then(() => {
 
-				}, () => {
+				}, (err) => {
+					this.log.error(err);
+					this.log.error(JSON.stringify(err));
 					this.log.error("Error getting Vehicle Status");
 				});
 				this.getVehicleLocation().then(() => {
@@ -668,7 +670,7 @@ class Mercedesme extends utils.Adapter {
 
 				}, (err, resp, body) => {
 					if (err) {
-						reject();
+						reject(err);
 						return;
 					}
 					if (resp.statusCode >= 400) {
