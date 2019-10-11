@@ -636,7 +636,7 @@ class Mercedesme extends utils.Adapter {
 	}
 	getVehicleStatus() {
 		return new Promise((resolve, reject) => {
-			this.log.debug("Update started");
+			// this.log.debug("Update started");
 			this.vinArray.forEach(vin => {
 				let url = "https://vhs.meapp.secure.mercedes-benz.com/api/v1/vehicles/" + vin + "/dynamic?forceRefresh=true";
 				let headers = {
@@ -684,7 +684,7 @@ class Mercedesme extends utils.Adapter {
 						return;
 					} 
 
-					this.log.debug("Update received");
+					// this.log.debug("Update received");
 					try {
 
 						let curObject = JSON.parse(body).dynamic;
