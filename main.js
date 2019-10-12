@@ -125,7 +125,7 @@ class Mercedesme extends utils.Adapter {
 
 				this.reconnectInterval = setInterval(() => {
 					this.log.debug("Intervall restart");
-					this.restart();
+					this.terminate("Reset Login",0);
 					// this.login().then(() => {
 					// 	this.vinArray.forEach((vin) => {
 					// 		this.connectToSocketIo(vin);
@@ -626,7 +626,7 @@ class Mercedesme extends utils.Adapter {
 
 					} catch (error) {
 						this.log.debug(body);
-						reject();
+						reject(error);
 
 					}
 				});
@@ -865,7 +865,7 @@ class Mercedesme extends utils.Adapter {
 						resolve();
 
 					} catch (error) {
-						reject();
+						reject(error);
 
 					}
 				});
@@ -893,7 +893,7 @@ class Mercedesme extends utils.Adapter {
 
 			}, (err, resp, body) => {
 				if (err) {
-					reject();
+					reject(err);
 				}
 				this.log.debug(body);
 				try {
