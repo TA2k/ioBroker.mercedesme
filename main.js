@@ -686,10 +686,10 @@ class Mercedesme extends utils.Adapter {
 
 					// this.log.debug("Update received");
 					try {
-
-						let curObject = JSON.parse(body).dynamic;
+						const parsedBody =  JSON.parse(body)
+						let curObject = parsedBody.dynamic;
 						if (this.config.isAdapter) {
-							curObject = JSON.parse(body)[0];
+							curObject = parsedBody[parsedBody.length - 1]
 						}
 						if (Object.keys(curObject).length === 0) {
 							this.log.info("No Dynamic Information from MercedesMe. Maybe you car is not activated for native mercedes me service. For ODB Adapter you have to activate the option.");
@@ -721,8 +721,8 @@ class Mercedesme extends utils.Adapter {
 							this.setState(vin + ".status." + element, value, true);
 						});
 
-						if (this.config.isAdapter) {
-							curObject = JSON.parse(body)[0].vehicleParameterValues;
+						if (this.config.isAdapter) 
+							curObject = parsedBody[parsedBody.length - 1].vehicleParameterValues;
 							this.log.debug("Mileage: " + JSON.stringify(curObject.mileage))
 							if (curObject) {
 								Object.keys(curObject).forEach((element) => {
