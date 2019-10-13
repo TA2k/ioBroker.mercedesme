@@ -721,7 +721,7 @@ class Mercedesme extends utils.Adapter {
 							this.setState(vin + ".status." + element, value, true);
 						});
 
-						if (this.config.isAdapter) 
+						if (this.config.isAdapter) {
 							curObject = parsedBody[parsedBody.length - 1].vehicleParameterValues;
 							this.log.debug("Mileage: " + JSON.stringify(curObject.mileage))
 							if (curObject) {
