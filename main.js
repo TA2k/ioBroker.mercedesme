@@ -125,7 +125,10 @@ class Mercedesme extends utils.Adapter {
 
 				this.reconnectInterval = setInterval(() => {
 					this.log.debug("Intervall restart");
-					this.terminate("Reset Login",0);
+					//Restart
+					this.getForeignObject('system.adapter.' + this.namespace, (err, obj) => {
+						if (obj) this.setForeignObject('system.adapter.' + this.namespace, obj);
+					});
 					// this.login().then(() => {
 					// 	this.vinArray.forEach((vin) => {
 					// 		this.connectToSocketIo(vin);
