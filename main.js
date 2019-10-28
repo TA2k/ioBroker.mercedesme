@@ -164,6 +164,11 @@ class Mercedesme extends utils.Adapter {
 			clearInterval(this.reAuthInterval);
 			clearInterval(this.reconnectInterval);
 			clearInterval(this.doorInterval);
+			this.vinArray.forEach(vin => {
+				for (const sockets in this.socketConnections[vin]) {
+					this.socketConnections[vin][sockets].close();
+				}
+			});
 			callback();
 		} catch (e) {
 			callback();
@@ -358,7 +363,7 @@ class Mercedesme extends utils.Adapter {
 										}
 									}
 								} else {
-									if (this.config.tank ) {
+									if (this.config.tank) {
 										const tankArray = this.config.tank.replace(/ /g, '').split(", ");
 										const tank = parseInt(tankArray[this.vinArray.indexOf(vin)]);
 										quantity = diff * tank / 100;
@@ -369,7 +374,7 @@ class Mercedesme extends utils.Adapter {
 											price = price * quantity;
 										}
 									}
-									if (this.config.isAdapter ) {
+									if (this.config.isAdapter) {
 										quantity = diff;
 										if (this.config.apiKey) {
 											price = await this.getGasPrice(vin);
@@ -685,11 +690,11 @@ class Mercedesme extends utils.Adapter {
 						this.log.error(resp.statusCode + " " + resp.statusMessage + " " + body);
 						reject();
 						return;
-					} 
+					}
 
 					// this.log.debug("Update received");
 					try {
-						const parsedBody =  JSON.parse(body)
+						const parsedBody = JSON.parse(body)
 						let curObject = parsedBody.dynamic;
 						if (this.config.isAdapter) {
 							curObject = parsedBody[parsedBody.length - 1]
@@ -717,7 +722,7 @@ class Mercedesme extends utils.Adapter {
 							} else {
 								value = curObject[element] || "";
 							}
-							
+
 							if (value && value.indexOf && value.indexOf(":") === -1) {
 								value = isNaN(parseFloat(value)) === true ? value : parseFloat(value);
 							}
