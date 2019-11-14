@@ -282,7 +282,8 @@ class Mercedesme extends utils.Adapter {
 							body: body
 						}, (err, resp, body) => {
 							if (err) {
-
+								this.log.error(err);
+								reject();
 								return;
 							}
 
@@ -692,7 +693,7 @@ class Mercedesme extends utils.Adapter {
 						return;
 					}
 
-					// this.log.debug("Update received");
+					this.log.debug(JSON.stringify(body));
 					try {
 						const parsedBody = JSON.parse(body)
 						let curObject = parsedBody.dynamic;
@@ -1713,7 +1714,11 @@ class Mercedesme extends utils.Adapter {
 					},
 					followAllRedirects: true
 				}, (err, resp, body) => {
-
+					if (err) {
+						this.log.error(err);
+						reject();
+						return;
+					}
 					//this.log.debug("form submit result: " + body);
 					if (body.indexOf("Login failed") !== -1) {
 						this.log.error("Logindaten fehlerhaft oder manueller Login auf der Webseite ist erforderlich");
@@ -1748,7 +1753,11 @@ class Mercedesme extends utils.Adapter {
 						},
 						followAllRedirects: this.config.isAdapter
 					}, (err, resp, body) => {
-
+						if (err) {
+							this.log.error(err);
+							reject();
+							return;
+						}
 						if (resp.headers.location || this.config.isAdapter) {
 							let code = "";
 							if (this.config.isAdapter) {
@@ -1775,6 +1784,11 @@ class Mercedesme extends utils.Adapter {
 								headers: headers,
 								followAllRedirects: false
 							}, (err, resp, body) => {
+								if (err) {
+									this.log.error(err);
+									reject();
+									return;
+								}
 								try {
 									const token = JSON.parse(body);
 									this.log.debug(JSON.stringify(token));
