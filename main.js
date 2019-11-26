@@ -33,6 +33,7 @@ class Mercedesme extends utils.Adapter {
 		this.socketConnections = {};
 		this.interval = null;
 		this.reAuthInterval = null;
+		this.refreshTokenInterval = null;
 		this.reconnectInterval = null;
 		this.doorInterval = null;
 		this.tenant = "";
@@ -109,9 +110,9 @@ class Mercedesme extends utils.Adapter {
 				}, () => {
 					this.log.error("Error getting Vehicle Location");
 				});
+
 				this.reAuthInterval = setInterval(() => {
 					this.log.debug("Intervall reauth");
-					this.refreshToken();
 					if (!this.config.disableSocket) {
 						if (!this.config.isAdapter) {
 							this.reAuth().then(() => {
@@ -123,22 +124,18 @@ class Mercedesme extends utils.Adapter {
 					}
 				}, 5 * 60 * 1000); //5min
 
+				this.refreshTokenInterval = setInterval(() => {
+					this.log.debug("Intervall refresh");
+					this.refreshToken();
+				}, 0.9 * 60 * 60 * 1000); //0.9h
+
 				this.reconnectInterval = setInterval(() => {
 					this.log.debug("Intervall restart");
 					//Restart
 					this.getForeignObject('system.adapter.' + this.namespace, (err, obj) => {
 						if (obj) this.setForeignObject('system.adapter.' + this.namespace, obj);
 					});
-					// this.login().then(() => {
-					// 	this.vinArray.forEach((vin) => {
-					// 		this.connectToSocketIo(vin);
-					// 	});
-					// }
-					// , () => {});
 				}, 6 * 60 * 60 * 1000); //6h
-
-
-
 
 			}, (
 
@@ -162,6 +159,7 @@ class Mercedesme extends utils.Adapter {
 		try {
 			clearInterval(this.interval);
 			clearInterval(this.reAuthInterval);
+			clearInterval(this.refreshTokenInterval);
 			clearInterval(this.reconnectInterval);
 			clearInterval(this.doorInterval);
 			this.vinArray.forEach(vin => {
@@ -223,7 +221,7 @@ class Mercedesme extends utils.Adapter {
 							}
 							body = '{"type":"departure"}';
 							const now = new Date();
-							body = '{"currentDepartureTime":' + (now.getHours() * 60 + now.getMinutes()) + '}';
+							body = '{"departureTime":' + (now.getHours() * 60 + now.getMinutes()) + '}';
 							this.log.debug(body);
 						}
 						if (id.indexOf("DoorLock") !== -1) {
@@ -275,22 +273,22 @@ class Mercedesme extends utils.Adapter {
 							}
 						}
 						this.log.debug(id + " " + url);
-						request.post({
+						request.post({	
 							jar: this.jar,
+							gzip: true,
 							url: url,
 							headers: headers,
 							body: body
 						}, (err, resp, body) => {
-							if (err) {
+							if (err || resp.statusCode >= 400 || !body) {
 								this.log.error(err);
-								reject();
 								return;
 							}
 
 							try {
-								this.log.debug(body);
+								this.log.info(body);
 								if (body.indexOf("INVALID") !== -1) {
-									this.log.error(body);
+									this.log.error("Action was not successful");
 								}
 
 							} catch (error) {
@@ -488,7 +486,7 @@ class Mercedesme extends utils.Adapter {
 					url: "https://creativecommons.tankerkoenig.de/json/list.php?lat=" + states[pre + "." + vin + ".location.latitude"].val + "&lng=" + states[pre + "." + vin + ".location.longitude"].val + "&rad=4&sort=dist&type=" + this.config.gas + "&apikey=" + this.config.apiKey,
 					followAllRedirects: true
 				}, (err, resp, body) => {
-					if (err) {
+					if (err || resp.statusCode >= 400 || !body) {
 						resolve(0);
 					}
 					try {
@@ -518,6 +516,7 @@ class Mercedesme extends utils.Adapter {
 				this.log.debug("Details");
 				request.get({
 					jar: this.jar,
+					gzip: true,
 					url: "https://bff.meapp.secure.mercedes-benz.com/api/v2/dashboarddata/" + vin + "/vehicle",
 					headers: {
 						"Accept-Language": "de_DE",
@@ -526,7 +525,7 @@ class Mercedesme extends utils.Adapter {
 						"User-Agent": "MercedesMe/2.13.2+639 (Android 5.1)"
 					}
 				}, (err, resp, body) => {
-					if (err) {
+					if (err || resp.statusCode >= 400 || !body) {
 
 						this.log.debug(err);
 						reject();
@@ -673,12 +672,12 @@ class Mercedesme extends utils.Adapter {
 				}
 				request.get({
 					jar: this.jar,
-					url: url,
 					gzip: true,
+					url: url,
 					headers: headers
 
 				}, (err, resp, body) => {
-					if (err) {
+					if (err || resp.statusCode >= 400 || !body) {
 						reject(err);
 						return;
 					}
@@ -832,6 +831,7 @@ class Mercedesme extends utils.Adapter {
 
 				request.get({
 					jar: this.jar,
+					gzip: true,
 					url: "https://vhs.meapp.secure.mercedes-benz.com/api/v1/vehicles/" + vin + "/location",
 					headers: {
 						"Accept-Language": "de_DE",
@@ -842,7 +842,7 @@ class Mercedesme extends utils.Adapter {
 						"lon": "1"
 					}
 				}, (err, resp, body) => {
-					if (err) {
+					if (err || resp.statusCode >= 400 || !body) {
 						reject();
 						return;
 					}
@@ -894,6 +894,7 @@ class Mercedesme extends utils.Adapter {
 			}
 			request.get({
 				jar: this.jar,
+					gzip: true,
 				url: url,
 				headers: {
 					"Accept-Language": "en_DE",
@@ -901,7 +902,7 @@ class Mercedesme extends utils.Adapter {
 				}
 
 			}, (err, resp, body) => {
-				if (err) {
+				if (err || resp.statusCode >= 400 || !body) {
 					reject(err);
 				}
 				this.log.debug(body);
@@ -1175,6 +1176,7 @@ class Mercedesme extends utils.Adapter {
 		return new Promise((resolve, reject) => {
 			request.get({
 				jar: this.jar,
+					gzip: true,
 				url: "https://frontend.meapp.secure.mercedes-benz.com/data-service/socket.io/?transport=polling"
 
 
@@ -1194,6 +1196,7 @@ class Mercedesme extends utils.Adapter {
 
 				request.post({
 					jar: this.jar,
+					gzip: true,
 					url: "https://api.secure.mercedes-benz.com/oidc10/auth/oauth/v2/authorize/consent",
 					form: consentForm,
 					followAllRedirects: true
@@ -1403,6 +1406,7 @@ class Mercedesme extends utils.Adapter {
 				});
 				request.get({
 					jar: this.jar,
+					gzip: true,
 					url: "https://frontend.meapp.secure.mercedes-benz.com/reauthenticate",
 					followAllRedirects: true
 				}, function (err, resp, body) {});
@@ -1500,6 +1504,7 @@ class Mercedesme extends utils.Adapter {
 
 			request.get({
 				jar: this.jar,
+				gzip: true,
 				url: "https://frontend.meapp.secure.mercedes-benz.com/reauthenticate",
 				followAllRedirects: true
 
@@ -1526,6 +1531,7 @@ class Mercedesme extends utils.Adapter {
 				}
 				request.post({
 					jar: this.jar,
+					gzip: true,
 					url: url,
 					form: form,
 					followAllRedirects: true
@@ -1550,6 +1556,7 @@ class Mercedesme extends utils.Adapter {
 					}
 					request.post({
 						jar: this.jar,
+						gzip: true,
 						url: "https://api.secure.mercedes-benz.com/oidc10/auth/oauth/v2/authorize/consent",
 						form: consentForm,
 						followAllRedirects: true
@@ -1595,10 +1602,14 @@ class Mercedesme extends utils.Adapter {
 			}
 			request.post({
 				jar: this.jar,
+				gzip: true,
 				url: url,
 				headers: headers,
 				followAllRedirects: false
 			}, (err, resp, body) => {
+				if (err || resp.statusCode >= 400 || !body) {
+					reject();
+				}
 				try {
 					const token = JSON.parse(body);
 					this.log.debug(JSON.stringify(token));
@@ -1609,18 +1620,14 @@ class Mercedesme extends utils.Adapter {
 					const t = new Date();
 					t.setSeconds(t.getSeconds() + 3600);
 					this.config.expires = t.getTime();
-
 					resolve();
 
 				} catch (error) {
-					this.log.debug("refresh result: " + body);
+					this.log.error("Error refresh token")
+					this.log.error("refresh result: " + body);
 					reject();
 				}
-				if (!err) {
-					resolve();
-				} else {
-					reject();
-				}
+					
 			});
 		});
 
@@ -1645,6 +1652,7 @@ class Mercedesme extends utils.Adapter {
 			this.log.debug(url01);
 			request.get({
 				jar: this.jar,
+				gzip: true,
 				url: url01,
 				followAllRedirects: true,
 				headers: {
@@ -1655,12 +1663,13 @@ class Mercedesme extends utils.Adapter {
 				}
 
 			}, (err, resp, body) => {
-				if (err) {
+				if (err || resp.statusCode >= 400 || !body) {
 					reject();
 				}
 				if (!this.config.isAdapter) {
 					request.get({
 						jar: this.jar,
+						gzip: true,
 						url: "https://login.secure.mercedes-benz.com/wl/third-party-cookie?app-id=" + app_id,
 						followAllRedirects: true,
 						headers: {
@@ -1700,6 +1709,7 @@ class Mercedesme extends utils.Adapter {
 				}
 				request.post({
 					jar: this.jar,
+					gzip: true,
 					url: url,
 					form: form,
 
@@ -1714,7 +1724,7 @@ class Mercedesme extends utils.Adapter {
 					},
 					followAllRedirects: true
 				}, (err, resp, body) => {
-					if (err) {
+					if (err || resp.statusCode >= 400 || !body) {
 						this.log.error(err);
 						reject();
 						return;
@@ -1739,6 +1749,7 @@ class Mercedesme extends utils.Adapter {
 					//this.log.debug("consent form: " + JSON.stringify(consentForm));
 					request.post({
 						jar: this.jar,
+					gzip: true,
 						url: "https://api.secure.mercedes-benz.com/oidc10/auth/oauth/v2/authorize/consent",
 						form: consentForm,
 						headers: {
@@ -1753,7 +1764,7 @@ class Mercedesme extends utils.Adapter {
 						},
 						followAllRedirects: this.config.isAdapter
 					}, (err, resp, body) => {
-						if (err) {
+						if (err || resp.statusCode >= 400 || !body) {
 							this.log.error(err);
 							reject();
 							return;
@@ -1779,12 +1790,13 @@ class Mercedesme extends utils.Adapter {
 							}
 							request.post({
 								jar: this.jar,
+								gzip: true,
 								url: url,
 								form: consentForm,
 								headers: headers,
 								followAllRedirects: false
 							}, (err, resp, body) => {
-								if (err) {
+								if (err || resp.statusCode >= 400 || !body) {
 									this.log.error(err);
 									reject();
 									return;
