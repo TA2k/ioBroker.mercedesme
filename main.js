@@ -23,7 +23,7 @@ class Mercedesme extends utils.Adapter {
 			name: "mercedesme",
 		});
 		this.on("ready", this.onReady.bind(this));
-		this.on("objectChange", this.onObjectChange.bind(this));
+		// this.on("objectChange", this.onObjectChange.bind(this));
 		this.on("stateChange", this.onStateChange.bind(this));
 		// this.on("message", this.onMessage.bind(this));
 		this.on("unload", this.onUnload.bind(this));
@@ -37,6 +37,7 @@ class Mercedesme extends utils.Adapter {
 		this.reconnectInterval = null;
 		this.doorInterval = null;
 		this.tenant = "";
+		this.statusEtag = "";
 	}
 
 	/**
@@ -653,6 +654,10 @@ class Mercedesme extends utils.Adapter {
 					"country_code": "DE",
 					"User-Agent": "MercedesMe/2.13.2+639 (Android 5.1)"
 				}
+				if (this.statusEtag) {
+					headers["If-None-Match"] = this.statusEtag;
+				
+				}
 				if (this.config.isAdapter) {
 					url = "https://connectme-adapter.mercedes-benz.com/services-dg/carlacsappapi/v2/tenants/" + this.tenant + "/vehicles/" + vin + "/status?filter=last";
 					headers = {
@@ -695,6 +700,12 @@ class Mercedesme extends utils.Adapter {
 					}
 
 					this.log.debug(JSON.stringify(body));
+					this.statusEtag = resp.headers.etag;
+					if (resp.statusCode === 304) {
+						this.log.debug("304 No values updated")
+						resolve();
+						return;
+					}
 					try {
 						const parsedBody = JSON.parse(body)
 						let curObject = parsedBody.dynamic;
