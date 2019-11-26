@@ -144,7 +144,7 @@ class Mercedesme extends utils.Adapter {
 			});
 
 		}, () => {
-			this.log.error("Login Failed");
+			this.log.error("Login Failed. Please try to login manually.");
 			this.setState("info.connection", false, true);
 		});
 
@@ -677,13 +677,15 @@ class Mercedesme extends utils.Adapter {
 					headers: headers
 
 				}, (err, resp, body) => {
-					if (err || resp.statusCode >= 400 || !body) {
+					if (err) {
+						this.log.error(err)
 						reject(err);
 						return;
 					}
 					if (resp.statusCode >= 400) {
 						if (resp.statusCode === 401) {
 							this.log.info("401 Error try to refresh accesstoken.");
+							this.log.error(body);
 							this.refreshToken();
 							return;
 						}
@@ -1749,7 +1751,7 @@ class Mercedesme extends utils.Adapter {
 					//this.log.debug("consent form: " + JSON.stringify(consentForm));
 					request.post({
 						jar: this.jar,
-					gzip: true,
+						gzip: true,
 						url: "https://api.secure.mercedes-benz.com/oidc10/auth/oauth/v2/authorize/consent",
 						form: consentForm,
 						headers: {
@@ -1757,14 +1759,14 @@ class Mercedesme extends utils.Adapter {
 							'Accept': '*/*',
 							'Cache-Control': 'max-age=0',
 							'Content-Type': 'application/x-www-form-urlencoded',
-							'Origin': "https://login.secure.mercedes-benz.com",
+							'Origin': "https://	login.secure.mercedes-benz.com",
 							'User-Agent': userAgent,
 							'Referer': 'https://login.secure.mercedes-benz.com/wl/login',
 							'X-Requested-With': 'com.daimler.mm.android'
 						},
 						followAllRedirects: this.config.isAdapter
 					}, (err, resp, body) => {
-						if (err || resp.statusCode >= 400 || !body) {
+						if (err) {
 							this.log.error(err);
 							reject();
 							return;
