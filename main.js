@@ -406,68 +406,70 @@ class Mercedesme extends utils.Adapter {
                         this.setState(vin + ".history." + lastString, state.val, true);
                     });
                 }
-                // if (id.indexOf("overallLockStatus") !== -1 || id.indexOf("switchDoors.isCommandPending") !== -1) {
-                //     this.getStates("*", (err, states) => {
-                //         if (states[pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending"] && states[pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending"].val) {
-                //             if (states[pre + "." + vin + ".remote.DoorLock"]) {
-                //                 // if (states[pre + "." + vin + ".remote.DoorLock"].val) {
-                //                 // 	this.setState(vin + ".remote.DoorLockStatus", 3, true);
-                //                 // } else {
-                //                 // 	this.setState(vin + ".remote.DoorLockStatus", 2, true);
-                //                 // }
-                //             }
-                //             return;
-                //         } else {
-                //             if (id.indexOf("overallLockStatus") !== -1) {
-                //                 this.setState(vin + ".remote.DoorLock", state.val, true);
-                //                 //	this.setState(vin + ".remote.DoorLockStatus", state.val ? 1 : 0, true);
-                //             } else {
-                //                 this.setState(vin + ".remote.DoorLock", states[pre + "." + vin + ".DOORLOCK_STATUS.overallLockStatus"], true);
-                //                 //	this.setState(vin + ".remote.DoorLockStatus", states[pre + "." + vin + ".DOORLOCK_STATUS.overallLockStatus"] ? 1 : 0, true);
-                //             }
-                //         }
-                //     });
-                // }
-                // if (id.indexOf("isPrecondIllustrationActive") !== -1) {
-                //     this.setState(vin + ".remote.Vorklimatisierung", state.val, true);
-                // }
-                // if (id.indexOf("DOORLOCK_STATUS.windowStatus") !== -1 || id.indexOf("switchWindows.isCommandPending") !== -1) {
-                //     this.getStates("*", (err, states) => {
-                //         const pre = this.name + "." + this.instance;
+                if (id.indexOf("overallLockStatus") !== -1) {
+                    //s|| id.indexOf("switchDoors.isCommandPending") !== -1) {
+                    this.getStates("*", (err, states) => {
+                        if (states[pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending"] && states[pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending"].val) {
+                            if (states[pre + "." + vin + ".remote.DoorLock"]) {
+                                // if (states[pre + "." + vin + ".remote.DoorLock"].val) {
+                                // 	this.setState(vin + ".remote.DoorLockStatus", 3, true);
+                                // } else {
+                                // 	this.setState(vin + ".remote.DoorLockStatus", 2, true);
+                                // }
+                            }
+                            return;
+                        } else {
+                            if (id.indexOf("overallLockStatus") !== -1) {
+                                this.setState(vin + ".remote.DoorLock", state.val, true);
+                                //	this.setState(vin + ".remote.DoorLockStatus", state.val ? 1 : 0, true);
+                            } else {
+                                this.setState(vin + ".remote.DoorLock", states[pre + "." + vin + ".DOORLOCK_STATUS.overallLockStatus"], true);
+                                //	this.setState(vin + ".remote.DoorLockStatus", states[pre + "." + vin + ".DOORLOCK_STATUS.overallLockStatus"] ? 1 : 0, true);
+                            }
+                        }
+                    });
+                }
+                if (id.indexOf("isPrecondIllustrationActive") !== -1) {
+                    this.setState(vin + ".remote.Vorklimatisierung", state.val, true);
+                }
+                if (id.indexOf("DOORLOCK_STATUS.windowStatus") !== -1) {
+                    // || id.indexOf("switchWindows.isCommandPending") !== -1) {
+                    this.getStates("*", (err, states) => {
+                        const pre = this.name + "." + this.instance;
 
-                //         if (states[pre + "." + vin + ".DOORLOCK_STATUS.switchWindows.isCommandPending"] && states[pre + "." + vin + ".DOORLOCK_STATUS.switchWindows.isCommandPending"].val) {
-                //             if (states[pre + "." + vin + ".remote.WindowLock"]) {
-                //                 // if (states[pre + "." + vin + ".remote.WindowLock"].val) {
-                //                 // 	this.setState(vin + ".remote.WindowLockStatus", 3, true);
-                //                 // } else {
-                //                 // 	this.setState(vin + ".remote.WindowLockStatus", 2, true);
-                //                 // }
-                //             }
+                        if (states[pre + "." + vin + ".DOORLOCK_STATUS.switchWindows.isCommandPending"] && states[pre + "." + vin + ".DOORLOCK_STATUS.switchWindows.isCommandPending"].val) {
+                            if (states[pre + "." + vin + ".remote.WindowLock"]) {
+                                // if (states[pre + "." + vin + ".remote.WindowLock"].val) {
+                                // 	this.setState(vin + ".remote.WindowLockStatus", 3, true);
+                                // } else {
+                                // 	this.setState(vin + ".remote.WindowLockStatus", 2, true);
+                                // }
+                            }
 
-                //             return;
-                //         } else {
-                //             if (
-                //                 states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontLeft"] &&
-                //                 states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontRight"] &&
-                //                 states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearLeft"] &&
-                //                 states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearRight"]
-                //             ) {
-                //                 if (
-                //                     states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontLeft"].val === 2 &&
-                //                     states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontRight"].val === 2 &&
-                //                     states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearLeft"].val === 2 &&
-                //                     states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearRight"].val === 2
-                //                 ) {
-                //                     this.setState(vin + ".remote.WindowLock", true, true);
-                //                     //this.setState(vin + ".remote.WindowLockStatus", 1, true);
-                //                 } else {
-                //                     this.setState(vin + ".remote.WindowLock", false, true);
-                //                     //this.setState(vin + ".remote.WindowLockStatus", 0, true);
-                //                 }
-                //             }
-                //         }
-                //     });
-                // }
+                            return;
+                        } else {
+                            if (
+                                states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontLeft"] &&
+                                states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontRight"] &&
+                                states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearLeft"] &&
+                                states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearRight"]
+                            ) {
+                                if (
+                                    states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontLeft"].val === 2 &&
+                                    states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontRight"].val === 2 &&
+                                    states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearLeft"].val === 2 &&
+                                    states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearRight"].val === 2
+                                ) {
+                                    this.setState(vin + ".remote.WindowLock", true, true);
+                                    //this.setState(vin + ".remote.WindowLockStatus", 1, true);
+                                } else {
+                                    this.setState(vin + ".remote.WindowLock", false, true);
+                                    //this.setState(vin + ".remote.WindowLockStatus", 0, true);
+                                }
+                            }
+                        }
+                    });
+                }
             }
         } else {
             // The state was deleted
