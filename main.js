@@ -410,9 +410,10 @@ class Mercedesme extends utils.Adapter {
                     this.log.info(id);
                     this.log.info(JSON.stringify(state));
                     this.getStates("*", (err, states) => {
-                        this.log.info("Pending:" + JSON.stringify(states[pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending"]));
+                        this.log.info("Pending: " + JSON.stringify(states[pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending"]));
                         if (states[pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending"] && states[pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending"].val) {
                             if (states[pre + "." + vin + ".remote.DoorLock"]) {
+                                this.log.info(id + " nothing");
                                 // if (states[pre + "." + vin + ".remote.DoorLock"].val) {
                                 // 	this.setState(vin + ".remote.DoorLockStatus", 3, true);
                                 // } else {
@@ -422,11 +423,11 @@ class Mercedesme extends utils.Adapter {
                             return;
                         } else {
                             if (id.indexOf("overallLockStatus") !== -1) {
-                                this.log.info("Pending False and status comes in means set the current status");
+                                this.log.info(id + " Pending False and status comes in means set the current status");
                                 this.setState(vin + ".remote.DoorLock", state.val, true);
                                 //	this.setState(vin + ".remote.DoorLockStatus", state.val ? 1 : 0, true);
                             } else {
-                                this.log.info("Pending False means set the current overall status");
+                                this.log.info(id + " Pending False means set the current overall status");
 
                                 this.setState(vin + ".remote.DoorLock", states[pre + "." + vin + ".DOORLOCK_STATUS.overallLockStatus"], true);
                                 //	this.setState(vin + ".remote.DoorLockStatus", states[pre + "." + vin + ".DOORLOCK_STATUS.overallLockStatus"] ? 1 : 0, true);
