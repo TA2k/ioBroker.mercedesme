@@ -411,8 +411,8 @@ class Mercedesme extends utils.Adapter {
                     this.log.info(JSON.stringify(state));
                     const isCommandPending = await this.getStateAsync(pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending");
                     const doorLook = await this.getStateAsync(pre + "." + vin + ".remote.DoorLock");
-                    this.log.info(isCommandPending);
-                    this.log.info(doorLook);
+                    this.log.info(JSON.stringify(isCommandPending));
+                    this.log.info(JSON.stringify(doorLook));
                     if (isCommandPending && isCommandPending.val) {
                         if (doorLook) {
                         }
