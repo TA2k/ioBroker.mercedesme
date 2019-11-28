@@ -177,19 +177,6 @@ class Mercedesme extends utils.Adapter {
     }
 
     /**
-     * Is called if a subscribed object changes
-     * @param {string} id
-     * @param {ioBroker.Object | null | undefined} obj
-     */
-    onObjectChange(id, obj) {
-        if (obj) {
-            // The object was changed
-        } else {
-            // The object was deleted
-        }
-    }
-
-    /**
      * Is called if a subscribed state changes
      * @param {string} id
      * @param {ioBroker.State | null | undefined} state
@@ -242,7 +229,7 @@ class Mercedesme extends utils.Adapter {
                             country_code: "DE",
                             "Content-Type": "application/json;charset=UTF-8",
                             "Accept-Encoding": "br, gzip, deflate",
-                            "User-Agent": "MercedesMe/2.13.2+639 (Android 5.1)"
+                            "User-Agent": "MercedesMe/2.13.7+816 (Android 5.1)"
                         };
                         let body = "";
                         if (id.indexOf("Vorklimatisierung") !== -1) {
@@ -351,6 +338,7 @@ class Mercedesme extends utils.Adapter {
                                         const capacityArray = this.config.capacity.replace(/ /g, "").split(",");
                                         const capacity = parseFloat(capacityArray[this.vinArray.indexOf(vin)]);
                                         quantity = (diff * capacity) / 100;
+                                        quantity = quantity.toFixed(2);
                                         if (this.config.kwprice) {
                                             basicPrice = parseFloat(this.config.kwprice);
                                             price = parseFloat(this.config.kwprice) * quantity;
@@ -361,6 +349,7 @@ class Mercedesme extends utils.Adapter {
                                         const tankArray = this.config.tank.replace(/ /g, "").split(", ");
                                         const tank = parseInt(tankArray[this.vinArray.indexOf(vin)]);
                                         quantity = (diff * tank) / 100;
+                                        quantity = quantity.toFixed(2);
 
                                         if (this.config.apiKey) {
                                             price = await this.getGasPrice(vin);
@@ -410,22 +399,15 @@ class Mercedesme extends utils.Adapter {
                     if (state.ts !== state.lc) {
                         return;
                     }
-                    this.log.info(id);
-                    this.log.info(JSON.stringify(state));
                     const isCommandPending = await this.getStateAsync(pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending");
-                    const doorLook = await this.getStateAsync(pre + "." + vin + ".remote.DoorLock");
-                    this.log.info(JSON.stringify(isCommandPending));
-                    this.log.info(JSON.stringify(doorLook));
+                    const doorLook = await this.getStateAsync(pre + "." + vin + ".DOORLOCK_STATUS.overallLockStatus");
+
                     if (isCommandPending && isCommandPending.val) {
-                        if (doorLook) {
-                        }
                         return;
                     } else {
                         if (id.indexOf("overallLockStatus") !== -1) {
-                            this.log.info(id + " Pending False and status comes in means set the current status");
                             this.setState(vin + ".remote.DoorLock", state.val, true);
                         } else {
-                            this.log.info(id + " Pending False means set the current overall status");
                             this.setState(vin + ".remote.DoorLock", doorLook.val, true);
                         }
                     }
@@ -434,41 +416,34 @@ class Mercedesme extends utils.Adapter {
                     this.setState(vin + ".remote.Vorklimatisierung", state.val, true);
                 }
                 if (id.indexOf("DOORLOCK_STATUS.windowStatus") !== -1 || id.indexOf("switchWindows.isCommandPending") !== -1) {
-                    this.getStates("*", (err, states) => {
-                        const pre = this.name + "." + this.instance;
+                    if (state.ts !== state.lc) {
+                        return;
+                    }
+                    const pre = this.name + "." + this.instance;
+                    const isCommandPending = await this.getStateAsync(pre + "." + vin + ".DOORLOCK_STATUS.switchWindows.isCommandPending");
+                    const windowFLeft = await this.getStateAsync(pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontLeft");
+                    const windowFRight = await this.getStateAsync(pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontRight");
+                    const windowRLeft = await this.getStateAsync(pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearLeft");
+                    const windowRRight = await this.getStateAsync(pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearRight");
 
-                        if (states[pre + "." + vin + ".DOORLOCK_STATUS.switchWindows.isCommandPending"] && states[pre + "." + vin + ".DOORLOCK_STATUS.switchWindows.isCommandPending"].val) {
-                            if (states[pre + "." + vin + ".remote.WindowLock"]) {
-                                // if (states[pre + "." + vin + ".remote.WindowLock"].val) {
-                                // 	this.setState(vin + ".remote.WindowLockStatus", 3, true);
-                                // } else {
-                                // 	this.setState(vin + ".remote.WindowLockStatus", 2, true);
-                                // }
-                            }
-
-                            return;
-                        } else {
-                            if (
-                                states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontLeft"] &&
-                                states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontRight"] &&
-                                states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearLeft"] &&
-                                states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearRight"]
-                            ) {
-                                if (
-                                    states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontLeft"].val === 2 &&
-                                    states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusFrontRight"].val === 2 &&
-                                    states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearLeft"].val === 2 &&
-                                    states[pre + "." + vin + ".DOORLOCK_STATUS.windowStatusRearRight"].val === 2
-                                ) {
-                                    this.setState(vin + ".remote.WindowLock", true, true);
-                                    //this.setState(vin + ".remote.WindowLockStatus", 1, true);
-                                } else {
-                                    this.setState(vin + ".remote.WindowLock", false, true);
-                                    //this.setState(vin + ".remote.WindowLockStatus", 0, true);
-                                }
+                    if (isCommandPending && isCommandPending.val) {
+                        // if (states[pre + "." + vin + ".remote.WindowLock"].val) {
+                        // 	this.setState(vin + ".remote.WindowLockStatus", 3, true);
+                        // } else {
+                        // 	this.setState(vin + ".remote.WindowLockStatus", 2, true);
+                        // }
+                        return;
+                    } else {
+                        if (windowFLeft && windowFRight && windowRLeft && windowRRight) {
+                            if (windowFLeft.val === 2 && windowFRight.val === 2 && windowRLeft.val === 2 && windowRRight.val === 2) {
+                                this.setState(vin + ".remote.WindowLock", true, true);
+                                //this.setState(vin + ".remote.WindowLockStatus", 1, true);
+                            } else {
+                                this.setState(vin + ".remote.WindowLock", false, true);
+                                //this.setState(vin + ".remote.WindowLockStatus", 0, true);
                             }
                         }
-                    });
+                    }
                 }
             }
         } else {
@@ -539,7 +514,7 @@ class Mercedesme extends utils.Adapter {
                             "Accept-Language": "de_DE",
                             Authorization: "Bearer " + this.config.atoken,
                             country_code: "DE",
-                            "User-Agent": "MercedesMe/2.13.2+639 (Android 5.1)"
+                            "User-Agent": "MercedesMe/2.13.7+816 (Android 5.1)"
                         }
                     },
                     (err, resp, body) => {
@@ -661,7 +636,7 @@ class Mercedesme extends utils.Adapter {
                     "Accept-Language": "de_DE",
                     Authorization: "Bearer " + this.config.atoken,
                     country_code: "DE",
-                    "User-Agent": "MercedesMe/2.13.2+639 (Android 5.1)"
+                    "User-Agent": "MercedesMe/2.13.7+816 (Android 5.1)"
                 };
                 if (this.statusEtag) {
                     headers["If-None-Match"] = this.statusEtag;
@@ -854,7 +829,7 @@ class Mercedesme extends utils.Adapter {
                             "Accept-Language": "de_DE",
                             Authorization: "Bearer " + this.config.atoken,
                             country_code: "DE",
-                            "User-Agent": "MercedesMe/2.13.2+639 (Android 5.1)",
+                            "User-Agent": "MercedesMe/2.13.7+816 (Android 5.1)",
                             lat: "1",
                             lon: "1"
                         }

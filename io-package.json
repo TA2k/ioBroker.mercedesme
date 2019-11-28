@@ -1,8 +1,11 @@
 {
 	"common": {
 		"name": "mercedesme",
-		"version": "0.0.17",
+		"version": "0.0.18",
 		"news": {
+			"0.0.18": {
+				"en": "Bugfixing"
+			},
 			"0.0.17": {
 				"en": "add connection via ODB Adapter (Adapter App)"
 			},
@@ -143,8 +146,8 @@
 		"gas": "",
 		"kwprice": "",
 		"disableSocket": false,
-		"isAdapter" : false,
-		"ciam" : ""
+		"isAdapter": false,
+		"ciam": ""
 	},
 	"objects": [],
 	"instanceObjects": []
