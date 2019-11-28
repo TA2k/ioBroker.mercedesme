@@ -406,9 +406,11 @@ class Mercedesme extends utils.Adapter {
                         this.setState(vin + ".history." + lastString, state.val, true);
                     });
                 }
-                if (id.indexOf("overallLockStatus") !== -1) {
-                    //s|| id.indexOf("switchDoors.isCommandPending") !== -1) {
+                if (id.indexOf("overallLockStatus") !== -1 || id.indexOf("switchDoors.isCommandPending") !== -1) {
+                    this.log.info(id);
+                    this.log.info(JSON.stringify(state));
                     this.getStates("*", (err, states) => {
+                        this.log.info("Pending:" + JSON.stringify(states[pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending"]));
                         if (states[pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending"] && states[pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending"].val) {
                             if (states[pre + "." + vin + ".remote.DoorLock"]) {
                                 // if (states[pre + "." + vin + ".remote.DoorLock"].val) {
@@ -420,9 +422,12 @@ class Mercedesme extends utils.Adapter {
                             return;
                         } else {
                             if (id.indexOf("overallLockStatus") !== -1) {
+                                this.log.info("Pending False and status comes in means set the current status");
                                 this.setState(vin + ".remote.DoorLock", state.val, true);
                                 //	this.setState(vin + ".remote.DoorLockStatus", state.val ? 1 : 0, true);
                             } else {
+                                this.log.info("Pending False means set the current overall status");
+
                                 this.setState(vin + ".remote.DoorLock", states[pre + "." + vin + ".DOORLOCK_STATUS.overallLockStatus"], true);
                                 //	this.setState(vin + ".remote.DoorLockStatus", states[pre + "." + vin + ".DOORLOCK_STATUS.overallLockStatus"] ? 1 : 0, true);
                             }
@@ -432,8 +437,7 @@ class Mercedesme extends utils.Adapter {
                 if (id.indexOf("isPrecondIllustrationActive") !== -1) {
                     this.setState(vin + ".remote.Vorklimatisierung", state.val, true);
                 }
-                if (id.indexOf("DOORLOCK_STATUS.windowStatus") !== -1) {
-                    // || id.indexOf("switchWindows.isCommandPending") !== -1) {
+                if (id.indexOf("DOORLOCK_STATUS.windowStatus") !== -1 || id.indexOf("switchWindows.isCommandPending") !== -1) {
                     this.getStates("*", (err, states) => {
                         const pre = this.name + "." + this.instance;
 
