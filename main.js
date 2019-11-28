@@ -194,7 +194,7 @@ class Mercedesme extends utils.Adapter {
      * @param {string} id
      * @param {ioBroker.State | null | undefined} state
      */
-    onStateChange(id, state) {
+    async onStateChange(id, state) {
         if (state) {
             const vin = id.split(".")[2];
             if (!state.ack) {
@@ -406,34 +406,26 @@ class Mercedesme extends utils.Adapter {
                         this.setState(vin + ".history." + lastString, state.val, true);
                     });
                 }
-                if (id.indexOf("overallLockStatus") !== -1 || id.indexOf("switchDoors.isCommandPending") !== -1) {
+                if (id.indexOf("overallLockStatus") !== -1 || (id.indexOf("switchDoors.isCommandPending") !== -1 && state.ts === state.lc)) {
                     this.log.info(id);
                     this.log.info(JSON.stringify(state));
-                    this.getStates("*", (err, states) => {
-                        this.log.info("Pending: " + JSON.stringify(states[pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending"]));
-                        if (states[pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending"] && states[pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending"].val) {
-                            if (states[pre + "." + vin + ".remote.DoorLock"]) {
-                                this.log.info(id + " nothing");
-                                // if (states[pre + "." + vin + ".remote.DoorLock"].val) {
-                                // 	this.setState(vin + ".remote.DoorLockStatus", 3, true);
-                                // } else {
-                                // 	this.setState(vin + ".remote.DoorLockStatus", 2, true);
-                                // }
-                            }
-                            return;
-                        } else {
-                            if (id.indexOf("overallLockStatus") !== -1) {
-                                this.log.info(id + " Pending False and status comes in means set the current status");
-                                this.setState(vin + ".remote.DoorLock", state.val, true);
-                                //	this.setState(vin + ".remote.DoorLockStatus", state.val ? 1 : 0, true);
-                            } else {
-                                this.log.info(id + " Pending False means set the current overall status");
-
-                                this.setState(vin + ".remote.DoorLock", states[pre + "." + vin + ".DOORLOCK_STATUS.overallLockStatus"], true);
-                                //	this.setState(vin + ".remote.DoorLockStatus", states[pre + "." + vin + ".DOORLOCK_STATUS.overallLockStatus"] ? 1 : 0, true);
-                            }
+                    const isCommandPending = await this.getStateAsync(pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending");
+                    const doorLook = await this.getStateAsync(pre + "." + vin + ".remote.DoorLock");
+                    this.log.info(isCommandPending);
+                    this.log.info(doorLook);
+                    if (isCommandPending && isCommandPending.val) {
+                        if (doorLook) {
                         }
-                    });
+                        return;
+                    } else {
+                        if (id.indexOf("overallLockStatus") !== -1) {
+                            this.log.info(id + " Pending False and status comes in means set the current status");
+                            this.setState(vin + ".remote.DoorLock", state.val, true);
+                        } else {
+                            this.log.info(id + " Pending False means set the current overall status");
+                            this.setState(vin + ".remote.DoorLock", doorLook.val, true);
+                        }
+                    }
                 }
                 if (id.indexOf("isPrecondIllustrationActive") !== -1) {
                     this.setState(vin + ".remote.Vorklimatisierung", state.val, true);
