@@ -406,7 +406,10 @@ class Mercedesme extends utils.Adapter {
                         this.setState(vin + ".history." + lastString, state.val, true);
                     });
                 }
-                if (id.indexOf("overallLockStatus") !== -1 || (id.indexOf("switchDoors.isCommandPending") !== -1 && state.ts === state.lc)) {
+                if (id.indexOf("overallLockStatus") !== -1 || id.indexOf("switchDoors.isCommandPending") !== -1) {
+                    if (state.ts !== state.lc) {
+                        return;
+                    }
                     this.log.info(id);
                     this.log.info(JSON.stringify(state));
                     const isCommandPending = await this.getStateAsync(pre + "." + vin + ".DOORLOCK_STATUS.switchDoors.isCommandPending");
