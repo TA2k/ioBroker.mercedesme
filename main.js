@@ -224,9 +224,9 @@ class Mercedesme extends utils.Adapter {
                     } else {
                         let url = "https://vhs.meapp.secure.mercedes-benz.com/api/v1/vehicles/" + vin;
                         const headers = {
-                            "Accept-Language": "de_DE",
+                            "Accept-Language": this.config.acceptL,
                             Authorization: "Bearer " + this.config.atoken,
-                            country_code: "DE",
+                            country_code: this.config.countryC,
                             "Content-Type": "application/json;charset=UTF-8",
                             "Accept-Encoding": "br, gzip, deflate",
                             "User-Agent": "MercedesMe/2.13.7+816 (Android 5.1)"
@@ -511,9 +511,9 @@ class Mercedesme extends utils.Adapter {
                         gzip: true,
                         url: "https://bff.meapp.secure.mercedes-benz.com/api/v2/dashboarddata/" + vin + "/vehicle",
                         headers: {
-                            "Accept-Language": "de_DE",
+                            "Accept-Language": this.config.acceptL,
                             Authorization: "Bearer " + this.config.atoken,
-                            country_code: "DE",
+                            country_code: this.config.countryC,
                             "User-Agent": "MercedesMe/2.13.7+816 (Android 5.1)"
                         }
                     },
@@ -633,9 +633,9 @@ class Mercedesme extends utils.Adapter {
             this.vinArray.forEach(vin => {
                 let url = "https://vhs.meapp.secure.mercedes-benz.com/api/v1/vehicles/" + vin + "/dynamic?forceRefresh=true";
                 let headers = {
-                    "Accept-Language": "de_DE",
+                    "Accept-Language": this.config.acceptL,
                     Authorization: "Bearer " + this.config.atoken,
-                    country_code: "DE",
+                    country_code: this.config.countryC,
                     "User-Agent": "MercedesMe/2.13.7+816 (Android 5.1)"
                 };
                 if (this.statusEtag) {
@@ -826,9 +826,9 @@ class Mercedesme extends utils.Adapter {
                         gzip: true,
                         url: "https://vhs.meapp.secure.mercedes-benz.com/api/v1/vehicles/" + vin + "/location",
                         headers: {
-                            "Accept-Language": "de_DE",
+                            "Accept-Language": this.config.acceptL,
                             Authorization: "Bearer " + this.config.atoken,
-                            country_code: "DE",
+                            country_code: this.config.countryC,
                             "User-Agent": "MercedesMe/2.13.7+816 (Android 5.1)",
                             lat: "1",
                             lon: "1"
@@ -887,7 +887,7 @@ class Mercedesme extends utils.Adapter {
                     gzip: true,
                     url: url,
                     headers: {
-                        "Accept-Language": "en_DE",
+                        "Accept-Language": this.config.acceptL,
                         Authorization: "Bearer " + this.config.atoken
                     }
                 },
@@ -1670,7 +1670,7 @@ class Mercedesme extends utils.Adapter {
                     url: url01,
                     followAllRedirects: true,
                     headers: {
-                        "Accept-Language": "en_DE",
+                        "Accept-Language": this.config.acceptL,
                         "X-Requested-With": "com.daimler.mm.android",
                         Accept: "*/*",
                         "User-Agent": userAgent
@@ -1688,7 +1688,7 @@ class Mercedesme extends utils.Adapter {
                                 url: "https://login.secure.mercedes-benz.com/wl/third-party-cookie?app-id=" + app_id,
                                 followAllRedirects: true,
                                 headers: {
-                                    "Accept-Language": "en_DE",
+                                    "Accept-Language": this.config.acceptL,
                                     "X-Requested-With": "com.daimler.mm.android",
                                     Accept: "*/*",
                                     "User-Agent": userAgent,
@@ -1729,7 +1729,7 @@ class Mercedesme extends utils.Adapter {
                             form: form,
 
                             headers: {
-                                "Accept-Language": "en_DE",
+                                "Accept-Language": this.config.acceptL,
                                 "X-Requested-With": "com.daimler.mm.android",
                                 Accept: "*/*",
                                 "User-Agent": userAgent,
@@ -1770,7 +1770,7 @@ class Mercedesme extends utils.Adapter {
                                     url: "https://api.secure.mercedes-benz.com/oidc10/auth/oauth/v2/authorize/consent",
                                     form: consentForm,
                                     headers: {
-                                        "Accept-Language": "en_DE",
+                                        "Accept-Language": this.config.acceptL,
                                         Accept: "*/*",
                                         "Cache-Control": "max-age=0",
                                         "Content-Type": "application/x-www-form-urlencoded",

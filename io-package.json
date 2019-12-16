@@ -145,6 +145,8 @@
 		"apiKey": "",
 		"gas": "",
 		"kwprice": "",
+		"acceptL": "en_DE",
+		"countryC": "DE",
 		"disableSocket": false,
 		"isAdapter": false,
 		"ciam": ""
