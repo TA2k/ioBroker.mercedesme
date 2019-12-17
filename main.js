@@ -702,18 +702,8 @@ class Mercedesme extends utils.Adapter {
                                 );
                                 reject();
                             }
+
                             Object.keys(curObject).forEach(element => {
-                                this.setObjectNotExists(vin + ".status." + element, {
-                                    type: "state",
-                                    common: {
-                                        name: element,
-                                        type: "mixed",
-                                        role: "indicator",
-                                        write: true,
-                                        read: true
-                                    },
-                                    native: {}
-                                });
                                 let value = "";
                                 if (!this.config.isAdapter) {
                                     value = curObject[element].value;
@@ -724,6 +714,20 @@ class Mercedesme extends utils.Adapter {
                                 if (value && value.indexOf && value.indexOf(":") === -1) {
                                     value = isNaN(parseFloat(value)) === true ? value : parseFloat(value);
                                 }
+
+                                let unit = this.extractUnit(value, element);
+                                this.setObjectNotExists(vin + ".status." + element, {
+                                    type: "state",
+                                    common: {
+                                        name: element,
+                                        type: "mixed",
+                                        role: "indicator",
+                                        write: true,
+                                        read: true,
+                                        unit: unit
+                                    },
+                                    native: {}
+                                });
                                 this.setState(vin + ".status." + element, value, true);
                             });
 
@@ -782,6 +786,12 @@ class Mercedesme extends utils.Adapter {
 
                             if (curObject && curObject["lastJourney"]) {
                                 Object.keys(curObject["lastJourney"]).forEach(element => {
+                                    let value = curObject["lastJourney"][element];
+                                    if (value && value.indexOf && value.indexOf(":") === -1) {
+                                        value = isNaN(parseFloat(value)) === true ? value : parseFloat(value);
+                                    }
+
+                                    let unit = this.extractUnit(value, element);
                                     this.setObjectNotExists(vin + ".lastjourney." + element, {
                                         type: "state",
                                         common: {
@@ -789,15 +799,11 @@ class Mercedesme extends utils.Adapter {
                                             type: "mixed",
                                             role: "indicator",
                                             write: false,
-                                            read: true
+                                            read: true,
+                                            unit: unit
                                         },
                                         native: {}
                                     });
-
-                                    let value = curObject["lastJourney"][element];
-                                    if (value && value.indexOf && value.indexOf(":") === -1) {
-                                        value = isNaN(parseFloat(value)) === true ? value : parseFloat(value);
-                                    }
                                     this.setState(vin + ".lastjourney." + element, value, true);
                                 });
                             }
@@ -813,6 +819,28 @@ class Mercedesme extends utils.Adapter {
             });
         });
     }
+    extractUnit(value, element) {
+        let unit = "";
+        if (value !== null && value !== false && value !== "null" && !isNaN(value)) {
+            if (element.toLowerCase().indexOf("range") !== -1 || element.toLowerCase().indexOf("distance") !== -1 || element.toLowerCase().indexOf("ecoscore") !== -1) {
+                unit = "km";
+            }
+            if (element.toLowerCase().indexOf("speed") !== -1) {
+                unit = "km/h";
+            }
+            if (element.toLowerCase().indexOf("driventime") !== -1) {
+                unit = "min";
+            }
+            if (element.toLowerCase().indexOf("emperature") !== -1) {
+                unit = "°c";
+            }
+            if (element.toLowerCase().indexOf("level") !== -1 || element.toLowerCase().indexOf("percent") !== -1 || element === "soc") {
+                unit = "%";
+            }
+        }
+        return unit;
+    }
+
     getVehicleLocation() {
         return new Promise((resolve, reject) => {
             if (this.config.isAdapter) {
@@ -1429,42 +1457,43 @@ class Mercedesme extends utils.Adapter {
                 native: {}
             });
             for (const element in data) {
-                this.setObjectNotExists(vin + "." + name + "." + element, {
-                    type: "state",
-                    common: {
-                        name: element,
-                        type: "mixed",
-                        role: "indicator",
-                        write: false,
-                        read: true
-                    },
-                    native: {}
-                });
-
                 let value = data[element];
                 if (typeof value === "object") {
                     for (const subElement in value) {
-                        this.setObjectNotExists(vin + "." + name + "." + element + "." + subElement, {
-                            type: "state",
-                            common: {
-                                name: subElement,
-                                type: "mixed",
-                                role: "indicator",
-                                write: false,
-                                read: true
-                            },
-                            native: {}
-                        });
                         let subValue = value[subElement];
                         {
                             if (Array.isArray(subValue)) {
+                                this.setObjectNotExists(vin + "." + name + "." + element + "." + subElement, {
+                                    type: "state",
+                                    common: {
+                                        name: subElement,
+                                        type: "mixed",
+                                        role: "indicator",
+                                        write: false,
+                                        read: true
+                                    },
+                                    native: {}
+                                });
                                 this.setState(vin + "." + name + "." + element + "." + subElement, JSON.stringify(subValue), true);
                             } else {
                                 if (subValue && subValue.indexOf && subValue.indexOf(":") === -1) {
                                     subValue = isNaN(parseFloat(subValue)) === true ? subValue : parseFloat(subValue);
                                 }
+                                let unit = this.extractUnit(subValue, subElement);
+                                this.setObjectNotExists(vin + "." + name + "." + element + "." + subElement, {
+                                    type: "state",
+                                    common: {
+                                        name: subElement,
+                                        type: "mixed",
+                                        role: "indicator",
+                                        write: false,
+                                        read: true,
+                                        unit: unit
+                                    },
+                                    native: {}
+                                });
+                                this.setState(vin + "." + name + "." + element + "." + subElement, subValue, true);
                             }
-                            this.setState(vin + "." + name + "." + element + "." + subElement, subValue, true);
                         }
                     }
                 } else {
@@ -1475,6 +1504,19 @@ class Mercedesme extends utils.Adapter {
                             value = isNaN(parseFloat(value)) === true ? value : parseFloat(value);
                         }
                     }
+                    let unit = this.extractUnit(value, element);
+                    this.setObjectNotExists(vin + "." + name + "." + element, {
+                        type: "state",
+                        common: {
+                            name: element,
+                            type: "mixed",
+                            role: "indicator",
+                            write: false,
+                            read: true,
+                            unit: unit
+                        },
+                        native: {}
+                    });
                     this.setState(vin + "." + name + "." + element, value, true);
                 }
             }
