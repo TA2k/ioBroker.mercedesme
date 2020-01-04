@@ -232,6 +232,9 @@ class Mercedesme extends utils.Adapter {
                             "User-Agent": "MercedesMe/2.13.7+816 (Android 5.1)"
                         };
                         let body = "";
+                        if (id.indexOf("VorklimaDelay") !== -1) {
+                           return;
+                        }
                         if (id.indexOf("Vorklimatisierung") !== -1) {
                             if (!state.val || state.val === "false") {
                                 url += "/precond/stop";
@@ -240,7 +243,14 @@ class Mercedesme extends utils.Adapter {
                             }
                             body = '{"type":"departure"}';
                             const now = new Date();
-                            body = '{"departureTime":' + (now.getHours() * 60 + now.getMinutes()) + "}";
+
+                            const pre = this.name + "." + this.instance;
+                            let delayState = await this.getStateAsync(pre + "." + vin + ".remote.VorklimaDelay")
+                            let delay = 0;
+                            if (delayState) {
+                                 delay = delayState.val || 0;
+                            } 
+                            body = '{"departureTime":' + (now.getHours() * 60 + now.getMinutes() + delay) + "}";
                             this.log.debug(body);
                         }
                         if (id.indexOf("DoorLock") !== -1) {
@@ -1101,6 +1111,16 @@ class Mercedesme extends utils.Adapter {
                             common: {
                                 name: "Precondition",
                                 type: "boolean",
+                                role: "indicator",
+                                write: true
+                            },
+                            native: {}
+                        });
+                        this.setObjectNotExists(element + ".remote.VorklimaDelay", {
+                            type: "state",
+                            common: {
+                                name: "PreconditionDelay in Minutes needed by some models",
+                                type: "number",
                                 role: "indicator",
                                 write: true
                             },
