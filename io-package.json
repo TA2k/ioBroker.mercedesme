@@ -1,8 +1,11 @@
 {
 	"common": {
 		"name": "mercedesme",
-		"version": "0.0.18",
+		"version": "0.0.19",
 		"news": {
+			"0.0.19": {
+				"en": "Improve error handling"
+			},
 			"0.0.18": {
 				"en": "Bugfixing"
 			},
