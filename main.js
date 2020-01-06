@@ -397,7 +397,7 @@ class Mercedesme extends utils.Adapter {
                                     if (currenJsonHistory) {
                                         try {
                                             currenJsonHistory = JSON.parse(currenJsonHistoryState.val);
-                                        } catch (erro) {
+                                        } catch (error) {
                                             currenJsonHistory = [];
                                         }
                                     }
@@ -1398,7 +1398,7 @@ class Mercedesme extends utils.Adapter {
             });
 
             this.connectDoorSockets(vin);
-        } catch {
+        } catch (error) {
             this.log.info("No connection to push stream possible.");
         }
     }
