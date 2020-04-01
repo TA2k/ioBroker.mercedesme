@@ -26,6 +26,7 @@ class Mercedesme extends utils.Adapter {
 		this.interval = null;
 		this.refreshTokenInterval = null;
 		this.reconnectInterval = null;
+		this.retryTimeout = null;
 		this.tenant = "";
 		this.statusEtag = "";
 		this.userAgent = "ioBroker/mercedesMe Adapter 0.0.21";
@@ -124,7 +125,7 @@ class Mercedesme extends utils.Adapter {
 			() => {
 				this.log.error("Login Failed. Please try to login manually.");
 				this.setState("info.connection", false, true);
-				setTimeout(() => {
+				this.retryTimeout = setTimeout(() => {
 					this.log.info("Restart adapter");
 					this.restart();
 				}, 5 * 60 * 1000); //5min
@@ -143,6 +144,7 @@ class Mercedesme extends utils.Adapter {
 			clearInterval(this.interval);
 			clearInterval(this.refreshTokenInterval);
 			clearInterval(this.reconnectInterval);
+			clearTimeout(this.retryTimeout);
 	
 			callback();
 		} catch (e) {
@@ -1105,7 +1107,7 @@ class Mercedesme extends utils.Adapter {
 				(err, resp, body) => {
 					if (err || resp.statusCode >= 400 || !body) {
 						reject();
-						setTimeout(() => {
+						this.retryTimeout = setTimeout(() => {
 							this.refreshToken();
 						}, 5 * 60 * 1000);
 					}
@@ -1119,7 +1121,7 @@ class Mercedesme extends utils.Adapter {
 								this.restart();
 							}
 							reject();
-							setTimeout(() => {
+							this.retryTimeout = setTimeout(() => {
 								this.refreshToken();
 							}, 5 * 60 * 1000);
 						}
