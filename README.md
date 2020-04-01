@@ -17,6 +17,10 @@ Mercedes me adapter for ioBroker
 
 ## Changelog
 
+### 0.0.21
+
+- Removed Socket.io connection
+
 ### 0.0.19
 
 - Improve Error handling

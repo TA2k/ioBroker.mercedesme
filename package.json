@@ -10,8 +10,7 @@
   "dependencies": {
     "@iobroker/adapter-core": "^1.0.3",
     "jsdom": "^15.1.1",
-    "request": "^2.88.0",
-    "socket.io": "^2.3.0"
+    "request": "^2.88.0"
   },
   "deprecated": false,
   "description": "Mercedes me adapter for ioBroker",
@@ -61,5 +60,5 @@
     "test:package": "mocha test/package --exit",
     "test:unit": "mocha test/unit --exit"
   },
-  "version": "0.0.20"
+  "version": "0.0.21"
 }
