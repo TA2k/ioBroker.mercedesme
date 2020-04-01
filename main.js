@@ -69,6 +69,7 @@ class Mercedesme extends utils.Adapter {
                                             keyName.indexOf(".MAINTENANCE_DATA") !== -1 ||
                                             keyName.indexOf(".PRECONDITIONING_DATA") !== -1 ||
                                             keyName.indexOf(".SET_MAP_DATA") !== -1 ||
+                                            keyName.indexOf(".SET_ECO_SCORE_DATA") !== -1 ||
                                             keyName.indexOf(".SET_SPEED_ALERT_DATA") !== -1
 									) {
 										this.delObject(
