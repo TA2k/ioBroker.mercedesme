@@ -1054,7 +1054,7 @@ class Mercedesme extends utils.Adapter {
 							common: {
 								name: "Door Lock",
 								type: "boolean",
-								role: "indicator",
+								role: "switch.lock",
 								write: true
 							},
 							native: {}
