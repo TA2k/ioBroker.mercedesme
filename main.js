@@ -16,7 +16,7 @@ class Mercedesme extends utils.Adapter {
 	constructor(options) {
 		super({
 			...options,
-			name: "mercedesme"
+			name: "mercedesme",
 		});
 		this.on("ready", this.onReady.bind(this));
 		this.on("stateChange", this.onStateChange.bind(this));
@@ -53,35 +53,29 @@ class Mercedesme extends utils.Adapter {
 							this.getVehicleLocation();
 						}, this.config.interval * 1000);
 
-						this.vinArray.forEach(vin => {
+						this.vinArray.forEach((vin) => {
 							this.log.debug("Start " + vin);
-                         
+
 							//Delete stream states
 							const pre = this.name + "." + this.instance;
 							this.getStates(pre + "." + vin + ".*", (err, states) => {
 								const allIds = Object.keys(states);
-								allIds.forEach(keyName => {
+								allIds.forEach((keyName) => {
 									if (
 										keyName.indexOf(".CHARGING_DATA") !== -1 ||
-                                            keyName.indexOf(".DOORLOCK_STATUS") !== -1 ||
-                                            keyName.indexOf(".windowlock") !== -1 ||
-                                            keyName.indexOf(".JOURNEYS_DATA") !== -1 ||
-                                            keyName.indexOf(".MAINTENANCE_DATA") !== -1 ||
-                                            keyName.indexOf(".PRECONDITIONING_DATA") !== -1 ||
-                                            keyName.indexOf(".SET_MAP_DATA") !== -1 ||
-                                            keyName.indexOf(".SET_ECO_SCORE_DATA") !== -1 ||
-                                            keyName.indexOf(".SET_SPEED_ALERT_DATA") !== -1
+                                        keyName.indexOf(".DOORLOCK_STATUS") !== -1 ||
+                                        keyName.indexOf(".windowlock") !== -1 ||
+                                        keyName.indexOf(".JOURNEYS_DATA") !== -1 ||
+                                        keyName.indexOf(".MAINTENANCE_DATA") !== -1 ||
+                                        keyName.indexOf(".PRECONDITIONING_DATA") !== -1 ||
+                                        keyName.indexOf(".SET_MAP_DATA") !== -1 ||
+                                        keyName.indexOf(".SET_ECO_SCORE_DATA") !== -1 ||
+                                        keyName.indexOf(".SET_SPEED_ALERT_DATA") !== -1
 									) {
-										this.delObject(
-											keyName
-												.split(".")
-												.slice(2)
-												.join(".")
-										);
+										this.delObject(keyName.split(".").slice(2).join("."));
 									}
 								});
 							});
-                            
 						});
 						this.getVehicleDetails().then(
 							() => {},
@@ -91,7 +85,7 @@ class Mercedesme extends utils.Adapter {
 						);
 						this.getVehicleStatus().then(
 							() => {},
-							err => {
+							(err) => {
 								this.log.error(err);
 								this.log.error(JSON.stringify(err));
 								this.log.error("Error getting Vehicle Status");
@@ -103,7 +97,6 @@ class Mercedesme extends utils.Adapter {
 								this.log.error("Error getting Vehicle Location");
 							}
 						);
-
 
 						this.refreshTokenInterval = setInterval(() => {
 							this.log.debug("Intervall refresh");
@@ -146,7 +139,7 @@ class Mercedesme extends utils.Adapter {
 			clearInterval(this.refreshTokenInterval);
 			clearInterval(this.reconnectInterval);
 			clearTimeout(this.retryTimeout);
-	
+
 			callback();
 		} catch (e) {
 			callback();
@@ -163,7 +156,6 @@ class Mercedesme extends utils.Adapter {
 			const vin = id.split(".")[2];
 			if (!state.ack) {
 				if (id.indexOf("remote") !== -1) {
-			
 					let url = "https://vhs.meapp.secure.mercedes-benz.com/api/v1/vehicles/" + vin;
 					const headers = {
 						"Accept-Language": this.config.acceptL,
@@ -171,7 +163,7 @@ class Mercedesme extends utils.Adapter {
 						country_code: this.config.countryC,
 						"Content-Type": "application/json;charset=UTF-8",
 						"Accept-Encoding": "br, gzip, deflate",
-						"User-Agent": this.userAgent
+						"User-Agent": this.userAgent,
 					};
 					let body = "";
 					if (id.indexOf("VorklimaDelay") !== -1) {
@@ -221,7 +213,7 @@ class Mercedesme extends utils.Adapter {
 							gzip: true,
 							url: url,
 							headers: headers,
-							body: body
+							body: body,
 						},
 						(err, resp, body) => {
 							if (err || resp.statusCode >= 400 || !body) {
@@ -239,7 +231,6 @@ class Mercedesme extends utils.Adapter {
 							}
 						}
 					);
-					
 				}
 			} else {
 				//ACK Values
@@ -327,7 +318,7 @@ class Mercedesme extends utils.Adapter {
 										quantity: quantity,
 										price: price.toFixed(2),
 										odo: odo,
-										basicPrice: basicPrice
+										basicPrice: basicPrice,
 									};
 
 									const currenJsonHistoryState = states[pre + "." + vin + ".history." + jsonString];
@@ -351,16 +342,14 @@ class Mercedesme extends utils.Adapter {
 					if (state.ts !== state.lc) {
 						return;
 					}
-				
+
 					if (id.indexOf("doorsClosed") !== -1) {
 						this.setState(vin + ".remote.DoorLock", state.val, true);
-					} 
-					
+					}
 				}
 				if (id.indexOf("precondActive") !== -1) {
 					this.setState(vin + ".remote.Vorklimatisierung", state.val, true);
 				}
-		
 			}
 		} else {
 			// The state was deleted
@@ -391,7 +380,7 @@ class Mercedesme extends utils.Adapter {
                             this.config.gas +
                             "&apikey=" +
                             this.config.apiKey,
-						followAllRedirects: true
+						followAllRedirects: true,
 					},
 					(err, resp, body) => {
 						if (err || resp.statusCode >= 400 || !body) {
@@ -419,7 +408,7 @@ class Mercedesme extends utils.Adapter {
 				resolve();
 				return;
 			}
-			this.vinArray.forEach(vin => {
+			this.vinArray.forEach((vin) => {
 				this.log.debug("Details");
 				request.get(
 					{
@@ -430,8 +419,8 @@ class Mercedesme extends utils.Adapter {
 							"Accept-Language": this.config.acceptL,
 							Authorization: "Bearer " + this.config.atoken,
 							country_code: this.config.countryC,
-							"User-Agent": this.userAgent
-						}
+							"User-Agent": this.userAgent,
+						},
 					},
 					(err, resp, body) => {
 						if (err || resp.statusCode >= 400 || !body) {
@@ -443,7 +432,7 @@ class Mercedesme extends utils.Adapter {
 						try {
 							const data = JSON.parse(body);
 
-							Object.keys(data["staticVehicleData"]).forEach(element => {
+							Object.keys(data["staticVehicleData"]).forEach((element) => {
 								this.setObjectNotExists(vin + ".details." + element, {
 									type: "state",
 									common: {
@@ -451,9 +440,9 @@ class Mercedesme extends utils.Adapter {
 										type: "mixed",
 										role: "indicator",
 										write: false,
-										read: true
+										read: true,
 									},
-									native: {}
+									native: {},
 								});
 								const folder = "details";
 								let value = data["staticVehicleData"][element];
@@ -467,9 +456,9 @@ class Mercedesme extends utils.Adapter {
 												type: "mixed",
 												role: "indicator",
 												write: false,
-												read: true
+												read: true,
 											},
-											native: {}
+											native: {},
 										});
 										let subValue = value[subElement];
 										{
@@ -495,7 +484,7 @@ class Mercedesme extends utils.Adapter {
 								}
 							});
 
-							Object.keys(data["metadata"]["appSections"]).forEach(element => {
+							Object.keys(data["metadata"]["appSections"]).forEach((element) => {
 								this.setObjectNotExists(vin + ".details." + element, {
 									type: "state",
 									common: {
@@ -503,9 +492,9 @@ class Mercedesme extends utils.Adapter {
 										type: "mixed",
 										role: "indicator",
 										write: false,
-										read: true
+										read: true,
 									},
-									native: {}
+									native: {},
 								});
 
 								let value = data["metadata"]["appSections"][element];
@@ -514,7 +503,7 @@ class Mercedesme extends utils.Adapter {
 								}
 								this.setState(vin + ".details." + element, value, true);
 							});
-							data["metadata"]["featureEnablements"].forEach(element => {
+							data["metadata"]["featureEnablements"].forEach((element) => {
 								this.setObjectNotExists(vin + ".features." + element.name, {
 									type: "state",
 									common: {
@@ -522,9 +511,9 @@ class Mercedesme extends utils.Adapter {
 										type: "mixed",
 										role: "indicator",
 										write: false,
-										read: true
+										read: true,
 									},
-									native: {}
+									native: {},
 								});
 
 								let value = element.enablement;
@@ -546,13 +535,13 @@ class Mercedesme extends utils.Adapter {
 	getVehicleStatus() {
 		return new Promise((resolve, reject) => {
 			// this.log.debug("Update started");
-			this.vinArray.forEach(vin => {
+			this.vinArray.forEach((vin) => {
 				let url = "https://vhs.meapp.secure.mercedes-benz.com/api/v1/vehicles/" + vin + "/dynamic?forceRefresh=true";
 				let headers = {
 					"Accept-Language": this.config.acceptL,
 					Authorization: "Bearer " + this.config.atoken,
 					country_code: this.config.countryC,
-					"User-Agent": this.userAgent
+					"User-Agent": this.userAgent,
 				};
 				if (this.statusEtag) {
 					headers["If-None-Match"] = this.statusEtag;
@@ -571,7 +560,7 @@ class Mercedesme extends utils.Adapter {
 						"Cache-Control": "no-cache",
 						"Accept-Encoding": "deflate",
 						Connection: "keep-alive",
-						"cache-control": "no-cache"
+						"cache-control": "no-cache",
 					};
 				}
 				request.get(
@@ -579,7 +568,7 @@ class Mercedesme extends utils.Adapter {
 						jar: this.jar,
 						gzip: true,
 						url: url,
-						headers: headers
+						headers: headers,
 					},
 					(err, resp, body) => {
 						if (err) {
@@ -619,7 +608,7 @@ class Mercedesme extends utils.Adapter {
 								reject();
 							}
 
-							Object.keys(curObject).forEach(element => {
+							Object.keys(curObject).forEach((element) => {
 								let value = "";
 								if (!this.config.isAdapter) {
 									value = curObject[element].value;
@@ -640,9 +629,9 @@ class Mercedesme extends utils.Adapter {
 										role: "indicator",
 										write: true,
 										read: true,
-										unit: unit
+										unit: unit,
 									},
-									native: {}
+									native: {},
 								});
 								this.setState(vin + ".status." + element, value, true);
 							});
@@ -651,7 +640,7 @@ class Mercedesme extends utils.Adapter {
 								curObject = parsedBody[parsedBody.length - 1].vehicleParameterValues;
 								this.log.debug("Mileage: " + JSON.stringify(curObject.mileage));
 								if (curObject) {
-									Object.keys(curObject).forEach(element => {
+									Object.keys(curObject).forEach((element) => {
 										this.setObjectNotExists(vin + ".status.vehicleParameterValues." + element, {
 											type: "state",
 											common: {
@@ -659,9 +648,9 @@ class Mercedesme extends utils.Adapter {
 												type: "mixed",
 												role: "indicator",
 												write: false,
-												read: true
+												read: true,
 											},
-											native: {}
+											native: {},
 										});
 
 										let value = curObject[element];
@@ -674,9 +663,9 @@ class Mercedesme extends utils.Adapter {
 														type: "mixed",
 														role: "indicator",
 														write: false,
-														read: true
+														read: true,
 													},
-													native: {}
+													native: {},
 												});
 												let subValue = value[subElement];
 												{
@@ -701,7 +690,7 @@ class Mercedesme extends utils.Adapter {
 							curObject = JSON.parse(body).aggregated;
 
 							if (curObject && curObject["lastJourney"]) {
-								Object.keys(curObject["lastJourney"]).forEach(element => {
+								Object.keys(curObject["lastJourney"]).forEach((element) => {
 									let value = curObject["lastJourney"][element];
 									if (value && value.indexOf && value.indexOf(":") === -1) {
 										value = isNaN(parseFloat(value)) === true ? value : parseFloat(value);
@@ -716,9 +705,9 @@ class Mercedesme extends utils.Adapter {
 											role: "indicator",
 											write: false,
 											read: true,
-											unit: unit
+											unit: unit,
 										},
-										native: {}
+										native: {},
 									});
 									this.setState(vin + ".lastjourney." + element, value, true);
 								});
@@ -738,7 +727,12 @@ class Mercedesme extends utils.Adapter {
 	extractUnit(value, element) {
 		let unit = "";
 		if (value !== null && value !== false && value !== "null" && !isNaN(value)) {
-			if (element.toLowerCase().indexOf("odo") !== -1 || element.toLowerCase().indexOf("range") !== -1 || element.toLowerCase().indexOf("distance") !== -1 || element.toLowerCase().indexOf("ecoscore") !== -1) {
+			if (
+				element.toLowerCase().indexOf("odo") !== -1 ||
+                element.toLowerCase().indexOf("range") !== -1 ||
+                element.toLowerCase().indexOf("distance") !== -1 ||
+                element.toLowerCase().indexOf("ecoscore") !== -1
+			) {
 				unit = "km";
 			}
 			if (element.toLowerCase().indexOf("speed") !== -1) {
@@ -769,7 +763,7 @@ class Mercedesme extends utils.Adapter {
 				resolve();
 				return;
 			}
-			this.vinArray.forEach(vin => {
+			this.vinArray.forEach((vin) => {
 				request.get(
 					{
 						jar: this.jar,
@@ -781,8 +775,8 @@ class Mercedesme extends utils.Adapter {
 							country_code: this.config.countryC,
 							"User-Agent": this.userAgent,
 							lat: "1",
-							lon: "1"
-						}
+							lon: "1",
+						},
 					},
 					(err, resp, body) => {
 						if (err || resp.statusCode >= 400 || !body) {
@@ -792,7 +786,7 @@ class Mercedesme extends utils.Adapter {
 
 						try {
 							const data = JSON.parse(body);
-							Object.keys(data).forEach(element => {
+							Object.keys(data).forEach((element) => {
 								this.setObjectNotExists(vin + ".location." + element, {
 									type: "state",
 									common: {
@@ -800,9 +794,9 @@ class Mercedesme extends utils.Adapter {
 										type: "mixed",
 										role: "indicator",
 										write: false,
-										read: true
+										read: true,
 									},
-									native: {}
+									native: {},
 								});
 
 								let value = data[element];
@@ -838,8 +832,8 @@ class Mercedesme extends utils.Adapter {
 					url: url,
 					headers: {
 						"Accept-Language": this.config.acceptL,
-						Authorization: "Bearer " + this.config.atoken
-					}
+						Authorization: "Bearer " + this.config.atoken,
+					},
 				},
 				(err, resp, body) => {
 					if (err || resp.statusCode >= 400 || !body) {
@@ -851,7 +845,7 @@ class Mercedesme extends utils.Adapter {
 							this.log.warn("No vehicles found");
 						}
 						this.tenant = JSON.parse(body).tenantId;
-						JSON.parse(body).vehicles.forEach(element => {
+						JSON.parse(body).vehicles.forEach((element) => {
 							if (element.fin !== null && element.fin !== "null") {
 								const fin = element.fin || element.vin;
 								this.vinArray.push(fin);
@@ -862,9 +856,9 @@ class Mercedesme extends utils.Adapter {
 										role: "indicator",
 										type: "mixed",
 										write: false,
-										read: true
+										read: true,
 									},
-									native: {}
+									native: {},
 								});
 								for (const key in element) {
 									this.setObjectNotExists(fin + ".general." + key, {
@@ -874,9 +868,9 @@ class Mercedesme extends utils.Adapter {
 											type: "mixed",
 											role: "indicator",
 											write: false,
-											read: true
+											read: true,
 										},
-										native: {}
+										native: {},
 									});
 									if (Array.isArray(element[key])) {
 										this.setState(fin + ".general." + key, JSON.stringify(element[key]), true);
@@ -890,30 +884,30 @@ class Mercedesme extends utils.Adapter {
 						this.log.warn("Vehicles not found please start the mercedes me app: " + error);
 					}
 					this.vinArray = [...new Set(this.vinArray)];
-					this.vinArray.forEach(element => {
+					this.vinArray.forEach((element) => {
 						this.setObjectNotExists(element + ".location", {
 							type: "state",
 							common: {
 								name: "Vehiclelocation updated via Interval in Settings",
-								write: true
+								write: true,
 							},
-							native: {}
+							native: {},
 						});
 						this.setObjectNotExists(element + ".status", {
 							type: "state",
 							common: {
 								name: "Vehiclestatus Fahrzeugstatus updated via Interval in Settings",
-								write: true
+								write: true,
 							},
-							native: {}
+							native: {},
 						});
 						this.setObjectNotExists(element + ".history", {
 							type: "state",
 							common: {
 								name: "Fuel/Energy Tank/Lade History",
-								write: true
+								write: true,
 							},
-							native: {}
+							native: {},
 						});
 
 						this.setObjectNotExists(element + ".history.tankLevelLast", {
@@ -924,9 +918,9 @@ class Mercedesme extends utils.Adapter {
 								role: "number",
 								write: false,
 								read: true,
-								unit: "%"
+								unit: "%",
 							},
-							native: {}
+							native: {},
 						});
 						this.setObjectNotExists(element + ".history.tankLevelBeforeFueling", {
 							type: "state",
@@ -936,9 +930,9 @@ class Mercedesme extends utils.Adapter {
 								role: "number",
 								write: false,
 								read: true,
-								unit: "%"
+								unit: "%",
 							},
-							native: {}
+							native: {},
 						});
 						this.setObjectNotExists(element + ".history.tankLevelStatus", {
 							type: "state",
@@ -947,9 +941,9 @@ class Mercedesme extends utils.Adapter {
 								type: "object",
 								role: "boolean",
 								write: false,
-								read: true
+								read: true,
 							},
-							native: {}
+							native: {},
 						});
 						this.setObjectNotExists(element + ".history.tankLevelJSON", {
 							type: "state",
@@ -958,9 +952,9 @@ class Mercedesme extends utils.Adapter {
 								type: "object",
 								role: "history",
 								write: true,
-								read: true
+								read: true,
 							},
-							native: {}
+							native: {},
 						});
 
 						this.setObjectNotExists(element + ".history.socLevelLast", {
@@ -971,9 +965,9 @@ class Mercedesme extends utils.Adapter {
 								role: "number",
 								write: false,
 								read: true,
-								unit: "%"
+								unit: "%",
 							},
-							native: {}
+							native: {},
 						});
 						this.setObjectNotExists(element + ".history.socLevelBeforeFueling", {
 							type: "state",
@@ -983,9 +977,9 @@ class Mercedesme extends utils.Adapter {
 								role: "number",
 								write: false,
 								read: true,
-								unit: "%"
+								unit: "%",
 							},
-							native: {}
+							native: {},
 						});
 						this.setObjectNotExists(element + ".history.socStatus", {
 							type: "state",
@@ -994,9 +988,9 @@ class Mercedesme extends utils.Adapter {
 								type: "object",
 								role: "boolean",
 								write: false,
-								read: true
+								read: true,
 							},
-							native: {}
+							native: {},
 						});
 						this.setObjectNotExists(element + ".history.socJSON", {
 							type: "state",
@@ -1005,61 +999,60 @@ class Mercedesme extends utils.Adapter {
 								type: "object",
 								role: "history",
 								write: true,
-								read: true
+								read: true,
 							},
-							native: {}
+							native: {},
 						});
 
 						this.setObjectNotExists(element + ".remote", {
 							type: "state",
 							common: {
 								name: "Remote controls",
-								write: true
+								write: true,
 							},
-							native: {}
+							native: {},
 						});
 						this.setObjectNotExists(element + ".remote.Vorklimatisierung", {
 							type: "state",
 							common: {
 								name: "Precondition",
 								type: "boolean",
-								role: "indicator",
-								write: true
+								role: "switch.enable",
+								write: true,
 							},
-							native: {}
+							native: {},
 						});
 						this.setObjectNotExists(element + ".remote.VorklimaDelay", {
 							type: "state",
 							common: {
 								name: "PreconditionDelay in Minutes needed by some models",
 								type: "number",
-								role: "indicator",
-								write: true
+								role: "level",
+								write: true,
 							},
-							native: {}
+							native: {},
 						});
 						this.setObjectNotExists(element + ".remote.Auxheat", {
 							type: "state",
 							common: {
 								name: "Standheizung",
 								type: "boolean",
-								role: "indicator",
-								write: true
+								role: "switch.enable",
+								write: true,
 							},
-							native: {}
+							native: {},
 						});
 
 						this.setObjectNotExists(element + ".remote.DoorLock", {
 							type: "state",
 							common: {
-								name: "Door Lock",
+								name: "Door Lock True = Locked Doors / False = Open Doors",
 								type: "boolean",
-								role: "indicator",
-								write: true
+								role: "switch.lock",
+								write: true,
 							},
-							native: {}
+							native: {},
 						});
-					
 					});
 					resolve();
 				}
@@ -1087,7 +1080,7 @@ class Mercedesme extends utils.Adapter {
 			const redirect = "https://cgw.meapp.secure.mercedes-benz.com/endpoint/api/v1/redirect";
 			const headers = {
 				"Content-Type": "application/x-www-form-urlencoded",
-				"User-Agent": "okhttp/3.9.0"
+				"User-Agent": "okhttp/3.9.0",
 			};
 			let url =
                 "https://api.secure.mercedes-benz.com/oidc10/auth/oauth/v2/token?grant_type=refresh_token&redirect_uri=" + redirect + "&client_id=" + clientID + "&refresh_token=" + this.config.rtoken;
@@ -1103,7 +1096,7 @@ class Mercedesme extends utils.Adapter {
 					gzip: true,
 					url: url,
 					headers: headers,
-					followAllRedirects: false
+					followAllRedirects: false,
 				},
 				(err, resp, body) => {
 					if (err || resp.statusCode >= 400 || !body) {
@@ -1180,8 +1173,8 @@ class Mercedesme extends utils.Adapter {
 						"Accept-Language": this.config.acceptL,
 						"X-Requested-With": "com.daimler.mm.android",
 						Accept: "*/*",
-						"User-Agent": userAgent
-					}
+						"User-Agent": userAgent,
+					},
 				},
 				(err, resp, body) => {
 					if (err || resp.statusCode >= 400 || !body) {
@@ -1201,8 +1194,8 @@ class Mercedesme extends utils.Adapter {
 									"User-Agent": userAgent,
 									Origin: "https://login.secure.mercedes-benz.com",
 									"Cache-Control": "max-age=0",
-									"Content-Type": "application/x-www-form-urlencoded"
-								}
+									"Content-Type": "application/x-www-form-urlencoded",
+								},
 							},
 							(err, resp, body) => {
 								this.log.debug("third submit result: " + body);
@@ -1242,9 +1235,9 @@ class Mercedesme extends utils.Adapter {
 								"User-Agent": userAgent,
 								Origin: "https://login.secure.mercedes-benz.com",
 								"Cache-Control": "max-age=0",
-								"Content-Type": "application/x-www-form-urlencoded"
+								"Content-Type": "application/x-www-form-urlencoded",
 							},
-							followAllRedirects: true
+							followAllRedirects: true,
 						},
 						(err, resp, body) => {
 							if (err || resp.statusCode >= 400 || !body) {
@@ -1284,9 +1277,9 @@ class Mercedesme extends utils.Adapter {
 										Origin: "https://	login.secure.mercedes-benz.com",
 										"User-Agent": userAgent,
 										Referer: "https://login.secure.mercedes-benz.com/wl/login",
-										"X-Requested-With": "com.daimler.mm.android"
+										"X-Requested-With": "com.daimler.mm.android",
 									},
-									followAllRedirects: this.config.isAdapter
+									followAllRedirects: this.config.isAdapter,
 								},
 								(err, resp, body) => {
 									if (err) {
@@ -1304,7 +1297,7 @@ class Mercedesme extends utils.Adapter {
 										this.log.debug("consent result: " + code);
 										const headers = {
 											"Content-Type": "application/x-www-form-urlencoded",
-											"User-Agent": "okhttp/3.9.0"
+											"User-Agent": "okhttp/3.9.0",
 										};
 										let url =
                                             "https://api.secure.mercedes-benz.com/oidc10/auth/oauth/v2/token?grant_type=authorization_code&redirect_uri=" +
@@ -1329,7 +1322,7 @@ class Mercedesme extends utils.Adapter {
 												url: url,
 												form: consentForm,
 												headers: headers,
-												followAllRedirects: false
+												followAllRedirects: false,
 											},
 											(err, resp, body) => {
 												if (err || resp.statusCode >= 400 || !body) {
@@ -1372,10 +1365,7 @@ class Mercedesme extends utils.Adapter {
 			for (let i = 64; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
 			result = Buffer.from(result).toString("base64");
 			result = result.replace(/=/g, "");
-			hash = crypto
-				.createHash("sha256")
-				.update(result)
-				.digest("base64");
+			hash = crypto.createHash("sha256").update(result).digest("base64");
 			hash = hash.slice(0, hash.length - 1);
 		}
 		return [result, hash];
@@ -1387,7 +1377,7 @@ if (module.parent) {
 	/**
      * @param {Partial<ioBroker.AdapterOptions>} [options={}]
      */
-	module.exports = options => new Mercedesme(options);
+	module.exports = (options) => new Mercedesme(options);
 } else {
 	// otherwise start the instance directly
 	new Mercedesme();
