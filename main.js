@@ -198,6 +198,18 @@ class Mercedesme extends utils.Adapter {
 							url += "/doors/lock";
 						}
 					}
+                    
+					if (id.indexOf("DoorOpen") !== -1) {
+						if (!this.config.pin) {
+							this.log.warn("Missing pin in settings");
+						}
+						headers["x-pin"] = this.config.pin;
+						if (!state.val || state.val === "false") {
+							url += "/doors/lock";
+						} else {
+							url += "/doors/unlock";
+						}
+					}
 
 					if (id.indexOf("Auxheat") !== -1) {
 						if (!state.val || state.val === "false") {
@@ -343,9 +355,11 @@ class Mercedesme extends utils.Adapter {
 						return;
 					}
 
-					if (id.indexOf("doorsClosed") !== -1) {
+					if (id.indexOf(".locked") !== -1) {
 						this.setState(vin + ".remote.DoorLock", state.val, true);
+						this.setState(vin + ".remote.DoorOpen", !state.val, true);
 					}
+				
 				}
 				if (id.indexOf("precondActive") !== -1) {
 					this.setState(vin + ".remote.Vorklimatisierung", state.val, true);
@@ -1049,6 +1063,16 @@ class Mercedesme extends utils.Adapter {
 								name: "Door Lock True = Locked Doors / False = Open Doors",
 								type: "boolean",
 								role: "switch.lock",
+								write: true,
+							},
+							native: {},
+						});
+						this.setObjectNotExists(element + ".remote.DoorOpen", {
+							type: "state",
+							common: {
+								name: "Door Open True = Open Doors / False = Locked Doors",
+								type: "boolean",
+								role: "switch.lock.door",
 								write: true,
 							},
 							native: {},
