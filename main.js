@@ -29,6 +29,7 @@ class Mercedesme extends utils.Adapter {
 		this.retryTimeout = null;
 		this.tenant = "";
 		this.statusEtag = "";
+		this.locationEtag = "";
 		this.userAgent = "ioBroker/mercedesMe Adapter 0.0.21";
 	}
 
@@ -198,7 +199,7 @@ class Mercedesme extends utils.Adapter {
 							url += "/doors/lock";
 						}
 					}
-                    
+
 					if (id.indexOf("DoorOpen") !== -1) {
 						if (!this.config.pin) {
 							this.log.warn("Missing pin in settings");
@@ -359,7 +360,6 @@ class Mercedesme extends utils.Adapter {
 						this.setState(vin + ".remote.DoorLock", state.val, true);
 						this.setState(vin + ".remote.DoorOpen", !state.val, true);
 					}
-				
 				}
 				if (id.indexOf("precondActive") !== -1) {
 					this.setState(vin + ".remote.Vorklimatisierung", state.val, true);
@@ -778,26 +778,35 @@ class Mercedesme extends utils.Adapter {
 				return;
 			}
 			this.vinArray.forEach((vin) => {
+				const headers = {
+					"Accept-Language": this.config.acceptL,
+					Authorization: "Bearer " + this.config.atoken,
+					country_code: this.config.countryC,
+					"User-Agent": this.userAgent,
+					lat: "1",
+					lon: "1",
+				};
+				if (this.locationEtag) {
+					headers["If-None-Match"] = this.locationEtag;
+				}
 				request.get(
 					{
 						jar: this.jar,
 						gzip: true,
 						url: "https://vhs.meapp.secure.mercedes-benz.com/api/v1/vehicles/" + vin + "/location",
-						headers: {
-							"Accept-Language": this.config.acceptL,
-							Authorization: "Bearer " + this.config.atoken,
-							country_code: this.config.countryC,
-							"User-Agent": this.userAgent,
-							lat: "1",
-							lon: "1",
-						},
+						headers: headers,
 					},
 					(err, resp, body) => {
 						if (err || resp.statusCode >= 400 || !body) {
 							reject();
 							return;
 						}
-
+						this.locationEtag = resp.headers.etag;
+						if (resp.statusCode === 304) {
+							this.log.debug("304 No values updated");
+							resolve();
+							return;
+						}
 						try {
 							const data = JSON.parse(body);
 							Object.keys(data).forEach((element) => {
@@ -822,6 +831,8 @@ class Mercedesme extends utils.Adapter {
 
 							resolve();
 						} catch (error) {
+							this.log.error(error);
+							this.log.error(error.stack);
 							reject(error);
 						}
 					}
