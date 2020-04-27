@@ -833,6 +833,7 @@ class Mercedesme extends utils.Adapter {
 						} catch (error) {
 							this.log.error(error);
 							this.log.error(error.stack);
+							this.log.error(body);
 							reject(error);
 						}
 					}
