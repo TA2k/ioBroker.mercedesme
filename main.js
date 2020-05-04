@@ -351,12 +351,12 @@ class Mercedesme extends utils.Adapter {
                         this.setState(vin + ".history." + lastString, state.val, true);
                     });
                 }
-                if (id.indexOf("doorsClosed") !== -1) {
+                if (id.indexOf("status.locked") !== -1) {
                     if (state.ts !== state.lc) {
                         return;
                     }
 
-                    if (id.indexOf(".locked") !== -1) {
+                    if (id.indexOf("status.locked") !== -1) {
                         this.setState(vin + ".remote.DoorLock", state.val, true);
                         this.setState(vin + ".remote.DoorOpen", !state.val, true);
                     }
