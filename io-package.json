@@ -3,6 +3,9 @@
 		"name": "mercedesme",
 		"version": "0.0.21",
 		"news": {
+			"0.0.22": {
+				"en": "Rework fuel history, fix js-controller 3 issues"
+			},
 			"0.0.21": {
 				"en": "Removed Socket.io connection"
 			},

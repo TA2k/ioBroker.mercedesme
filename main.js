@@ -47,8 +47,8 @@ class Mercedesme extends utils.Adapter {
                 this.log.debug("Login successful");
                 this.setState("info.connection", true, true);
 
-                this.getVehicles().then(
-                    () => {
+                this.getVehicles()
+                    .then(() => {
                         this.interval = setInterval(() => {
                             this.getVehicleStatus();
                             this.getVehicleLocation();
@@ -78,26 +78,23 @@ class Mercedesme extends utils.Adapter {
                                 });
                             });
                         });
-                        this.getVehicleDetails().then(
-                            () => {},
-                            () => {
+                        this.getVehicleDetails()
+                            .then(() => {})
+                            .catch(() => {
                                 this.log.error("Error getting Vehicle Details");
-                            }
-                        );
-                        this.getVehicleStatus().then(
-                            () => {},
-                            (err) => {
+                            });
+                        this.getVehicleStatus()
+                            .then(() => {})
+                            .catch((err) => {
                                 this.log.error(err);
                                 this.log.error(JSON.stringify(err));
                                 this.log.error("Error getting Vehicle Status");
-                            }
-                        );
-                        this.getVehicleLocation().then(
-                            () => {},
-                            () => {
+                            });
+                        this.getVehicleLocation()
+                            .then(() => {})
+                            .catch(() => {
                                 this.log.error("Error getting Vehicle Location");
-                            }
-                        );
+                            });
 
                         this.refreshTokenInterval = setInterval(() => {
                             this.log.debug("Intervall refresh");
@@ -111,11 +108,10 @@ class Mercedesme extends utils.Adapter {
                                 if (obj) this.setForeignObject("system.adapter." + this.namespace, obj);
                             });
                         }, 6 * 60 * 60 * 1000); //6h
-                    },
-                    () => {
+                    })
+                    .catch(() => {
                         this.log.error("Error getting Vehicles");
-                    }
-                );
+                    });
             })
             .catch(() => {
                 this.log.error("Login Failed. Please try to login manually.");
@@ -1104,15 +1100,14 @@ class Mercedesme extends utils.Adapter {
     }
     login() {
         return new Promise((resolve, reject) => {
-            this.loginApp().then(
-                () => {
+            this.loginApp()
+                .then(() => {
                     this.log.debug("Login in App successful. Starting login into website.");
                     resolve();
-                },
-                () => {
+                })
+                .catch(() => {
                     reject();
-                }
-            );
+                });
         });
     }
 
