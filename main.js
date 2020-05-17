@@ -42,8 +42,8 @@ class Mercedesme extends utils.Adapter {
         // The adapters config (in the instance object everything under the attribute "native") is accessible via
         // this.config:
 
-        this.login().then(
-            () => {
+        this.login()
+            .then(() => {
                 this.log.debug("Login successful");
                 this.setState("info.connection", true, true);
 
@@ -116,16 +116,15 @@ class Mercedesme extends utils.Adapter {
                         this.log.error("Error getting Vehicles");
                     }
                 );
-            },
-            () => {
+            })
+            .catch(() => {
                 this.log.error("Login Failed. Please try to login manually.");
                 this.setState("info.connection", false, true);
                 this.retryTimeout = setTimeout(() => {
                     this.log.info("Restart adapter");
                     this.restart();
                 }, 5 * 60 * 1000); //5min
-            }
-        );
+            });
 
         this.subscribeStates("*");
     }
@@ -249,107 +248,115 @@ class Mercedesme extends utils.Adapter {
                 //ACK Values
                 const pre = this.name + "." + this.instance;
                 if (id.indexOf("status.tanklevelpercent") !== -1 || id.indexOf("status.soc") !== -1 || id.indexOf("status.vehicleParameterValues.fuelVolume.value") !== -1) {
-                    this.getStates("*", async (err, states) => {
-                        let lastString = "tankLevelLast";
-                        let status = "tankLevelStatus";
-                        let before = "tankLevelBeforeFueling";
-                        let jsonString = "tankLevelJSON";
-                        if (id.indexOf("status.soc") !== -1) {
-                            lastString = "socLevelLast";
-                            status = "socStatus";
-                            before = "socLevelBeforeFueling";
-                            jsonString = "socJSON";
-                        }
-                        if (!states[pre + "." + vin + ".history." + status]) {
-                            this.setState(vin + ".history." + status, false, true);
-                        }
-                        if (!states[pre + "." + vin + ".history." + lastString]) {
-                            this.setState(vin + ".history." + lastString, state.val, true);
-                        }
-                        if (states[pre + "." + vin + ".history." + status] && states[pre + "." + vin + ".history." + lastString]) {
-                            if (state.val > states[pre + "." + vin + ".history." + lastString].val && !states[pre + "." + vin + ".history." + status].val) {
-                                //check is charging via power plug
-                                if (status === "socStatus" && states[pre + "." + vin + ".status.chargingstatus"].val >= 2) {
+                    let lastTankeLevel = "tankLevelLast";
+                    let status = "tankLevelStatus";
+                    let beforeFueling = "tankLevelBeforeFueling";
+                    let jsonString = "tankLevelJSON";
+                    if (id.indexOf("status.soc") !== -1) {
+                        lastTankeLevel = "socLevelLast";
+                        status = "socStatus";
+                        beforeFueling = "socLevelBeforeFueling";
+                        jsonString = "socJSON";
+                    }
+                    const statusState = await this.getStateAsync(vin + ".history." + status);
+                    if (!statusState) {
+                        await this.setStateAsync(vin + ".history." + status, false, true);
+                    }
+
+                    const lastTankLevelState = await this.getStateAsync(vin + ".history." + lastTankeLevel);
+                    if (!lastTankLevelState) {
+                        await this.setStateAsync(vin + ".history." + lastTankeLevel, state.val, true);
+                    }
+                    const beforeFuelingState = await this.getStateAsync(vin + ".history." + beforeFueling);
+                    const odoState = (await this.getStateAsync(vin + ".status.odo")) || { val: 0 };
+
+                    if (statusState && lastTankLevelState) {
+                        await this.setStateAsync(vin + ".history." + status, false, true);
+                        if (state.val > lastTankLevelState.val && !statusState.val) {
+                            //check is charging via power plug
+                            if (status === "socStatus") {
+                                const chargingstatus = await this.getStateAsync(vin + ".status.chargingstatus");
+                                if (chargingstatus && chargingstatus.val >= 2) {
                                     return;
                                 }
-                                this.setState(vin + ".history." + before, states[pre + "." + vin + ".history." + lastString].val, true);
-                                this.setState(vin + ".history." + status, true, true);
                             }
-                            if (state.val === 100 || (state.val < states[pre + "." + vin + ".history." + lastString].val && states[pre + "." + vin + ".history." + status].val)) {
-                                this.setState(vin + ".history." + status, false, true);
-                                this.setState(vin + ".history." + before, states[pre + "." + vin + ".history." + lastString], true);
-                                const d = new Date();
-                                const dformat =
-                                    [d.getDate(), d.getMonth() + 1, d.getFullYear()].join(".") +
-                                    " " +
-                                    [d.getHours().toString().length < 2 ? "0" + d.getHours() : d.getHours(), d.getMinutes().toString().length < 2 ? "0" + d.getMinutes() : d.getMinutes()].join(":");
-                                const beforeValue = states[pre + "." + vin + ".history." + before] ? states[pre + "." + vin + ".history." + before].val : 0;
-                                const diff = state.val - parseInt(beforeValue);
-                                let quantity;
-                                let price = 0;
-                                const odo = states[pre + "." + vin + ".status.odo"].val;
-                                let basicPrice = 0;
-                                if (id.indexOf("status.soc") !== -1) {
-                                    if (this.config.capacity) {
-                                        const capacityArray = this.config.capacity.replace(/ /g, "").split(",");
-                                        const capacity = parseFloat(capacityArray[this.vinArray.indexOf(vin)]);
-                                        quantity = (diff * capacity) / 100;
-                                        quantity = quantity.toFixed(2);
-                                        if (this.config.kwprice) {
-                                            basicPrice = parseFloat(this.config.kwprice);
-                                            price = parseFloat(this.config.kwprice) * quantity;
-                                        }
-                                    }
-                                } else {
-                                    if (this.config.tank) {
-                                        const tankArray = this.config.tank.replace(/ /g, "").split(", ");
-                                        const tank = parseInt(tankArray[this.vinArray.indexOf(vin)]);
-                                        quantity = (diff * tank) / 100;
-                                        quantity = quantity.toFixed(2);
-
-                                        if (this.config.apiKey) {
-                                            price = await this.getGasPrice(vin);
-                                            basicPrice = price;
-                                            price = price * quantity;
-                                        }
-                                    }
-                                    if (this.config.isAdapter) {
-                                        quantity = diff;
-                                        if (this.config.apiKey) {
-                                            price = await this.getGasPrice(vin);
-                                            basicPrice = price;
-                                            price = price * quantity;
-                                        }
+                            await this.setStateAsync(vin + ".history." + beforeFueling, lastTankLevelState.val, true);
+                            await this.setStateAsync(vin + ".history." + status, true, true);
+                        }
+                        if (state.val === 100 || (state.val < lastTankLevelState.val && statusState.val)) {
+                            this.setState(vin + ".history." + status, false, true);
+                            this.setState(vin + ".history." + beforeFueling, lastTankLevelState, true);
+                            const d = new Date();
+                            const dformat =
+                                [d.getDate(), d.getMonth() + 1, d.getFullYear()].join(".") +
+                                " " +
+                                [d.getHours().toString().length < 2 ? "0" + d.getHours() : d.getHours(), d.getMinutes().toString().length < 2 ? "0" + d.getMinutes() : d.getMinutes()].join(":");
+                            const beforeValue = beforeFuelingState ? beforeFuelingState.val : 0;
+                            const diff = state.val - parseInt(beforeValue);
+                            let quantity = 0;
+                            let price = 0;
+                            const odo = odoState.val;
+                            let basicPrice = 0;
+                            if (id.indexOf("status.soc") !== -1) {
+                                if (this.config.capacity) {
+                                    const capacityArray = this.config.capacity.replace(/ /g, "").split(",");
+                                    const capacity = parseFloat(capacityArray[this.vinArray.indexOf(vin)]);
+                                    quantity = (diff * capacity) / 100;
+                                    quantity = quantity.toFixed(2);
+                                    if (this.config.kwprice) {
+                                        basicPrice = parseFloat(this.config.kwprice);
+                                        price = parseFloat(this.config.kwprice) * quantity;
                                     }
                                 }
-                                if (beforeValue < 99 && diff > 0) {
-                                    const fuelObject = {
-                                        start: beforeValue,
-                                        end: state.val,
-                                        date: dformat,
-                                        diff: diff,
-                                        quantity: quantity,
-                                        price: price.toFixed(2),
-                                        odo: odo,
-                                        basicPrice: basicPrice,
-                                    };
+                            } else {
+                                if (this.config.tank) {
+                                    const tankArray = this.config.tank.replace(/ /g, "").split(", ");
+                                    const tank = parseInt(tankArray[this.vinArray.indexOf(vin)]);
+                                    quantity = (diff * tank) / 100;
+                                    quantity = quantity.toFixed(2);
 
-                                    const currenJsonHistoryState = states[pre + "." + vin + ".history." + jsonString];
-                                    let currenJsonHistory = [];
-                                    if (currenJsonHistory) {
-                                        try {
-                                            currenJsonHistory = JSON.parse(currenJsonHistoryState.val);
-                                        } catch (error) {
-                                            currenJsonHistory = [];
-                                        }
+                                    if (this.config.apiKey) {
+                                        price = await this.getGasPrice(vin);
+                                        basicPrice = price;
+                                        price = price * quantity;
                                     }
-                                    const newJsonHistory = [fuelObject].concat(currenJsonHistory);
-                                    this.setState(vin + ".history." + jsonString, JSON.stringify(newJsonHistory), true);
                                 }
+                                if (this.config.isAdapter) {
+                                    quantity = diff;
+                                    if (this.config.apiKey) {
+                                        price = await this.getGasPrice(vin);
+                                        basicPrice = price;
+                                        price = price * quantity;
+                                    }
+                                }
+                            }
+                            if (beforeValue < 99 && diff > 0) {
+                                const fuelObject = {
+                                    start: beforeValue,
+                                    end: state.val,
+                                    date: dformat,
+                                    diff: diff,
+                                    quantity: quantity,
+                                    price: price.toFixed(2),
+                                    odo: odo,
+                                    basicPrice: basicPrice,
+                                };
+                                const currenJsonHistoryState = (await this.getStateAsync(vin + ".history." + jsonString)) || { val: {} };
+
+                                let currenJsonHistory = [];
+                                if (currenJsonHistory) {
+                                    try {
+                                        currenJsonHistory = JSON.parse(currenJsonHistoryState.val);
+                                    } catch (error) {
+                                        currenJsonHistory = [];
+                                    }
+                                }
+                                const newJsonHistory = [fuelObject].concat(currenJsonHistory);
+                                await this.setStateAsync(vin + ".history." + jsonString, JSON.stringify(newJsonHistory), true);
                             }
                         }
-                        this.setState(vin + ".history." + lastString, state.val, true);
-                    });
+                    }
+                    await this.setStateAsync(vin + ".history." + lastTankeLevel, state.val, true);
                 }
                 if (id.indexOf("status.locked") !== -1) {
                     if (state.ts !== state.lc) {
