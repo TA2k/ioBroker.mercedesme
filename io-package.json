@@ -50,38 +50,6 @@
 			"0.0.7": {
 				"en": "improve door open functionality add detailed state for door status",
 				"de": "Tür öffnen verbessert. Besseren Türstatus hinzugefügt."
-			},
-			"0.0.6": {
-				"en": "fix issue with door data",
-				"de": "Problem mit Türstatus behoben."
-			},
-			"0.0.5": {
-				"en": "fix issue no data after 1h",
-				"de": "Problem behoben, dass keine Daten nach 1h kommen."
-			},
-			"0.0.4": {
-				"en": "relogin every hour, field to enter vin manually",
-				"de": "Relogin jede Stunde, Feld zum manuellen eintragen der FIN"
-			},
-			"0.0.3": {
-				"en": "fix no values after 1h bug, add realtime values like preconditioning",
-				"de": "Keine Daten nach 1h Bug gefixt. Echtzeitwerte hinzugefügt wie Vorklimatisierung"
-			},
-			"0.0.2": {
-				"en": "add remote control for Door lock, Window lock and preconditioning",
-				"de": "Tür und Fenster öffnen und Vorklimatisierung hinzugefügt."
-			},
-			"0.0.1": {
-				"en": "initial release",
-				"de": "Erstveröffentlichung",
-				"ru": "Начальная версия",
-				"pt": "lançamento inicial",
-				"nl": "Eerste uitgave",
-				"fr": "Première version",
-				"it": "Versione iniziale",
-				"es": "Versión inicial",
-				"pl": "Pierwsze wydanie",
-				"zh-cn": "首次出版"
 			}
 		},
 		"title": "Mercedes me",
@@ -130,6 +98,11 @@
 		"type": "vehicle",
 		"compact": true,
 		"materialize": true,
+		"plugins": {
+			"sentry": {
+				"dsn": "https://b5af79b8000149148826a2266de14281@sentry.iobroker.net/69"
+			}
+		},
 		"dependencies": [
 			{
 				"admin": ">=3.0.0"
