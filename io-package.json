@@ -1,10 +1,10 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.0.30",
+    "version": "0.0.31",
     "news": {
-      "0.0.30": {
-        "en": "First version for new app"
+      "0.0.31": {
+        "en": "Support for new app"
       },
       "0.0.22": {
         "en": "Rework fuel history, fix js-controller 3 issues"

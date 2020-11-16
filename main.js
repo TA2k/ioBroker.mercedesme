@@ -65,19 +65,16 @@ class Mercedesme extends utils.Adapter {
      */
     async onReady() {
         // Initialize your adapter here
-           //Delete old states
-           const pre = this.name + "." + this.instance;
-           this.getStates(pre + ".*", (err, states) => {
-               const allIds = Object.keys(states);
-               allIds.forEach((keyName) => {
-                   if (
-                    keyName.split(".")[3]==="status" ||
-                    keyName.split(".")[3]==="location"
-                   ) {
-                       this.delObject(keyName.split(".").slice(2).join("."));
-                   }
-               });
-           });
+        //Delete old states
+        const pre = this.name + "." + this.instance;
+        this.getStates(pre + ".*", (err, states) => {
+            const allIds = Object.keys(states);
+            allIds.forEach((keyName) => {
+                if (keyName.split(".")[3] === "status" || keyName.split(".")[3] === "location") {
+                    this.delObject(keyName.split(".").slice(2).join("."));
+                }
+            });
+        });
         this.login()
             .then(() => {
                 this.log.debug("Login successful");
@@ -1117,9 +1114,23 @@ class Mercedesme extends utils.Adapter {
                                 },
                                 native: {},
                             });
+                            if (element[0] === "doorstatusfrontleft") {
+                                debugger;
+                            }
                             Object.keys(element[1]).forEach((state) => {
-                                if (state ==="displayValue" || state ==="status" || state ==="changed" || element[1][state] ) {
-                                    adapter.setObjectNotExistsAsync(vin + ".state."+ element[0] +"."+ state, {
+                                if (
+                                    state === "displayValue" ||
+                                    state === "status" ||
+                                    state === "changed" ||
+                                    state === "boolValue" ||
+                                    state === "doubleValue" ||
+                                    state === "intValue" ||
+                                    state === "nilValue" ||
+                                    state === "stringValue" ||
+                                    state === "unsupportedValue" ||
+                                    element[1][state]
+                                ) {
+                                    adapter.setObjectNotExistsAsync(vin + ".state." + element[0] + "." + state, {
                                         type: "state",
                                         common: {
                                             name: state,
