@@ -217,12 +217,12 @@ class Mercedesme extends utils.Adapter {
             } else {
                 //ACK Values
                 const pre = this.name + "." + this.instance;
-                if (id.indexOf("status.tanklevelpercent") !== -1 || id.indexOf("status.soc") !== -1 || id.indexOf("status.vehicleParameterValues.fuelVolume.value") !== -1) {
+                if (id.indexOf("state.tanklevelpercent.intValue") !== -1 || id.indexOf("state.soc.intValue") !== -1 ) {
                     let lastTankeLevel = "tankLevelLast";
                     let status = "tankLevelStatus";
                     let beforeFueling = "tankLevelBeforeFueling";
                     let jsonString = "tankLevelJSON";
-                    if (id.indexOf("status.soc") !== -1) {
+                    if (id.indexOf("state.soc.intValue") !== -1) {
                         lastTankeLevel = "socLevelLast";
                         status = "socStatus";
                         beforeFueling = "socLevelBeforeFueling";
@@ -238,14 +238,14 @@ class Mercedesme extends utils.Adapter {
                         await this.setStateAsync(vin + ".history." + lastTankeLevel, state.val, true);
                     }
                     const beforeFuelingState = await this.getStateAsync(vin + ".history." + beforeFueling);
-                    const odoState = (await this.getStateAsync(vin + ".status.odo")) || { val: 0 };
+                    const odoState = (await this.getStateAsync(vin + ".state.odo.intValue")) || { val: 0 };
 
                     if (statusState && lastTankLevelState) {
                         await this.setStateAsync(vin + ".history." + status, false, true);
                         if (state.val > lastTankLevelState.val && !statusState.val) {
                             //check is charging via power plug
                             if (status === "socStatus") {
-                                const chargingstatus = await this.getStateAsync(vin + ".status.chargingstatus");
+                                const chargingstatus = await this.getStateAsync(vin + ".state.chargingstatus.intValue");
                                 if (chargingstatus && chargingstatus.val >= 2) {
                                     return;
                                 }
@@ -267,7 +267,7 @@ class Mercedesme extends utils.Adapter {
                             let price = 0;
                             const odo = odoState.val;
                             let basicPrice = 0;
-                            if (id.indexOf("status.soc") !== -1) {
+                            if (id.indexOf("state.soc.intValue") !== -1) {
                                 if (this.config.capacity) {
                                     const capacityArray = this.config.capacity.replace(/ /g, "").split(",");
                                     const capacity = parseFloat(capacityArray[this.vinArray.indexOf(vin)]);
