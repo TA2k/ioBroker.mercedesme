@@ -17,7 +17,7 @@ Mercedes me adapter for ioBroker
 
 ## Changelog
 
-### 0.0.32
+### 0.0.34
 
 - Support for new app
 

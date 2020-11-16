@@ -1,9 +1,9 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.0.32",
+    "version": "0.0.34",
     "news": {
-      "0.0.32": {
+      "0.0.34": {
         "en": "Support for new app"
       },
       "0.0.22": {
