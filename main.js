@@ -34,12 +34,14 @@ class Mercedesme extends utils.Adapter {
         this.vinArray = [];
         this.interval = null;
         this.refreshTokenInterval = null;
-        this.reconnectInterval = null;
         this.retryTimeout = null;
         this.tenant = "";
         this.statusEtag = "";
         this.locationEtag = "";
         this.ws = null;
+        this.wsHeartbeatTimeout = null;
+
+        this.reconnectInterval = null;
         this.xSession = uuidv4();
         this.xTracking = uuidv4();
         this.deviceuuid = uuidv4();
@@ -75,6 +77,21 @@ class Mercedesme extends utils.Adapter {
                 }
             });
         });
+
+        if (this.config.resetAccess) {
+            this.log.info("Reset access");
+            this.atoken = "";
+            this.rtoken = "";
+            this.setState("auth.access_token", "", true);
+            this.setState("auth.refresh_token", "", true);
+            const adapterConfig = "system.adapter." + pre;
+            this.getForeignObject(adapterConfig, (error, obj) => {
+                obj.native.resetAccess = false;
+                this.setForeignObject(adapterConfig, obj);
+            });
+            return;
+        }
+
         this.login()
             .then(() => {
                 this.log.debug("Login successful");
@@ -109,6 +126,7 @@ class Mercedesme extends utils.Adapter {
             clearInterval(this.refreshTokenInterval);
             clearInterval(this.reconnectInterval);
             clearTimeout(this.retryTimeout);
+            clearTimeout(this.wsHeartbeatTimeout);
 
             callback();
         } catch (e) {
@@ -217,7 +235,7 @@ class Mercedesme extends utils.Adapter {
             } else {
                 //ACK Values
                 const pre = this.name + "." + this.instance;
-                if (id.indexOf("state.tanklevelpercent.intValue") !== -1 || id.indexOf("state.soc.intValue") !== -1 ) {
+                if (id.indexOf("state.tanklevelpercent.intValue") !== -1 || id.indexOf("state.soc.intValue") !== -1) {
                     let lastTankeLevel = "tankLevelLast";
                     let status = "tankLevelStatus";
                     let beforeFueling = "tankLevelBeforeFueling";
@@ -844,7 +862,7 @@ class Mercedesme extends utils.Adapter {
                     url: "https://keycloak.risingstars.daimler.com/auth/realms/Daimler/protocol/openid-connect/token",
                     headers: {
                         "content-type": "application/x-www-form-urlencoded; charset=utf-8",
-                        "ris-os-version": "13.6",
+                        "ris-os-version": "14.2",
                         "x-trackingid": this.xTracking,
                         "ris-os-name": "ios",
                         "x-sessionid": this.xSession,
@@ -852,9 +870,9 @@ class Mercedesme extends utils.Adapter {
                         stage: "prod",
                         "x-applicationname": "mycar-store-ece",
                         "accept-language": "de-de",
-                        "ris-sdk-version": "2.10.0",
-                        "user-agent": "MyCar/731 CFNetwork/1128.0.1 Darwin/19.6.0",
-                        "ris-application-version": "1.3.1 (731)",
+                        "RIS-SDK-Version": "2.24.0",
+                        "User-Agent": "MyCar/855 CFNetwork/1206 Darwin/20.1.0",
+                        "ris-application-version": "1.5.1 (855)",
                         "x-locale": this.config.acceptL,
                     },
                     followAllRedirects: false,
@@ -866,6 +884,10 @@ class Mercedesme extends utils.Adapter {
                         this.retryTimeout = setTimeout(() => {
                             this.refreshToken();
                         }, 5 * 60 * 1000);
+                        err && this.log.error(err);
+                        resp && this.log.error(resp.statusCode);
+                        body && this.log.error(JSON.stringify(body)); 
+                        return
                     }
                     try {
                         const token = JSON.parse(body);
@@ -970,7 +992,7 @@ class Mercedesme extends utils.Adapter {
                     url: "https://keycloak.risingstars.daimler.com/auth/realms/Daimler/protocol/openid-connect/token",
                     headers: {
                         "content-type": "application/x-www-form-urlencoded; charset=utf-8",
-                        "ris-os-version": "13.6",
+                        "ris-os-version": "14.2",
                         "x-trackingid": this.xTracking,
                         "ris-os-name": "ios",
                         "x-sessionid": this.xSession,
@@ -978,9 +1000,9 @@ class Mercedesme extends utils.Adapter {
                         stage: "prod",
                         "x-applicationname": "mycar-store-ece",
                         "accept-language": "de-de",
-                        "ris-sdk-version": "2.10.0",
-                        "user-agent": "MyCar/731 CFNetwork/1128.0.1 Darwin/19.6.0",
-                        "ris-application-version": "1.3.1 (731)",
+                        "RIS-SDK-Version": "2.24.0",
+                        "User-Agent": "MyCar/855 CFNetwork/1206 Darwin/20.1.0",
+                        "ris-application-version": "1.5.1 (855)",
                         "device-uuid": this.deviceuuid,
                         "x-locale": this.config.acceptL,
                     },
@@ -1041,31 +1063,44 @@ class Mercedesme extends utils.Adapter {
     connectWS(vin) {
         var headers = this.baseHeader;
         headers.Authorization = this.atoken;
-        this.ws = new WebSocket("wss://websocket-prod.risingstars.daimler.com/ws", {
-            headers: headers,
-        });
+        this.log.info("Connect to WebSocket")
+        try {
+            clearInterval(this.reconnectInterval)
+            this.reconnectInterval = setInterval(() => {
+                this.connectWS();
+            }, 5 * 60 * 1000); // 5min
+            this.ws = new WebSocket("wss://websocket-prod.risingstars.daimler.com/ws", {
+                headers: headers,
+            });
+        } catch (error) {
+            this.log.error(error);
+            this.log.error("No WebSocketConnection possible");
+        }
 
         this.ws.on("open", () => {
             this.log.debug("WS connected");
-            // this.ws.send('{"protocol":"json","version":1}');
-            this.setObjectNotExists(vin + ".Stream", {
-                type: "state",
-                common: {
-                    name: "Streaminformation ",
-                    role: "indicator",
-                    type: "mixed",
-                    write: false,
-                    read: true,
-                },
-                native: {},
-            });
+            clearInterval(this.reconnectInterval)
+        });
+        this.ws.on("error", (data) => {
+            this.log.error(data);
         });
         this.ws.on("close", (data) => {
             this.log.info(data);
             this.log.info("Websocket closed");
         });
         this.ws.on("message", async (data) => {
-            // this.log.debug(data);
+            this.log.debug("WS Message Length: " + data.length);
+            if (this.wsHeartbeatTimeout) {
+                clearTimeout(this.wsHeartbeatTimeout);
+                clearInterval(this.reconnectInterval)                
+            }
+            this.wsHeartbeatTimeout = setTimeout(() => {
+                this.log.error("Lost WebSocket connection try to reconnect")
+                this.ws.close();
+                setTimeout(() => {
+                    this.connectWS();
+                }, 5000);
+            }, 1 * 60 * 1000); //1min
             try {
                 const message = VehicleEvents.PushMessage.deserializeBinary(data).toObject();
                 if (message.debugmessage) {
@@ -1114,9 +1149,6 @@ class Mercedesme extends utils.Adapter {
                                 },
                                 native: {},
                             });
-                            if (element[0] === "doorstatusfrontleft") {
-                                debugger;
-                            }
                             Object.keys(element[1]).forEach((state) => {
                                 if (
                                     state === "displayValue" ||
