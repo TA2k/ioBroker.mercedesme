@@ -884,8 +884,8 @@ class Mercedesme extends utils.Adapter {
                         }, 5 * 60 * 1000);
                         err && this.log.error(err);
                         resp && this.log.error(resp.statusCode);
-                        body && this.log.error(JSON.stringify(body)); 
-                        return
+                        body && this.log.error(JSON.stringify(body));
+                        return;
                     }
                     try {
                         const token = JSON.parse(body);
@@ -972,7 +972,7 @@ class Mercedesme extends utils.Adapter {
                     .then(() => {
                         resolve();
                         this.refreshTokenInterval = setInterval(() => {
-                            this.log.debug("Refresh Token")
+                            this.log.debug("Refresh Token");
                             this.refreshToken();
                         }, 60 * 60 * 1000); // 60min
                         return;
@@ -1065,11 +1065,11 @@ class Mercedesme extends utils.Adapter {
     connectWS(vin) {
         var headers = this.baseHeader;
         headers.Authorization = this.atoken;
-        this.log.info("Connect to WebSocket")
+        this.log.info("Connect to WebSocket");
         try {
-            clearInterval(this.reconnectInterval)
+            clearInterval(this.reconnectInterval);
             this.reconnectInterval = setInterval(() => {
-                this.log.info("Try to reconnect")
+                this.log.info("Try to reconnect");
                 this.connectWS();
             }, 5 * 60 * 1000); // 5min
             this.ws = new WebSocket("wss://websocket-prod.risingstars.daimler.com/ws", {
@@ -1082,7 +1082,7 @@ class Mercedesme extends utils.Adapter {
 
         this.ws.on("open", () => {
             this.log.debug("WS connected");
-            clearInterval(this.reconnectInterval)
+            clearInterval(this.reconnectInterval);
         });
         this.ws.on("error", (data) => {
             this.log.error(data);
@@ -1095,10 +1095,10 @@ class Mercedesme extends utils.Adapter {
             this.log.debug("WS Message Length: " + data.length);
             if (this.wsHeartbeatTimeout) {
                 clearTimeout(this.wsHeartbeatTimeout);
-                clearInterval(this.reconnectInterval);              
+                clearInterval(this.reconnectInterval);
             }
             this.wsHeartbeatTimeout = setTimeout(() => {
-                this.log.error("Lost WebSocket connection try to reconnect")
+                this.log.error("Lost WebSocket connection try to reconnect");
                 this.ws.close();
                 setTimeout(() => {
                     this.connectWS();
@@ -1112,13 +1112,17 @@ class Mercedesme extends utils.Adapter {
                 if (message.assignedVehicles) {
                     this.log.debug(JSON.stringify(message.assignedVehicles));
                     this.vinArray = message.assignedVehicles.vinsList;
+                    let ackCommand = new Client.AcknowledgeAssignedVehicles();
+                    let clientMessage = new Client.ClientMessage();
+                    clientMessage.setAcknowledgeAssignedVehicles(ackCommand);
+                    this.ws.send(clientMessage.serializeBinary());
                 }
                 if (message.apptwinPendingCommandRequest) {
-                    this.log.debug(JSON.stringify(message.apptwinPendingCommandRequest));
+                    this.log.debug("apptwinPendingCommandRequest: "+JSON.stringify(message.apptwinPendingCommandRequest));
                 }
                 if (message.vepupdates) {
-                    // this.log.debug(JSON.stringify(message.vepupdates))
-
+                    this.log.silly(JSON.stringify(message.vepupdates));
+                    this.log.debug("Received State Updated");
                     this.currentSequenceNumber = message.vepupdates.sequenceNumber;
                     let ackCommand = new Client.AcknowledgeVEPUpdatesByVIN();
                     ackCommand.setSequenceNumber(message.vepupdates.sequenceNumber);
