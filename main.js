@@ -32,7 +32,6 @@ class Mercedesme extends utils.Adapter {
         this.on("unload", this.onUnload.bind(this));
         this.jar = request.jar();
         this.vinArray = [];
-        this.interval = null;
         this.refreshTokenInterval = null;
         this.retryTimeout = null;
         this.tenant = "";
@@ -122,7 +121,6 @@ class Mercedesme extends utils.Adapter {
      */
     onUnload(callback) {
         try {
-            clearInterval(this.interval);
             clearInterval(this.refreshTokenInterval);
             clearInterval(this.reconnectInterval);
             clearTimeout(this.retryTimeout);
@@ -973,6 +971,10 @@ class Mercedesme extends utils.Adapter {
                 await this.refreshToken()
                     .then(() => {
                         resolve();
+                        this.refreshTokenInterval = setInterval(() => {
+                            this.log.debug("Refresh Token")
+                            this.refreshToken();
+                        }, 60 * 60 * 1000); // 60min
                         return;
                     })
                     .catch(() => {
@@ -1067,6 +1069,7 @@ class Mercedesme extends utils.Adapter {
         try {
             clearInterval(this.reconnectInterval)
             this.reconnectInterval = setInterval(() => {
+                this.log.info("Try to reconnect")
                 this.connectWS();
             }, 5 * 60 * 1000); // 5min
             this.ws = new WebSocket("wss://websocket-prod.risingstars.daimler.com/ws", {
@@ -1092,7 +1095,7 @@ class Mercedesme extends utils.Adapter {
             this.log.debug("WS Message Length: " + data.length);
             if (this.wsHeartbeatTimeout) {
                 clearTimeout(this.wsHeartbeatTimeout);
-                clearInterval(this.reconnectInterval)                
+                clearInterval(this.reconnectInterval);              
             }
             this.wsHeartbeatTimeout = setTimeout(() => {
                 this.log.error("Lost WebSocket connection try to reconnect")
