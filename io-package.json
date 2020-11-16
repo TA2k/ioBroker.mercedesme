@@ -1,138 +1,161 @@
 {
-	"common": {
-		"name": "mercedesme",
-		"version": "0.0.21",
-		"news": {
-			"0.0.22": {
-				"en": "Rework fuel history, fix js-controller 3 issues"
-			},
-			"0.0.21": {
-				"en": "Removed Socket.io connection"
-			},
-			"0.0.19": {
-				"en": "Improve error handling"
-			},
-			"0.0.18": {
-				"en": "Bugfixing"
-			},
-			"0.0.17": {
-				"en": "add connection via ODB Adapter (Adapter App)"
-			},
-			"0.0.16": {
-				"en": "fix fueling will not recording probably"
-			},
-			"0.0.15": {
-				"en": "fix soc history bug, add basic price and  adapter restart every 6h"
-			},
-			"0.0.14": {
-				"en": "fix when webpage streams are not reachable"
-			},
-			"0.0.13": {
-				"en": "add hard reconnect after 6h for stream data"
-			},
-			"0.0.12": {
-				"en": "add gas prices via tankerkönig"
-			},
-			"0.0.11": {
-				"en": "minor fixes"
-			},
-			"0.0.10": {
-				"en": "fix socket refresh"
-			},
-			"0.0.9": {
-				"en": "move code base to app add auxheat",
-				"de": "Auf App API umgestellt. Standheizung jetzt möglich."
-			},
-			"0.0.8": {
-				"en": "decrease reconnect for all sockets",
-				"de": "decrease reconnect for all sockets"
-			},
-			"0.0.7": {
-				"en": "improve door open functionality add detailed state for door status",
-				"de": "Tür öffnen verbessert. Besseren Türstatus hinzugefügt."
-			}
-		},
-		"title": "Mercedes me",
-		"titleLang": {
-			"en": "Mercedes me",
-			"de": "Mercedes me",
-			"ru": "Мерседес me",
-			"pt": "Mercedes me",
-			"nl": "Mercedes me",
-			"fr": "Mercedes me",
-			"it": "Mercedes me",
-			"es": "Mercedes me",
-			"pl": "Mercedes me",
-			"zh-cn": "梅赛德斯我"
-		},
-		"desc": {
-			"en": "Mercedes me adapter for ioBroker",
-			"de": "Mercedes me Adapter für ioBroker",
-			"ru": "Mercedes me адаптер для ioBroker",
-			"pt": "Mercedes me adaptador para ioBroker",
-			"nl": "Mercedes me-adapter voor ioBroker",
-			"fr": "Mercedes me adaptateur pour ioBroker",
-			"it": "Mercedes me adattatore per ioBroker",
-			"es": "Mercedes me adapta para ioBroker",
-			"pl": "Adapter Mercedes me do ioBroker",
-			"zh-cn": "梅赛德斯适用于ioBroker的适配器"
-		},
-		"authors": [
-			"tombox <tombox2020@gmail.com>"
-		],
-		"keywords": [
-			"mercedes",
-			"mercedes me",
-			"mercedes benz",
-			"daimler"
-		],
-		"license": "MIT",
-		"platform": "Javascript/Node.js",
-		"main": "main.js",
-		"icon": "mercedesme.png",
-		"enabled": true,
-		"extIcon": "https://raw.githubusercontent.com/TA2k/ioBroker.mercedesme/master/admin/mercedesme.png",
-		"readme": "https://github.com/TA2k/ioBroker.mercedesme/blob/master/README.md",
-		"loglevel": "info",
-		"mode": "daemon",
-		"type": "vehicle",
-		"compact": true,
-		"materialize": true,
-		"plugins": {
-			"sentry": {
-				"dsn": "https://b5af79b8000149148826a2266de14281@sentry.iobroker.net/69"
-			}
-		},
-		"dependencies": [
-			{
-				"admin": ">=3.0.0"
-			},
-			{
-				"js-controller": ">=1.4.2"
-			}
-		]
-	},
-	"native": {
-		"mail": "",
-		"password": "",
-		"manuelvin": "",
-		"interval": 30,
-		"tank": "",
-		"capacity": "",
-		"pin": "",
-		"atoken": "",
-		"rtoken": "",
-		"expires": "",
-		"scope": "",
-		"apiKey": "",
-		"gas": "",
-		"kwprice": "",
-		"acceptL": "de_DE",
-		"countryC": "DE",
-		"disableSocket": false,
-		"isAdapter": false,
-		"ciam": ""
-	},
-	"objects": [],
-	"instanceObjects": []
+  "common": {
+    "name": "mercedesme",
+    "version": "0.0.30",
+    "news": {
+      "0.0.30": {
+        "en": "First version for new app"
+      },
+      "0.0.22": {
+        "en": "Rework fuel history, fix js-controller 3 issues"
+      },
+      "0.0.21": {
+        "en": "Removed Socket.io connection"
+      },
+      "0.0.19": {
+        "en": "Improve error handling"
+      },
+      "0.0.18": {
+        "en": "Bugfixing"
+      },
+      "0.0.17": {
+        "en": "add connection via ODB Adapter (Adapter App)"
+      },
+      "0.0.16": {
+        "en": "fix fueling will not recording probably"
+      },
+      "0.0.15": {
+        "en": "fix soc history bug, add basic price and  adapter restart every 6h"
+      },
+      "0.0.14": {
+        "en": "fix when webpage streams are not reachable"
+      },
+      "0.0.13": {
+        "en": "add hard reconnect after 6h for stream data"
+      },
+      "0.0.12": {
+        "en": "add gas prices via tankerkönig"
+      },
+      "0.0.11": {
+        "en": "minor fixes"
+      },
+      "0.0.10": {
+        "en": "fix socket refresh"
+      },
+      "0.0.9": {
+        "en": "move code base to app add auxheat",
+        "de": "Auf App API umgestellt. Standheizung jetzt möglich."
+      },
+      "0.0.8": {
+        "en": "decrease reconnect for all sockets",
+        "de": "decrease reconnect for all sockets"
+      },
+      "0.0.7": {
+        "en": "improve door open functionality add detailed state for door status",
+        "de": "Tür öffnen verbessert. Besseren Türstatus hinzugefügt."
+      }
+    },
+    "title": "Mercedes me",
+    "titleLang": {
+      "en": "Mercedes me",
+      "de": "Mercedes me",
+      "ru": "Мерседес me",
+      "pt": "Mercedes me",
+      "nl": "Mercedes me",
+      "fr": "Mercedes me",
+      "it": "Mercedes me",
+      "es": "Mercedes me",
+      "pl": "Mercedes me",
+      "zh-cn": "梅赛德斯我"
+    },
+    "desc": {
+      "en": "Mercedes me adapter for ioBroker",
+      "de": "Mercedes me Adapter für ioBroker",
+      "ru": "Mercedes me адаптер для ioBroker",
+      "pt": "Mercedes me adaptador para ioBroker",
+      "nl": "Mercedes me-adapter voor ioBroker",
+      "fr": "Mercedes me adaptateur pour ioBroker",
+      "it": "Mercedes me adattatore per ioBroker",
+      "es": "Mercedes me adapta para ioBroker",
+      "pl": "Adapter Mercedes me do ioBroker",
+      "zh-cn": "梅赛德斯适用于ioBroker的适配器"
+    },
+    "authors": [
+      "tombox <tombox2020@gmail.com>"
+    ],
+    "keywords": [
+      "mercedes",
+      "mercedes me",
+      "mercedes benz",
+      "daimler"
+    ],
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "main": "main.js",
+    "icon": "mercedesme.png",
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/TA2k/ioBroker.mercedesme/master/admin/mercedesme.png",
+    "readme": "https://github.com/TA2k/ioBroker.mercedesme/blob/master/README.md",
+    "loglevel": "info",
+    "mode": "daemon",
+    "type": "vehicle",
+    "compact": true,
+    "materialize": true,
+    "plugins": {
+      "sentry": {
+        "dsn": "https://b5af79b8000149148826a2266de14281@sentry.iobroker.net/69"
+      }
+    },
+    "dependencies": [
+      {
+        "admin": ">=3.0.0"
+      },
+      {
+        "js-controller": ">=1.4.2"
+      }
+    ]
+  },
+  "native": {
+    "mail": "",
+    "loginCode": "",
+    "manuelvin": "",
+    "interval": 30,
+    "tank": "",
+    "capacity": "",
+    "pin": "",
+    "expires": "",
+    "scope": "",
+    "apiKey": "",
+    "gas": "",
+    "kwprice": "",
+    "acceptL": "de_DE",
+    "countryC": "DE",
+    "disableSocket": false,
+    "isAdapter": false,
+    "ciam": ""
+  },
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "info",
+      "type": "channel",
+      "common": {
+        "name": "Information"
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "role": "indicator.connected",
+        "name": "Device or service connected",
+        "type": "boolean",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    }
+  ]
 }

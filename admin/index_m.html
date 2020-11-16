@@ -20,7 +20,7 @@
             function load(settings, onChange) {
                 // example: select elements with id=key and class=value and insert value
                 if (!settings) return;
-                $(".value").each(function() {
+                $(".value").each(function () {
                     var $key = $(this);
                     var id = $key.attr("id");
                     if ($key.attr("type") === "checkbox") {
@@ -42,7 +42,7 @@
             function save(callback) {
                 // example: select elements with class=value and build settings object
                 var obj = {};
-                $(".value").each(function() {
+                $(".value").each(function () {
                     var $this = $(this);
                     if ($this.attr("type") === "checkbox") {
                         obj[$this.attr("id")] = $this.prop("checked");
@@ -68,20 +68,11 @@
                     <input class="value" id="mail" type="text" />
                     <label for="mail" class="translate">mercedes me mail</label>
                 </div>
-                <div class="input-field col col s3">
-                    <input class="value" id="isAdapter" type="checkbox" />
-                    <label for="adapter" class="translate">Use OBD Adapter</label>
-                </div>
-                <div class="input-field col col s3">
-                    <input class="value" id="ciam" type="text" />
-                    <label for="adapter" class="translate">CIAM</label>
-                    (NUR ODB Adapter Benutzer) Adapter App-> i oben rechts-> App support
-                </div>
             </div>
             <div class="row">
                 <div class="input-field col col s3">
-                    <input class="value" id="password" type="password" />
-                    <label for="password" class="translate">password</label>
+                    <input class="value" id="loginCode" type="text" />
+                    <label for="loginCode" class="translate">NACH DEM ERSTEN START HIER E-MAIL SICHERHEITSCODE EINGEBEN</label>
                 </div>
             </div>
 

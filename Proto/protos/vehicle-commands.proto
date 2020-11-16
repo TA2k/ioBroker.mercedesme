@@ -1,0 +1,645 @@
+syntax = "proto3";
+package proto;
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+
+option (gogoproto.goproto_enum_prefix_all) = true;
+option java_package = "com.daimler.mbcarkit.proto";
+
+// Part of a CommandStatusUpdate
+// Sending direction: App <- BFF <- AppTwin
+message CommandStatus {
+
+  // The remote VVA process id of the command.
+  int64 process_id = 5;
+
+  // The id of the command with which the app created it. Only set on the first transmission to the app.
+  string request_id = 7;
+
+  // The initial CommandStatus from the response of the VVA has a timestamp of -1
+  int64 timestamp = 6;
+
+  // The initial CommandStatus from the response of the VVA has a timestamp of -1
+  int64 timestamp_in_ms = 25;
+
+  enum AcpError {
+    UNKNOWN_ACP_ERROR = 0;
+    VALUE_OUT_OF_RANGE = 1;
+    WRONG_DATA_TYPE = 2;
+    VALUE_OVERFLOW = 3;
+    INCOMPLETE_VALUES = 4;
+    SYNTAX_ERROR = 5;
+    NULL_INF_VALUES = 6;
+    LOCK_FAILED = 7;
+    FAILED_DUE_TO_DOOR_IS_OPEN = 8;
+    FAILED_DUE_TO_IGNITION_IS_ON = 9;
+    LOCK_REQUEST_NOT_AUTHORIZED = 10;
+    UNLOCK_FAILED = 11;
+    FAILED_DUE_TO_TIMEOUT = 12;
+    FAILED_DUE_TO_INVALID_SMS_TIME = 13;
+    FAILED_BECAUSE_VEHICLE_IS_IN_MOTION = 14;
+    FAILED_DUE_TO_IGNITION_TRANSITION = 15;
+    UNLOCK_REQUEST_NOT_AUTHORIZED = 16;
+    DOOR_IS_OPEN_AFTER_UNLOCK_COMMAND = 17;
+    PROCESSING_FAILED = 18;
+    SERVICE_NOT_AUTHORIZED = 19;
+    REMOTE_WINDOW_ROOF_COMMAND_FAILED = 20;
+    REMOTE_WINDOW_ROOF_COMMAND_FAILED_VEHICLE_STATE_IN_IGN = 21;
+    REMOTE_WINDOW_ROOF_COMMAND_FAILED_WINDOW_NOT_NORMED = 22;
+    REMOTE_WINDOW_ROOF_COMMAND_FAILED_SERVICE_NOT_AUTHORIZED_IN_TCU = 62;
+    // The user entered the wrong pin
+    PIN_INVALID = 23;
+    // There were too many failed pin attempts for this CiamId -> the user can only another try after blockingTime is expired.
+    CIAM_ID_BLOCKED = 24;
+    RS_ABORTED_DOORS_NOT_LOCKED = 27;
+    RS_ABORTED_DOORS_OPEN = 28;
+    RS_ABORTED_HOOD_OPEN = 29;
+    RS_ABORTED_ALARM_ACTIVE = 30;
+    RS_ABORTED_FUEL_LOW = 31;
+    RS_ABORTED_GAS_PEDAL_PRESSED = 32;
+    RS_ABORTED_NOT_ALLOWED_BY_EIS = 33;
+    RS_ABORTED_ENGINE_UNEXPECTED_SHUT_OFF = 34;
+    RS_DENIED_NOT_ALLOWED_BY_EIS = 35;
+    RS_DENIED_VEHICLE_NOT_IN_PARK = 36;
+    RS_DENIED_DOORS_NOT_LOCKED = 37;
+    RS_DENIED_DOORS_OPEN = 38;
+    RS_DENIED_WINDOWS_OPEN = 39;
+    RS_DENIED_HOOD_OPEN = 40;
+    RS_DENIED_ALARM_ACTIVE = 41;
+    RS_DENIED_FUEL_LOW = 42;
+    RS_DENIED_GAS_PEDAL_PRESSED = 43;
+    RS_DENIED_DELAY_NOT_EXPIRED = 44;
+    RS_ABORTED_INVALID_CHALLENGE_RESPONSE = 45;
+    RS_DENIED_NUMBER_OF_REQUESTS_EXPIRED = 46;
+    RS_ABORTED_REQUEST_REFUSED_BY_ENGINE = 47;
+    RS_NO_CAN_ACKNOWLEDGEMENT = 48;
+    RS_DENIED_NOT_AUTHORIZED = 49;
+    RS_ABORTED_CHARGE_CABLE_PLUGGED = 50;
+    RS_FBS_RESP_GENERATION_NOT_POSSIBLE_FOR_VIN = 51;
+    RS_FBS_MAINTENANCE = 52;
+    RS_CALLBACK_TIMEOUT = 53;
+    RS_FBS_GENERAL_ERROR = 54;
+    RS_CURRENTLY_BLOCKED = 55;
+    RS_DENIED_AFTER_CHALLENGE_DOORS_NOT_LOCKED = 56;
+    RS_DENIED_AFTER_CHALLENGE_DOORS_OPEN = 57;
+    RS_DENIED_AFTER_CHALLENGE_HOOD_OPEN = 58;
+    RS_DENIED_AFTER_CHALLENGE_ALARM_ACTIVE = 59;
+    RS_DENIED_AFTER_CHALLENGE_NOT_ALLOWED_BY_EIS = 60;
+    ENERGY_LEVEL_IN_BATTERY_IS_TOO_LOW = 63;
+    CONFIGURATION_PROCESSING_FAILED = 65;
+    PROCESSING_FAILED_CUSTOMER_MAX_SOC_BELOW_VEHICLE_THRESHOLD = 66;
+    CONFIGURATION_NOT_AUTHORIZED = 67;
+    ZEV_WEEK_DEPT_SET_PROCESSING_FAILED = 68;
+    ZEV_WEEK_DEPT_SET_NOT_AUTHORIZED = 69;
+    ZEV_WEEK_DEPT_SET_PROCESSING_OVERWRITTEN = 70;
+    ZEV_WEEK_DEPT_SET_PROCESSING_NOT_POSSIBLE_DUE_TO_INSTANT_CHARGING = 71;
+    FASTPATH_TIMEOUT = 72;
+    ZEV_CHARGE_PROGRAM_NOT_SUPPORTED_BY_VEHICLE = 73;
+    // Remote Vehicle Finder
+    SIGPOS_FAILED = 74;
+    SIGPOS_VEHICLE_IN_IGNITION = 75;
+    SIGPOS_NOT_AUTHORIZED = 76;
+    // Vehicle Theft Alarm
+    REMOTE_VTA_FAILED = 25;
+    REMOTE_VTA_SERVICE_NOT_AUTHORIZED = 26;
+    REMOTE_VTA_IGNITION_NOT_LOCKED = 77;
+    REMOTE_VTA_VVR_VALUE_NOT_SET = 78;
+    REMOTE_VTA_VVR_NOT_ALLOWED = 79;
+
+    // Rising Stars Errors
+    NO_APPTWIN_CONNECTED = 61;
+    VVA_RESPONDED_SERVICE_NOT_ACTIVATED = 64;
+  }
+
+  // Potential ACP error if the command request could not be fulfilled
+  repeated AcpError errors = 4;
+
+  // Potential timestamp until user cannot send login/pin requests. Data in seconds since Unix epoch
+  int64 blocking_time_seconds = 13;
+
+  // Potential amount of failed pin attempts.
+  int32 pin_attempts = 14;
+
+  // The type of command the CommandStatus belongs to. Not guaranteed to be always set.
+  oneof type {
+    AuxheatStart auxheat_start = 9;
+    AuxheatStop auxheat_stop = 10;
+    AuxheatConfigure auxheat_configure = 28;
+
+    DoorsLock doors_lock = 11;
+    DoorsUnlock doors_unlock = 12;
+
+    SunroofOpen sunroof_open = 15;
+    SunroofClose sunroof_close = 16;
+    SunroofLift sunroof_lift = 17;
+
+    WindowsOpen windows_open = 18;
+    WindowsClose windows_close = 19;
+
+    EngineStart engine_start = 26;
+    EngineStop engine_stop = 27;
+  }
+
+  enum State {
+    UNKOWN_STATE_TYPE = 0;
+    CREATED           = 1;
+    ENQUEUED          = 2;
+    PROCESSING        = 3;
+    SUSPENDED         = 4;
+    FINISHED          = 5;
+  }
+  State state = 2;
+
+  enum Condition {
+    UNKOWN_CONDITION_TYPE = 0;
+    NONE                  = 1;
+    ACCEPTED              = 2;
+    REJECTED              = 3;
+    TERMINATE             = 4;
+    SUCCESS               = 5;
+    FAILED                = 6;
+    OVERWRITTEN           = 7;
+    TIMEOUT               = 8;
+
+    // Not from DaiVB
+    DUPLICATE             = 9;
+  }
+  Condition condition = 3;
+}
+
+
+// acknowledge that the CommandStatusUpdate-Messages of up to `sequence_number` have been received
+// Sending direction: App -> BFF -> AppTwin
+message AcknowledgeCommandStatusUpdateRequest {
+  int32 sequence_number = 1;
+}
+
+// Sending direction: App <- BFF <- AppTwin
+message CommandStatusUpdatesByVIN {
+  map<string, CommandStatusUpdate> updates = 1;
+}
+
+// Sending direction: App <- BFF <- AppTwin
+message CommandStatusUpdate {
+
+  int32 sequence_number = 1;
+
+  string vin = 2;
+
+  // when was the event emitted? This is the time of the update, (seconds in Unix time) (deprecated)
+  // not when the attributes where changed. To compare attribute changes, you need to look into each attribute timestamp
+  int64 emit_timestamp = 3;
+
+  // When was the event emitted (milliseconds in Unix time)
+  int64 emit_timestamp_in_ms = 7;
+
+  map<int64, CommandStatus> updates = 6;
+}
+
+// Acknowledge the CommandRequest reached the apptwin actor
+// Websocket <- Apptwin
+message AcknowledgeCommandRequest {
+  string request_id = 1;
+}
+
+// After the command was issued at VVA based on this
+// command request the call will get a command request
+// correlation message which matches the request id
+// with the process id.
+// Sending direction: App - BFF -> AppTwin
+message CommandRequest {
+  string vin = 1;
+
+  // Set this id to correlate a CommandStatus
+  // with this command request.
+  string request_id = 7;
+
+  // Temporary backend switch field. Will be removed as soon as all commands are migrated to the VehicleAPI
+  // This field only needs to be set if the command is supported by both API from our backend. If this field is removed
+  // don't forget to set the field 36 to reserved.
+  enum Backend {
+    VVA = 0; // default value
+    VehicleAPI = 1;
+  }
+  Backend backend = 36;
+
+  oneof command {
+    AuxheatStart auxheat_start = 2;
+    AuxheatStop auxheat_stop = 3;
+    AuxheatConfigure auxheat_configure = 4;
+
+    DoorsLock doors_lock = 5;
+    DoorsUnlock doors_unlock = 6;
+
+    SunroofOpen sunroof_open = 9;
+    SunroofClose sunroof_close = 10;
+    SunroofLift sunroof_lift = 11;
+
+    WindowsOpen windows_open = 12;
+    WindowsClose windows_close = 13;
+
+    EngineStart engine_start = 19;
+    EngineStop engine_stop = 20;
+
+    ZEVPreconditioningStart zev_preconditioning_start = 21;
+    ZEVPreconditioningStop zev_preconditioning_stop = 22;
+    ZEVPreconditioningConfigure zev_precondition_configure = 25;
+    ZEVPreconditioningConfigureSeats zev_precondition_configure_seats = 26;
+
+    // WindowVentilate window_ventilate = 14;
+
+    SpeedalertStart speedalert_start = 23;
+    SpeedalertStop speedalert_stop = 24;
+
+    BatteryChargeProgramConfigure battery_charge_program = 27;
+    BatteryMaxSocConfigure battery_max_soc = 28;
+
+    ChargeProgramConfigure charge_program_configure = 34;
+
+    ChargeOptConfigure charge_opt_configure = 29;
+    ChargeOptStart charge_opt_start = 30;
+    ChargeOptStop charge_opt_stop = 31;
+
+    TemperatureConfigure temperature_configure = 32;
+
+    WeekProfileConfigure week_profile_configure = 33;
+
+    SigPosStart sigpos_start = 35;
+
+    TheftalarmConfirmDamagedetection theftalarm_confirm_damagedetection = 8;
+    TheftalarmDeselectDamagedetection theftalarm_deselect_damagedetection= 14;
+    TheftalarmDeselectInterior theftalarm_deselect_interior = 15;
+    TheftalarmDeselectTow theftalarm_deselect_tow = 16;
+    TheftalarmSelectDamagedetection theftalarm_select_damagedetection = 17;
+    TheftalarmSelectInterior theftalarm_select_interior = 18;
+    TheftalarmSelectTow theftalarm_select_tow = 37;
+    TheftalarmStart theftalarm_start = 38;
+    TheftalarmStop theftalarm_stop = 39;
+  }
+}
+
+message AuxheatStart {}
+message AuxheatStop {}
+message AuxheatConfigure {
+
+  enum Selection {
+    NO_SELECTION = 0;
+    TIME_1       = 1;
+    TIME_2       = 2;
+    TIME_3       = 3;
+  }
+
+  Selection time_selection = 1;
+
+  // Minutes from midnight.
+  int32 time_1 = 2;
+
+  // Minutes from midnight.
+  int32 time_2 = 3;
+
+  // Minutes from midnight.
+  int32 time_3 = 4;
+}
+
+enum Door {
+  // the JSON enum values are lowercase, but lowercase values are not exported in golang, so
+  // we allow aliasing all values.
+  option allow_alias = true;
+
+  // the lowercase versions are for json (de)serialization purposes only. The upper case version should be the preferred
+  // enum values to be used in code.
+  // These definitions need to come before upper case versions
+  unknown_door = 0;
+  frontleft = 1;
+  frontright = 2;
+  rearleft = 3;
+  rearright = 4;
+  trunk = 5;
+  fuelflap = 6;
+  chargeflap = 7;
+  chargecoupler = 8;
+
+  UNKNOWN_DOOR = 0;
+  FRONT_LEFT = 1;
+  FRONT_RIGHT = 2;
+  REAR_LEFT = 3;
+  REAR_RIGHT = 4;
+  TRUNK = 5;
+  FUEL_FLAP = 6;
+  CHARGE_FLAP = 7;
+  CHARGE_COUPLER = 8;
+}
+
+message DoorsLock {
+  // doors / flaps to unlock (only supported by TCU type RAMSES)
+  // leave empty to target all doors
+  repeated Door doors = 1;
+}
+message DoorsUnlock {
+  string pin = 1;
+  // doors / flaps to unlock (only supported by TCU type RAMSES)
+  // leave empty to target all doors
+  repeated Door doors = 2;
+}
+
+ message EngineStart {
+   string pin = 1;
+ }
+ message EngineStop {}
+
+message SunroofOpen {
+  string pin = 1;
+}
+message SunroofClose {}
+message SunroofLift {}
+
+message WindowsOpen {
+  string pin = 1;
+}
+message WindowsClose {}
+// message WindowVentilate {}
+
+message SpeedalertStart {
+  int32 threshold = 1;
+  int32 alert_end_time = 2;
+}
+message SpeedalertStop {}
+
+// --- Vehicle API commands
+
+enum ZEVPreconditioningType {
+  // the JSON enum values are lowercase, but lowercase values are not exported in golang, so
+  // we allow aliasing all values.
+  option allow_alias = true;
+
+  // the lowercase versions are for json parsing purposes only. The upper case version should be the preferred
+  // enum values to be used in code.
+  // These definitions need to come before upper case versions
+  unknown_zev_preconditioning_command_type = 0;
+  immediate = 1;
+  departure = 2;
+  now = 3;
+  departureWeekly = 4;
+
+  // the uppercase versions are here to have exported values
+  // The given preconditioning command type is unknown
+  UNKNOWN_ZEV_PRECONDITIONING_COMMAND_TYPE = 0;
+
+  // starts immediate preconditioning
+  IMMEDIATE = 1;
+
+  // starts preconditioning at departure time (requires a departure time to be provided in ZEVPreconditioningStart)
+  DEPARTURE = 2;
+
+  // start right away (departure time is ignored)
+  NOW = 3;
+
+  // starts preconditioning for a configured weekly profile (does NOT require a departure time to be provided)
+  DEPARTURE_WEEKLY = 4;
+
+}
+
+message ZEVPreconditioningStart {
+  int32 departure_time = 1 [ json_name = "departuretime" ];
+  ZEVPreconditioningType type = 2 [ json_name = "type" ];
+}
+
+message ZEVPreconditioningStop { ZEVPreconditioningType type = 2 [ json_name = "type" ]; }
+
+// Configure preconditioning
+message ZEVPreconditioningConfigure {
+  enum DepartureTimeMode {
+    DISABLED = 0;
+    SINGLE_DEPARTURE = 1;
+    WEEKLY_DEPARTURE = 2;
+  }
+  DepartureTimeMode departure_time_mode = 1 [ json_name = "departureTimeMode" ];
+
+  int32 departure_time = 3 [ json_name = "departuretime" ];
+}
+
+// Configure which seats should be preconditioned.
+// Currently, the only available options are to precondition all seats or only the front-left seat
+message ZEVPreconditioningConfigureSeats {
+  bool front_left = 1 [ json_name = "precondSeatFrontLeft" ];
+  bool front_right = 2 [ json_name = "precondSeatFrontRight" ];
+  bool rear_left = 3 [ json_name = "precondSeatRearLeft" ];
+  bool rear_right = 4 [ json_name = "precondSeatRearRight" ];
+}
+
+// Configure the charge program
+message BatteryChargeProgramConfigure {
+  enum ChargeProgram {
+    DEFAULT = 0;
+    INSTANT = 1;
+  }
+  ChargeProgram charge_program = 1 [ json_name = "chargeprogram" ];
+}
+
+// Configure the maximum value for the state of charge of the HV battery
+message BatteryMaxSocConfigure {
+  // Values need to be between 50 and 100 and divisible by ten
+  int32 max_soc = 1 [ json_name = "maxsoc" ];
+}
+
+// Select the given charge program and enables the consumer to configure it.
+// Not yet usable, but will be deployed in the beginning of July 2019 on ece-int
+message ChargeProgramConfigure {
+  enum ChargeProgram {
+    DEFAULT_CHARGEPROGRAM = 0;
+    INSTANT_CHARGEPROGRAM = 1;
+    HOME_CHARGEPROGRAM = 2;
+    WORK_CHARGEPROGRAM = 3;
+  }
+  ChargeProgram charge_program = 1 [ json_name = "chargeprogram" ];
+
+  // Values need to be between 50 and 100 and divisible by ten
+  int32 max_soc = 2 [ json_name = "maxsoc" ];
+
+  // unlock the plug after charging is finished
+  bool auto_unlock = 3 [ json_name = "autounlock" ];
+
+  // automatically switch between home and work program, based on the location of the car
+  bool location_based_charging = 4 [ json_name = "locationbasedcharging" ];
+}
+
+// Provide functionality to initiate a charge optimization configuration
+message ChargeOptConfigure {
+  message Tariff {
+    enum Rate {
+      INVALID_PRICE = 0;
+      LOW_PRICE = 33;
+      NORMAL_PRICE = 44;
+      HIGH_PRICE = 66;
+    }
+    Rate rate = 1 [ json_name = "rate" ];
+    // Time in seconds after 00:00
+    int32 time = 2 [ json_name = "time" ];
+  }
+
+  repeated Tariff weekday_tariff = 1 [ json_name = "weekdaytariff" ];
+  repeated Tariff weekend_tariff = 2 [ json_name = "weekendtariff" ];
+}
+
+// Provide the functionality to start the charge optimization function in the vehicle
+message ChargeOptStart {
+  // empty
+}
+
+// Provide the functionality to stop the charge optimization function in the vehicle
+message ChargeOptStop {
+  // empty
+}
+
+// Set the temperature points of the vehicle
+message TemperatureConfigure {
+  message TemperaturePoint {
+    enum Zone {
+      // the JSON enum values are lowercase, but lowercase values are not exported in golang, so
+      // we allow aliasing all values.
+      option allow_alias = true;
+
+      // the lowercase versions are for json parsing purposes only. The upper case version should be the preferred
+      // enum values to be used in code.
+      // These definitions need to come before upper case versions
+      unknown = 0;
+      frontLeft = 1;
+      frontRight = 2;
+      frontCenter = 3;
+      rearLeft = 4;
+      rearRight = 5;
+      rearCenter = 6;
+      rear2Left = 7;
+      rear2Right = 8;
+      rear2Center = 9;
+      // PLEASE BE AWARE OF THE FOLLOWING BEFORE ADDING NEW ZONES:
+      // Currently there is a bug in vehicle API, that we need to send the zones in the correct order. Otherwise the request will be rejected.
+      // The order needs to be like the following:
+      // Front before rear before rear2
+      // Left before right - There is no center zone if there are left and right zones in this row
+      // As this is already the order like specified here, this needs to be considered on adding new zones.
+
+      UNKNOWN_ZONE = 0;
+      FRONT_LEFT = 1;
+      FRONT_RIGHT = 2;
+      FRONT_CENTER = 3;
+      REAR_LEFT = 4;
+      REAR_RIGHT = 5;
+      REAR_CENTER = 6;
+      REAR_2_LEFT = 7;
+      REAR_2_RIGHT = 8;
+      REAR_2_CENTER = 9;
+      // PLEASE BE AWARE OF THE FOLLOWING BEFORE ADDING NEW ZONES:
+      // Currently there is a bug in vehicle API, that we need to send the zones in the correct order. Otherwise the request will be rejected.
+      // The order needs to be like the following:
+      // Front before rear before rear2
+      // Left before right - There is no center zone if there are left and right zones in this row
+      // As this is already the order like specified here, this needs to be considered on adding new zones.
+    }
+    Zone zone = 1 [ json_name = "zone" ];
+
+    int32 temperature = 2 [ deprecated = true ];
+    double temperature_in_celsius = 3 [ json_name = "temp" ];
+  }
+
+  repeated TemperaturePoint temperature_points = 1 [ json_name = "temperaturePoints" ];
+}
+
+// Set the weekprofile for the weekly departure time settings
+message WeekProfileConfigure {
+  message WeeklySetHU {
+    enum Day {
+      MONDAY = 0;
+      TUESDAY = 1;
+      WEDNESDAY = 2;
+      THURSDAY = 3;
+      FRIDAY = 4;
+      SATURDAY = 5;
+      SUNDAY = 6;
+    }
+    Day day = 1 [ json_name = "day" ];
+    // Time in minutes after 00:00
+    int32 time = 2 [ json_name = "time" ];
+  }
+
+  repeated WeeklySetHU weekly_set_hu = 1 [ json_name = "weeklySetHU" ];
+}
+
+// Invoke the Remote Vehicle Finder for signalling the vehicle’s position with lights, horn or panic alarm.
+message SigPosStart {
+  // Value needs to be between 0 and 30. The default is 0.
+  // Only allowed for RAMSES
+  int32 horn_repeat = 1 [ json_name = "hornRepeat" ];
+
+  // Only allowed for RAMSES
+  enum HornType {
+    HORN_OFF = 0;
+    HORN_LOW_VOLUME = 1;
+    HORN_HIGH_VOLUME = 2;
+  }
+  HornType horn_type = 2 [ json_name = "hornType" ];
+
+  // Only allowed for RAMSES
+  enum LightType {
+    LIGHT_OFF = 0;
+    DIPPED_HEAD_LIGHT = 1;
+    WARNING_LIGHT = 2;
+  }
+  LightType light_type = 3 [ json_name = "lightType" ];
+
+  // Value needs to be between 0 and 10. It indicates how long the light should be switched on.
+  int32 sigpos_duration = 4 [ json_name = "sigposDuration" ];
+
+  enum SigposType {
+    LIGHT_ONLY = 0;
+    HORN_ONLY = 1;      // Only allowed for RAMSES
+    LIGHT_AND_HORN = 2; // Only allowed for RAMSES
+    PANIC_ALARM = 3;    // Only allowed for HERMES
+  }
+  SigposType sigpos_type = 5 [ json_name = "sigposType" ];
+}
+
+// Confirm the detected parking bump
+message TheftalarmConfirmDamagedetection {
+  // empty
+}
+
+// Provide the functionality to deselect the parking damage detection sensor
+message TheftalarmDeselectDamagedetection {
+  // empty
+}
+
+// Provide the functionality to deselect the interior protection sensor
+message TheftalarmDeselectInterior {
+  // empty
+}
+
+// Provide the functionality to deselect the tow protection sensor
+message TheftalarmDeselectTow {
+  // empty
+}
+
+// Provide the functionality to select the parking damage detection sensor
+message TheftalarmSelectDamagedetection {
+  // empty
+}
+
+// Provide the functionality to select the interior protection sensor
+message TheftalarmSelectInterior {
+  // empty
+}
+
+// Provide the functionality to select the tow protection sensor
+message TheftalarmSelectTow {
+   // empty
+}
+
+// Provide the functionality to trigger an alarm that lasts for "alarm_duration" seconds
+message TheftalarmStart {
+  // Specify how many seconds the alarm should be switched on
+  int32 alarm_duration_in_seconds = 1 [ json_name = "alarmduration" ];
+}
+
+// Provide the functionality to deactivate an active/ongoing alarm
+message TheftalarmStop {
+  // empty
+}
