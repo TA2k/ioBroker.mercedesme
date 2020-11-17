@@ -14,7 +14,7 @@ const WebSocket = require("ws");
 
 // const Eventpush = require("./Proto/eventpush_pb");
 // const UserEvents = require("./Proto/user-events_pb");
-// const VehicleCommands = require("./Proto/vehicle-commands_pb");
+const VehicleCommands = require("./Proto/vehicle-commands_pb");
 const VehicleEvents = require("./Proto/vehicle-events_pb");
 const Client = require("./Proto/client_pb");
 const { JSDOM } = jsdom;
@@ -174,15 +174,7 @@ class Mercedesme extends utils.Adapter {
                         this.log.debug(body);
                     }
                     if (id.indexOf("DoorLock") !== -1) {
-                        if (!this.config.pin) {
-                            this.log.warn("Missing pin in settings");
-                        }
-                        headers["x-pin"] = this.config.pin;
-                        if (!state.val || state.val === "false") {
-                            url += "/doors/unlock";
-                        } else {
-                            url += "/doors/lock";
-                        }
+                
                     }
 
                     if (id.indexOf("DoorOpen") !== -1) {
@@ -560,26 +552,6 @@ class Mercedesme extends utils.Adapter {
                     }
                     this.vinArray = [...new Set(this.vinArray)];
                     this.vinArray.forEach(async (element) => {
-                        this.setObjectNotExists(element + ".location", {
-                            type: "state",
-                            common: {
-                                name: "Vehiclelocation updated via Interval in Settings",
-                                write: true,
-                                role: "indicator",
-                                read: true,
-                            },
-                            native: {},
-                        });
-                        this.setObjectNotExists(element + ".status", {
-                            type: "state",
-                            common: {
-                                name: "Vehiclestatus Fahrzeugstatus updated via Interval in Settings",
-                                write: true,
-                                role: "indicator",
-                                read: true,
-                            },
-                            native: {},
-                        });
                         this.setObjectNotExists(element + ".history", {
                             type: "state",
                             common: {
@@ -795,51 +767,63 @@ class Mercedesme extends utils.Adapter {
                                 },
                                 native: {},
                             });
-                            const adapter = this;
-                            traverse(body).forEach(function (value) {
-                                if (this.path.length > 0 && this.isLeaf) {
-                                    const modPath = this.path;
-                                    this.path.forEach((pathElement, pathIndex) => {
-                                        if (!isNaN(parseInt(pathElement))) {
-                                            let stringPathIndex = parseInt(pathElement) + 1 + "";
-                                            while (stringPathIndex.length < 2) stringPathIndex = "0" + stringPathIndex;
-                                            const key = this.path[pathIndex - 1] + stringPathIndex;
-                                            const parentIndex = modPath.indexOf(pathElement) - 1;
-                                            modPath[parentIndex] = key;
-                                            modPath.splice(parentIndex + 1, 1);
-                                        }
-                                    });
-                                    if (this.parent.node.commandName) {
-                                        modPath[0] = this.parent.node.commandName;
+                            body.commands.forEach(async (command) => {
+                                await this.setObjectNotExistsAsync(vin + ".commands." + command.commandName, {
+                                    type: "state",
+                                    common: {
+                                        name: command.commandName,
+                                        role: "indicator",
+                                        type: "mixed",
+                                        write: false,
+                                        read: true,
+                                    },
+                                    native: {},
+                                });
+                                Object.keys(command).forEach(async (key) => {
+                                    if (key === "parameters") {
+                                        await this.setObjectNotExistsAsync(vin + ".commands." + command.commandName + ".parameters", {
+                                            type: "state",
+                                            common: {
+                                                name: command.commandName + " parameters",
+                                                role: "indicator",
+                                                type: "mixed",
+                                                write: false,
+                                                read: true,
+                                            },
+                                            native: {},
+                                        });
+                                        command["parameters"] &&
+                                            command["parameters"].forEach(async (parameter) => {
+                                                Object.keys(parameter).forEach(async (pKey) => {
+                                                    await this.setObjectNotExistsAsync(vin + ".commands." + command.commandName + ".parameters." + parameter.parameterName + "." + pKey, {
+                                                        type: "state",
+                                                        common: {
+                                                            name: pKey,
+                                                            role: "indicator",
+                                                            type: "mixed",
+                                                            write: false,
+                                                            read: true,
+                                                        },
+                                                        native: {},
+                                                    });
+                                                    this.setState(vin + ".commands." + command.commandName + ".parameters." + parameter.parameterName + "." + pKey, parameter[pKey], true);
+                                                });
+                                            });
+                                    } else {
+                                        await this.setObjectNotExistsAsync(vin + ".commands." + command.commandName + "." + key, {
+                                            type: "state",
+                                            common: {
+                                                name: key,
+                                                role: "indicator",
+                                                type: "mixed",
+                                                write: false,
+                                                read: true,
+                                            },
+                                            native: {},
+                                        });
+                                        this.setState(vin + ".commands." + command.commandName + "." + key, command[key], true);
                                     }
-                                    let finalPath = modPath.join(".");
-
-                                    let parentPath = modPath.slice(0, -1).join(".");
-                                    let finalValue = String(value);
-                                    adapter.setObjectNotExists(vin + ".commands." + parentPath, {
-                                        type: "state",
-                                        common: {
-                                            name: this.parent.node.commandName || this.key,
-                                            role: "indicator",
-                                            type: "mixed",
-                                            write: false,
-                                            read: true,
-                                        },
-                                        native: {},
-                                    });
-                                    adapter.setObjectNotExists(vin + ".commands." + finalPath, {
-                                        type: "state",
-                                        common: {
-                                            name: this.key || value,
-                                            role: "indicator",
-                                            type: "mixed",
-                                            write: false,
-                                            read: true,
-                                        },
-                                        native: {},
-                                    });
-                                    adapter.setState(vin + ".commands." + finalPath, finalValue || this.node, true);
-                                }
+                                });
                             });
                         } catch (error) {
                             this.log.warn("Commands not found");
@@ -849,7 +833,7 @@ class Mercedesme extends utils.Adapter {
             });
         });
     }
-    refreshToken() {
+    refreshToken(reconnect) {
         return new Promise((resolve, reject) => {
             this.log.debug("refreshToken");
 
@@ -907,7 +891,13 @@ class Mercedesme extends utils.Adapter {
 
                         this.setState("auth.access_token", token.access_token, true);
                         this.setState("auth.refresh_token", token.refresh_token, true);
-
+                        if (reconnect) {
+                            this.log.debug("Reconnect after refreshtoken")
+                            this.ws.close();
+                            setTimeout(() => {
+                                this.connectWS();
+                            }, 5000);
+                        }
                         resolve();
                     } catch (error) {
                         this.log.error("Error refresh token");
@@ -973,7 +963,7 @@ class Mercedesme extends utils.Adapter {
                         resolve();
                         this.refreshTokenInterval = setInterval(() => {
                             this.log.debug("Refresh Token");
-                            this.refreshToken();
+                            this.refreshToken(true);
                         }, 60 * 60 * 1000); // 60min
                         return;
                     })
@@ -1109,6 +1099,15 @@ class Mercedesme extends utils.Adapter {
                 if (message.debugmessage) {
                     this.log.debug(JSON.stringify(message.debugmessage));
                 }
+                if (message.apptwinCommandStatusUpdatesByVin) {
+                    this.log.debug(JSON.stringify(message.apptwinCommandStatusUpdatesByVin));
+                    
+                    let ackCommand = new Client.AcknowledgeAppTwinCommandStatusUpdatesByVIN();
+                    ackCommand.setSequenceNumber(message.apptwinCommandStatusUpdatesByVin.sequenceNumber);
+                    let clientMessage = new Client.ClientMessage();
+                    clientMessage.setAcknowledgeApptwinCommandStatusUpdateByVin(ackCommand);
+                    this.ws.send(clientMessage.serializeBinary());
+                }
                 if (message.assignedVehicles) {
                     this.log.debug(JSON.stringify(message.assignedVehicles));
                     this.vinArray = message.assignedVehicles.vinsList;
@@ -1118,7 +1117,7 @@ class Mercedesme extends utils.Adapter {
                     this.ws.send(clientMessage.serializeBinary());
                 }
                 if (message.apptwinPendingCommandRequest) {
-                    this.log.debug("apptwinPendingCommandRequest: "+JSON.stringify(message.apptwinPendingCommandRequest));
+                    this.log.debug("apptwinPendingCommandRequest: " + JSON.stringify(message.apptwinPendingCommandRequest));
                 }
                 if (message.vepupdates) {
                     this.log.silly(JSON.stringify(message.vepupdates));
