@@ -903,7 +903,7 @@ class Mercedesme extends utils.Adapter {
                         "device-uuid": this.deviceuuid,
                         "x-locale": this.config.acceptL,
                     },
-                    data: "client_id=app&grant_type=password&password=" + this.config.loginCode + "&scope=offline_access&username=" + this.config.mail,
+                    data: "client_id=app&grant_type=password&password=" + this.config.loginCode + "&scope=offline_access&username=" + encodeURIComponent(this.config.mail),
                 })
                     .then((response) => {
                         this.log.debug(JSON.stringify(response.status));
