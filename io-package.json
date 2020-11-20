@@ -1,8 +1,11 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.0.35",
+    "version": "0.0.36",
     "news": {
+      "0.0.36": {
+        "en": "Fix connection and gas price fetching"
+      },
       "0.0.35": {
         "en": "Support for new app"
       },

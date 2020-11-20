@@ -141,87 +141,8 @@ class Mercedesme extends utils.Adapter {
         if (state) {
             const vin = id.split(".")[2];
             if (!state.ack) {
-                if (id.indexOf("remote") !== -1) {
-                    let url = "https://vhs.meapp.secure.mercedes-benz.com/api/v1/vehicles/" + vin;
-                    const headers = {
-                        "Accept-Language": this.config.acceptL,
-                        Authorization: "Bearer " + this.atoken,
-                        country_code: this.config.countryC,
-                        "Content-Type": "application/json;charset=UTF-8",
-                        "Accept-Encoding": "br, gzip, deflate",
-                        "User-Agent": this.userAgent,
-                    };
-                    let body = "";
-                    if (id.indexOf("VorklimaDelay") !== -1) {
-                        return;
-                    }
-                    if (id.indexOf("Vorklimatisierung") !== -1) {
-                        if (!state.val || state.val === "false") {
-                            url += "/precond/stop";
-                        } else {
-                            url += "/precond/start";
-                        }
-                        body = '{"type":"departure"}';
-                        const now = new Date();
-
-                        const pre = this.name + "." + this.instance;
-                        const delayState = await this.getStateAsync(pre + "." + vin + ".remote.VorklimaDelay");
-                        let delay = 0;
-                        if (delayState) {
-                            delay = delayState.val || 0;
-                        }
-                        body = '{"departureTime":' + (now.getHours() * 60 + now.getMinutes() + delay) + "}";
-                        this.log.debug(body);
-                    }
-                    if (id.indexOf("DoorLock") !== -1) {
-                
-                    }
-
-                    if (id.indexOf("DoorOpen") !== -1) {
-                        if (!this.config.pin) {
-                            this.log.warn("Missing pin in settings");
-                        }
-                        headers["x-pin"] = this.config.pin;
-                        if (!state.val || state.val === "false") {
-                            url += "/doors/lock";
-                        } else {
-                            url += "/doors/unlock";
-                        }
-                    }
-
-                    if (id.indexOf("Auxheat") !== -1) {
-                        if (!state.val || state.val === "false") {
-                            url += "/auxheat/stop";
-                        } else {
-                            url += "/auxheat/start";
-                        }
-                    }
-                    this.log.debug(id + " " + url);
-                    request.post(
-                        {
-                            jar: this.jar,
-                            gzip: true,
-                            url: url,
-                            headers: headers,
-                            body: body,
-                        },
-                        (err, resp, body) => {
-                            if (err || resp.statusCode >= 400 || !body) {
-                                this.log.error(err);
-                                return;
-                            }
-
-                            try {
-                                this.log.info(body);
-                                if (body.indexOf("INVALID") !== -1) {
-                                    this.log.error("Action was not successful");
-                                }
-                            } catch (error) {
-                                this.log.error("Action not successful " + error);
-                            }
-                        }
-                    );
-                }
+                this.log.info("Controls sind mit dem Adapter noch nicht möglich.")
+                return;
             } else {
                 //ACK Values
                 const pre = this.name + "." + this.instance;
@@ -355,50 +276,34 @@ class Mercedesme extends utils.Adapter {
         }
     }
     async getGasPrice(vin) {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             const pre = this.name + "." + this.instance;
-            this.getStates(pre + "." + vin + ".location.*", (err, states) => {
-                this.log.debug(
-                    "https://creativecommons.tankerkoenig.de/json/list.php?lat=" +
-                        states[pre + "." + vin + ".location.latitude"].val +
-                        "&lng=" +
-                        states[pre + "." + vin + ".location.longitude"].val +
-                        "&rad=4&sort=dist&type=" +
-                        this.config.gas +
-                        "&apikey=" +
-                        this.config.apiKey
-                );
-                request.get(
-                    {
-                        url:
-                            "https://creativecommons.tankerkoenig.de/json/list.php?lat=" +
-                            states[pre + "." + vin + ".location.latitude"].val +
-                            "&lng=" +
-                            states[pre + "." + vin + ".location.longitude"].val +
-                            "&rad=4&sort=dist&type=" +
-                            this.config.gas +
-                            "&apikey=" +
-                            this.config.apiKey,
-                        followAllRedirects: true,
-                    },
-                    (err, resp, body) => {
-                        if (err || resp.statusCode >= 400 || !body) {
-                            resolve(0);
-                        }
-                        try {
-                            this.log.debug(body);
-                            const tankk = JSON.parse(body);
-                            if (tankk.status === "error") {
-                                resolve(0);
-                            }
-                            this.log.debug(tankk.stations[0].price);
-                            resolve(tankk.stations[0].price);
-                        } catch (error) {
-                            resolve(0);
-                        }
+
+            const lat = await this.getStateAsync(pre + "." + vin + ".state.positionLat.doubleValue");
+            const long = await this.getStateAsync(pre + "." + vin + ".state.positionLong.doubleValue");
+            this.log.debug("https://creativecommons.tankerkoenig.de/json/list.php?lat=" + lat.val + "&lng=" + long.val + "&rad=4&sort=dist&type=" + this.config.gas + "&apikey=" + this.config.apiKey);
+            request.get(
+                {
+                    url: "https://creativecommons.tankerkoenig.de/json/list.php?lat=" + lat.val + "&lng=" + long.val + "&rad=4&sort=dist&type=" + this.config.gas + "&apikey=" + this.config.apiKey,
+                    followAllRedirects: true,
+                },
+                (err, resp, body) => {
+                    if (err || resp.statusCode >= 400 || !body) {
+                        resolve(0);
                     }
-                );
-            });
+                    try {
+                        this.log.debug(body);
+                        const tankk = JSON.parse(body);
+                        if (tankk.status === "error") {
+                            resolve(0);
+                        }
+                        this.log.debug(tankk.stations[0].price);
+                        resolve(tankk.stations[0].price);
+                    } catch (error) {
+                        resolve(0);
+                    }
+                }
+            );
         });
     }
     extractUnit(value, element) {
@@ -892,7 +797,7 @@ class Mercedesme extends utils.Adapter {
                         this.setState("auth.access_token", token.access_token, true);
                         this.setState("auth.refresh_token", token.refresh_token, true);
                         if (reconnect) {
-                            this.log.debug("Reconnect after refreshtoken")
+                            this.log.debug("Reconnect after refreshtoken");
                             this.ws.close();
                             setTimeout(() => {
                                 this.connectWS();
@@ -1101,7 +1006,7 @@ class Mercedesme extends utils.Adapter {
                 }
                 if (message.apptwinCommandStatusUpdatesByVin) {
                     this.log.debug(JSON.stringify(message.apptwinCommandStatusUpdatesByVin));
-                    
+
                     let ackCommand = new Client.AcknowledgeAppTwinCommandStatusUpdatesByVIN();
                     ackCommand.setSequenceNumber(message.apptwinCommandStatusUpdatesByVin.sequenceNumber);
                     let clientMessage = new Client.ClientMessage();
