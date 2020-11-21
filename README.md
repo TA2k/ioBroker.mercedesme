@@ -17,6 +17,10 @@ Mercedes me adapter for ioBroker
 
 ## Changelog
 
+### 0.0.39
+
+- Add remote functionality
+
 ### 0.0.38
 
 - Add commands functionality

@@ -72,7 +72,7 @@ class Mercedesme extends utils.Adapter {
         this.getStates(pre + ".*", (err, states) => {
             const allIds = Object.keys(states);
             allIds.forEach((keyName) => {
-                if (keyName.split(".")[3] === "status" || keyName.split(".")[3] === "location" || keyName.split(".")[3] === "remote") {
+                if (keyName.split(".")[3] === "status" || keyName.split(".")[3] === "location" ) {
                     this.delObject(keyName.split(".").slice(2).join("."));
                 }
             });
@@ -178,6 +178,41 @@ class Mercedesme extends utils.Adapter {
                         this.log.error(error);
                         return;
                     }
+                }
+                if (id.indexOf("remote") !== -1) {
+                
+                    if (id.indexOf("Vorklimatisierung") !== -1) {
+                        if (!state.val || state.val === "false") {
+                            this.setState(vin + ".commands.ZEV_PRECONDITIONING_STOP.start", true, false);
+                        } else {
+                            this.setState(vin + ".commands.ZEV_PRECONDITIONING_START.start", true, false);
+                        }
+                        
+                    }
+                    if (id.indexOf("DoorLock") !== -1) {
+                        if (!state.val || state.val === "false") {
+                            this.setState(vin + ".commands.DOORS_UNLOCK.start", true, false);
+                        } else {
+                            this.setState(vin + ".commands.DOORS_LOCK.start", true, false);
+                        }
+                    }
+
+                    if (id.indexOf("DoorOpen") !== -1) {
+                        if (!state.val || state.val === "false") {
+                            this.setState(vin + ".commands.DOORS_LOCK.start", true, false);
+                        } else {
+                            this.setState(vin + ".commands.DOORS_UNLOCK.start", true, false);
+                        }
+                    }
+
+                    if (id.indexOf("Auxheat") !== -1) {
+                        if (!state.val || state.val === "false") {
+                            this.setState(vin + ".commands.AUXHEAT_STOP.start", true, false);
+                        } else {
+                            this.setState(vin + ".commands.AUXHEAT_START.start", true, false);
+                        }
+                    }
+                    
                 }
             } else {
                 //ACK Values
@@ -293,18 +328,21 @@ class Mercedesme extends utils.Adapter {
                     }
                     await this.setStateAsync(vin + ".history." + lastTankeLevel, state.val, true);
                 }
-                if (id.indexOf("status.locked") !== -1) {
+                if (id.indexOf(".state.doorLockStatusOverall.intValue") !== -1) {
                     if (state.ts !== state.lc) {
                         return;
                     }
 
-                    if (id.indexOf("status.locked") !== -1) {
-                        this.setState(vin + ".remote.DoorLock", state.val, true);
-                        this.setState(vin + ".remote.DoorOpen", !state.val, true);
+                    if (id.indexOf(".state.doorLockStatusOverall.intValue") !== -1) {
+                        this.setState(vin + ".remote.DoorLock", state.val?0:1, true);
+                        this.setState(vin + ".remote.DoorOpen", state.val, true);
                     }
                 }
-                if (id.indexOf("precondActive") !== -1) {
+                if (id.indexOf("state.precondActive.intValue") !== -1) {
                     this.setState(vin + ".remote.Vorklimatisierung", state.val, true);
+                }
+                if (id.indexOf("state.auxheatActive.intValue") !== -1) {
+                    this.setState(vin + ".remote.Auxheat", state.val, true);
                 }
             }
         } else {
@@ -626,18 +664,7 @@ class Mercedesme extends utils.Adapter {
                             },
                             native: {},
                         });
-                        this.setObjectNotExists(element + ".remote.VorklimaDelay", {
-                            type: "state",
-                            common: {
-                                name: "PreconditionDelay in Minutes needed by some models",
-                                type: "number",
-                                role: "level",
-                                write: true,
-                                role: "indicator",
-                                read: true,
-                            },
-                            native: {},
-                        });
+              
                         this.setObjectNotExists(element + ".remote.Auxheat", {
                             type: "state",
                             common: {
@@ -654,7 +681,7 @@ class Mercedesme extends utils.Adapter {
                         this.setObjectNotExists(element + ".remote.DoorLock", {
                             type: "state",
                             common: {
-                                name: "Door Lock True = Locked Doors / False = Open Doors",
+                                name: "Door Lock 1 = Locked Doors / 0 = Open Doors",
                                 type: "boolean",
                                 role: "switch.lock",
                                 write: true,
@@ -666,7 +693,7 @@ class Mercedesme extends utils.Adapter {
                         this.setObjectNotExists(element + ".remote.DoorOpen", {
                             type: "state",
                             common: {
-                                name: "Door Open True = Open Doors / False = Locked Doors",
+                                name: "Door Open 1 = Open Doors / 0 = Locked Doors",
                                 type: "boolean",
                                 role: "switch.lock.door",
                                 write: true,
@@ -1053,6 +1080,9 @@ class Mercedesme extends utils.Adapter {
             this.log.debug("Websocket closed");
         });
         this.ws.on("message", async (data) => {
+            //hexString = "".replace(" ")
+            //let parsed = new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+            //VehicleEvents.PushMessage.deserializeBinary(parsed).toObject()
             this.log.debug("WS Message Length: " + data.length);
             if (this.wsHeartbeatTimeout) {
                 clearTimeout(this.wsHeartbeatTimeout);
@@ -1156,8 +1186,8 @@ class Mercedesme extends utils.Adapter {
                                     });
                                     let value = element[1][state];
                                     if (typeof value === "object") {
-                                        value = JSON.stringify(value)
-                                    } 
+                                        value = JSON.stringify(value);
+                                    }
                                     adapter.setState(vin + ".state." + element[0] + "." + state, value, true);
                                 }
                             });

@@ -1,8 +1,11 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.0.38",
+    "version": "0.0.39",
     "news": {
+      "0.0.39": {
+        "en": "Add remote functionality"
+      },
       "0.0.38": {
         "en": "Add commands functionality"
       },
