@@ -1,8 +1,11 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.0.36",
+    "version": "0.0.37",
     "news": {
+      "0.0.37": {
+        "en": "Add commands functionality"
+      },
       "0.0.36": {
         "en": "Fix connection and gas price fetching"
       },

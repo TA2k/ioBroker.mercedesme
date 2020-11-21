@@ -17,6 +17,10 @@ Mercedes me adapter for ioBroker
 
 ## Changelog
 
+### 0.0.37
+
+- Add commands functionality
+
 ### 0.0.36
 
 - Fix connection and gas price fetching

@@ -17,6 +17,7 @@ const WebSocket = require("ws");
 const VehicleCommands = require("./Proto/vehicle-commands_pb");
 const VehicleEvents = require("./Proto/vehicle-events_pb");
 const Client = require("./Proto/client_pb");
+const { type } = require("os");
 const { JSDOM } = jsdom;
 class Mercedesme extends utils.Adapter {
     /**
@@ -71,7 +72,7 @@ class Mercedesme extends utils.Adapter {
         this.getStates(pre + ".*", (err, states) => {
             const allIds = Object.keys(states);
             allIds.forEach((keyName) => {
-                if (keyName.split(".")[3] === "status" || keyName.split(".")[3] === "location") {
+                if (keyName.split(".")[3] === "status" || keyName.split(".")[3] === "location" || keyName.split(".")[3] === "remote") {
                     this.delObject(keyName.split(".").slice(2).join("."));
                 }
             });
@@ -141,8 +142,43 @@ class Mercedesme extends utils.Adapter {
         if (state) {
             const vin = id.split(".")[2];
             if (!state.ack) {
-                this.log.info("Controls sind mit dem Adapter noch nicht möglich.")
-                return;
+                if (id.indexOf("commands") !== -1) {
+                    let commandId = id.split(".").splice(-2, 1)[0].toLocaleLowerCase();
+
+                    try {
+                        const commandIdCC = this.toCamel("_" + commandId.replace("zev", "ZEV"));
+                        const setCommandIdCC = this.toCamel("set_" + commandId);
+                        let command = new VehicleCommands.CommandRequest();
+                        command.setBackend(1);
+                        command.setVin(vin);
+                        command.setRequestId(uuidv4());
+                        let vc = new VehicleCommands[commandIdCC]();
+                        if (vc.setPin) {
+                            vc.setPin(this.config.pin);
+                        }
+                        if (commandId.indexOf("zev") !== -1) {
+                            if (vc.setType) {
+                                vc.setType(3);
+                            }
+                            if (vc.setDepartureTime) {
+                                vc.setDepartureTime(-1);
+                            }
+                        }
+                        command[setCommandIdCC](vc);
+                        this.log.debug(JSON.stringify(command.toObject()));
+                        let clientMessage = new Client.ClientMessage();
+
+                        clientMessage.setCommandrequest(command);
+                        // clientMessage.setTrackingId(this.xTracking);
+                        this.log.debug(JSON.stringify(clientMessage.toObject()));
+                        this.ws.send(clientMessage.serializeBinary());
+                        return;
+                    } catch (error) {
+                        this.log.error("Cannot start " + commandId);
+                        this.log.error(error);
+                        return;
+                    }
+                }
             } else {
                 //ACK Values
                 const pre = this.name + "." + this.instance;
@@ -274,6 +310,12 @@ class Mercedesme extends utils.Adapter {
         } else {
             // The state was deleted
         }
+    }
+
+    toCamel(s) {
+        return s.replace(/([-_][a-z])/gi, ($1) => {
+            return $1.toUpperCase().replace("-", "").replace("_", "");
+        });
     }
     async getGasPrice(vin) {
         return new Promise(async (resolve, reject) => {
@@ -727,6 +769,20 @@ class Mercedesme extends utils.Adapter {
                                             native: {},
                                         });
                                         this.setState(vin + ".commands." + command.commandName + "." + key, command[key], true);
+                                        if (key === "isAvailable" && command[key] === true) {
+                                            await this.setObjectNotExistsAsync(vin + ".commands." + command.commandName + ".start", {
+                                                type: "state",
+                                                common: {
+                                                    name: "Start the command",
+                                                    role: "button",
+                                                    type: "boolean",
+                                                    write: true,
+                                                    read: true,
+                                                },
+                                                native: {},
+                                            });
+                                            this.setState(vin + ".commands." + command.commandName + ".start", false, true);
+                                        }
                                     }
                                 });
                             });
@@ -956,11 +1012,10 @@ class Mercedesme extends utils.Adapter {
             }
         });
     }
-
     connectWS(vin) {
         var headers = this.baseHeader;
         headers.Authorization = this.atoken;
-        this.log.info("Connect to WebSocket");
+        this.log.debug("Connect to WebSocket");
         try {
             clearInterval(this.reconnectInterval);
             this.reconnectInterval = setInterval(() => {
@@ -977,14 +1032,25 @@ class Mercedesme extends utils.Adapter {
 
         this.ws.on("open", () => {
             this.log.debug("WS connected");
+
+            this.setState("info.connection", true, true);
             clearInterval(this.reconnectInterval);
         });
         this.ws.on("error", (data) => {
             this.log.error(data);
+
+            this.setState("info.connection", false, true);
+            try {
+                if (data.indexOf("403") !== -1) {
+                    this.refreshToken(true);
+                }
+            } catch (error) {}
         });
         this.ws.on("close", (data) => {
-            this.log.info(data);
-            this.log.info("Websocket closed");
+            this.log.debug(data);
+
+            this.setState("info.connection", false, true);
+            this.log.debug("Websocket closed");
         });
         this.ws.on("message", async (data) => {
             this.log.debug("WS Message Length: " + data.length);
@@ -1012,6 +1078,10 @@ class Mercedesme extends utils.Adapter {
                     let clientMessage = new Client.ClientMessage();
                     clientMessage.setAcknowledgeApptwinCommandStatusUpdateByVin(ackCommand);
                     this.ws.send(clientMessage.serializeBinary());
+                    try {
+                        if (message.apptwinCommandStatusUpdatesByVin.updatesByVinMap[0][1].updatesByPidMap[0][1].errorsList.length)
+                            this.log.error(JSON.stringify(message.apptwinCommandStatusUpdatesByVin.updatesByVinMap[0][1].updatesByPidMap[0][1].errorsList));
+                    } catch (error) {}
                 }
                 if (message.assignedVehicles) {
                     this.log.debug(JSON.stringify(message.assignedVehicles));
@@ -1084,7 +1154,11 @@ class Mercedesme extends utils.Adapter {
                                         },
                                         native: {},
                                     });
-                                    adapter.setState(vin + ".state." + element[0] + "." + state, element[1][state], true);
+                                    let value = element[1][state];
+                                    if (typeof value === "object") {
+                                        value = JSON.stringify(value)
+                                    } 
+                                    adapter.setState(vin + ".state." + element[0] + "." + state, value, true);
                                 }
                             });
                         });
