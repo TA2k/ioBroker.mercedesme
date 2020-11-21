@@ -1064,7 +1064,7 @@ class Mercedesme extends utils.Adapter {
             clearInterval(this.reconnectInterval);
         });
         this.ws.on("error", (data) => {
-            this.log.error(data);
+            this.log.error("WS error:" + data);
 
             this.setState("info.connection", false, true);
             try {
