@@ -17,6 +17,10 @@ Mercedes me adapter for ioBroker
 
 ## Changelog
 
+### 0.0.40
+
+- Add windowLock and precond for old models
+
 ### 0.0.39
 
 - Add remote functionality

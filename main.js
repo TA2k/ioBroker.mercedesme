@@ -57,7 +57,7 @@ class Mercedesme extends utils.Adapter {
             "Content-Type": "application/json",
             "RIS-SDK-Version": "2.24.0",
             "User-Agent": "MyCar/855 CFNetwork/1206 Darwin/20.1.0",
-            "ris-application-version": "1.5.1 (855)",
+            "ris-application-version": "1.6.0 (869)",
             "X-Locale": "de-DE",
         };
     }
@@ -72,7 +72,7 @@ class Mercedesme extends utils.Adapter {
         this.getStates(pre + ".*", (err, states) => {
             const allIds = Object.keys(states);
             allIds.forEach((keyName) => {
-                if (keyName.split(".")[3] === "status" || keyName.split(".")[3] === "location" ) {
+                if (keyName.split(".")[3] === "status" || keyName.split(".")[3] === "location") {
                     this.delObject(keyName.split(".").slice(2).join("."));
                 }
             });
@@ -157,11 +157,24 @@ class Mercedesme extends utils.Adapter {
                             vc.setPin(this.config.pin);
                         }
                         if (commandId.indexOf("zev") !== -1) {
-                            if (vc.setType) {
-                                vc.setType(3);
-                            }
-                            if (vc.setDepartureTime) {
-                                vc.setDepartureTime(-1);
+                            //VorklimaDelay
+
+                            const delayState = await this.getStateAsync(vin + ".remote.VorklimaDelay");
+                            if (delayState && delayState.val > 0) {
+                                if (vc.setType) {
+                                    vc.setType(2);
+                                }
+                                if (vc.setDepartureTime) {
+                                    const now = new Date();
+                                    vc.setDepartureTime(now.getHours() * 60 + now.getMinutes() + delayState.val);
+                                }
+                            } else {
+                                if (vc.setType) {
+                                    vc.setType(3);
+                                }
+                                if (vc.setDepartureTime) {
+                                    vc.setDepartureTime(-1);
+                                }
                             }
                         }
                         command[setCommandIdCC](vc);
@@ -180,14 +193,12 @@ class Mercedesme extends utils.Adapter {
                     }
                 }
                 if (id.indexOf("remote") !== -1) {
-                
                     if (id.indexOf("Vorklimatisierung") !== -1) {
                         if (!state.val || state.val === "false") {
                             this.setState(vin + ".commands.ZEV_PRECONDITIONING_STOP.start", true, false);
                         } else {
                             this.setState(vin + ".commands.ZEV_PRECONDITIONING_START.start", true, false);
                         }
-                        
                     }
                     if (id.indexOf("DoorLock") !== -1) {
                         if (!state.val || state.val === "false") {
@@ -204,7 +215,13 @@ class Mercedesme extends utils.Adapter {
                             this.setState(vin + ".commands.DOORS_UNLOCK.start", true, false);
                         }
                     }
-
+                    if (id.indexOf("WindowsOpen") !== -1) {
+                        if (!state.val || state.val === "false") {
+                            this.setState(vin + ".commands.WINDOWS_CLOSE.start", true, false);
+                        } else {
+                            this.setState(vin + ".commands.WINDOWS_OPEN.start", true, false);
+                        }
+                    }
                     if (id.indexOf("Auxheat") !== -1) {
                         if (!state.val || state.val === "false") {
                             this.setState(vin + ".commands.AUXHEAT_STOP.start", true, false);
@@ -212,7 +229,6 @@ class Mercedesme extends utils.Adapter {
                             this.setState(vin + ".commands.AUXHEAT_START.start", true, false);
                         }
                     }
-                    
                 }
             } else {
                 //ACK Values
@@ -334,14 +350,21 @@ class Mercedesme extends utils.Adapter {
                     }
 
                     if (id.indexOf(".state.doorLockStatusOverall.intValue") !== -1) {
-                        this.setState(vin + ".remote.DoorLock", state.val?0:1, true);
+                        this.setState(vin + ".remote.DoorLock", state.val ? 0 : 1, true);
                         this.setState(vin + ".remote.DoorOpen", state.val, true);
                     }
                 }
-                if (id.indexOf("state.precondActive.intValue") !== -1) {
+                if (id.indexOf(".state.windowStatusOverall.intValue") !== -1) {
+                    if (state.ts !== state.lc) {
+                        return;
+                    }
+
+                    this.setState(vin + ".remote.WindowsOpen", state.val===2? 1:0, true);
+                }
+                if (id.indexOf("state.precondActive.boolValue") !== -1 || id.indexOf("state.precondNow.boolValue") !== -1) {
                     this.setState(vin + ".remote.Vorklimatisierung", state.val, true);
                 }
-                if (id.indexOf("state.auxheatActive.intValue") !== -1) {
+                if (id.indexOf("state.auxheatActive.boolValue") !== -1) {
                     this.setState(vin + ".remote.Auxheat", state.val, true);
                 }
             }
@@ -664,7 +687,18 @@ class Mercedesme extends utils.Adapter {
                             },
                             native: {},
                         });
-              
+                        this.setObjectNotExists(element + ".remote.VorklimaDelay", {
+                            type: "state",
+                            common: {
+                                name: "PreconditionDelay in Minutes needed by old models",
+                                type: "number",
+                                role: "level",
+                                write: true,
+                                role: "indicator",
+                                read: true,
+                            },
+                            native: {},
+                        });
                         this.setObjectNotExists(element + ".remote.Auxheat", {
                             type: "state",
                             common: {
@@ -696,6 +730,18 @@ class Mercedesme extends utils.Adapter {
                                 name: "Door Open 1 = Open Doors / 0 = Locked Doors",
                                 type: "boolean",
                                 role: "switch.lock.door",
+                                write: true,
+                                role: "indicator",
+                                read: true,
+                            },
+                            native: {},
+                        });
+                        this.setObjectNotExists(element + ".remote.WindowsOpen", {
+                            type: "state",
+                            common: {
+                                name: "Door Open 1 = Open Windows / 0 = Locked Windows",
+                                type: "boolean",
+                                role: "switch.lock.window",
                                 write: true,
                                 role: "indicator",
                                 read: true,
@@ -842,7 +888,7 @@ class Mercedesme extends utils.Adapter {
                         "accept-language": "de-de",
                         "RIS-SDK-Version": "2.24.0",
                         "User-Agent": "MyCar/855 CFNetwork/1206 Darwin/20.1.0",
-                        "ris-application-version": "1.5.1 (855)",
+                        "ris-application-version": "1.6.0 (869)",
                         "x-locale": this.config.acceptL,
                     },
                     followAllRedirects: false,
@@ -982,7 +1028,7 @@ class Mercedesme extends utils.Adapter {
                         "accept-language": "de-de",
                         "RIS-SDK-Version": "2.24.0",
                         "User-Agent": "MyCar/855 CFNetwork/1206 Darwin/20.1.0",
-                        "ris-application-version": "1.5.1 (855)",
+                        "ris-application-version": "1.6.0 (869)",
                         "device-uuid": this.deviceuuid,
                         "x-locale": this.config.acceptL,
                     },
@@ -1080,9 +1126,9 @@ class Mercedesme extends utils.Adapter {
             this.log.debug("Websocket closed");
         });
         this.ws.on("message", async (data) => {
-            //hexString = "".replace(" ")
-            //let parsed = new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
-            //VehicleEvents.PushMessage.deserializeBinary(parsed).toObject()
+            // const hexString = ""
+            // let parsed = new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+            // const foo =Client.ClientMessage.deserializeBinary(parsed).toObject()
             this.log.debug("WS Message Length: " + data.length);
             if (this.wsHeartbeatTimeout) {
                 clearTimeout(this.wsHeartbeatTimeout);
