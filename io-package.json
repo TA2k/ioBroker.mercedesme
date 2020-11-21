@@ -1,9 +1,9 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.0.37",
+    "version": "0.0.38",
     "news": {
-      "0.0.37": {
+      "0.0.38": {
         "en": "Add commands functionality"
       },
       "0.0.36": {
