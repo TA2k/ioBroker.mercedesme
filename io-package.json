@@ -1,8 +1,11 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.0.40",
+    "version": "0.0.41",
     "news": {
+      "0.0.41": {
+        "en": "Fix reconnect"
+      },
       "0.0.40": {
         "en": "Add windowLock and precond for old models"
       },

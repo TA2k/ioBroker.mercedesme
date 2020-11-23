@@ -72,7 +72,7 @@ class Mercedesme extends utils.Adapter {
         this.getStates(pre + ".*", (err, states) => {
             const allIds = Object.keys(states);
             allIds.forEach((keyName) => {
-                if (keyName.split(".")[3] === "status" || keyName.split(".")[3] === "location") {
+                if (keyName.split(".")[3] === "status" || keyName.split(".")[3] === "location"|| keyName.split(".")[3] === "lastJourney") {
                     this.delObject(keyName.split(".").slice(2).join("."));
                 }
             });
@@ -238,11 +238,16 @@ class Mercedesme extends utils.Adapter {
                     let status = "tankLevelStatus";
                     let beforeFueling = "tankLevelBeforeFueling";
                     let jsonString = "tankLevelJSON";
+                    let changedState = await this.getStateAsync(vin + ".state.tanklevelpercent.changed");
                     if (id.indexOf("state.soc.intValue") !== -1) {
                         lastTankeLevel = "socLevelLast";
                         status = "socStatus";
                         beforeFueling = "socLevelBeforeFueling";
                         jsonString = "socJSON";
+                        changedState = await this.getStateAsync(vin + ".state.soc.changed");
+                    }
+                    if (changedState&&changedState.val === false) {
+                        return
                     }
                     const statusState = await this.getStateAsync(vin + ".history." + status);
                     if (!statusState) {
@@ -1114,7 +1119,7 @@ class Mercedesme extends utils.Adapter {
 
             this.setState("info.connection", false, true);
             try {
-                if (data.indexOf("403") !== -1) {
+                if (data.message.indexOf("403") !== -1) {
                     this.refreshToken(true);
                 }
             } catch (error) {}
