@@ -72,7 +72,7 @@ class Mercedesme extends utils.Adapter {
         this.getStates(pre + ".*", (err, states) => {
             const allIds = Object.keys(states);
             allIds.forEach((keyName) => {
-                if (keyName.split(".")[3] === "status" || keyName.split(".")[3] === "location"|| keyName.split(".")[3] === "lastJourney") {
+                if (keyName.split(".")[3] === "status" || keyName.split(".")[3] === "location" || keyName.split(".")[3] === "lastJourney") {
                     this.delObject(keyName.split(".").slice(2).join("."));
                 }
             });
@@ -246,8 +246,8 @@ class Mercedesme extends utils.Adapter {
                         jsonString = "socJSON";
                         changedState = await this.getStateAsync(vin + ".state.soc.changed");
                     }
-                    if (changedState&&changedState.val === false) {
-                        return
+                    if (changedState && changedState.val === false) {
+                        return;
                     }
                     const statusState = await this.getStateAsync(vin + ".history." + status);
                     if (!statusState) {
@@ -262,7 +262,10 @@ class Mercedesme extends utils.Adapter {
                     const odoState = (await this.getStateAsync(vin + ".state.odo.intValue")) || { val: 0 };
 
                     if (statusState && lastTankLevelState) {
-                        await this.setStateAsync(vin + ".history." + status, false, true);
+                        if (state.val === lastTankLevelState.val && statusState.val) {
+                            await this.setStateAsync(vin + ".history." + status, false, true);
+                            this.log.debug("Tank/Soc is not icnreased set loading on false")
+                        }
                         if (state.val > lastTankLevelState.val && !statusState.val) {
                             //check is charging via power plug
                             if (status === "socStatus") {
@@ -364,7 +367,7 @@ class Mercedesme extends utils.Adapter {
                         return;
                     }
 
-                    this.setState(vin + ".remote.WindowsOpen", state.val===2? 1:0, true);
+                    this.setState(vin + ".remote.WindowsOpen", state.val === 2 ? 1 : 0, true);
                 }
                 if (id.indexOf("state.precondActive.boolValue") !== -1 || id.indexOf("state.precondNow.boolValue") !== -1) {
                     this.setState(vin + ".remote.Vorklimatisierung", state.val, true);
@@ -935,7 +938,7 @@ class Mercedesme extends utils.Adapter {
                             this.ws.close();
                             setTimeout(() => {
                                 this.connectWS();
-                            }, 5000);
+                            }, 2000);
                         }
                         resolve();
                     } catch (error) {
@@ -1144,7 +1147,7 @@ class Mercedesme extends utils.Adapter {
                 this.ws.close();
                 setTimeout(() => {
                     this.connectWS();
-                }, 5000);
+                }, 2000);
             }, 1 * 60 * 1000); //1min
             try {
                 const message = VehicleEvents.PushMessage.deserializeBinary(data).toObject();
