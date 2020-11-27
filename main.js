@@ -264,7 +264,7 @@ class Mercedesme extends utils.Adapter {
                     if (statusState && lastTankLevelState) {
                         if (state.val === lastTankLevelState.val && statusState.val) {
                             await this.setStateAsync(vin + ".history." + status, false, true);
-                            this.log.debug("Tank/Soc is not icnreased set loading on false")
+                            this.log.debug("Tank/Soc is not increased set loading on false")
                         }
                         if (state.val > lastTankLevelState.val && !statusState.val) {
                             //check is charging via power plug
@@ -279,7 +279,6 @@ class Mercedesme extends utils.Adapter {
                         }
                         if (state.val === 100 || (state.val < lastTankLevelState.val && statusState.val)) {
                             this.setState(vin + ".history." + status, false, true);
-                            this.setState(vin + ".history." + beforeFueling, lastTankLevelState, true);
                             const d = new Date();
                             const dformat =
                                 [d.getDate(), d.getMonth() + 1, d.getFullYear()].join(".") +
