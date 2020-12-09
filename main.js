@@ -264,7 +264,7 @@ class Mercedesme extends utils.Adapter {
                     if (statusState && lastTankLevelState) {
                         if (state.val === lastTankLevelState.val && statusState.val) {
                             await this.setStateAsync(vin + ".history." + status, false, true);
-                            this.log.debug("Tank/Soc is not increased set loading on false")
+                            this.log.debug("Tank/Soc is not increased set loading on false");
                         }
                         if (state.val > lastTankLevelState.val && !statusState.val) {
                             //check is charging via power plug
@@ -391,6 +391,11 @@ class Mercedesme extends utils.Adapter {
 
             const lat = await this.getStateAsync(pre + "." + vin + ".state.positionLat.doubleValue");
             const long = await this.getStateAsync(pre + "." + vin + ".state.positionLong.doubleValue");
+            if (!long || !lat) {
+                this.log.warn("No Location available to receive the gas price");
+                resolve(0);
+                return;
+            }
             this.log.debug("https://creativecommons.tankerkoenig.de/json/list.php?lat=" + lat.val + "&lng=" + long.val + "&rad=4&sort=dist&type=" + this.config.gas + "&apikey=" + this.config.apiKey);
             request.get(
                 {
