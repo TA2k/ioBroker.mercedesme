@@ -1010,7 +1010,7 @@ class Mercedesme extends utils.Adapter {
                         this.refreshTokenInterval = setInterval(() => {
                             this.log.debug("Refresh Token");
                             this.refreshToken(true);
-                        }, 60 * 60 * 1000); // 60min
+                        }, 30 * 60 * 1000); // 30min
                         return;
                     })
                     .catch(() => {
