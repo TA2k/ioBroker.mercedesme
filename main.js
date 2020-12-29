@@ -46,7 +46,7 @@ class Mercedesme extends utils.Adapter {
         this.xTracking = uuidv4();
         this.deviceuuid = uuidv4();
         this.baseHeader = {
-            "RIS-OS-Version": "14.2",
+            "RIS-OS-Version": "14.3",
             "X-TrackingId": this.xTracking,
             "RIS-OS-Name": "ios",
             "X-SessionId": this.xSession,
@@ -55,9 +55,9 @@ class Mercedesme extends utils.Adapter {
             "Accept-Language": "de-de",
             "X-AuthMode": "KEYCLOAK",
             "Content-Type": "application/json",
-            "RIS-SDK-Version": "2.24.0",
-            "User-Agent": "MyCar/855 CFNetwork/1206 Darwin/20.1.0",
-            "ris-application-version": "1.6.0 (869)",
+            "RIS-SDK-Version": "2.30.0",
+            "User-Agent": "MyCar/1.6.2 (com.daimler.ris.mercedesme.ece.ios; build:897; iOS 14.3.0) Alamofire/5.4.0",
+            "ris-application-version": "1.6.2 (897)",
             "X-Locale": "de-DE",
         };
     }
@@ -100,7 +100,7 @@ class Mercedesme extends utils.Adapter {
                 this.getVehicles()
                     .then(() => {
                         this.getCommands();
-
+                        this.getGeoFence();
                         this.connectWS();
                     })
                     .catch(() => {
@@ -238,12 +238,15 @@ class Mercedesme extends utils.Adapter {
                     let status = "tankLevelStatus";
                     let beforeFueling = "tankLevelBeforeFueling";
                     let jsonString = "tankLevelJSON";
+                    let startDate = "tankStart";
                     let changedState = await this.getStateAsync(vin + ".state.tanklevelpercent.changed");
                     if (id.indexOf("state.soc.intValue") !== -1) {
                         lastTankeLevel = "socLevelLast";
                         status = "socStatus";
                         beforeFueling = "socLevelBeforeFueling";
                         jsonString = "socJSON";
+
+                        startDate = "socStart";
                         changedState = await this.getStateAsync(vin + ".state.soc.changed");
                     }
                     if (changedState && changedState.val === false) {
@@ -276,6 +279,13 @@ class Mercedesme extends utils.Adapter {
                             }
                             await this.setStateAsync(vin + ".history." + beforeFueling, lastTankLevelState.val, true);
                             await this.setStateAsync(vin + ".history." + status, true, true);
+                            const d = new Date();
+                            const dateFormatted =
+                                [d.getDate(), d.getMonth() + 1, d.getFullYear()].join(".") +
+                                " " +
+                                [d.getHours().toString().length < 2 ? "0" + d.getHours() : d.getHours(), d.getMinutes().toString().length < 2 ? "0" + d.getMinutes() : d.getMinutes()].join(":");
+
+                            await this.setStateAsync(vin + ".history." + startDate, dateFormatted, true);
                         }
                         if (state.val === 100 || (state.val < lastTankLevelState.val && statusState.val)) {
                             this.setState(vin + ".history." + status, false, true);
@@ -324,6 +334,13 @@ class Mercedesme extends utils.Adapter {
                                 }
                             }
                             if (beforeValue < 99 && diff > 0) {
+                                const startState = (await this.getStateAsync(vin + ".history." + startDate)) || { val: "" };
+                                const startDateValue = startState.val;
+                                const startDateArray = startDateValue.split(".");
+                                const startDateValueDate = new Date(startDateArray[1] + "-" + startDateArray[0] + "-" + startDateArray[2]);
+                                const diffTime = Math.abs(d - startDateValueDate);
+                                const diff = Math.ceil(diffTime / (1000 * 60));
+
                                 const fuelObject = {
                                     start: beforeValue,
                                     end: state.val,
@@ -333,6 +350,9 @@ class Mercedesme extends utils.Adapter {
                                     price: price.toFixed(2),
                                     odo: odo,
                                     basicPrice: basicPrice,
+                                    startDate: startState.val,
+                                    duration: diff,
+                                    perHour: quantity / diff / 60,
                                 };
                                 const currenJsonHistoryState = (await this.getStateAsync(vin + ".history." + jsonString)) || { val: {} };
 
@@ -676,6 +696,28 @@ class Mercedesme extends utils.Adapter {
                             },
                             native: {},
                         });
+                        this.setObjectNotExists(element + ".history.socStart", {
+                            type: "state",
+                            common: {
+                                name: "Start Date of soc charging",
+                                type: "object",
+                                role: "string",
+                                write: false,
+                                read: true,
+                            },
+                            native: {},
+                        });
+                        this.setObjectNotExists(element + ".history.tankStart", {
+                            type: "state",
+                            common: {
+                                name: "Start Date of fueling",
+                                type: "object",
+                                role: "string",
+                                write: false,
+                                read: true,
+                            },
+                            native: {},
+                        });
 
                         this.setObjectNotExists(element + ".remote", {
                             type: "state",
@@ -878,6 +920,82 @@ class Mercedesme extends utils.Adapter {
                 );
             });
         });
+    }
+    getGeoFence() {
+        return new Promise((resolve, reject) => {
+            var headers = this.baseHeader;
+            headers.Authorization = this.atoken;
+            this.vinArray.forEach((vin) => {
+                request.get(
+                    {
+                        jar: this.jar,
+                        gzip: true,
+                        url: "https://bff-prod.risingstars.daimler.com/v1/geofencing/fences/?vin=" + vin,
+                        headers: headers,
+                        json: true,
+                    },
+                    (err, resp, body) => {
+                        if (err || resp.statusCode >= 400 || !body) {
+                            err && this.log.error(JSON.stringify(err));
+                            resp && this.log.error(resp.statusCode);
+                            body && this.log.error(JSON.stringify(body));
+                            reject();
+                        }
+                        this.log.debug(JSON.stringify(body));
+                        try {
+                            this.setObjectNotExists(vin + ".geofencing", {
+                                type: "state",
+                                common: {
+                                    name: "GeoFencing of the new mercedesMe App",
+                                    role: "indicator",
+                                    type: "mixed",
+                                    write: false,
+                                    read: true,
+                                },
+                                native: {},
+                            });
+                            body.forEach(async (element) => {
+                                this.extractKeys(vin + ".geofencing." + element.name, element);
+                            });
+                        } catch (error) {
+                            this.log.warn("Commands not found");
+                        }
+                    }
+                );
+            });
+        });
+    }
+    extractKeys(path, element) {
+        const objectKeys = Object.keys(element);
+        objectKeys.forEach(async (key) => {
+            if (this.isJsonString(element[key])) {
+                element[key] = JSON.parse(element[key]);
+            }
+            if (typeof element[key] === "object") {
+                this.extractKeys(path + "." + key, element[key]);
+            } else {
+                this.setObjectNotExists(path + "." + key, {
+                    type: "state",
+                    common: {
+                        name: key,
+                        role: "indicator",
+                        type: typeof element[key],
+                        write: false,
+                        read: true,
+                    },
+                    native: {},
+                });
+                this.setState(path + "." + key, element[key], true);
+            }
+        });
+    }
+    isJsonString(str) {
+        try {
+            JSON.parse(str);
+        } catch (e) {
+            return false;
+        }
+        return true;
     }
     refreshToken(reconnect) {
         return new Promise((resolve, reject) => {
