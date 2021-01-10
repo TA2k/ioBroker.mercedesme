@@ -6,8 +6,6 @@
 
 const utils = require("@iobroker/adapter-core");
 const request = require("request");
-const jsdom = require("jsdom");
-const traverse = require("traverse");
 const uuidv4 = require("uuid/v4");
 const axios = require("axios").default;
 const WebSocket = require("ws");
@@ -18,7 +16,6 @@ const VehicleCommands = require("./Proto/vehicle-commands_pb");
 const VehicleEvents = require("./Proto/vehicle-events_pb");
 const Client = require("./Proto/client_pb");
 const { type } = require("os");
-const { JSDOM } = jsdom;
 class Mercedesme extends utils.Adapter {
     /**
      * @param {Partial<ioBroker.AdapterOptions>} [options={}]
@@ -523,68 +520,7 @@ class Mercedesme extends utils.Adapter {
                                     },
                                     native: {},
                                 });
-                                const adapter = this;
-                                traverse(element).forEach(function (value) {
-                                    if (this.path.length > 0 && this.isLeaf) {
-                                        const modPath = this.path;
-                                        this.path.forEach((pathElement, pathIndex) => {
-                                            if (!isNaN(parseInt(pathElement))) {
-                                                let stringPathIndex = parseInt(pathElement) + 1 + "";
-                                                while (stringPathIndex.length < 2) stringPathIndex = "0" + stringPathIndex;
-                                                const key = this.path[pathIndex - 1] + stringPathIndex;
-                                                const parentIndex = modPath.indexOf(pathElement) - 1;
-                                                modPath[parentIndex] = key;
-                                                modPath.splice(parentIndex + 1, 1);
-                                            }
-                                        });
-                                        let finalPath = modPath.join(".");
-                                        let finalValue = value;
-                                        if (modPath[0].indexOf("equipments") !== -1) {
-                                            finalPath = "equipments." + value;
-                                            finalValue = true;
-                                            if (modPath[modPath.length - 1] === "origin") {
-                                                return;
-                                            }
-                                        }
-                                        if (modPath[0].indexOf("technicalData") !== -1) {
-                                            finalPath = "technicalData." + value;
-                                            finalValue = "" || this.parent.node.textValue;
-                                            if (modPath[modPath.length - 1] === "textValue") {
-                                                return;
-                                            }
-                                        }
-                                        adapter.setObjectNotExists(fin + ".masterdata." + finalPath, {
-                                            type: "state",
-                                            common: {
-                                                name: this.key || value,
-                                                role: "indicator",
-                                                type: "mixed",
-                                                write: false,
-                                                read: true,
-                                            },
-                                            native: {},
-                                        });
-                                        adapter.setState(fin + ".masterdata." + finalPath, finalValue || this.node, true);
-                                    }
-                                });
-                                // for (const key in element) {
-                                //     this.setObjectNotExists(fin + ".masterdata." + key, {
-                                //         type: "state",
-                                //         common: {
-                                //             name: key,
-                                //             type: "mixed",
-                                //             role: "indicator",
-                                //             write: false,
-                                //             read: true,
-                                //         },
-                                //         native: {},
-                                //     });
-                                //     if (Array.isArray(element[key])) {
-                                //         this.setState(fin + ".masterdata." + key, JSON.stringify(element[key]), true);
-                                //     } else {
-                                //         this.setState(fin + ".masterdata." + key, element[key], true);
-                                //     }
-                                // }
+                                this.extractKeys(fin + ".masterdata", element);
                             }
                         });
                     } catch (error) {
@@ -966,27 +902,109 @@ class Mercedesme extends utils.Adapter {
         });
     }
     extractKeys(path, element) {
-        const objectKeys = Object.keys(element);
-        objectKeys.forEach(async (key) => {
-            if (this.isJsonString(element[key])) {
-                element[key] = JSON.parse(element[key]);
+        //v1.2
+        try {
+            const objectKeys = Object.keys(element);
+            let write = false;
+            if (Array.isArray(element)) {
+                this.extractArray(element, "", path, write);
+                return;
             }
-            if (typeof element[key] === "object") {
-                this.extractKeys(path + "." + key, element[key]);
-            } else {
-                this.setObjectNotExists(path + "." + key, {
+            // if (path.endsWith("Settings")) {
+            //     await this.setObjectNotExistsAsync(path, {
+            //         type: "state",
+            //         common: {
+            //             name: "Einstellungen sind hier änderbar / You can change the settings here",
+            //             role: "indicator",
+            //             write: false,
+            //             read: true,
+            //         },
+            //         native: {},
+            //     });
+            //     write = true;
+            // }
+            objectKeys.forEach(async (key) => {
+                if (this.isJsonString(element[key])) {
+                    element[key] = JSON.parse(element[key]);
+                }
+
+                if (Array.isArray(element[key])) {
+                    this.extractArray(element, key, path, write);
+                } else if (element[key] !== null && typeof element[key] === "object") {
+                    this.extractKeys(path + "." + key, element[key]);
+                } else {
+                    await this.setObjectNotExistsAsync(path + "." + key, {
+                        type: "state",
+                        common: {
+                            name: key,
+                            role: "indicator",
+                            type: typeof element[key],
+                            write: write,
+                            read: true,
+                        },
+                        native: {},
+                    });
+                    this.setState(path + "." + key, element[key], true);
+                }
+            });
+        } catch (error) {
+            this.log.error("Error extract keys: " + path + " " + JSON.stringify(element));
+            this.log.error(error);
+        }
+    }
+    extractArray(element, key, path, write) {
+        if (key) {
+            element = element[key];
+        }
+        element.forEach(async (arrayElement, index) => {
+            index = index + 1;
+            if (index < 10) {
+                index = "0" + index;
+            }
+            let arrayPath = key + index;
+
+            if (typeof arrayElement[Object.keys(arrayElement)[0]] === "string") {
+                arrayPath = arrayElement[Object.keys(arrayElement)[0]];
+            }
+            Object.keys(arrayElement).forEach((keyName) => {
+                if (keyName.endsWith("Id")) {
+                    arrayPath = arrayElement[keyName];
+                }
+            });
+            Object.keys(arrayElement).forEach((keyName) => {
+                if (keyName.endsWith("Name")) {
+                    arrayPath = arrayElement[keyName];
+                }
+            });
+            if (arrayElement.id) {
+                arrayPath = arrayElement.id;
+            }
+            if (arrayElement.name) {
+                arrayPath = arrayElement.name;
+            }
+            //special case array with 2 string objects
+            if (Object.keys(arrayElement).length === 2 && typeof Object.keys(arrayElement)[0] === "string" && typeof Object.keys(arrayElement)[1] === "string") {
+                let subKey = arrayElement[Object.keys(arrayElement)[0]];
+                let subValue = arrayElement[Object.keys(arrayElement)[1]];
+                let subName = Object.keys(arrayElement)[0] + " " + Object.keys(arrayElement)[1];
+                if (key) {
+                    subKey = key + "." + subKey;
+                }
+                await this.setObjectNotExistsAsync(path + "." + subKey, {
                     type: "state",
                     common: {
-                        name: key,
+                        name: subName,
                         role: "indicator",
-                        type: typeof element[key],
-                        write: false,
+                        type: typeof subValue,
+                        write: write,
                         read: true,
                     },
                     native: {},
                 });
-                this.setState(path + "." + key, element[key], true);
+                this.setState(path + "." + subKey, subValue, true);
+                return;
             }
+            this.extractKeys(path + "." + arrayPath, arrayElement);
         });
     }
     isJsonString(str) {
