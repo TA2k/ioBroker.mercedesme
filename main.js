@@ -98,6 +98,7 @@ class Mercedesme extends utils.Adapter {
                     .then(() => {
                         this.getCommands();
                         this.getGeoFence();
+                        this.getUserInformation();
                         this.connectWS();
                     })
                     .catch(() => {
@@ -895,6 +896,48 @@ class Mercedesme extends utils.Adapter {
                             });
                         } catch (error) {
                             this.log.warn("Commands not found");
+                        }
+                    }
+                );
+            });
+        });
+    }
+    getUserInformation() {
+        return new Promise((resolve, reject) => {
+            var headers = this.baseHeader;
+            headers.Authorization = this.atoken;
+            this.vinArray.forEach((vin) => {
+                request.get(
+                    {
+                        jar: this.jar,
+                        gzip: true,
+                        url: "https://bff-prod.risingstars.daimler.com/v1/user/self",
+                        headers: headers,
+                        json: true,
+                    },
+                    (err, resp, body) => {
+                        if (err || resp.statusCode >= 400 || !body) {
+                            err && this.log.error(JSON.stringify(err));
+                            resp && this.log.error(resp.statusCode);
+                            body && this.log.error(JSON.stringify(body));
+                            reject();
+                        }
+                        this.log.debug(JSON.stringify(body));
+                        try {
+                            this.setObjectNotExists(vin + ".user", {
+                                type: "state",
+                                common: {
+                                    name: "User Information of the new mercedesMe App",
+                                    role: "indicator",
+                                    type: "mixed",
+                                    write: false,
+                                    read: true,
+                                },
+                                native: {},
+                            });
+                            this.extractKeys(vin + ".user", body);
+                        } catch (error) {
+                            this.log.warn("User Information not found");
                         }
                     }
                 );

@@ -1,8 +1,11 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.0.42",
+    "version": "0.0.43",
     "news": {
+      "0.0.43": {
+        "en": "Small improvements"
+      },
       "0.0.42": {
         "en": "Fix Fueling history"
       },
