@@ -750,6 +750,7 @@ class Mercedesme extends utils.Adapter {
             var headers = this.baseHeader;
             headers.Authorization = this.atoken;
             this.vinArray.forEach((vin) => {
+                this.log.debug("https://bff-prod.risingstars.daimler.com/v1/vehicle/" + vin + "/capabilities/commands");
                 request.get(
                     {
                         jar: this.jar,
@@ -852,6 +853,7 @@ class Mercedesme extends utils.Adapter {
                             });
                         } catch (error) {
                             this.log.warn("Commands not found");
+                            this.log.error(error);
                         }
                     }
                 );
@@ -947,6 +949,10 @@ class Mercedesme extends utils.Adapter {
     extractKeys(path, element) {
         //v1.2
         try {
+            if (element === null) {
+                this.log.debug("Cannot extract: " + path);
+                return;
+            }
             const objectKeys = Object.keys(element);
             let write = false;
             if (Array.isArray(element)) {
