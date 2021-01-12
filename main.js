@@ -96,9 +96,15 @@ class Mercedesme extends utils.Adapter {
 
                 this.getVehicles()
                     .then(() => {
-                        this.getCommands();
-                        this.getGeoFence();
-                        this.getUserInformation();
+                        this.getCommands().catch(() => {
+                            this.log.error("Error getting Commands");
+                        });
+                        this.getGeoFence().catch(() => {
+                            this.log.error("Error getting GeoFence");
+                        });
+                        this.getUserInformation().catch(() => {
+                            this.log.error("Error getting user infos");
+                        });
                         this.connectWS();
                     })
                     .catch(() => {
@@ -526,6 +532,7 @@ class Mercedesme extends utils.Adapter {
                         });
                     } catch (error) {
                         this.log.warn("Vehicles not found please start the mercedes me app: " + error);
+                        reject();
                     }
                     this.vinArray = [...new Set(this.vinArray)];
                     this.vinArray.forEach(async (element) => {
@@ -850,10 +857,12 @@ class Mercedesme extends utils.Adapter {
                                         }
                                     }
                                 });
+                                resolve();
                             });
                         } catch (error) {
-                            this.log.warn("Commands not found");
+                            this.log.warn("Commands not found ");
                             this.log.error(error);
+                            reject();
                         }
                     }
                 );
@@ -896,8 +905,11 @@ class Mercedesme extends utils.Adapter {
                             body.forEach(async (element) => {
                                 this.extractKeys(vin + ".geofencing." + element.name, element);
                             });
+                            resolve();
                         } catch (error) {
-                            this.log.warn("Commands not found");
+                            this.log.warn("Geofence not found");
+                            this.log.error(error);
+                            reject();
                         }
                     }
                 );
@@ -938,8 +950,11 @@ class Mercedesme extends utils.Adapter {
                                 native: {},
                             });
                             this.extractKeys(vin + ".user", body);
+                            resolve();
                         } catch (error) {
                             this.log.warn("User Information not found");
+                            this.log.error(error);
+                            reject();
                         }
                     }
                 );
