@@ -6,7 +6,7 @@
 
 const utils = require("@iobroker/adapter-core");
 const request = require("request");
-const uuidv4 = require("uuid/v4");
+const { v4: uuidv4 } = require("uuid");
 const axios = require("axios").default;
 const WebSocket = require("ws");
 
@@ -15,7 +15,6 @@ const WebSocket = require("ws");
 const VehicleCommands = require("./Proto/vehicle-commands_pb");
 const VehicleEvents = require("./Proto/vehicle-events_pb");
 const Client = require("./Proto/client_pb");
-const { type } = require("os");
 class Mercedesme extends utils.Adapter {
     /**
      * @param {Partial<ioBroker.AdapterOptions>} [options={}]
@@ -83,8 +82,10 @@ class Mercedesme extends utils.Adapter {
             this.setState("auth.refresh_token", "", true);
             const adapterConfig = "system.adapter." + pre;
             this.getForeignObject(adapterConfig, (error, obj) => {
-                obj.native.resetAccess = false;
-                this.setForeignObject(adapterConfig, obj);
+                if (obj) {
+                    obj.native.resetAccess = false;
+                    this.setForeignObject(adapterConfig, obj);
+                }
             });
             return;
         }
@@ -147,16 +148,16 @@ class Mercedesme extends utils.Adapter {
             const vin = id.split(".")[2];
             if (!state.ack) {
                 if (id.indexOf("commands") !== -1) {
-                    let commandId = id.split(".").splice(-2, 1)[0].toLocaleLowerCase();
+                    const commandId = id.split(".").splice(-2, 1)[0].toLocaleLowerCase();
 
                     try {
                         const commandIdCC = this.toCamel("_" + commandId.replace("zev", "ZEV"));
                         const setCommandIdCC = this.toCamel("set_" + commandId);
-                        let command = new VehicleCommands.CommandRequest();
+                        const command = new VehicleCommands.CommandRequest();
                         command.setBackend(1);
                         command.setVin(vin);
                         command.setRequestId(uuidv4());
-                        let vc = new VehicleCommands[commandIdCC]();
+                        const vc = new VehicleCommands[commandIdCC]();
                         if (vc.setPin) {
                             vc.setPin(this.config.pin);
                         }
@@ -170,7 +171,7 @@ class Mercedesme extends utils.Adapter {
                                 }
                                 if (vc.setDepartureTime) {
                                     const now = new Date();
-                                    vc.setDepartureTime(now.getHours() * 60 + now.getMinutes() + delayState.val);
+                                    vc.setDepartureTime(now.getHours() * 60 + now.getMinutes() + parseInt(delayState.val));
                                 }
                             } else {
                                 if (vc.setType) {
@@ -183,7 +184,7 @@ class Mercedesme extends utils.Adapter {
                         }
                         command[setCommandIdCC](vc);
                         this.log.debug(JSON.stringify(command.toObject()));
-                        let clientMessage = new Client.ClientMessage();
+                        const clientMessage = new Client.ClientMessage();
 
                         clientMessage.setCommandrequest(command);
                         // clientMessage.setTrackingId(this.xTracking);
@@ -236,7 +237,6 @@ class Mercedesme extends utils.Adapter {
                 }
             } else {
                 //ACK Values
-                const pre = this.name + "." + this.instance;
                 if (id.indexOf("state.tanklevelpercent.intValue") !== -1 || id.indexOf("state.soc.intValue") !== -1) {
                     let lastTankeLevel = "tankLevelLast";
                     let status = "tankLevelStatus";
@@ -410,7 +410,7 @@ class Mercedesme extends utils.Adapter {
         });
     }
     async getGasPrice(vin) {
-        return new Promise(async (resolve, reject) => {
+        return new Promise(async (resolve) => {
             const pre = this.name + "." + this.instance;
 
             const lat = await this.getStateAsync(pre + "." + vin + ".state.positionLat.doubleValue");
@@ -479,7 +479,7 @@ class Mercedesme extends utils.Adapter {
     }
     getVehicles() {
         return new Promise((resolve, reject) => {
-            var headers = this.baseHeader;
+            const headers = this.baseHeader;
             headers.Authorization = this.atoken;
             request.get(
                 {
@@ -492,9 +492,10 @@ class Mercedesme extends utils.Adapter {
                 (err, resp, body) => {
                     if (err || resp.statusCode >= 400 || !body) {
                         err && this.log.error(JSON.stringify(err));
-                        resp && this.log.error(resp.statusCode);
+                        resp && this.log.error(resp.statusCode.toString());
                         body && this.log.error(JSON.stringify(body));
                         reject();
+                        return;
                     }
                     this.log.debug(JSON.stringify(body));
                     try {
@@ -680,7 +681,6 @@ class Mercedesme extends utils.Adapter {
                                 type: "boolean",
                                 role: "switch.enable",
                                 write: true,
-                                role: "indicator",
                                 read: true,
                             },
                             native: {},
@@ -692,7 +692,6 @@ class Mercedesme extends utils.Adapter {
                                 type: "number",
                                 role: "level",
                                 write: true,
-                                role: "indicator",
                                 read: true,
                             },
                             native: {},
@@ -704,7 +703,6 @@ class Mercedesme extends utils.Adapter {
                                 type: "boolean",
                                 role: "switch.enable",
                                 write: true,
-                                role: "indicator",
                                 read: true,
                             },
                             native: {},
@@ -717,7 +715,6 @@ class Mercedesme extends utils.Adapter {
                                 type: "boolean",
                                 role: "switch.lock",
                                 write: true,
-                                role: "indicator",
                                 read: true,
                             },
                             native: {},
@@ -729,7 +726,6 @@ class Mercedesme extends utils.Adapter {
                                 type: "boolean",
                                 role: "switch.lock.door",
                                 write: true,
-                                role: "indicator",
                                 read: true,
                             },
                             native: {},
@@ -741,7 +737,6 @@ class Mercedesme extends utils.Adapter {
                                 type: "boolean",
                                 role: "switch.lock.window",
                                 write: true,
-                                role: "indicator",
                                 read: true,
                             },
                             native: {},
@@ -754,7 +749,7 @@ class Mercedesme extends utils.Adapter {
     }
     getCommands() {
         return new Promise((resolve, reject) => {
-            var headers = this.baseHeader;
+            const headers = this.baseHeader;
             headers.Authorization = this.atoken;
             this.vinArray.forEach((vin) => {
                 this.log.debug("https://bff-prod.risingstars.daimler.com/v1/vehicle/" + vin + "/capabilities/commands");
@@ -768,10 +763,12 @@ class Mercedesme extends utils.Adapter {
                     },
                     (err, resp, body) => {
                         if (err || resp.statusCode >= 400 || !body) {
+                            this.log.error("Getting commands for " + vin + " failed");
                             err && this.log.error(JSON.stringify(err));
-                            resp && this.log.error(resp.statusCode);
+                            resp && this.log.error(resp.statusCode.toString());
                             body && this.log.error(JSON.stringify(body));
                             reject();
+                            return;
                         }
                         this.log.debug(JSON.stringify(body));
                         try {
@@ -871,7 +868,7 @@ class Mercedesme extends utils.Adapter {
     }
     getGeoFence() {
         return new Promise((resolve, reject) => {
-            var headers = this.baseHeader;
+            const headers = this.baseHeader;
             headers.Authorization = this.atoken;
             this.vinArray.forEach((vin) => {
                 request.get(
@@ -885,9 +882,10 @@ class Mercedesme extends utils.Adapter {
                     (err, resp, body) => {
                         if (err || resp.statusCode >= 400 || !body) {
                             err && this.log.error(JSON.stringify(err));
-                            resp && this.log.error(resp.statusCode);
+                            resp && this.log.error(resp.statusCode.toString());
                             body && this.log.error(JSON.stringify(body));
                             reject();
+                            return;
                         }
                         this.log.debug(JSON.stringify(body));
                         try {
@@ -918,7 +916,7 @@ class Mercedesme extends utils.Adapter {
     }
     getUserInformation() {
         return new Promise((resolve, reject) => {
-            var headers = this.baseHeader;
+            const headers = this.baseHeader;
             headers.Authorization = this.atoken;
             this.vinArray.forEach((vin) => {
                 request.get(
@@ -932,9 +930,10 @@ class Mercedesme extends utils.Adapter {
                     (err, resp, body) => {
                         if (err || resp.statusCode >= 400 || !body) {
                             err && this.log.error(JSON.stringify(err));
-                            resp && this.log.error(resp.statusCode);
+                            resp && this.log.error(resp.statusCode.toString());
                             body && this.log.error(JSON.stringify(body));
                             reject();
+                            return;
                         }
                         this.log.debug(JSON.stringify(body));
                         try {
@@ -969,7 +968,7 @@ class Mercedesme extends utils.Adapter {
                 return;
             }
             const objectKeys = Object.keys(element);
-            let write = false;
+            const write = false;
             if (Array.isArray(element)) {
                 this.extractArray(element, "", path, write);
                 return;
@@ -1049,8 +1048,8 @@ class Mercedesme extends utils.Adapter {
             //special case array with 2 string objects
             if (Object.keys(arrayElement).length === 2 && typeof Object.keys(arrayElement)[0] === "string" && typeof Object.keys(arrayElement)[1] === "string") {
                 let subKey = arrayElement[Object.keys(arrayElement)[0]];
-                let subValue = arrayElement[Object.keys(arrayElement)[1]];
-                let subName = Object.keys(arrayElement)[0] + " " + Object.keys(arrayElement)[1];
+                const subValue = arrayElement[Object.keys(arrayElement)[1]];
+                const subName = Object.keys(arrayElement)[0] + " " + Object.keys(arrayElement)[1];
                 if (key) {
                     subKey = key + "." + subKey;
                 }
@@ -1113,7 +1112,7 @@ class Mercedesme extends utils.Adapter {
                             this.refreshToken();
                         }, 5 * 60 * 1000);
                         err && this.log.error(err);
-                        resp && this.log.error(resp.statusCode);
+                        resp && this.log.error(resp.statusCode.toString());
                         body && this.log.error(JSON.stringify(body));
                         return;
                     }
@@ -1249,7 +1248,6 @@ class Mercedesme extends utils.Adapter {
                     .then((response) => {
                         this.log.debug(JSON.stringify(response.status));
                         this.log.debug(JSON.stringify(response.data));
-                        const adapterConfig = "system.adapter." + this.name + "." + this.instance;
 
                         this.atoken = response.data.access_token;
                         this.rtoken = response.data.refresh_token;
@@ -1297,8 +1295,8 @@ class Mercedesme extends utils.Adapter {
             }
         });
     }
-    connectWS(vin) {
-        var headers = this.baseHeader;
+    connectWS() {
+        const headers = this.baseHeader;
         headers.Authorization = this.atoken;
         this.log.debug("Connect to WebSocket");
         try {
@@ -1329,7 +1327,9 @@ class Mercedesme extends utils.Adapter {
                 if (data.message.indexOf("403") !== -1) {
                     this.refreshToken(true);
                 }
-            } catch (error) {}
+            } catch (error) {
+                this.log.error(error);
+            }
         });
         this.ws.on("close", (data) => {
             this.log.debug(data);
@@ -1361,21 +1361,23 @@ class Mercedesme extends utils.Adapter {
                 if (message.apptwinCommandStatusUpdatesByVin) {
                     this.log.debug(JSON.stringify(message.apptwinCommandStatusUpdatesByVin));
 
-                    let ackCommand = new Client.AcknowledgeAppTwinCommandStatusUpdatesByVIN();
+                    const ackCommand = new Client.AcknowledgeAppTwinCommandStatusUpdatesByVIN();
                     ackCommand.setSequenceNumber(message.apptwinCommandStatusUpdatesByVin.sequenceNumber);
-                    let clientMessage = new Client.ClientMessage();
+                    const clientMessage = new Client.ClientMessage();
                     clientMessage.setAcknowledgeApptwinCommandStatusUpdateByVin(ackCommand);
                     this.ws.send(clientMessage.serializeBinary());
                     try {
                         if (message.apptwinCommandStatusUpdatesByVin.updatesByVinMap[0][1].updatesByPidMap[0][1].errorsList.length)
                             this.log.error(JSON.stringify(message.apptwinCommandStatusUpdatesByVin.updatesByVinMap[0][1].updatesByPidMap[0][1].errorsList));
-                    } catch (error) {}
+                    } catch (error) {
+                        this.log.error(error);
+                    }
                 }
                 if (message.assignedVehicles) {
                     this.log.debug(JSON.stringify(message.assignedVehicles));
                     this.vinArray = message.assignedVehicles.vinsList;
-                    let ackCommand = new Client.AcknowledgeAssignedVehicles();
-                    let clientMessage = new Client.ClientMessage();
+                    const ackCommand = new Client.AcknowledgeAssignedVehicles();
+                    const clientMessage = new Client.ClientMessage();
                     clientMessage.setAcknowledgeAssignedVehicles(ackCommand);
                     this.ws.send(clientMessage.serializeBinary());
                 }
@@ -1386,9 +1388,9 @@ class Mercedesme extends utils.Adapter {
                     this.log.silly(JSON.stringify(message.vepupdates));
                     this.log.debug("Received State Updated");
                     this.currentSequenceNumber = message.vepupdates.sequenceNumber;
-                    let ackCommand = new Client.AcknowledgeVEPUpdatesByVIN();
+                    const ackCommand = new Client.AcknowledgeVEPUpdatesByVIN();
                     ackCommand.setSequenceNumber(message.vepupdates.sequenceNumber);
-                    let clientMessage = new Client.ClientMessage();
+                    const clientMessage = new Client.ClientMessage();
                     clientMessage.setAcknowledgeVepUpdatesByVin(ackCommand);
                     this.ws.send(clientMessage.serializeBinary());
                     message.vepupdates.updatesMap.forEach(async (update) => {
