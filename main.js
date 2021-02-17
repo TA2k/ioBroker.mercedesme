@@ -963,7 +963,7 @@ class Mercedesme extends utils.Adapter {
     extractKeys(path, element) {
         //v1.2
         try {
-            if (element === null) {
+            if (element === null || element === undefined) {
                 this.log.debug("Cannot extract: " + path);
                 return;
             }
@@ -986,7 +986,28 @@ class Mercedesme extends utils.Adapter {
             //     });
             //     write = true;
             // }
-            objectKeys.forEach(async (key) => {
+
+            if (typeof element === "string") {
+                this.setObjectNotExistsAsync(path, {
+                    type: "state",
+                    common: {
+                        name: element,
+                        role: "indicator",
+                        type: typeof element,
+                        write: write,
+                        read: true,
+                    },
+                    native: {},
+                })
+                    .then(() => {
+                        this.setState(path, element, true);
+                    })
+                    .catch((error) => {
+                        this.log.error(error);
+                    });
+                return;
+            }
+            objectKeys.forEach((key) => {
                 if (this.isJsonString(element[key])) {
                     element[key] = JSON.parse(element[key]);
                 }
@@ -996,7 +1017,7 @@ class Mercedesme extends utils.Adapter {
                 } else if (element[key] !== null && typeof element[key] === "object") {
                     this.extractKeys(path + "." + key, element[key]);
                 } else {
-                    await this.setObjectNotExistsAsync(path + "." + key, {
+                    this.setObjectNotExistsAsync(path + "." + key, {
                         type: "state",
                         common: {
                             name: key,
@@ -1006,8 +1027,13 @@ class Mercedesme extends utils.Adapter {
                             read: true,
                         },
                         native: {},
-                    });
-                    this.setState(path + "." + key, element[key], true);
+                    })
+                        .then(() => {
+                            this.setState(path + "." + key, element[key], true);
+                        })
+                        .catch((error) => {
+                            this.log.error(error);
+                        });
                 }
             });
         } catch (error) {
@@ -1019,14 +1045,14 @@ class Mercedesme extends utils.Adapter {
         if (key) {
             element = element[key];
         }
-        element.forEach(async (arrayElement, index) => {
+        element.forEach((arrayElement, index) => {
             index = index + 1;
             if (index < 10) {
                 index = "0" + index;
             }
             let arrayPath = key + index;
 
-            if (typeof arrayElement[Object.keys(arrayElement)[0]] === "string") {
+            if (typeof arrayElement !== "string" && typeof arrayElement[Object.keys(arrayElement)[0]] === "string") {
                 arrayPath = arrayElement[Object.keys(arrayElement)[0]];
             }
             Object.keys(arrayElement).forEach((keyName) => {
@@ -1053,7 +1079,7 @@ class Mercedesme extends utils.Adapter {
                 if (key) {
                     subKey = key + "." + subKey;
                 }
-                await this.setObjectNotExistsAsync(path + "." + subKey, {
+                this.setObjectNotExistsAsync(path + "." + subKey, {
                     type: "state",
                     common: {
                         name: subName,
@@ -1063,8 +1089,14 @@ class Mercedesme extends utils.Adapter {
                         read: true,
                     },
                     native: {},
-                });
-                this.setState(path + "." + subKey, subValue, true);
+                })
+                    .then(() => {
+                        this.setState(path + "." + subKey, subValue, true);
+                    })
+                    .catch((error) => {
+                        this.log.error(error);
+                    });
+
                 return;
             }
             this.extractKeys(path + "." + arrayPath, arrayElement);
