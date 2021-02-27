@@ -17,6 +17,10 @@ Mercedes me adapter for ioBroker
 
 ## Changelog
 
+### 0.0.46
+
+- fix new login
+  
 ### 0.0.45
 
 - Small improvments

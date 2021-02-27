@@ -1,8 +1,11 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.0.45",
+    "version": "0.0.46",
     "news": {
+      "0.0.46": {
+        "en": "Fig new login"
+      },
       "0.0.45": {
         "en": "Small improvements"
       },

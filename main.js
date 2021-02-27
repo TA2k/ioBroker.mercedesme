@@ -1225,7 +1225,19 @@ class Mercedesme extends utils.Adapter {
                 },
                 native: {},
             });
+            await this.setObjectNotExists("auth.loginNonce", {
+                type: "state",
+                common: {
+                    name: "Login Nonce",
+                    type: "string",
+                    write: true,
+                    role: "indicator",
+                    read: true,
+                },
+                native: {},
+            });
 
+            let loginNonce = await this.getStateAsync("auth.loginNonce");
             const aTokenState = await this.getStateAsync("auth.access_token");
             const rTokenState = await this.getStateAsync("auth.refresh_token");
             if (aTokenState) {
@@ -1258,24 +1270,31 @@ class Mercedesme extends utils.Adapter {
                     // jar: this.jar,
                     // gzip: true,
                     // followAllRedirects: true,
-                    url: "https://keycloak.risingstars.daimler.com/auth/realms/Daimler/protocol/openid-connect/token",
+                    url: "https://id.mercedes-benz.com/as/token.oauth2",
                     headers: {
                         "content-type": "application/x-www-form-urlencoded; charset=utf-8",
-                        "ris-os-version": "14.2",
+                        "ris-os-version": "14.4",
+                        "RIS-OS-Name": "ios",
                         "x-trackingid": this.xTracking,
                         "ris-os-name": "ios",
                         "x-sessionid": this.xSession,
                         accept: "*/*",
                         stage: "prod",
-                        "x-applicationname": "mycar-store-ece",
+                        "X-ApplicationName": "mycar-store-ece",
                         "accept-language": "de-de",
                         "RIS-SDK-Version": "2.24.0",
-                        "User-Agent": "MyCar/855 CFNetwork/1206 Darwin/20.1.0",
-                        "ris-application-version": "1.6.0 (869)",
+                        "User-Agent": "MyCar/1.7.0 (com.daimler.ris.mercedesme.ece.ios; build:957; iOS 14.4.0) Alamofire/5.4.0",
+                        "ris-application-version": "1.7.0 (957)",
                         "device-uuid": this.deviceuuid,
                         "x-locale": this.config.acceptL,
                     },
-                    data: "client_id=app&grant_type=password&password=" + this.config.loginCode + "&scope=offline_access&username=" + encodeURIComponent(this.config.mail),
+                    data:
+                        "client_id=01398c1c-dc45-4b42-882b-9f5ba9f175f1&grant_type=password&password=" +
+                        loginNonce.val +
+                        ":" +
+                        this.config.loginCode +
+                        "&scope=openid%20email%20phone%20profile%20offline_access%20ciam-uid&username=" +
+                        encodeURIComponent(this.config.mail),
                 })
                     .then((response) => {
                         this.log.debug(JSON.stringify(response.status));
@@ -1301,6 +1320,9 @@ class Mercedesme extends utils.Adapter {
                     });
             }
             if (!this.atoken) {
+                loginNonce = uuidv4();
+
+                this.setState("auth.loginNonce", loginNonce, true);
                 axios({
                     method: "post",
                     // jar: this.jar,
@@ -1308,7 +1330,7 @@ class Mercedesme extends utils.Adapter {
                     url: "https://bff-prod.risingstars.daimler.com/v1/login",
                     // followAllRedirects: true,
                     headers: this.baseHeader,
-                    data: JSON.stringify({ locale: this.config.acceptL, emailOrPhoneNumber: this.config.mail, countryCode: this.config.countryC }),
+                    data: JSON.stringify({ nonce: loginNonce, locale: this.config.acceptL, emailOrPhoneNumber: this.config.mail, countryCode: this.config.countryC }),
                 })
                     .then((response) => {
                         this.log.debug(JSON.stringify(response.status));
@@ -1321,6 +1343,7 @@ class Mercedesme extends utils.Adapter {
                         reject();
                     })
                     .catch((error) => {
+                        this.log.error("Not able to request login code");
                         this.log.error(error);
                         reject();
                     });
@@ -1498,6 +1521,7 @@ class Mercedesme extends utils.Adapter {
         });
     }
 }
+
 if (module.parent) {
     // Export the constructor in compact mode
     /**
