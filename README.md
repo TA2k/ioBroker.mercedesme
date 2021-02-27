@@ -14,6 +14,8 @@
 ## mercedesme adapter for ioBroker
 
 Mercedes me adapter for ioBroker
+Unter commands das commando auf klappen und den button neben start drücken wenn das command available ist.
+Remote sind vorgefertige Remote Befehle
 
 ## Changelog
 
