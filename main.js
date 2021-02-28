@@ -1264,7 +1264,7 @@ class Mercedesme extends utils.Adapter {
                     });
             }
 
-            if (this.config.loginCode && !this.atoken) {
+            if (this.config.loginCode && !this.atoken && loginNonce) {
                 await axios({
                     method: "post",
                     // jar: this.jar,
