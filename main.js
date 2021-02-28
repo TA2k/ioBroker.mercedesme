@@ -1237,7 +1237,7 @@ class Mercedesme extends utils.Adapter {
                 native: {},
             });
 
-            let loginNonce = await this.getStateAsync("auth.loginNonce");
+            let loginNonceState = await this.getStateAsync("auth.loginNonce");
             const aTokenState = await this.getStateAsync("auth.access_token");
             const rTokenState = await this.getStateAsync("auth.refresh_token");
             if (aTokenState) {
@@ -1264,7 +1264,7 @@ class Mercedesme extends utils.Adapter {
                     });
             }
 
-            if (this.config.loginCode && !this.atoken && loginNonce) {
+            if (this.config.loginCode && !this.atoken && loginNonceState) {
                 await axios({
                     method: "post",
                     // jar: this.jar,
@@ -1290,7 +1290,7 @@ class Mercedesme extends utils.Adapter {
                     },
                     data:
                         "client_id=01398c1c-dc45-4b42-882b-9f5ba9f175f1&grant_type=password&password=" +
-                        loginNonce.val +
+                        loginNonceState.val +
                         ":" +
                         this.config.loginCode +
                         "&scope=openid%20email%20phone%20profile%20offline_access%20ciam-uid&username=" +
@@ -1320,7 +1320,7 @@ class Mercedesme extends utils.Adapter {
                     });
             }
             if (!this.atoken) {
-                loginNonce = uuidv4();
+                let loginNonce = uuidv4();
 
                 this.setState("auth.loginNonce", loginNonce, true);
                 axios({
