@@ -1318,8 +1318,7 @@ class Mercedesme extends utils.Adapter {
                             }
                         });
                     });
-            }
-            if (!this.atoken) {
+            } else if (!this.atoken) {
                 let loginNonce = uuidv4();
 
                 this.setState("auth.loginNonce", loginNonce, true);
