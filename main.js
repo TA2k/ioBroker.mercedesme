@@ -1317,11 +1317,13 @@ class Mercedesme extends utils.Adapter {
                                 this.setForeignObject(adapterConfig, obj);
                             }
                         });
+                        return;
                     });
-            } else if (!this.atoken) {
+            }
+            if (!this.atoken) {
                 let loginNonce = uuidv4();
 
-                this.setState("auth.loginNonce", loginNonce, true);
+                await this.setStateAsync("auth.loginNonce", loginNonce, true);
                 axios({
                     method: "post",
                     // jar: this.jar,
