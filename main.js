@@ -1118,24 +1118,25 @@ class Mercedesme extends utils.Adapter {
                 {
                     jar: this.jar,
                     gzip: true,
-                    url: "https://keycloak.risingstars.daimler.com/auth/realms/Daimler/protocol/openid-connect/token",
+                    url: "https://id.mercedes-benz.com/as/token.oauth2",
                     headers: {
-                        "content-type": "application/x-www-form-urlencoded; charset=utf-8",
-                        "ris-os-version": "14.2",
-                        "x-trackingid": this.xTracking,
-                        "ris-os-name": "ios",
-                        "x-sessionid": this.xSession,
-                        accept: "*/*",
-                        stage: "prod",
-                        "x-applicationname": "mycar-store-ece",
-                        "accept-language": "de-de",
-                        "RIS-SDK-Version": "2.24.0",
-                        "User-Agent": "MyCar/855 CFNetwork/1206 Darwin/20.1.0",
-                        "ris-application-version": "1.6.0 (869)",
-                        "x-locale": this.config.acceptL,
+                        "RIS-OS-Version": "14.4",
+                        "X-TrackingId": this.xTracking,
+                        "RIS-OS-Name": "ios",
+                        "X-SessionId": this.xSession,
+                        Accept: "*/*",
+                        Stage: "prod",
+                        "X-ApplicationName": "mycar-store-ece",
+                        "Accept-Language": "de-DE;q=1.0, en-DE;q=0.9",
+                        "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
+                        "X-Request-Id": this.xTracking,
+                        "RIS-SDK-Version": "2.36.0",
+                        "User-Agent": "MyCar/1.8.0 (com.daimler.ris.mercedesme.ece.ios; build:974; iOS 14.4.0) Alamofire/5.4.0",
+                        "ris-application-version": "1.8.0 (974)",
+                        "X-Locale": "de-DE",
                     },
                     followAllRedirects: false,
-                    body: "client_id=app&grant_type=refresh_token&refresh_token=" + this.rtoken,
+                    body: "grant_type=refresh_token&refresh_token=" + this.rtoken,
                 },
                 (err, resp, body) => {
                     if (err || resp.statusCode >= 400 || !body) {
@@ -1253,7 +1254,7 @@ class Mercedesme extends utils.Adapter {
                         this.refreshTokenInterval = setInterval(() => {
                             this.log.debug("Refresh Token");
                             this.refreshToken(true);
-                        }, 30 * 60 * 1000); // 30min
+                        }, 60 * 60 * 1000); // 60min
                         return;
                     })
                     .catch(() => {
