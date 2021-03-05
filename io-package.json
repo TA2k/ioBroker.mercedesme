@@ -1,9 +1,9 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.0.49",
+    "version": "0.0.50",
     "news": {
-      "0.0.49": {
+      "0.0.50": {
         "en": "fix refresh token"
       },
       "0.0.47": {

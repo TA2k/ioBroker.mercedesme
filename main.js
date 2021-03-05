@@ -70,12 +70,13 @@ class Mercedesme extends utils.Adapter {
             "Accept-Language": "de-DE;q=1.0, en-DE;q=0.9",
             "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
             "X-Request-Id": this.xTracking,
-            "RIS-SDK-Version": "2.36.1",
+            "RIS-SDK-Version": "2.36.0",
             "User-Agent": "MyCar/1.8.0 (com.daimler.ris.mercedesme.ece.ios; build:974; iOS 14.4.0) Alamofire/5.4.0",
             "ris-application-version": "1.8.0 (974)",
             "device-uuid": this.deviceuuid,
             "X-locale": this.config.acceptL,
         };
+
         if (this.config.resetAccess) {
             this.log.info("Reset access");
             this.atoken = "";
@@ -1305,7 +1306,9 @@ class Mercedesme extends utils.Adapter {
             }
             if (!this.atoken) {
                 const loginNonce = uuidv4();
-
+                const headers = this.baseHeader;
+                headers["X-Authmode"] = "KEYCLOAK";
+                headers["Content-Type"] = "application/json";
                 await this.setStateAsync("auth.loginNonce", loginNonce, true);
                 axios({
                     method: "post",
@@ -1313,7 +1316,7 @@ class Mercedesme extends utils.Adapter {
                     // gzip: true,
                     url: "https://bff-prod.risingstars.daimler.com/v1/login",
                     // followAllRedirects: true,
-                    headers: this.baseHeader,
+                    headers: headers,
                     data: JSON.stringify({ nonce: loginNonce, locale: this.config.acceptL, emailOrPhoneNumber: this.config.mail, countryCode: this.config.countryC }),
                 })
                     .then((response) => {
