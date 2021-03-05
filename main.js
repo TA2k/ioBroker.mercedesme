@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable quotes */
 "use strict";
 /*
@@ -41,21 +42,6 @@ class Mercedesme extends utils.Adapter {
         this.xSession = uuidv4();
         this.xTracking = uuidv4();
         this.deviceuuid = uuidv4();
-        this.baseHeader = {
-            "RIS-OS-Version": "14.3",
-            "X-TrackingId": this.xTracking,
-            "RIS-OS-Name": "ios",
-            "X-SessionId": this.xSession,
-            Accept: "*/*",
-            "X-ApplicationName": "mycar-store-ece",
-            "Accept-Language": "de-de",
-            "X-AuthMode": "KEYCLOAK",
-            "Content-Type": "application/json",
-            "RIS-SDK-Version": "2.30.0",
-            "User-Agent": "MyCar/1.6.2 (com.daimler.ris.mercedesme.ece.ios; build:897; iOS 14.3.0) Alamofire/5.4.0",
-            "ris-application-version": "1.6.2 (897)",
-            "X-Locale": "de-DE",
-        };
     }
 
     /**
@@ -73,7 +59,23 @@ class Mercedesme extends utils.Adapter {
                 }
             });
         });
-
+        this.baseHeader = {
+            "RIS-OS-Version": "14.4",
+            "X-TrackingId": this.xTracking,
+            "RIS-OS-Name": "ios",
+            "X-SessionId": this.xSession,
+            Accept: "*/*",
+            Stage: "prod",
+            "X-ApplicationName": "mycar-store-ece",
+            "Accept-Language": "de-DE;q=1.0, en-DE;q=0.9",
+            "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
+            "X-Request-Id": this.xTracking,
+            "RIS-SDK-Version": "2.36.1",
+            "User-Agent": "MyCar/1.8.0 (com.daimler.ris.mercedesme.ece.ios; build:974; iOS 14.4.0) Alamofire/5.4.0",
+            "ris-application-version": "1.8.0 (974)",
+            "device-uuid": this.deviceuuid,
+            "X-locale": this.config.acceptL,
+        };
         if (this.config.resetAccess) {
             this.log.info("Reset access");
             this.atoken = "";
@@ -1114,27 +1116,13 @@ class Mercedesme extends utils.Adapter {
         return new Promise((resolve, reject) => {
             this.log.debug("refreshToken");
 
+            const headers = this.baseHeader;
             request.post(
                 {
                     jar: this.jar,
                     gzip: true,
                     url: "https://id.mercedes-benz.com/as/token.oauth2",
-                    headers: {
-                        "RIS-OS-Version": "14.4",
-                        "X-TrackingId": this.xTracking,
-                        "RIS-OS-Name": "ios",
-                        "X-SessionId": this.xSession,
-                        Accept: "*/*",
-                        Stage: "prod",
-                        "X-ApplicationName": "mycar-store-ece",
-                        "Accept-Language": "de-DE;q=1.0, en-DE;q=0.9",
-                        "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
-                        "X-Request-Id": this.xTracking,
-                        "RIS-SDK-Version": "2.36.0",
-                        "User-Agent": "MyCar/1.8.0 (com.daimler.ris.mercedesme.ece.ios; build:974; iOS 14.4.0) Alamofire/5.4.0",
-                        "ris-application-version": "1.8.0 (974)",
-                        "X-Locale": "de-DE",
-                    },
+                    headers: headers,
                     followAllRedirects: false,
                     body: "grant_type=refresh_token&refresh_token=" + this.rtoken,
                 },
@@ -1142,7 +1130,9 @@ class Mercedesme extends utils.Adapter {
                     if (err || resp.statusCode >= 400 || !body) {
                         reject();
                         this.retryTimeout = setTimeout(() => {
-                            this.refreshToken();
+                            this.refreshToken().catch(() => {
+                                this.log.error("Refresh Token Failed ");
+                            });
                         }, 5 * 60 * 1000);
                         err && this.log.error(err);
                         resp && this.log.error(resp.statusCode.toString());
@@ -1160,7 +1150,9 @@ class Mercedesme extends utils.Adapter {
                             }
                             reject();
                             this.retryTimeout = setTimeout(() => {
-                                this.refreshToken();
+                                this.refreshToken().catch(() => {
+                                    this.log.error("Refresh Token Failed ");
+                                });
                             }, 5 * 60 * 1000);
                         }
                         this.log.debug(JSON.stringify(token));
@@ -1238,7 +1230,7 @@ class Mercedesme extends utils.Adapter {
                 native: {},
             });
 
-            let loginNonceState = await this.getStateAsync("auth.loginNonce");
+            const loginNonceState = await this.getStateAsync("auth.loginNonce");
             const aTokenState = await this.getStateAsync("auth.access_token");
             const rTokenState = await this.getStateAsync("auth.refresh_token");
             if (aTokenState) {
@@ -1253,7 +1245,12 @@ class Mercedesme extends utils.Adapter {
                         resolve();
                         this.refreshTokenInterval = setInterval(() => {
                             this.log.debug("Refresh Token");
-                            this.refreshToken(true);
+                            this.refreshToken(true).catch(() => {
+                                this.log.error("Refresh Token Failed do a relogin");
+                                this.login().catch(() => {
+                                    this.log.error("Relogin failed");
+                                });
+                            });
                         }, 60 * 60 * 1000); // 60min
                         return;
                     })
@@ -1266,29 +1263,14 @@ class Mercedesme extends utils.Adapter {
             }
 
             if (this.config.loginCode && !this.atoken && loginNonceState) {
+                const headers = this.baseHeader;
                 await axios({
                     method: "post",
                     // jar: this.jar,
                     // gzip: true,
                     // followAllRedirects: true,
                     url: "https://id.mercedes-benz.com/as/token.oauth2",
-                    headers: {
-                        "content-type": "application/x-www-form-urlencoded; charset=utf-8",
-                        "ris-os-version": "14.4",
-                        "RIS-OS-Name": "ios",
-                        "x-trackingid": this.xTracking,
-                        "ris-os-name": "ios",
-                        "x-sessionid": this.xSession,
-                        accept: "*/*",
-                        stage: "prod",
-                        "X-ApplicationName": "mycar-store-ece",
-                        "accept-language": "de-de",
-                        "RIS-SDK-Version": "2.24.0",
-                        "User-Agent": "MyCar/1.7.0 (com.daimler.ris.mercedesme.ece.ios; build:957; iOS 14.4.0) Alamofire/5.4.0",
-                        "ris-application-version": "1.7.0 (957)",
-                        "device-uuid": this.deviceuuid,
-                        "x-locale": this.config.acceptL,
-                    },
+                    headers: headers,
                     data:
                         "client_id=01398c1c-dc45-4b42-882b-9f5ba9f175f1&grant_type=password&password=" +
                         loginNonceState.val +
@@ -1322,7 +1304,7 @@ class Mercedesme extends utils.Adapter {
                     });
             }
             if (!this.atoken) {
-                let loginNonce = uuidv4();
+                const loginNonce = uuidv4();
 
                 await this.setStateAsync("auth.loginNonce", loginNonce, true);
                 axios({
@@ -1382,7 +1364,9 @@ class Mercedesme extends utils.Adapter {
             this.setState("info.connection", false, true);
             try {
                 if (data.message.indexOf("403") !== -1) {
-                    this.refreshToken(true);
+                    this.refreshToken(true).catch(() => {
+                        this.log.error("Refresh Token Failed ");
+                    });
                 }
             } catch (error) {
                 this.log.error(error);
