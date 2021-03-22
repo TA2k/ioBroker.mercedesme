@@ -93,6 +93,12 @@ class Mercedesme extends utils.Adapter {
             return;
         }
 
+        this.initLoading();
+
+        this.subscribeStates("*");
+    }
+
+    initLoading() {
         this.login()
             .then(() => {
                 this.log.debug("Login successful");
@@ -120,8 +126,6 @@ class Mercedesme extends utils.Adapter {
                 this.setState("info.connection", false, true);
                 return;
             });
-
-        this.subscribeStates("*");
     }
 
     /**
@@ -133,6 +137,7 @@ class Mercedesme extends utils.Adapter {
             clearInterval(this.refreshTokenInterval);
             clearInterval(this.reconnectInterval);
             clearTimeout(this.retryTimeout);
+            clearTimeout(this.reLoginTimeout);
             clearTimeout(this.wsHeartbeatTimeout);
 
             callback();
@@ -1129,12 +1134,12 @@ class Mercedesme extends utils.Adapter {
                 },
                 (err, resp, body) => {
                     if (err || resp.statusCode >= 400 || !body) {
-                        reject();
+                        reject(err);
                         this.retryTimeout = setTimeout(() => {
                             this.refreshToken().catch(() => {
                                 this.log.error("Refresh Token Failed ");
                             });
-                        }, 5 * 60 * 1000);
+                        }, 6 * 60 * 1000);
                         err && this.log.error(err);
                         resp && this.log.error(resp.statusCode.toString());
                         body && this.log.error(JSON.stringify(body));
@@ -1154,7 +1159,7 @@ class Mercedesme extends utils.Adapter {
                                 this.refreshToken().catch(() => {
                                     this.log.error("Refresh Token Failed ");
                                 });
-                            }, 5 * 60 * 1000);
+                            }, 6 * 60 * 1000);
                         }
                         this.log.debug(JSON.stringify(token));
                         this.atoken = token.access_token;
@@ -1255,11 +1260,21 @@ class Mercedesme extends utils.Adapter {
                         }, 60 * 60 * 1000); // 60min
                         return;
                     })
-                    .catch(() => {
-                        this.atoken = "";
-                        this.rtoken = "";
-                        this.setState("auth.access_token", "", true);
-                        this.setState("auth.refresh_token", "", true);
+                    .catch((error) => {
+                        if (error) {
+                            this.log.error("Connection error no login possible. Relogin in 5min");
+                            this.reLoginTimeout = setTimeout(() => {
+                                this.initLoading();
+                            }, 5 * 60 * 1000);
+                            reject();
+                        } else {
+                            reject();
+                            this.log.error("No Login possible. Deleting auth tokens. Please enter new email code.");
+                            this.atoken = "";
+                            this.rtoken = "";
+                            this.setState("auth.access_token", "", true);
+                            this.setState("auth.refresh_token", "", true);
+                        }
                     });
             }
 

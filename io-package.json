@@ -1,8 +1,11 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.0.50",
+    "version": "0.0.51",
     "news": {
+      "0.0.51": {
+        "en": "improve handling of failing logins"
+      },
       "0.0.50": {
         "en": "fix refresh token"
       },
