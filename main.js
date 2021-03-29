@@ -98,7 +98,58 @@ class Mercedesme extends utils.Adapter {
         this.subscribeStates("*");
     }
 
-    initLoading() {
+    async initLoading() {
+        await this.setObjectNotExists("auth", {
+            type: "state",
+            common: {
+                name: "Auth Information for login",
+                write: true,
+                role: "indicator",
+                read: true,
+            },
+            native: {},
+        });
+        await this.setObjectNotExists("auth.access_token", {
+            type: "state",
+            common: {
+                name: "Access Token",
+                type: "string",
+                write: true,
+                role: "indicator",
+                read: true,
+            },
+            native: {},
+        });
+        await this.setObjectNotExists("auth.refresh_token", {
+            type: "state",
+            common: {
+                name: "Refresh Token",
+                type: "string",
+                write: true,
+                role: "indicator",
+                read: true,
+            },
+            native: {},
+        });
+        await this.setObjectNotExists("auth.loginNonce", {
+            type: "state",
+            common: {
+                name: "Login Nonce",
+                type: "string",
+                write: true,
+                role: "indicator",
+                read: true,
+            },
+            native: {},
+        });
+        const aTokenState = await this.getStateAsync("auth.access_token");
+        const rTokenState = await this.getStateAsync("auth.refresh_token");
+        if (aTokenState) {
+            this.atoken = aTokenState.val;
+        }
+        if (rTokenState) {
+            this.rtoken = rTokenState.val;
+        }
         this.login()
             .then(() => {
                 this.log.debug("Login successful");
@@ -1143,6 +1194,7 @@ class Mercedesme extends utils.Adapter {
                         err && this.log.error(err);
                         resp && this.log.error(resp.statusCode.toString());
                         body && this.log.error(JSON.stringify(body));
+                        this.log.error("RefreshToken: " + this.rtoken);
                         return;
                     }
                     try {
@@ -1192,59 +1244,6 @@ class Mercedesme extends utils.Adapter {
         return new Promise(async (resolve, reject) => {
             this.log.debug("Login");
 
-            await this.setObjectNotExists("auth", {
-                type: "state",
-                common: {
-                    name: "Auth Information for login",
-                    write: true,
-                    role: "indicator",
-                    read: true,
-                },
-                native: {},
-            });
-            await this.setObjectNotExists("auth.access_token", {
-                type: "state",
-                common: {
-                    name: "Access Token",
-                    type: "string",
-                    write: true,
-                    role: "indicator",
-                    read: true,
-                },
-                native: {},
-            });
-            await this.setObjectNotExists("auth.refresh_token", {
-                type: "state",
-                common: {
-                    name: "Refresh Token",
-                    type: "string",
-                    write: true,
-                    role: "indicator",
-                    read: true,
-                },
-                native: {},
-            });
-            await this.setObjectNotExists("auth.loginNonce", {
-                type: "state",
-                common: {
-                    name: "Login Nonce",
-                    type: "string",
-                    write: true,
-                    role: "indicator",
-                    read: true,
-                },
-                native: {},
-            });
-
-            const loginNonceState = await this.getStateAsync("auth.loginNonce");
-            const aTokenState = await this.getStateAsync("auth.access_token");
-            const rTokenState = await this.getStateAsync("auth.refresh_token");
-            if (aTokenState) {
-                this.atoken = aTokenState.val;
-            }
-            if (rTokenState) {
-                this.rtoken = rTokenState.val;
-            }
             if (this.atoken) {
                 await this.refreshToken()
                     .then(() => {
@@ -1278,6 +1277,7 @@ class Mercedesme extends utils.Adapter {
                     });
             }
 
+            const loginNonceState = await this.getStateAsync("auth.loginNonce");
             if (this.config.loginCode && !this.atoken && loginNonceState) {
                 const headers = this.baseHeader;
                 await axios({
