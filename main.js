@@ -1400,7 +1400,7 @@ class Mercedesme extends utils.Adapter {
             // const hexString = ""
             // let parsed = new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
             // const foo =Client.ClientMessage.deserializeBinary(parsed).toObject()
-            this.log.debug("WS Message Length: " + data.length);
+            this.log.silly("WS Message Length: " + data.length);
             if (this.wsHeartbeatTimeout) {
                 clearTimeout(this.wsHeartbeatTimeout);
                 clearInterval(this.reconnectInterval);
@@ -1441,7 +1441,7 @@ class Mercedesme extends utils.Adapter {
                     this.ws.send(clientMessage.serializeBinary());
                 }
                 if (message.apptwinPendingCommandRequest) {
-                    this.log.debug("apptwinPendingCommandRequest: " + JSON.stringify(message.apptwinPendingCommandRequest));
+                    this.log.silly("apptwinPendingCommandRequest: " + JSON.stringify(message.apptwinPendingCommandRequest));
                 }
                 if (message.vepupdates) {
                     this.log.silly(JSON.stringify(message.vepupdates));
