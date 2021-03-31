@@ -1218,7 +1218,7 @@ class Mercedesme extends utils.Adapter {
                         this.rtoken = token.refresh_token;
 
                         this.setState("auth.access_token", token.access_token, true);
-                        this.log.debug("setRefrehToken: " + token.refreshToken);
+                        this.log.debug("setRefrehToken: " + token.refresh_token);
                         this.setState("auth.refresh_token", token.refresh_token, true);
                         if (reconnect) {
                             this.log.debug("Reconnect after refreshtoken");
