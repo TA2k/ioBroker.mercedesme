@@ -154,7 +154,16 @@ class Mercedesme extends utils.Adapter {
             .then(() => {
                 this.log.debug("Login successful");
                 this.setState("info.connection", true, true);
-
+                this.log.debug("start refresh interval");
+                this.refreshTokenInterval = setInterval(() => {
+                    this.log.debug("Refresh Token");
+                    this.refreshToken(true).catch(() => {
+                        this.log.error("Refresh Token Failed do a relogin");
+                        this.login().catch(() => {
+                            this.log.error("Relogin failed");
+                        });
+                    });
+                }, 60 * 60 * 1000); // 60min
                 this.getVehicles()
                     .then(() => {
                         this.getCommands().catch(() => {
@@ -1249,15 +1258,7 @@ class Mercedesme extends utils.Adapter {
                 await this.refreshToken()
                     .then(() => {
                         resolve();
-                        this.refreshTokenInterval = setInterval(() => {
-                            this.log.debug("Refresh Token");
-                            this.refreshToken(true).catch(() => {
-                                this.log.error("Refresh Token Failed do a relogin");
-                                this.login().catch(() => {
-                                    this.log.error("Relogin failed");
-                                });
-                            });
-                        }, 60 * 60 * 1000); // 60min
+
                         return;
                     })
                     .catch((error) => {
@@ -1305,6 +1306,7 @@ class Mercedesme extends utils.Adapter {
                         this.setState("auth.access_token", response.data.access_token, true);
                         this.setState("auth.refresh_token", response.data.refresh_token, true);
                         resolve();
+
                         return;
                     })
                     .catch((error) => {
