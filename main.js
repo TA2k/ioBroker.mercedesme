@@ -890,7 +890,7 @@ class Mercedesme extends utils.Adapter {
                                                         },
                                                         native: {},
                                                     });
-                                                    this.setState(vin + ".commands." + command.commandName + ".parameters." + parameter.parameterName + "." + pKey, parameter[pKey], true);
+                                                    this.setState(vin + ".commands." + command.commandName + ".parameters." + parameter.parameterName + "." + pKey, JSON.stringify(parameter[pKey]), true);
                                                 });
                                             });
                                     } else {
