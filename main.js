@@ -1374,8 +1374,7 @@ class Mercedesme extends utils.Adapter {
         }
 
         this.ws.on("open", () => {
-            this.log.debug("WS connected");
-
+            this.log.debug("WebSocket connected");
             this.setState("info.connection", true, true);
             clearInterval(this.reconnectInterval);
         });
@@ -1409,7 +1408,7 @@ class Mercedesme extends utils.Adapter {
                 clearInterval(this.reconnectInterval);
             }
             this.wsHeartbeatTimeout = setTimeout(() => {
-                this.log.error("Lost WebSocket connection try to reconnect");
+                this.log.info("Lost WebSocket connection. Reconnect WebSocket");
                 this.ws.close();
                 setTimeout(() => {
                     this.connectWS();
