@@ -1,8 +1,11 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.0.51",
+    "version": "0.0.52",
     "news": {
+      "0.0.52": {
+        "en": "fix js-controller 3.3 warnings"
+      },
       "0.0.51": {
         "en": "improve handling of failing logins"
       },
