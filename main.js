@@ -780,7 +780,7 @@ class Mercedesme extends utils.Adapter {
                             type: "state",
                             common: {
                                 name: "Door Lock 1 = Locked Doors / 0 = Open Doors",
-                                type: "boolean",
+                                type: "number",
                                 role: "switch.lock",
                                 write: true,
                                 read: true,
@@ -791,7 +791,7 @@ class Mercedesme extends utils.Adapter {
                             type: "state",
                             common: {
                                 name: "Door Open 1 = Open Doors / 0 = Locked Doors",
-                                type: "boolean",
+                                type: "number",
                                 role: "switch.lock.door",
                                 write: true,
                                 read: true,
@@ -802,7 +802,7 @@ class Mercedesme extends utils.Adapter {
                             type: "state",
                             common: {
                                 name: "Door Open 1 = Open Windows / 0 = Locked Windows",
-                                type: "boolean",
+                                type: "number",
                                 role: "switch.lock.window",
                                 write: true,
                                 read: true,
@@ -890,7 +890,11 @@ class Mercedesme extends utils.Adapter {
                                                         },
                                                         native: {},
                                                     });
-                                                    this.setState(vin + ".commands." + command.commandName + ".parameters." + parameter.parameterName + "." + pKey, JSON.stringify(parameter[pKey]), true);
+                                                    this.setState(
+                                                        vin + ".commands." + command.commandName + ".parameters." + parameter.parameterName + "." + pKey,
+                                                        JSON.stringify(parameter[pKey]),
+                                                        true
+                                                    );
                                                 });
                                             });
                                     } else {
