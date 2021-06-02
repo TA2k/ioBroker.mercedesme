@@ -1485,7 +1485,7 @@ class Mercedesme extends utils.Adapter {
                                 },
                                 native: {},
                             });
-                            Object.keys(element[1]).forEach((state) => {
+                            Object.keys(element[1]).forEach(async (state) => {
                                 if (
                                     state === "displayValue" ||
                                     state === "status" ||
