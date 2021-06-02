@@ -644,8 +644,8 @@ class Mercedesme extends utils.Adapter {
                             type: "state",
                             common: {
                                 name: "Refueling/Tanken",
-                                type: "number",
-                                role: "number",
+                                type: "boolean",
+                                role: "boolean",
                                 write: false,
                                 read: true,
                             },
@@ -667,7 +667,7 @@ class Mercedesme extends utils.Adapter {
                             type: "state",
                             common: {
                                 name: "Last Charging value",
-                                type: "object",
+                                type: "number",
                                 role: "number",
                                 write: false,
                                 read: true,
@@ -679,7 +679,7 @@ class Mercedesme extends utils.Adapter {
                             type: "state",
                             common: {
                                 name: "Last Charging value before charging",
-                                type: "object",
+                                type: "number",
                                 role: "number",
                                 write: false,
                                 read: true,
@@ -691,7 +691,7 @@ class Mercedesme extends utils.Adapter {
                             type: "state",
                             common: {
                                 name: "Charging/Laden",
-                                type: "object",
+                                type: "boolean",
                                 role: "boolean",
                                 write: false,
                                 read: true,
@@ -1498,7 +1498,7 @@ class Mercedesme extends utils.Adapter {
                                     state === "unsupportedValue" ||
                                     element[1][state]
                                 ) {
-                                    adapter.setObjectNotExistsAsync(vin + ".state." + element[0] + "." + state, {
+                                    await adapter.setObjectNotExistsAsync(vin + ".state." + element[0] + "." + state, {
                                         type: "state",
                                         common: {
                                             name: state,
