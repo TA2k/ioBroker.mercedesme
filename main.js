@@ -620,7 +620,7 @@ class Mercedesme extends utils.Adapter {
                             type: "state",
                             common: {
                                 name: "Last Tanklevel value",
-                                type: "object",
+                                type: "number",
                                 role: "number",
                                 write: false,
                                 read: true,
@@ -632,7 +632,7 @@ class Mercedesme extends utils.Adapter {
                             type: "state",
                             common: {
                                 name: "Last Tanklevel before fueling",
-                                type: "object",
+                                type: "number",
                                 role: "number",
                                 write: false,
                                 read: true,
@@ -644,8 +644,8 @@ class Mercedesme extends utils.Adapter {
                             type: "state",
                             common: {
                                 name: "Refueling/Tanken",
-                                type: "object",
-                                role: "boolean",
+                                type: "number",
+                                role: "number",
                                 write: false,
                                 read: true,
                             },
