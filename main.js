@@ -1354,7 +1354,7 @@ class Mercedesme extends utils.Adapter {
                     .catch((error) => {
                         this.log.error("Not able to request login code");
                         this.log.error(error);
-                        this.log.error(JSON.stringify(error.response));
+                        this.log.error(JSON.stringify(error.response.data));
                         reject();
                     });
             }
