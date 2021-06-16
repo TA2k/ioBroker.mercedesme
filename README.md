@@ -19,6 +19,10 @@ Remote sind vorgefertige Remote Befehle
 
 ## Changelog
 
+### 0.0.53
+
+- fix login
+  
 ### 0.0.52
 
 - fix js-controller 3.3 warnings

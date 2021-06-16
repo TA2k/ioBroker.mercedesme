@@ -1,8 +1,11 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.0.52",
+    "version": "0.0.53",
     "news": {
+      "0.0.53": {
+        "en": "fix login"
+      },
       "0.0.52": {
         "en": "fix js-controller 3.3 warnings"
       },
@@ -124,11 +127,12 @@
     "apiKey": "",
     "gas": "",
     "kwprice": "",
-    "acceptL": "de_DE",
+    "acceptLanguage": "de-DE",
     "countryC": "DE",
     "disableSocket": false,
     "isAdapter": false,
-    "ciam": ""
+    "ciam": "",
+    "resetAccess": false
   },
   "objects": [],
   "instanceObjects": [

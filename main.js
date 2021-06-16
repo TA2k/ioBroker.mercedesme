@@ -59,22 +59,22 @@ class Mercedesme extends utils.Adapter {
                 }
             });
         });
+        this.config.acceptLanguage = this.config.acceptLanguage ? this.config.acceptLanguage : "de-DE";
         this.baseHeader = {
-            "RIS-OS-Version": "14.4",
+            "RIS-OS-Version": "14.6",
             "X-TrackingId": this.xTracking,
             "RIS-OS-Name": "ios",
             "X-SessionId": this.xSession,
             Accept: "*/*",
-            Stage: "prod",
             "X-ApplicationName": "mycar-store-ece",
-            "Accept-Language": "de-DE;q=1.0, en-DE;q=0.9",
+            "Accept-Language": "de-DE;q=1.0",
             "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
             "X-Request-Id": this.xTracking,
-            "RIS-SDK-Version": "2.36.0",
-            "User-Agent": "MyCar/1.8.0 (com.daimler.ris.mercedesme.ece.ios; build:974; iOS 14.4.0) Alamofire/5.4.0",
-            "ris-application-version": "1.8.0 (974)",
+            "RIS-SDK-Version": "2.43.0",
+            "User-Agent": "MyCar/1.11.0 (com.daimler.ris.mercedesme.ece.ios; build:1051; iOS 12.5.1) Alamofire/5.4.0",
+            "ris-application-version": "1.11.0 (1051)",
             "device-uuid": this.deviceuuid,
-            "X-locale": this.config.acceptL,
+            "X-Locale": this.config.acceptLanguage,
         };
 
         if (this.config.resetAccess) {
@@ -553,7 +553,7 @@ class Mercedesme extends utils.Adapter {
                 {
                     jar: this.jar,
                     gzip: true,
-                    url: "https://bff-prod.risingstars.daimler.com/v1/vehicle/self/masterdata?countryCode=" + this.config.countryC + "&locale=" + this.config.acceptL,
+                    url: "https://bff-prod.risingstars.daimler.com/v1/vehicle/self/masterdata?countryCode=" + this.config.countryC + "&locale=" + this.config.acceptLanguage,
                     headers: headers,
                     json: true,
                 },
@@ -1339,7 +1339,7 @@ class Mercedesme extends utils.Adapter {
                     url: "https://bff-prod.risingstars.daimler.com/v1/login",
                     // followAllRedirects: true,
                     headers: headers,
-                    data: JSON.stringify({ nonce: loginNonce, locale: this.config.acceptL, emailOrPhoneNumber: this.config.mail, countryCode: this.config.countryC }),
+                    data: JSON.stringify({ nonce: loginNonce, locale: this.config.acceptLanguage, emailOrPhoneNumber: this.config.mail, countryCode: this.config.countryC }),
                 })
                     .then((response) => {
                         this.log.debug(JSON.stringify(response.status));
@@ -1354,6 +1354,7 @@ class Mercedesme extends utils.Adapter {
                     .catch((error) => {
                         this.log.error("Not able to request login code");
                         this.log.error(error);
+                        this.log.error(JSON.stringify(error.response));
                         reject();
                     });
             }
