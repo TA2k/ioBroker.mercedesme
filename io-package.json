@@ -1,8 +1,11 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.0.54",
+    "version": "0.0.55",
     "news": {
+      "0.0.55": {
+        "en": "fix login refresh"
+      },
       "0.0.54": {
         "en": "fix login"
       },
