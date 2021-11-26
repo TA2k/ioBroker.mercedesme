@@ -52,12 +52,14 @@ class Mercedesme extends utils.Adapter {
         //Delete old states
         const pre = this.name + "." + this.instance;
         this.getStates(pre + ".*", (err, states) => {
-            const allIds = Object.keys(states);
-            allIds.forEach((keyName) => {
-                if (keyName.split(".")[3] === "status" || keyName.split(".")[3] === "location" || keyName.split(".")[3] === "lastJourney") {
-                    this.delObject(keyName.split(".").slice(2).join("."));
-                }
-            });
+            if (states) {
+                const allIds = Object.keys(states);
+                allIds.forEach((keyName) => {
+                    if (keyName.split(".")[3] === "status" || keyName.split(".")[3] === "location" || keyName.split(".")[3] === "lastJourney") {
+                        this.delObject(keyName.split(".").slice(2).join("."));
+                    }
+                });
+            }
         });
         this.config.acceptLanguage = this.config.acceptLanguage ? this.config.acceptLanguage : "de-DE";
         this.baseHeader = {
@@ -159,7 +161,7 @@ class Mercedesme extends utils.Adapter {
                     this.log.debug("Refresh Token");
                     this.refreshToken(true).catch(() => {
                         this.log.error("Refresh Token Failed do a relogin");
-                        this.login().catch(() => {
+                        this.initLoading().catch(() => {
                             this.log.error("Relogin failed");
                         });
                     });
@@ -1198,38 +1200,26 @@ class Mercedesme extends utils.Adapter {
                 },
                 (err, resp, body) => {
                     if (err || resp.statusCode >= 400 || !body) {
-                        reject(err);
-                        this.retryTimeout = setTimeout(() => {
-                            this.refreshToken().catch(() => {
-                                this.log.error("Refresh Token Failed ");
-                            });
-                        }, 6 * 60 * 1000);
+                     
                         err && this.log.error(err);
                         resp && this.log.error(resp.statusCode.toString());
                         body && this.log.error(JSON.stringify(body));
                         this.log.error("RefreshToken: " + this.rtoken);
+                        reject();
                         return;
                     }
                     try {
                         const token = JSON.parse(body);
-                        if (token.error) {
-                            this.log.error("refreshToken Error");
-                            this.log.error(body);
-                            if (token.error === "invalid_grant") {
-                                this.log.error("Invalid Grant. Restarting Adapter.");
-                                this.restart();
-                            }
-                            reject();
-                            this.retryTimeout = setTimeout(() => {
-                                this.refreshToken().catch(() => {
-                                    this.log.error("Refresh Token Failed ");
-                                });
-                            }, 6 * 60 * 1000);
-                        }
+                    
                         this.log.debug(JSON.stringify(token));
                         this.atoken = token.access_token;
                         this.rtoken = token.refresh_token;
-
+                        if(!token.refresh_token) {
+                            this.log.error("Refresh Token not found");
+                            this.log.error(JSON.stringify(token));
+                            resolve()
+                            return;
+                        }
                         this.setState("auth.access_token", token.access_token, true);
                         this.log.debug("setRefrehToken: " + token.refresh_token);
                         this.setState("auth.refresh_token", token.refresh_token, true);
