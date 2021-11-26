@@ -1213,16 +1213,14 @@ class Mercedesme extends utils.Adapter {
                     
                         this.log.debug(JSON.stringify(token));
                         this.atoken = token.access_token;
-                        this.rtoken = token.refresh_token;
-                        if(!token.refresh_token) {
-                            this.log.error("Refresh Token not found");
-                            this.log.error(JSON.stringify(token));
-                            resolve()
-                            return;
-                        }
+                     
                         this.setState("auth.access_token", token.access_token, true);
-                        this.log.debug("setRefrehToken: " + token.refresh_token);
-                        this.setState("auth.refresh_token", token.refresh_token, true);
+                        if(token.refresh_token) {
+                             this.rtoken = token.refresh_token;
+                             this.log.debug("setRefrehToken: " + token.refresh_token);
+                             this.setState("auth.refresh_token", token.refresh_token, true);
+                        } 
+                       
                         if (reconnect) {
                             this.log.debug("Reconnect after refreshtoken");
                             this.ws.close();
