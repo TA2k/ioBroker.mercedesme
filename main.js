@@ -1306,7 +1306,7 @@ class Mercedesme extends utils.Adapter {
                         this.log.error(error);
                         const adapterConfig = "system.adapter." + this.name + "." + this.instance;
                         this.getForeignObject(adapterConfig, (error, obj) => {
-                            if (obj.native.loginCode) {
+                            if (obj.native && obj.native.loginCode) {
                                 obj.native.loginCode = "";
                                 this.setForeignObject(adapterConfig, obj);
                             }
@@ -1342,7 +1342,7 @@ class Mercedesme extends utils.Adapter {
                     .catch((error) => {
                         this.log.error("Not able to request login code");
                         this.log.error(error);
-                        this.log.error(JSON.stringify(error.response.data));
+                        error.response && this.log.error(JSON.stringify(error.response.data));
                         reject();
                     });
             }
