@@ -1200,27 +1200,31 @@ class Mercedesme extends utils.Adapter {
                 },
                 (err, resp, body) => {
                     if (err || resp.statusCode >= 400 || !body) {
-                     
                         err && this.log.error(err);
-                        resp && this.log.error(resp.statusCode.toString());
-                        body && this.log.error(JSON.stringify(body));
-                        this.log.error("RefreshToken: " + this.rtoken);
-                        reject();
-                        return;
+                        if (resp.statusCode >= 400 && resp.statusCode < 500) {
+                            resp && this.log.error(resp.statusCode.toString());
+                            body && this.log.error(JSON.stringify(body));
+                            this.log.error("RefreshToken: " + this.rtoken);
+                            reject();
+                            return;
+                        } else {
+                            resolve();
+                            return;
+                        }
                     }
                     try {
                         const token = JSON.parse(body);
-                    
+
                         this.log.debug(JSON.stringify(token));
                         this.atoken = token.access_token;
-                     
+
                         this.setState("auth.access_token", token.access_token, true);
-                        if(token.refresh_token) {
-                             this.rtoken = token.refresh_token;
-                             this.log.debug("setRefrehToken: " + token.refresh_token);
-                             this.setState("auth.refresh_token", token.refresh_token, true);
-                        } 
-                       
+                        if (token.refresh_token) {
+                            this.rtoken = token.refresh_token;
+                            this.log.debug("setRefrehToken: " + token.refresh_token);
+                            this.setState("auth.refresh_token", token.refresh_token, true);
+                        }
+
                         if (reconnect) {
                             this.log.debug("Reconnect after refreshtoken");
                             this.ws.close();
