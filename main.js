@@ -1236,6 +1236,7 @@ class Mercedesme extends utils.Adapter {
                         resolve();
                     } catch (error) {
                         this.log.error("Error refresh token");
+                        this.log.error(error);
                         this.log.error("refresh result: " + body);
                         this.atoken = "";
                         this.rtoken = "";
@@ -1277,7 +1278,7 @@ class Mercedesme extends utils.Adapter {
             }
 
             const loginNonceState = await this.getStateAsync("auth.loginNonce");
-            if (this.config.loginCode && !this.atoken && loginNonceState) {
+            if (this.config.loginCode && !this.atoken && loginNonceState.val) {
                 const headers = this.baseHeader;
                 await axios({
                     method: "post",
@@ -1302,6 +1303,7 @@ class Mercedesme extends utils.Adapter {
                         this.rtoken = response.data.refresh_token;
                         this.setState("auth.access_token", response.data.access_token, true);
                         this.setState("auth.refresh_token", response.data.refresh_token, true);
+                        this.setState("auth.loginNonce", "", true);
                         resolve();
 
                         return;
@@ -1309,6 +1311,7 @@ class Mercedesme extends utils.Adapter {
                     .catch((error) => {
                         this.log.error("Wrong Sicherheitscode please enter the new code you received via mail");
                         this.log.error(error);
+                        error.response && this.log.error(JSON.stringify(error.response.data));
                         const adapterConfig = "system.adapter." + this.name + "." + this.instance;
                         this.getForeignObject(adapterConfig, (error, obj) => {
                             if (obj.native && obj.native.loginCode) {
