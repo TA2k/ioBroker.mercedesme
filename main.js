@@ -572,7 +572,8 @@ class Mercedesme extends utils.Adapter {
                         if (body.assignedVehicles.length === 0) {
                             this.log.warn("No vehicles found");
                         }
-                        body.assignedVehicles.forEach((element) => {
+                        const vehicles = body.assignedVehicles.concat(body.fleets);
+                        vehicles.forEach((element) => {
                             if (element.fin !== null && element.fin !== "null") {
                                 const fin = element.fin || element.vin;
                                 this.vinArray.push(fin);
