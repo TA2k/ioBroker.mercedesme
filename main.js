@@ -555,7 +555,7 @@ class Mercedesme extends utils.Adapter {
                 {
                     jar: this.jar,
                     gzip: true,
-                    url: "https://bff-prod.risingstars.daimler.com/v1/vehicle/self/masterdata?countryCode=" + this.config.countryC + "&locale=" + this.config.acceptLanguage,
+                    url: "https://bff-prod.risingstars.daimler.com/v2/vehicles?locale=" + this.config.acceptLanguage,
                     headers: headers,
                     json: true,
                 },
@@ -569,10 +569,10 @@ class Mercedesme extends utils.Adapter {
                     }
                     this.log.debug(JSON.stringify(body));
                     try {
-                        if (body.length === 0) {
+                        if (body.assignedVehicles.length === 0) {
                             this.log.warn("No vehicles found");
                         }
-                        body.forEach((element) => {
+                        body.assignedVehicles.forEach((element) => {
                             if (element.fin !== null && element.fin !== "null") {
                                 const fin = element.fin || element.vin;
                                 this.vinArray.push(fin);
