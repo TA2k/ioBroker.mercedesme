@@ -1202,7 +1202,7 @@ class Mercedesme extends utils.Adapter {
                 (err, resp, body) => {
                     if (err || resp.statusCode >= 400 || !body) {
                         err && this.log.error(err);
-                        if (resp.statusCode >= 400 && resp.statusCode < 500) {
+                        if (resp && resp.statusCode >= 400 && resp.statusCode < 500) {
                             resp && this.log.error(resp.statusCode.toString());
                             body && this.log.error(JSON.stringify(body));
                             this.log.error("RefreshToken: " + this.rtoken);
@@ -1278,7 +1278,7 @@ class Mercedesme extends utils.Adapter {
             }
 
             const loginNonceState = await this.getStateAsync("auth.loginNonce");
-            if (this.config.loginCode && !this.atoken && loginNonceState.val) {
+            if (this.config.loginCode && !this.atoken && loginNonceState && loginNonceState.val) {
                 const headers = this.baseHeader;
                 await axios({
                     method: "post",
