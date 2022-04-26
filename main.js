@@ -1200,7 +1200,7 @@ class Mercedesme extends utils.Adapter {
                     body: "grant_type=refresh_token&refresh_token=" + this.rtoken,
                 },
                 (err, resp, body) => {
-                    if (err || resp.statusCode >= 400 || !body) {
+                    if (err || (resp && resp.statusCode >= 400) || !body) {
                         err && this.log.error(err);
                         if (resp && resp.statusCode >= 400 && resp.statusCode < 500) {
                             resp && this.log.error(resp.statusCode.toString());
