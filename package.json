@@ -10,7 +10,7 @@
     "dependencies": {
         "@iobroker/adapter-core": "^2.5.1",
         "axios": ">=0.24.0",
-        "google-protobuf": "^3.14.0",
+        "google-protobuf": "^3.20.1",
         "request": "^2.88.2",
         "uuid": "^8.3.2",
         "ws": "^7.4.3"
