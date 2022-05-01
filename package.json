@@ -18,7 +18,7 @@
     "deprecated": false,
     "description": "Mercedes me adapter for ioBroker",
     "devDependencies": {
-        "@iobroker/testing": "^2.4.2",
+        "@iobroker/testing": "^2.6.0",
         "@types/chai": "^4.2.14",
         "@types/chai-as-promised": "^7.1.4",
         "@types/gulp": "^4.0.8",
