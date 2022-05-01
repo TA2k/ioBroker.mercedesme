@@ -9,7 +9,7 @@
     "bundleDependencies": false,
     "dependencies": {
         "@iobroker/adapter-core": "^2.5.1",
-        "axios": ">=0.24.0",
+        "axios": ">=0.27.2",
         "google-protobuf": "^3.14.0",
         "request": "^2.88.2",
         "uuid": "^8.3.2",
