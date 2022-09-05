@@ -58,7 +58,6 @@
         "en": "Improve error handling"
       }
     },
-    "title": "Mercedes me",
     "titleLang": {
       "en": "Mercedes me",
       "de": "Mercedes me",
@@ -83,7 +82,7 @@
       "pl": "Adapter Mercedes me do ioBroker",
       "zh-cn": "梅赛德斯适用于ioBroker的适配器"
     },
-    "authors": ["tombox <tombox2020@gmail.com>"],
+    "authors": ["TA2k <tombox2020@gmail.com>"],
     "keywords": ["mercedes", "mercedes me", "mercedes benz", "daimler"],
     "license": "MIT",
     "platform": "Javascript/Node.js",
@@ -106,10 +105,12 @@
     },
     "dependencies": [
       {
-        "admin": ">=3.0.0"
-      },
-      {
         "js-controller": ">=1.4.2"
+      }
+    ],
+    "globalDependencies": [
+      {
+        "admin": ">=3.0.0"
       }
     ]
   },
