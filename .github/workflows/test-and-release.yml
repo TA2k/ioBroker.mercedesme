@@ -80,4 +80,3 @@ jobs:
 #          sentry-version-prefix: "iobroker.mercedesme
 #          # If your sentry project is linked to a GitHub repository, you can enable the following option
 #          # sentry-github-integration: true
-e
