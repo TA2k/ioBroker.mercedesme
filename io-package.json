@@ -105,12 +105,12 @@
     },
     "dependencies": [
       {
-        "js-controller": ">=1.4.2"
+        "js-controller": ">=3.2.0"
       }
     ],
     "globalDependencies": [
       {
-        "admin": ">=3.0.0"
+        "admin": ">=5.2.28"
       }
     ]
   },
