@@ -1,167 +1,160 @@
 {
-    "common": {
-        "name": "mercedesme",
-        "version": "0.0.56",
-        "news": {
-            "0.0.56": {
-                "en": "fix vehicle list while login"
-            },
-            "0.0.55": {
-                "en": "fix login refresh"
-            },
-            "0.0.54": {
-                "en": "fix login"
-            },
-            "0.0.52": {
-                "en": "fix js-controller 3.3 warnings"
-            },
-            "0.0.51": {
-                "en": "improve handling of failing logins"
-            },
-            "0.0.50": {
-                "en": "fix refresh token"
-            },
-            "0.0.47": {
-                "en": "Fig new login"
-            },
-            "0.0.45": {
-                "en": "Small improvements"
-            },
-            "0.0.42": {
-                "en": "Fix Fueling history"
-            },
-            "0.0.41": {
-                "en": "Fix reconnect"
-            },
-            "0.0.40": {
-                "en": "Add windowLock and precond for old models"
-            },
-            "0.0.39": {
-                "en": "Add remote functionality"
-            },
-            "0.0.38": {
-                "en": "Add commands functionality"
-            },
-            "0.0.36": {
-                "en": "Fix connection and gas price fetching"
-            },
-            "0.0.35": {
-                "en": "Support for new app"
-            },
-            "0.0.22": {
-                "en": "Rework fuel history, fix js-controller 3 issues"
-            },
-            "0.0.21": {
-                "en": "Removed Socket.io connection"
-            },
-            "0.0.19": {
-                "en": "Improve error handling"
-            }
-        },
-        "title": "Mercedes me",
-        "titleLang": {
-            "en": "Mercedes me",
-            "de": "Mercedes me",
-            "ru": "Мерседес me",
-            "pt": "Mercedes me",
-            "nl": "Mercedes me",
-            "fr": "Mercedes me",
-            "it": "Mercedes me",
-            "es": "Mercedes me",
-            "pl": "Mercedes me",
-            "zh-cn": "梅赛德斯我"
-        },
-        "desc": {
-            "en": "Mercedes me adapter for ioBroker",
-            "de": "Mercedes me Adapter für ioBroker",
-            "ru": "Mercedes me адаптер для ioBroker",
-            "pt": "Mercedes me adaptador para ioBroker",
-            "nl": "Mercedes me-adapter voor ioBroker",
-            "fr": "Mercedes me adaptateur pour ioBroker",
-            "it": "Mercedes me adattatore per ioBroker",
-            "es": "Mercedes me adapta para ioBroker",
-            "pl": "Adapter Mercedes me do ioBroker",
-            "zh-cn": "梅赛德斯适用于ioBroker的适配器"
-        },
-        "authors": [
-            "tombox <tombox2020@gmail.com>"
-        ],
-        "keywords": [
-            "mercedes",
-            "mercedes me",
-            "mercedes benz",
-            "daimler"
-        ],
-        "license": "MIT",
-        "platform": "Javascript/Node.js",
-        "main": "main.js",
-        "icon": "mercedesme.png",
-        "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/TA2k/ioBroker.mercedesme/master/admin/mercedesme.png",
-        "readme": "https://github.com/TA2k/ioBroker.mercedesme/blob/master/README.md",
-        "loglevel": "info",
-        "mode": "daemon",
-        "type": "vehicle",
-        "compact": true,
-        "connectionType": "cloud",
-        "dataSource": "push",
-        "materialize": true,
-        "plugins": {
-            "sentry": {
-                "dsn": "https://b5af79b8000149148826a2266de14281@sentry.iobroker.net/69"
-            }
-        },
-        "dependencies": [
-            {
-                "admin": ">=3.0.0"
-            },
-            {
-                "js-controller": ">=1.4.2"
-            }
-        ]
+  "common": {
+    "name": "mercedesme",
+    "version": "0.0.56",
+    "news": {
+      "0.0.56": {
+        "en": "fix vehicle list while login"
+      },
+      "0.0.55": {
+        "en": "fix login refresh"
+      },
+      "0.0.54": {
+        "en": "fix login"
+      },
+      "0.0.52": {
+        "en": "fix js-controller 3.3 warnings"
+      },
+      "0.0.51": {
+        "en": "improve handling of failing logins"
+      },
+      "0.0.50": {
+        "en": "fix refresh token"
+      },
+      "0.0.47": {
+        "en": "Fig new login"
+      },
+      "0.0.45": {
+        "en": "Small improvements"
+      },
+      "0.0.42": {
+        "en": "Fix Fueling history"
+      },
+      "0.0.41": {
+        "en": "Fix reconnect"
+      },
+      "0.0.40": {
+        "en": "Add windowLock and precond for old models"
+      },
+      "0.0.39": {
+        "en": "Add remote functionality"
+      },
+      "0.0.38": {
+        "en": "Add commands functionality"
+      },
+      "0.0.36": {
+        "en": "Fix connection and gas price fetching"
+      },
+      "0.0.35": {
+        "en": "Support for new app"
+      },
+      "0.0.22": {
+        "en": "Rework fuel history, fix js-controller 3 issues"
+      },
+      "0.0.21": {
+        "en": "Removed Socket.io connection"
+      },
+      "0.0.19": {
+        "en": "Improve error handling"
+      }
     },
-    "native": {
-        "mail": "",
-        "loginCode": "",
-        "manuelvin": "",
-        "interval": 30,
-        "tank": "",
-        "capacity": "",
-        "pin": "",
-        "expires": "",
-        "scope": "",
-        "apiKey": "",
-        "gas": "",
-        "kwprice": "",
-        "acceptLanguage": "de-DE",
-        "countryC": "DE",
-        "disableSocket": false,
-        "isAdapter": false,
-        "ciam": "",
-        "resetAccess": false
+    "title": "Mercedes me",
+    "titleLang": {
+      "en": "Mercedes me",
+      "de": "Mercedes me",
+      "ru": "Мерседес me",
+      "pt": "Mercedes me",
+      "nl": "Mercedes me",
+      "fr": "Mercedes me",
+      "it": "Mercedes me",
+      "es": "Mercedes me",
+      "pl": "Mercedes me",
+      "zh-cn": "梅赛德斯我"
     },
-    "objects": [],
-    "instanceObjects": [
-        {
-            "_id": "info",
-            "type": "channel",
-            "common": {
-                "name": "Information"
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.connection",
-            "type": "state",
-            "common": {
-                "role": "indicator.connected",
-                "name": "Device or service connected",
-                "type": "boolean",
-                "read": true,
-                "write": false,
-                "def": false
-            },
-            "native": {}
-        }
+    "desc": {
+      "en": "Mercedes me adapter for ioBroker",
+      "de": "Mercedes me Adapter für ioBroker",
+      "ru": "Mercedes me адаптер для ioBroker",
+      "pt": "Mercedes me adaptador para ioBroker",
+      "nl": "Mercedes me-adapter voor ioBroker",
+      "fr": "Mercedes me adaptateur pour ioBroker",
+      "it": "Mercedes me adattatore per ioBroker",
+      "es": "Mercedes me adapta para ioBroker",
+      "pl": "Adapter Mercedes me do ioBroker",
+      "zh-cn": "梅赛德斯适用于ioBroker的适配器"
+    },
+    "authors": ["tombox <tombox2020@gmail.com>"],
+    "keywords": ["mercedes", "mercedes me", "mercedes benz", "daimler"],
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "main": "main.js",
+    "icon": "mercedesme.png",
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/TA2k/ioBroker.mercedesme/master/admin/mercedesme.png",
+    "readme": "https://github.com/TA2k/ioBroker.mercedesme/blob/master/README.md",
+    "loglevel": "info",
+    "mode": "daemon",
+    "type": "vehicle",
+    "compact": true,
+    "connectionType": "cloud",
+    "dataSource": "push",
+    "materialize": true,
+    "plugins": {
+      "sentry": {
+        "dsn": "https://b5af79b8000149148826a2266de14281@sentry.iobroker.net/69"
+      }
+    },
+    "dependencies": [
+      {
+        "admin": ">=3.0.0"
+      },
+      {
+        "js-controller": ">=1.4.2"
+      }
     ]
+  },
+  "native": {
+    "mail": "",
+    "loginCode": "",
+    "manuelvin": "",
+    "interval": 30,
+    "tank": "",
+    "capacity": "",
+    "pin": "",
+    "expires": "",
+    "scope": "",
+    "apiKey": "",
+    "gas": "",
+    "kwprice": "",
+    "acceptLanguage": "de-DE",
+    "countryC": "DE",
+    "disableSocket": false,
+    "isAdapter": false,
+    "ciam": "",
+    "resetAccess": false
+  },
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "info",
+      "type": "channel",
+      "common": {
+        "name": "Information"
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "role": "indicator.connected",
+        "name": "Device or service connected",
+        "type": "boolean",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    }
+  ]
 }
