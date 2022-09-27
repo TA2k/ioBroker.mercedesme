@@ -101,7 +101,7 @@ class Mercedesme extends utils.Adapter {
   }
 
   async initLoading() {
-    await this.setObjectNotExists("auth", {
+    await this.setObjectNotExistsAsync("auth", {
       type: "state",
       common: {
         name: "Auth Information for login",
@@ -111,7 +111,7 @@ class Mercedesme extends utils.Adapter {
       },
       native: {},
     });
-    await this.setObjectNotExists("auth.access_token", {
+    await this.setObjectNotExistsAsync("auth.access_token", {
       type: "state",
       common: {
         name: "Access Token",
@@ -122,7 +122,7 @@ class Mercedesme extends utils.Adapter {
       },
       native: {},
     });
-    await this.setObjectNotExists("auth.refresh_token", {
+    await this.setObjectNotExistsAsync("auth.refresh_token", {
       type: "state",
       common: {
         name: "Refresh Token",
@@ -133,7 +133,7 @@ class Mercedesme extends utils.Adapter {
       },
       native: {},
     });
-    await this.setObjectNotExists("auth.loginNonce", {
+    await this.setObjectNotExistsAsync("auth.loginNonce", {
       type: "state",
       common: {
         name: "Login Nonce",
@@ -628,7 +628,7 @@ class Mercedesme extends utils.Adapter {
       });
     this.vinArray = [...new Set(this.vinArray)];
     this.vinArray.forEach(async (element) => {
-      this.setObjectNotExists(element + ".history", {
+      await this.setObjectNotExistsAsync(element + ".history", {
         type: "state",
         common: {
           name: "Fuel/Energy Tank/Lade History",
@@ -639,7 +639,7 @@ class Mercedesme extends utils.Adapter {
         native: {},
       });
 
-      this.setObjectNotExists(element + ".history.tankLevelLast", {
+      await this.setObjectNotExistsAsync(element + ".history.tankLevelLast", {
         type: "state",
         common: {
           name: "Last Tanklevel value",
@@ -651,7 +651,7 @@ class Mercedesme extends utils.Adapter {
         },
         native: {},
       });
-      this.setObjectNotExists(element + ".history.tankLevelBeforeFueling", {
+      await this.setObjectNotExistsAsync(element + ".history.tankLevelBeforeFueling", {
         type: "state",
         common: {
           name: "Last Tanklevel before fueling",
@@ -663,7 +663,7 @@ class Mercedesme extends utils.Adapter {
         },
         native: {},
       });
-      this.setObjectNotExists(element + ".history.tankLevelStatus", {
+      await this.setObjectNotExistsAsync(element + ".history.tankLevelStatus", {
         type: "state",
         common: {
           name: "Refueling/Tanken",
@@ -674,7 +674,7 @@ class Mercedesme extends utils.Adapter {
         },
         native: {},
       });
-      this.setObjectNotExists(element + ".history.tankLevelJSON", {
+      await this.setObjectNotExistsAsync(element + ".history.tankLevelJSON", {
         type: "state",
         common: {
           name: "Tanklevel history as json",
@@ -686,7 +686,7 @@ class Mercedesme extends utils.Adapter {
         native: {},
       });
 
-      this.setObjectNotExists(element + ".history.socLevelLast", {
+      await this.setObjectNotExistsAsync(element + ".history.socLevelLast", {
         type: "state",
         common: {
           name: "Last Charging value",
@@ -698,7 +698,7 @@ class Mercedesme extends utils.Adapter {
         },
         native: {},
       });
-      this.setObjectNotExists(element + ".history.socLevelBeforeFueling", {
+      await this.setObjectNotExistsAsync(element + ".history.socLevelBeforeFueling", {
         type: "state",
         common: {
           name: "Last Charging value before charging",
@@ -710,7 +710,7 @@ class Mercedesme extends utils.Adapter {
         },
         native: {},
       });
-      this.setObjectNotExists(element + ".history.socStatus", {
+      await this.setObjectNotExistsAsync(element + ".history.socStatus", {
         type: "state",
         common: {
           name: "Charging/Laden",
@@ -721,7 +721,7 @@ class Mercedesme extends utils.Adapter {
         },
         native: {},
       });
-      this.setObjectNotExists(element + ".history.socJSON", {
+      await this.setObjectNotExistsAsync(element + ".history.socJSON", {
         type: "state",
         common: {
           name: "Charging history as json",
@@ -732,7 +732,7 @@ class Mercedesme extends utils.Adapter {
         },
         native: {},
       });
-      this.setObjectNotExists(element + ".history.socStart", {
+      await this.setObjectNotExistsAsync(element + ".history.socStart", {
         type: "state",
         common: {
           name: "Start Date of soc charging",
@@ -743,7 +743,7 @@ class Mercedesme extends utils.Adapter {
         },
         native: {},
       });
-      this.setObjectNotExists(element + ".history.tankStart", {
+      await this.setObjectNotExistsAsync(element + ".history.tankStart", {
         type: "state",
         common: {
           name: "Start Date of fueling",
@@ -755,7 +755,7 @@ class Mercedesme extends utils.Adapter {
         native: {},
       });
 
-      this.setObjectNotExists(element + ".remote", {
+      await this.setObjectNotExistsAsync(element + ".remote", {
         type: "state",
         common: {
           name: "Remote controls",
@@ -765,7 +765,7 @@ class Mercedesme extends utils.Adapter {
         },
         native: {},
       });
-      this.setObjectNotExists(element + ".remote.Vorklimatisierung", {
+      await this.setObjectNotExistsAsync(element + ".remote.Vorklimatisierung", {
         type: "state",
         common: {
           name: "Precondition",
@@ -776,7 +776,7 @@ class Mercedesme extends utils.Adapter {
         },
         native: {},
       });
-      this.setObjectNotExists(element + ".remote.VorklimaDelay", {
+      await this.setObjectNotExistsAsync(element + ".remote.VorklimaDelay", {
         type: "state",
         common: {
           name: "PreconditionDelay in Minutes needed by old models",
@@ -787,7 +787,7 @@ class Mercedesme extends utils.Adapter {
         },
         native: {},
       });
-      this.setObjectNotExists(element + ".remote.Auxheat", {
+      await this.setObjectNotExistsAsync(element + ".remote.Auxheat", {
         type: "state",
         common: {
           name: "Standheizung",
@@ -799,7 +799,7 @@ class Mercedesme extends utils.Adapter {
         native: {},
       });
 
-      this.setObjectNotExists(element + ".remote.DoorLock", {
+      await this.setObjectNotExistsAsync(element + ".remote.DoorLock", {
         type: "state",
         common: {
           name: "Door Lock 1 = Locked Doors / 0 = Open Doors",
@@ -810,7 +810,7 @@ class Mercedesme extends utils.Adapter {
         },
         native: {},
       });
-      this.setObjectNotExists(element + ".remote.DoorOpen", {
+      await this.setObjectNotExistsAsync(element + ".remote.DoorOpen", {
         type: "state",
         common: {
           name: "Door Open 1 = Open Doors / 0 = Locked Doors",
@@ -821,7 +821,7 @@ class Mercedesme extends utils.Adapter {
         },
         native: {},
       });
-      this.setObjectNotExists(element + ".remote.WindowsOpen", {
+      await this.setObjectNotExistsAsync(element + ".remote.WindowsOpen", {
         type: "state",
         common: {
           name: "Door Open 1 = Open Windows / 0 = Locked Windows",
