@@ -23,7 +23,7 @@ class Mercedesme extends utils.Adapter {
   constructor(options) {
     super({
       ...options,
-      name: "mercedesme"
+      name: "mercedesme",
     });
     this.on("ready", this.onReady.bind(this));
     this.on("stateChange", this.onStateChange.bind(this));
@@ -76,7 +76,7 @@ class Mercedesme extends utils.Adapter {
       "User-Agent": "MyCar/1.11.0 (com.daimler.ris.mercedesme.ece.ios; build:1051; iOS 12.5.1) Alamofire/5.4.0",
       "ris-application-version": "1.11.0 (1051)",
       "device-uuid": this.deviceuuid,
-      "X-Locale": this.config.acceptLanguage
+      "X-Locale": this.config.acceptLanguage,
     };
 
     if (this.config.resetAccess) {
@@ -107,9 +107,9 @@ class Mercedesme extends utils.Adapter {
         name: "Auth Information for login",
         write: true,
         role: "indicator",
-        read: true
+        read: true,
       },
-      native: {}
+      native: {},
     });
     await this.setObjectNotExists("auth.access_token", {
       type: "state",
@@ -118,9 +118,9 @@ class Mercedesme extends utils.Adapter {
         type: "string",
         write: true,
         role: "indicator",
-        read: true
+        read: true,
       },
-      native: {}
+      native: {},
     });
     await this.setObjectNotExists("auth.refresh_token", {
       type: "state",
@@ -129,9 +129,9 @@ class Mercedesme extends utils.Adapter {
         type: "string",
         write: true,
         role: "indicator",
-        read: true
+        read: true,
       },
-      native: {}
+      native: {},
     });
     await this.setObjectNotExists("auth.loginNonce", {
       type: "state",
@@ -140,9 +140,9 @@ class Mercedesme extends utils.Adapter {
         type: "string",
         write: true,
         role: "indicator",
-        read: true
+        read: true,
       },
-      native: {}
+      native: {},
     });
     const aTokenState = await this.getStateAsync("auth.access_token");
     const rTokenState = await this.getStateAsync("auth.refresh_token");
@@ -360,7 +360,7 @@ class Mercedesme extends utils.Adapter {
                 " " +
                 [
                   d.getHours().toString().length < 2 ? "0" + d.getHours() : d.getHours(),
-                  d.getMinutes().toString().length < 2 ? "0" + d.getMinutes() : d.getMinutes()
+                  d.getMinutes().toString().length < 2 ? "0" + d.getMinutes() : d.getMinutes(),
                 ].join(":");
 
               await this.setStateAsync(vin + ".history." + startDate, dateFormatted, true);
@@ -373,7 +373,7 @@ class Mercedesme extends utils.Adapter {
                 " " +
                 [
                   d.getHours().toString().length < 2 ? "0" + d.getHours() : d.getHours(),
-                  d.getMinutes().toString().length < 2 ? "0" + d.getMinutes() : d.getMinutes()
+                  d.getMinutes().toString().length < 2 ? "0" + d.getMinutes() : d.getMinutes(),
                 ].join(":");
               const beforeValue = beforeFuelingState ? beforeFuelingState.val : 0;
               const diff = state.val - parseInt(beforeValue);
@@ -433,7 +433,7 @@ class Mercedesme extends utils.Adapter {
                   basicPrice: basicPrice,
                   startDate: startState.val,
                   duration: diff,
-                  perHour: quantity / diff / 60
+                  perHour: quantity / diff / 60,
                 };
                 const currenJsonHistoryState = (await this.getStateAsync(vin + ".history." + jsonString)) || { val: {} };
 
@@ -518,7 +518,7 @@ class Mercedesme extends utils.Adapter {
             this.config.gas +
             "&apikey=" +
             this.config.apiKey,
-          followAllRedirects: true
+          followAllRedirects: true,
         },
         (err, resp, body) => {
           if (err || resp.statusCode >= 400 || !body) {
@@ -578,9 +578,7 @@ class Mercedesme extends utils.Adapter {
       method: "get",
       headers: headers,
       jar: this.jar,
-      gzip: true,
       url: "https://bff-prod.risingstars.daimler.com/v2/vehicles?locale=" + this.config.acceptLanguage,
-      json: true
     })
       .then(async (res) => {
         const body = res.data;
@@ -592,16 +590,16 @@ class Mercedesme extends utils.Adapter {
           const vehicles = body.assignedVehicles.concat(body.fleets);
           this.log.info("Found " + vehicles.length + " vehicles");
           for (const element of vehicles) {
-            if (element.fin !== null && element.fin !== "null") {
-              const fin = element.fin || element.vin;
+            if ((element.fin && element.fin !== "null") || (element.vin && element.vin !== "null")) {
+              const fin = element.vin || element.fin;
               this.vinArray.push(fin);
               this.log.info(`Creating vehicle ${fin} with ${element.licensePlate}`);
               await this.setObjectNotExistsAsync(fin, {
                 type: "device",
                 common: {
-                  name: element.licensePlate || element.licencePlateNumber
+                  name: element.licensePlate || element.licencePlateNumber,
                 },
-                native: {}
+                native: {},
               });
               await this.setObjectNotExistsAsync(fin + ".masterdata", {
                 type: "state",
@@ -610,13 +608,13 @@ class Mercedesme extends utils.Adapter {
                   role: "indicator",
                   type: "mixed",
                   write: false,
-                  read: true
+                  read: true,
                 },
-                native: {}
+                native: {},
               });
               this.extractKeys(fin + ".masterdata", element);
             } else {
-              this.log.warn("No fin found for vehicle");
+              this.log.warn("No fin or vin found for vehicle");
               this.log.warn(JSON.stringify(element));
             }
           }
@@ -636,9 +634,9 @@ class Mercedesme extends utils.Adapter {
           name: "Fuel/Energy Tank/Lade History",
           write: true,
           role: "indicator",
-          read: true
+          read: true,
         },
-        native: {}
+        native: {},
       });
 
       this.setObjectNotExists(element + ".history.tankLevelLast", {
@@ -649,9 +647,9 @@ class Mercedesme extends utils.Adapter {
           role: "number",
           write: false,
           read: true,
-          unit: "%"
+          unit: "%",
         },
-        native: {}
+        native: {},
       });
       this.setObjectNotExists(element + ".history.tankLevelBeforeFueling", {
         type: "state",
@@ -661,9 +659,9 @@ class Mercedesme extends utils.Adapter {
           role: "number",
           write: false,
           read: true,
-          unit: "%"
+          unit: "%",
         },
-        native: {}
+        native: {},
       });
       this.setObjectNotExists(element + ".history.tankLevelStatus", {
         type: "state",
@@ -672,9 +670,9 @@ class Mercedesme extends utils.Adapter {
           type: "boolean",
           role: "boolean",
           write: false,
-          read: true
+          read: true,
         },
-        native: {}
+        native: {},
       });
       this.setObjectNotExists(element + ".history.tankLevelJSON", {
         type: "state",
@@ -683,9 +681,9 @@ class Mercedesme extends utils.Adapter {
           type: "object",
           role: "history",
           write: true,
-          read: true
+          read: true,
         },
-        native: {}
+        native: {},
       });
 
       this.setObjectNotExists(element + ".history.socLevelLast", {
@@ -696,9 +694,9 @@ class Mercedesme extends utils.Adapter {
           role: "number",
           write: false,
           read: true,
-          unit: "%"
+          unit: "%",
         },
-        native: {}
+        native: {},
       });
       this.setObjectNotExists(element + ".history.socLevelBeforeFueling", {
         type: "state",
@@ -708,9 +706,9 @@ class Mercedesme extends utils.Adapter {
           role: "number",
           write: false,
           read: true,
-          unit: "%"
+          unit: "%",
         },
-        native: {}
+        native: {},
       });
       this.setObjectNotExists(element + ".history.socStatus", {
         type: "state",
@@ -719,9 +717,9 @@ class Mercedesme extends utils.Adapter {
           type: "boolean",
           role: "boolean",
           write: false,
-          read: true
+          read: true,
         },
-        native: {}
+        native: {},
       });
       this.setObjectNotExists(element + ".history.socJSON", {
         type: "state",
@@ -730,9 +728,9 @@ class Mercedesme extends utils.Adapter {
           type: "object",
           role: "history",
           write: true,
-          read: true
+          read: true,
         },
-        native: {}
+        native: {},
       });
       this.setObjectNotExists(element + ".history.socStart", {
         type: "state",
@@ -741,9 +739,9 @@ class Mercedesme extends utils.Adapter {
           type: "object",
           role: "string",
           write: false,
-          read: true
+          read: true,
         },
-        native: {}
+        native: {},
       });
       this.setObjectNotExists(element + ".history.tankStart", {
         type: "state",
@@ -752,9 +750,9 @@ class Mercedesme extends utils.Adapter {
           type: "object",
           role: "string",
           write: false,
-          read: true
+          read: true,
         },
-        native: {}
+        native: {},
       });
 
       this.setObjectNotExists(element + ".remote", {
@@ -763,9 +761,9 @@ class Mercedesme extends utils.Adapter {
           name: "Remote controls",
           write: true,
           role: "indicator",
-          read: true
+          read: true,
         },
-        native: {}
+        native: {},
       });
       this.setObjectNotExists(element + ".remote.Vorklimatisierung", {
         type: "state",
@@ -774,9 +772,9 @@ class Mercedesme extends utils.Adapter {
           type: "boolean",
           role: "switch.enable",
           write: true,
-          read: true
+          read: true,
         },
-        native: {}
+        native: {},
       });
       this.setObjectNotExists(element + ".remote.VorklimaDelay", {
         type: "state",
@@ -785,9 +783,9 @@ class Mercedesme extends utils.Adapter {
           type: "number",
           role: "level",
           write: true,
-          read: true
+          read: true,
         },
-        native: {}
+        native: {},
       });
       this.setObjectNotExists(element + ".remote.Auxheat", {
         type: "state",
@@ -796,9 +794,9 @@ class Mercedesme extends utils.Adapter {
           type: "boolean",
           role: "switch.enable",
           write: true,
-          read: true
+          read: true,
         },
-        native: {}
+        native: {},
       });
 
       this.setObjectNotExists(element + ".remote.DoorLock", {
@@ -808,9 +806,9 @@ class Mercedesme extends utils.Adapter {
           type: "number",
           role: "switch.lock",
           write: true,
-          read: true
+          read: true,
         },
-        native: {}
+        native: {},
       });
       this.setObjectNotExists(element + ".remote.DoorOpen", {
         type: "state",
@@ -819,9 +817,9 @@ class Mercedesme extends utils.Adapter {
           type: "number",
           role: "switch.lock.door",
           write: true,
-          read: true
+          read: true,
         },
-        native: {}
+        native: {},
       });
       this.setObjectNotExists(element + ".remote.WindowsOpen", {
         type: "state",
@@ -830,9 +828,9 @@ class Mercedesme extends utils.Adapter {
           type: "number",
           role: "switch.lock.window",
           write: true,
-          read: true
+          read: true,
         },
-        native: {}
+        native: {},
       });
     });
   }
@@ -849,7 +847,7 @@ class Mercedesme extends utils.Adapter {
             gzip: true,
             url: "https://bff-prod.risingstars.daimler.com/v1/vehicle/" + vin + "/capabilities/commands",
             headers: headers,
-            json: true
+            json: true,
           },
           (err, resp, body) => {
             if (err || resp.statusCode >= 400 || !body) {
@@ -869,9 +867,9 @@ class Mercedesme extends utils.Adapter {
                   role: "indicator",
                   type: "mixed",
                   write: false,
-                  read: true
+                  read: true,
                 },
-                native: {}
+                native: {},
               });
               body.commands.forEach(async (command) => {
                 await this.setObjectNotExistsAsync(vin + ".commands." + command.commandName, {
@@ -881,9 +879,9 @@ class Mercedesme extends utils.Adapter {
                     role: "indicator",
                     type: "mixed",
                     write: false,
-                    read: true
+                    read: true,
                   },
-                  native: {}
+                  native: {},
                 });
                 Object.keys(command).forEach(async (key) => {
                   if (key === "parameters") {
@@ -894,9 +892,9 @@ class Mercedesme extends utils.Adapter {
                         role: "indicator",
                         type: "mixed",
                         write: false,
-                        read: true
+                        read: true,
                       },
-                      native: {}
+                      native: {},
                     });
                     command["parameters"] &&
                       command["parameters"].forEach(async (parameter) => {
@@ -910,9 +908,9 @@ class Mercedesme extends utils.Adapter {
                                 role: "indicator",
                                 type: "mixed",
                                 write: false,
-                                read: true
+                                read: true,
                               },
-                              native: {}
+                              native: {},
                             }
                           );
                           this.setState(
@@ -930,9 +928,9 @@ class Mercedesme extends utils.Adapter {
                         role: "indicator",
                         type: "mixed",
                         write: false,
-                        read: true
+                        read: true,
                       },
-                      native: {}
+                      native: {},
                     });
                     this.setState(vin + ".commands." + command.commandName + "." + key, command[key], true);
                     if (key === "isAvailable" && command[key] === true) {
@@ -943,9 +941,9 @@ class Mercedesme extends utils.Adapter {
                           role: "button",
                           type: "boolean",
                           write: true,
-                          read: true
+                          read: true,
                         },
-                        native: {}
+                        native: {},
                       });
                       this.setState(vin + ".commands." + command.commandName + ".start", false, true);
                     }
@@ -974,7 +972,7 @@ class Mercedesme extends utils.Adapter {
             gzip: true,
             url: "https://bff-prod.risingstars.daimler.com/v1/geofencing/fences/?vin=" + vin,
             headers: headers,
-            json: true
+            json: true,
           },
           (err, resp, body) => {
             if (err || resp.statusCode >= 400 || !body) {
@@ -993,9 +991,9 @@ class Mercedesme extends utils.Adapter {
                   role: "indicator",
                   type: "mixed",
                   write: false,
-                  read: true
+                  read: true,
                 },
-                native: {}
+                native: {},
               });
               body.forEach(async (element) => {
                 this.extractKeys(vin + ".geofencing." + element.name, element);
@@ -1022,7 +1020,7 @@ class Mercedesme extends utils.Adapter {
             gzip: true,
             url: "https://bff-prod.risingstars.daimler.com/v1/user/self",
             headers: headers,
-            json: true
+            json: true,
           },
           (err, resp, body) => {
             if (err || resp.statusCode >= 400 || !body) {
@@ -1041,9 +1039,9 @@ class Mercedesme extends utils.Adapter {
                   role: "indicator",
                   type: "mixed",
                   write: false,
-                  read: true
+                  read: true,
                 },
-                native: {}
+                native: {},
               });
               this.extractKeys(vin + ".user", body);
               resolve();
@@ -1092,9 +1090,9 @@ class Mercedesme extends utils.Adapter {
             role: "indicator",
             type: typeof element,
             write: write,
-            read: true
+            read: true,
           },
-          native: {}
+          native: {},
         })
           .then(() => {
             this.setState(path, element, true);
@@ -1121,9 +1119,9 @@ class Mercedesme extends utils.Adapter {
               role: "indicator",
               type: typeof element[key],
               write: write,
-              read: true
+              read: true,
             },
-            native: {}
+            native: {},
           })
             .then(() => {
               this.setState(path + "." + key, element[key], true);
@@ -1187,9 +1185,9 @@ class Mercedesme extends utils.Adapter {
             role: "indicator",
             type: typeof subValue,
             write: write,
-            read: true
+            read: true,
           },
-          native: {}
+          native: {},
         })
           .then(() => {
             this.setState(path + "." + subKey, subValue, true);
@@ -1223,7 +1221,7 @@ class Mercedesme extends utils.Adapter {
           url: "https://id.mercedes-benz.com/as/token.oauth2",
           headers: headers,
           followAllRedirects: false,
-          body: "grant_type=refresh_token&refresh_token=" + this.rtoken
+          body: "grant_type=refresh_token&refresh_token=" + this.rtoken,
         },
         (err, resp, body) => {
           if (err || (resp && resp.statusCode >= 400) || !body) {
@@ -1319,7 +1317,7 @@ class Mercedesme extends utils.Adapter {
             ":" +
             this.config.loginCode +
             "&scope=openid%20email%20phone%20profile%20offline_access%20ciam-uid&username=" +
-            encodeURIComponent(this.config.mail)
+            encodeURIComponent(this.config.mail),
         })
           .then((response) => {
             this.log.debug(JSON.stringify(response.status));
@@ -1365,8 +1363,8 @@ class Mercedesme extends utils.Adapter {
             nonce: loginNonce,
             locale: this.config.acceptLanguage,
             emailOrPhoneNumber: this.config.mail,
-            countryCode: this.config.countryC
-          })
+            countryCode: this.config.countryC,
+          }),
         })
           .then((response) => {
             this.log.debug(JSON.stringify(response.status));
@@ -1398,7 +1396,7 @@ class Mercedesme extends utils.Adapter {
         this.connectWS();
       }, 5 * 60 * 1000); // 5min
       this.ws = new WebSocket("wss://websocket-prod.risingstars.daimler.com/ws", {
-        headers: headers
+        headers: headers,
       });
     } catch (error) {
       this.log.error(error);
@@ -1496,9 +1494,9 @@ class Mercedesme extends utils.Adapter {
                 role: "indicator",
                 type: "mixed",
                 write: false,
-                read: true
+                read: true,
               },
-              native: {}
+              native: {},
             });
             this.log.debug("update for " + vin + ": " + message.vepupdates.sequenceNumber);
             const adapter = this;
@@ -1510,9 +1508,9 @@ class Mercedesme extends utils.Adapter {
                   role: "indicator",
                   type: "mixed",
                   write: false,
-                  read: true
+                  read: true,
                 },
-                native: {}
+                native: {},
               });
               Object.keys(element[1]).forEach(async (state) => {
                 if (
@@ -1534,9 +1532,9 @@ class Mercedesme extends utils.Adapter {
                       role: "indicator",
                       type: typeof element[1][state],
                       write: false,
-                      read: true
+                      read: true,
                     },
-                    native: {}
+                    native: {},
                   });
                   let value = element[1][state];
                   if (typeof value === "object") {
