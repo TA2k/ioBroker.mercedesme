@@ -1,8 +1,14 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.0.56",
+    "version": "0.0.58",
     "news": {
+      "0.0.58": {
+        "en": "fix for new vehicles without fin"
+      },
+      "0.0.57": {
+        "en": "minor bugfixes"
+      },
       "0.0.56": {
         "en": "fix vehicle list while login"
       },

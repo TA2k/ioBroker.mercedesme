@@ -106,7 +106,7 @@ class Mercedesme extends utils.Adapter {
       common: {
         name: "Auth Information for login",
         write: true,
-        role: "indicator",
+        role: "channel",
         read: true,
       },
       native: {},
@@ -602,13 +602,9 @@ class Mercedesme extends utils.Adapter {
                 native: {},
               });
               await this.setObjectNotExistsAsync(fin + ".masterdata", {
-                type: "state",
+                type: "channel",
                 common: {
                   name: "Masterdata of the new mercedesMe App",
-                  role: "indicator",
-                  type: "mixed",
-                  write: false,
-                  read: true,
                 },
                 native: {},
               });
@@ -629,12 +625,9 @@ class Mercedesme extends utils.Adapter {
     this.vinArray = [...new Set(this.vinArray)];
     this.vinArray.forEach(async (element) => {
       await this.setObjectNotExistsAsync(element + ".history", {
-        type: "state",
+        type: "channel",
         common: {
           name: "Fuel/Energy Tank/Lade History",
-          write: true,
-          role: "indicator",
-          read: true,
         },
         native: {},
       });
@@ -756,12 +749,9 @@ class Mercedesme extends utils.Adapter {
       });
 
       await this.setObjectNotExistsAsync(element + ".remote", {
-        type: "state",
+        type: "channel",
         common: {
           name: "Remote controls",
-          write: true,
-          role: "indicator",
-          read: true,
         },
         native: {},
       });
@@ -861,13 +851,9 @@ class Mercedesme extends utils.Adapter {
             this.log.debug(JSON.stringify(body));
             try {
               this.setObjectNotExists(vin + ".commands", {
-                type: "state",
+                type: "channel",
                 common: {
                   name: "Commands of the new mercedesMe App",
-                  role: "indicator",
-                  type: "mixed",
-                  write: false,
-                  read: true,
                 },
                 native: {},
               });
@@ -985,13 +971,9 @@ class Mercedesme extends utils.Adapter {
             this.log.debug(JSON.stringify(body));
             try {
               this.setObjectNotExists(vin + ".geofencing", {
-                type: "state",
+                type: "channel",
                 common: {
                   name: "GeoFencing of the new mercedesMe App",
-                  role: "indicator",
-                  type: "mixed",
-                  write: false,
-                  read: true,
                 },
                 native: {},
               });
@@ -1033,13 +1015,9 @@ class Mercedesme extends utils.Adapter {
             this.log.debug(JSON.stringify(body));
             try {
               this.setObjectNotExists(vin + ".user", {
-                type: "state",
+                type: "channel",
                 common: {
                   name: "User Information of the new mercedesMe App",
-                  role: "indicator",
-                  type: "mixed",
-                  write: false,
-                  read: true,
                 },
                 native: {},
               });
