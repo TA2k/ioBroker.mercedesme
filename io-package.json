@@ -41,30 +41,6 @@
       },
       "0.0.41": {
         "en": "Fix reconnect"
-      },
-      "0.0.40": {
-        "en": "Add windowLock and precond for old models"
-      },
-      "0.0.39": {
-        "en": "Add remote functionality"
-      },
-      "0.0.38": {
-        "en": "Add commands functionality"
-      },
-      "0.0.36": {
-        "en": "Fix connection and gas price fetching"
-      },
-      "0.0.35": {
-        "en": "Support for new app"
-      },
-      "0.0.22": {
-        "en": "Rework fuel history, fix js-controller 3 issues"
-      },
-      "0.0.21": {
-        "en": "Removed Socket.io connection"
-      },
-      "0.0.19": {
-        "en": "Improve error handling"
       }
     },
     "titleLang": {
