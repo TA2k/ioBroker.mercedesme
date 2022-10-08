@@ -1330,7 +1330,7 @@ class Mercedesme extends utils.Adapter {
         headers["X-Authmode"] = "KEYCLOAK";
         headers["Content-Type"] = "application/json";
         await this.setStateAsync("auth.loginNonce", loginNonce, true);
-        axios({
+        await axios({
           method: "post",
           // jar: this.jar,
           // gzip: true,
