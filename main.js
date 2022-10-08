@@ -8,7 +8,7 @@
 const utils = require("@iobroker/adapter-core");
 const request = require("request");
 const { v4: uuidv4 } = require("uuid");
-const axios = require("axios").default;
+const axios = require("axios");
 const WebSocket = require("ws");
 
 // const Eventpush = require("./Proto/eventpush_pb");
