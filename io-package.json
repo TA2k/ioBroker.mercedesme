@@ -1,8 +1,11 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.0.58",
+    "version": "0.0.59",
     "news": {
+      "0.0.59": {
+        "en": "fix dependencies"
+      },
       "0.0.58": {
         "en": "fix for new vehicles without fin"
       },
