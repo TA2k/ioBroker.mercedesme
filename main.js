@@ -76,9 +76,9 @@ class Mercedesme extends utils.Adapter {
       "Accept-Language": "de-DE;q=1.0",
       "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
       "X-Request-Id": this.xTracking,
-      "RIS-SDK-Version": "2.82.2",
-      "User-Agent": "MyCar/1.26.1 (com.daimler.ris.mercedesme.ece.ios; build:1697; iOS 14.8.0) Alamofire/5.4.0",
-      "ris-application-version": "1.26.1 (1697)",
+      "RIS-SDK-Version": "9.99.0",
+      "User-Agent": "MyCar/1.27.0 (com.daimler.ris.mercedesme.ece.ios; build:1719; iOS 14.8.0) Alamofire/5.4.0",
+      "ris-application-version": "1.27.0 (1719)",
       "device-uuid": this.deviceuuid,
       "X-Locale": this.config.acceptLanguage,
     };
