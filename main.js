@@ -257,6 +257,9 @@ class Mercedesme extends utils.Adapter {
                 }
               }
             }
+            if (commandId.includes("battery_max_soc_configure")) {
+              vc.setBatteryMaxSoc(state.val);
+            }
             command[setCommandIdCC](vc);
             this.log.debug(JSON.stringify(command.toObject()));
             const clientMessage = new Client.ClientMessage();
@@ -944,18 +947,26 @@ class Mercedesme extends utils.Adapter {
                     });
                     this.setState(vin + ".commands." + command.commandName + "." + key, command[key], true);
                     if (key === "isAvailable" && command[key] === true) {
-                      await this.setObjectNotExistsAsync(vin + ".commands." + command.commandName + ".start", {
+                      let type = "boolean";
+                      let role = "button";
+                      let def = false;
+                      if (command.commandName === "BATTERY_MAX_SOC_CONFIGURE") {
+                        type = "number";
+                        role = "level.battery";
+                        def = 100;
+                      }
+                      await this.extendObjectAsync(vin + ".commands." + command.commandName + ".start", {
                         type: "state",
                         common: {
                           name: "Start the command",
-                          role: "button",
-                          type: "boolean",
+                          role: role,
+                          type: type,
                           write: true,
                           read: true,
+                          def: def,
                         },
                         native: {},
                       });
-                      this.setState(vin + ".commands." + command.commandName + ".start", false, true);
                     }
                   }
                 });
