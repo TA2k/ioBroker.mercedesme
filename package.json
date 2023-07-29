@@ -8,7 +8,7 @@
   },
   "bundleDependencies": [],
   "dependencies": {
-    "@iobroker/adapter-core": "^3.0.0",
+    "@iobroker/adapter-core": "^2.6.8",
     "axios": "^1.4.0",
     "google-protobuf": "3.21.2",
     "request": "^2.88.2",
@@ -60,5 +60,5 @@
     "test:package": "mocha test/package --exit",
     "test:unit": "mocha test/unit --exit"
   },
-  "version": "0.1.2"
+  "version": "0.1.3"
 }
