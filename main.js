@@ -593,7 +593,7 @@ class Mercedesme extends utils.Adapter {
       method: "get",
       headers: headers,
       jar: this.jar,
-      url: "https://bff-prod.risingstars.daimler.com/v2/vehicles?locale=" + this.config.acceptLanguage,
+      url: "https://bff.emea-prod.mobilesdk.mercedes-benz.com//v2/vehicles?locale=" + this.config.acceptLanguage,
     })
       .then(async (res) => {
         const body = res.data;
@@ -845,12 +845,14 @@ class Mercedesme extends utils.Adapter {
       const headers = this.baseHeader;
       headers.Authorization = this.atoken;
       this.vinArray.forEach((vin) => {
-        this.log.debug("https://bff-prod.risingstars.daimler.com/v1/vehicle/" + vin + "/capabilities/commands");
+        this.log.debug(
+          "https://bff.emea-prod.mobilesdk.mercedes-benz.com//v1/vehicle/" + vin + "/capabilities/commands",
+        );
         request.get(
           {
             jar: this.jar,
             gzip: true,
-            url: "https://bff-prod.risingstars.daimler.com/v1/vehicle/" + vin + "/capabilities/commands",
+            url: "https://bff.emea-prod.mobilesdk.mercedes-benz.com//v1/vehicle/" + vin + "/capabilities/commands",
             headers: headers,
             json: true,
           },
@@ -991,7 +993,7 @@ class Mercedesme extends utils.Adapter {
           {
             jar: this.jar,
             gzip: true,
-            url: "https://bff-prod.risingstars.daimler.com/v1/geofencing/fences/?vin=" + vin,
+            url: "https://bff.emea-prod.mobilesdk.mercedes-benz.com//v1/geofencing/fences/?vin=" + vin,
             headers: headers,
             json: true,
           },
@@ -1035,7 +1037,7 @@ class Mercedesme extends utils.Adapter {
           {
             jar: this.jar,
             gzip: true,
-            url: "https://bff-prod.risingstars.daimler.com/v1/user/self",
+            url: "https://bff.emea-prod.mobilesdk.mercedes-benz.com//v1/user/self",
             headers: headers,
             json: true,
           },
@@ -1369,7 +1371,7 @@ class Mercedesme extends utils.Adapter {
           method: "post",
           // jar: this.jar,
           // gzip: true,
-          url: "https://bff-prod.risingstars.daimler.com/v1/login",
+          url: "https://bff.emea-prod.mobilesdk.mercedes-benz.com/v1/login",
           // followAllRedirects: true,
           headers: headers,
           data: JSON.stringify({
@@ -1408,7 +1410,7 @@ class Mercedesme extends utils.Adapter {
         this.log.info("Try to reconnect");
         this.connectWS();
       }, 5 * 60 * 1000); // 5min
-      this.ws = new WebSocket("wss://websocket-prod.risingstars.daimler.com/ws", {
+      this.ws = new WebSocket("wss://websocket.emea-prod.mobilesdk.mercedes-benz.com/ws", {
         headers: headers,
       });
     } catch (error) {
