@@ -910,7 +910,7 @@ class Mercedesme extends utils.Adapter {
                               type: "state",
                               common: {
                                 name: pKey,
-                                role: "state",
+                                role: this.getRole(pKey),
                                 type: "mixed",
                                 write: false,
                                 read: true,
@@ -936,7 +936,7 @@ class Mercedesme extends utils.Adapter {
                       type: "state",
                       common: {
                         name: key,
-                        role: "state",
+                        role: this.getRole(key),
                         type: "mixed",
                         write: false,
                         read: true,
@@ -1098,7 +1098,7 @@ class Mercedesme extends utils.Adapter {
           type: "state",
           common: {
             name: element,
-            role: "state",
+            role: this.getRole(element, write),
             type: typeof element,
             write: write,
             read: true,
@@ -1127,7 +1127,7 @@ class Mercedesme extends utils.Adapter {
             type: "state",
             common: {
               name: key,
-              role: "state",
+              role: this.getRole(element[key], write),
               type: typeof element[key],
               write: write,
               read: true,
@@ -1193,7 +1193,7 @@ class Mercedesme extends utils.Adapter {
           type: "state",
           common: {
             name: subName,
-            role: "state",
+            role: this.getRole(subValue, write),
             type: typeof subValue,
             write: write,
             read: true,
@@ -1219,6 +1219,24 @@ class Mercedesme extends utils.Adapter {
       return false;
     }
     return true;
+  }
+  getRole(element, write) {
+    if (typeof element === "boolean" && !write) {
+      return "indicator";
+    }
+    if (typeof element === "boolean" && write) {
+      return "switch";
+    }
+    if (typeof element === "number" && !write) {
+      return "value";
+    }
+    if (typeof element === "number" && write) {
+      return "level";
+    }
+    if (typeof element === "string") {
+      return "text";
+    }
+    return "state";
   }
   refreshToken(reconnect) {
     return new Promise((resolve, reject) => {
@@ -1540,7 +1558,7 @@ class Mercedesme extends utils.Adapter {
                     type: "state",
                     common: {
                       name: state,
-                      role: "state",
+                      role: this.getRole(element[1][state], false),
                       type: typeof element[1][state],
                       write: false,
                       read: true,
