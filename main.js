@@ -121,7 +121,7 @@ class Mercedesme extends utils.Adapter {
         name: "Access Token",
         type: "string",
         write: true,
-        role: "indicator",
+        role: "text",
         read: true,
       },
       native: {},
@@ -132,7 +132,7 @@ class Mercedesme extends utils.Adapter {
         name: "Refresh Token",
         type: "string",
         write: true,
-        role: "indicator",
+        role: "text",
         read: true,
       },
       native: {},
@@ -143,7 +143,7 @@ class Mercedesme extends utils.Adapter {
         name: "Login Nonce",
         type: "string",
         write: true,
-        role: "indicator",
+        role: "text",
         read: true,
       },
       native: {},
@@ -876,11 +876,9 @@ class Mercedesme extends utils.Adapter {
               });
               body.commands.forEach(async (command) => {
                 await this.setObjectNotExistsAsync(vin + ".commands." + command.commandName, {
-                  type: "state",
+                  type: "channel",
                   common: {
                     name: command.commandName,
-                    role: "indicator",
-                    type: "mixed",
                     write: false,
                     read: true,
                   },
@@ -889,11 +887,9 @@ class Mercedesme extends utils.Adapter {
                 Object.keys(command).forEach(async (key) => {
                   if (key === "parameters") {
                     await this.setObjectNotExistsAsync(vin + ".commands." + command.commandName + ".parameters", {
-                      type: "state",
+                      type: "channel",
                       common: {
                         name: command.commandName + " parameters",
-                        role: "indicator",
-                        type: "mixed",
                         write: false,
                         read: true,
                       },
@@ -914,7 +910,7 @@ class Mercedesme extends utils.Adapter {
                               type: "state",
                               common: {
                                 name: pKey,
-                                role: "indicator",
+                                role: "state",
                                 type: "mixed",
                                 write: false,
                                 read: true,
@@ -940,7 +936,7 @@ class Mercedesme extends utils.Adapter {
                       type: "state",
                       common: {
                         name: key,
-                        role: "indicator",
+                        role: "state",
                         type: "mixed",
                         write: false,
                         read: true,
@@ -1102,7 +1098,7 @@ class Mercedesme extends utils.Adapter {
           type: "state",
           common: {
             name: element,
-            role: "indicator",
+            role: "state",
             type: typeof element,
             write: write,
             read: true,
@@ -1131,7 +1127,7 @@ class Mercedesme extends utils.Adapter {
             type: "state",
             common: {
               name: key,
-              role: "indicator",
+              role: "state",
               type: typeof element[key],
               write: write,
               read: true,
@@ -1197,7 +1193,7 @@ class Mercedesme extends utils.Adapter {
           type: "state",
           common: {
             name: subName,
-            role: "indicator",
+            role: "state",
             type: typeof subValue,
             write: write,
             read: true,
@@ -1507,11 +1503,9 @@ class Mercedesme extends utils.Adapter {
           message.vepupdates.updatesMap.forEach(async (update) => {
             const vin = update[0];
             await this.setObjectNotExistsAsync(vin + ".state", {
-              type: "state",
+              type: "channel",
               common: {
                 name: "State of the new mercedesMe App",
-                role: "indicator",
-                type: "mixed",
                 write: false,
                 read: true,
               },
@@ -1521,11 +1515,9 @@ class Mercedesme extends utils.Adapter {
             const adapter = this;
             update[1].attributesMap.forEach(async (element) => {
               await adapter.setObjectNotExistsAsync(vin + ".state." + element[0], {
-                type: "state",
+                type: "channel",
                 common: {
                   name: element[0],
-                  role: "indicator",
-                  type: "mixed",
                   write: false,
                   read: true,
                 },
@@ -1548,7 +1540,7 @@ class Mercedesme extends utils.Adapter {
                     type: "state",
                     common: {
                       name: state,
-                      role: "indicator",
+                      role: "state",
                       type: typeof element[1][state],
                       write: false,
                       read: true,
