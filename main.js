@@ -176,7 +176,7 @@ class Mercedesme extends utils.Adapter {
               this.log.error("Error getting Commands");
             });
             this.getGeoFence().catch(() => {
-              this.log.error("Error getting GeoFence");
+              this.log.warn("Error getting GeoFence");
             });
             this.getUserInformation().catch(() => {
               this.log.error("Error getting user infos");
