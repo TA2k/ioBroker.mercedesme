@@ -898,7 +898,7 @@ class Mercedesme extends utils.Adapter {
                     command["parameters"] &&
                       command["parameters"].forEach(async (parameter) => {
                         Object.keys(parameter).forEach(async (pKey) => {
-                          await this.setObjectNotExistsAsync(
+                          await this.extendObjectAsync(
                             vin +
                               ".commands." +
                               command.commandName +
@@ -932,7 +932,7 @@ class Mercedesme extends utils.Adapter {
                         });
                       });
                   } else {
-                    await this.setObjectNotExistsAsync(vin + ".commands." + command.commandName + "." + key, {
+                    await this.extendObjectAsync(vin + ".commands." + command.commandName + "." + key, {
                       type: "state",
                       common: {
                         name: key,
@@ -1228,6 +1228,11 @@ class Mercedesme extends utils.Adapter {
       return "switch";
     }
     if (typeof element === "number" && !write) {
+      if (element && element.toString().length === 13) {
+        if (element > 1500000000000 && element < 2000000000000) {
+          return "value.time";
+        }
+      }
       return "value";
     }
     if (typeof element === "number" && write) {
@@ -1520,7 +1525,7 @@ class Mercedesme extends utils.Adapter {
           this.ws.send(clientMessage.serializeBinary());
           message.vepupdates.updatesMap.forEach(async (update) => {
             const vin = update[0];
-            await this.setObjectNotExistsAsync(vin + ".state", {
+            await this.extendObjectAsync(vin + ".state", {
               type: "channel",
               common: {
                 name: "State of the new mercedesMe App",
@@ -1532,7 +1537,7 @@ class Mercedesme extends utils.Adapter {
             this.log.debug("update for " + vin + ": " + message.vepupdates.sequenceNumber);
             const adapter = this;
             update[1].attributesMap.forEach(async (element) => {
-              await adapter.setObjectNotExistsAsync(vin + ".state." + element[0], {
+              await adapter.extendObjectAsync(vin + ".state." + element[0], {
                 type: "channel",
                 common: {
                   name: element[0],
@@ -1554,7 +1559,7 @@ class Mercedesme extends utils.Adapter {
                   state === "unsupportedValue" ||
                   element[1][state]
                 ) {
-                  await adapter.setObjectNotExistsAsync(vin + ".state." + element[0] + "." + state, {
+                  await adapter.extendObjectAsync(vin + ".state." + element[0] + "." + state, {
                     type: "state",
                     common: {
                       name: state,
