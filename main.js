@@ -949,8 +949,9 @@ class Mercedesme extends utils.Adapter {
                         JSON.stringify(command[key]),
                         true,
                       );
+                    } else {
+                      this.setState(vin + ".commands." + command.commandName + "." + key, command[key], true);
                     }
-                    this.setState(vin + ".commands." + command.commandName + "." + key, command[key], true);
                     if (key === "isAvailable" && command[key] === true) {
                       let type = "boolean";
                       let role = "button";
