@@ -943,6 +943,13 @@ class Mercedesme extends utils.Adapter {
                       },
                       native: {},
                     });
+                    if (typeof command[key] === "object") {
+                      this.setState(
+                        vin + ".commands." + command.commandName + "." + key,
+                        JSON.stringify(command[key]),
+                        true,
+                      );
+                    }
                     this.setState(vin + ".commands." + command.commandName + "." + key, command[key], true);
                     if (key === "isAvailable" && command[key] === true) {
                       let type = "boolean";
