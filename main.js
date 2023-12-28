@@ -10,6 +10,7 @@ const request = require("request");
 const { v4: uuidv4 } = require("uuid");
 const axios = require("axios").default;
 const WebSocket = require("ws");
+const Json2iob = require("json2iob");
 
 // const Eventpush = require("./Proto/eventpush_pb");
 // const UserEvents = require("./Proto/user-events_pb");
@@ -42,6 +43,7 @@ class Mercedesme extends utils.Adapter {
     this.xSession = uuidv4();
     this.xTracking = uuidv4();
     this.deviceuuid = uuidv4();
+    this.Json2iob = new Json2iob(this);
   }
 
   /**
@@ -1018,9 +1020,9 @@ class Mercedesme extends utils.Adapter {
                 },
                 native: {},
               });
-              body.forEach(async (element) => {
-                this.extractKeys(vin + ".geofencing." + element.name, element);
-              });
+
+              this.Json2iob.parse(vin + ".geofencing", body);
+
               resolve();
             } catch (error) {
               this.log.warn("Geofence not found");
