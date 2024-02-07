@@ -1391,6 +1391,20 @@ class Mercedesme extends utils.Adapter {
           });
       }
       if (!this.atoken) {
+        //config fetch needed to get the login code
+        await axios({
+          method: "get",
+          url: "https://bff.emea-prod.mobilesdk.mercedes-benz.com/v1/config",
+          headers: headers,
+        })
+          .then((response) => {
+            this.log.debug(JSON.stringify(response.data));
+          })
+          .catch((error) => {
+            this.log.error("Not able to get config");
+            this.log.error(error);
+            error.response && this.log.error(JSON.stringify(error.response.data));
+          });
         const loginNonce = uuidv4();
         const headers = this.baseHeader;
         headers["X-Authmode"] = "KEYCLOAK";
