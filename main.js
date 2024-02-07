@@ -1391,7 +1391,8 @@ class Mercedesme extends utils.Adapter {
           });
       }
       if (!this.atoken) {
-        const headers = this.baseHeader;
+        //deep copy
+        const headers = JSON.parse(JSON.stringify(this.baseHeader));
         //config fetch needed to get the login code
         await axios({
           method: "get",
