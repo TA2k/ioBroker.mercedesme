@@ -1391,6 +1391,7 @@ class Mercedesme extends utils.Adapter {
           });
       }
       if (!this.atoken) {
+        const headers = this.baseHeader;
         //config fetch needed to get the login code
         await axios({
           method: "get",
@@ -1406,7 +1407,6 @@ class Mercedesme extends utils.Adapter {
             error.response && this.log.error(JSON.stringify(error.response.data));
           });
         const loginNonce = uuidv4();
-        const headers = this.baseHeader;
         headers["X-Authmode"] = "KEYCLOAK";
         headers["Content-Type"] = "application/json";
         await this.setStateAsync("auth.loginNonce", loginNonce, true);
