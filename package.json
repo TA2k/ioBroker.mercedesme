@@ -9,9 +9,9 @@
   "bundleDependencies": [],
   "dependencies": {
     "@iobroker/adapter-core": "^3.0.4",
-    "axios": "^1.6.3",
+    "axios": "^1.6.7",
     "google-protobuf": "3.21.2",
-    "json2iob": "^2.6.0",
+    "json2iob": "^2.6.6",
     "request": "^2.88.2",
     "uuid": "^9.0.1",
     "ws": "^8.16.0"
@@ -25,20 +25,8 @@
     "@alcalzone/release-script-plugin-manual-review": "^3.7.0",
     "@iobroker/testing": "^4.1.0",
     "@tsconfig/node16": "^16.1.1",
-    "@types/chai": "^4.3.11",
-    "@types/chai-as-promised": "^7.1.8",
-    "@types/mocha": "^10.0.6",
-    "@types/node": "^20.10.5",
-    "@types/proxyquire": "^1.3.31",
-    "@types/sinon": "^17.0.2",
-    "@types/sinon-chai": "^3.2.12",
-    "chai": "^4.3.10",
-    "chai-as-promised": "^7.1.1",
+    "@types/node": "^20.11.19",
     "eslint": "^8.56.0",
-    "mocha": "^10.2.0",
-    "proxyquire": "^2.1.3",
-    "sinon": "^17.0.1",
-    "sinon-chai": "^3.7.0",
     "typescript": "~5.3.3"
   },
   "engines": {
@@ -65,7 +53,8 @@
     "test:integration": "mocha test/integration --exit",
     "test:js": "mocha --opts test/mocha.custom.opts",
     "test:package": "mocha test/package --exit",
-    "test:unit": "mocha test/unit --exit"
+    "test:unit": "mocha test/unit --exit",
+    "release": "release-script"
   },
   "version": "0.1.6"
 }

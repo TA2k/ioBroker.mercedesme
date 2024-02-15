@@ -19,6 +19,10 @@ Remote sind vorgefertige Remote Befehle
 
 ## Changelog
 
+### **WORK IN PROGRESS**
+
+- improve code sending
+
 ### 0.1.6
 
 - fix login
@@ -30,22 +34,23 @@ Remote sind vorgefertige Remote Befehle
 ### 0.0.56
 
 - fix vehicle list while login
-  
+
 ### 0.0.55
 
 - fix refresh login
+
 ### 0.0.55
 
 - fix refresh login
-  
+
 ### 0.0.54
 
 - fix login
-  
+
 ### 0.0.52
 
 - fix js-controller 3.3 warnings
-  
+
 ### 0.0.51
 
 - improve handling of failing logins
@@ -53,11 +58,11 @@ Remote sind vorgefertige Remote Befehle
 ### 0.0.50
 
 - fix refresh token
-  
+
 ### 0.0.47
 
 - fix new login
-  
+
 ### 0.0.45
 
 - Small improvments
@@ -116,7 +121,7 @@ Remote sind vorgefertige Remote Befehle
 
 ### 0.0.15
 
-- fix soc history bug, add basic price and  adapter restart every 6h
+- fix soc history bug, add basic price and adapter restart every 6h
 
 ### 0.0.14
 
