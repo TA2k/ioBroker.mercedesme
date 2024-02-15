@@ -18,8 +18,7 @@ Unter commands das commando auf klappen und den button neben start drücken wenn
 Remote sind vorgefertige Remote Befehle
 
 ## Changelog
-
-### **WORK IN PROGRESS**
+### 0.1.8 (2024-02-15)
 
 - improve code sending
 

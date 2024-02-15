@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.1.7",
+    "version": "0.1.8",
     "news": {
+      "0.1.8": {
+        "en": "improve code sending",
+        "de": "Code Senden verbessert",
+        "ru": "улучшить отправку кода",
+        "pt": "melhorar o envio de código",
+        "nl": "code verzenden verbeteren",
+        "fr": "améliorer l'envoi de code",
+        "it": "migliorare l'invio di codice",
+        "es": "mejorar el código de envío",
+        "pl": "poprawić wysyłanie kodu",
+        "uk": "поліпшення відправки коду",
+        "zh-cn": "改进代码发送"
+      },
       "0.1.6": {
         "en": "fix login"
       },
@@ -20,39 +33,6 @@
       },
       "0.0.58": {
         "en": "fix for new vehicles without fin"
-      },
-      "0.0.57": {
-        "en": "minor bugfixes"
-      },
-      "0.0.56": {
-        "en": "fix vehicle list while login"
-      },
-      "0.0.55": {
-        "en": "fix login refresh"
-      },
-      "0.0.54": {
-        "en": "fix login"
-      },
-      "0.0.52": {
-        "en": "fix js-controller 3.3 warnings"
-      },
-      "0.0.51": {
-        "en": "improve handling of failing logins"
-      },
-      "0.0.50": {
-        "en": "fix refresh token"
-      },
-      "0.0.47": {
-        "en": "Fig new login"
-      },
-      "0.0.45": {
-        "en": "Small improvements"
-      },
-      "0.0.42": {
-        "en": "Fix Fueling history"
-      },
-      "0.0.41": {
-        "en": "Fix reconnect"
       }
     },
     "titleLang": {
