@@ -1566,62 +1566,62 @@ class Mercedesme extends utils.Adapter {
           clientMessage.setAcknowledgeVepUpdatesByVin(ackCommand);
           this.ws.send(clientMessage.serializeBinary());
 
-          // message.vepupdates.updatesMap.forEach(async (update) => {
-          //   const vin = update[0];
-          //   await this.extendObjectAsync(vin + ".state", {
-          //     type: "channel",
-          //     common: {
-          //       name: "State of the new mercedesMe App",
-          //       write: false,
-          //       read: true,
-          //     },
-          //     native: {},
-          //   });
-          //   this.log.debug("update for " + vin + ": " + message.vepupdates.sequenceNumber);
-          //   const adapter = this;
-          //   update[1].attributesMap.forEach(async (element) => {
-          //     await adapter.extendObjectAsync(vin + ".state." + element[0], {
-          //       type: "channel",
-          //       common: {
-          //         name: element[0],
-          //         write: false,
-          //         read: true,
-          //       },
-          //       native: {},
-          //     });
-          //     Object.keys(element[1]).forEach(async (state) => {
-          //       if (
-          //         state === "displayValue" ||
-          //         state === "status" ||
-          //         state === "changed" ||
-          //         state === "boolValue" ||
-          //         state === "doubleValue" ||
-          //         state === "intValue" ||
-          //         state === "nilValue" ||
-          //         state === "stringValue" ||
-          //         state === "unsupportedValue" ||
-          //         element[1][state]
-          //       ) {
-          //         await adapter.extendObjectAsync(vin + ".state." + element[0] + "." + state, {
-          //           type: "state",
-          //           common: {
-          //             name: state,
-          //             role: this.getRole(element[1][state], false),
-          //             type: typeof element[1][state],
-          //             write: false,
-          //             read: true,
-          //           },
-          //           native: {},
-          //         });
-          //         let value = element[1][state];
-          //         if (typeof value === "object") {
-          //           value = JSON.stringify(value);
-          //         }
-          //         adapter.setState(vin + ".state." + element[0] + "." + state, value, true);
-          //       }
-          //     });
-          //   });
-          // });
+          message.vepupdates.updatesMap.forEach(async (update) => {
+            const vin = update[0];
+            await this.extendObjectAsync(vin + ".state", {
+              type: "channel",
+              common: {
+                name: "State of the new mercedesMe App",
+                write: false,
+                read: true,
+              },
+              native: {},
+            });
+            this.log.debug("update for " + vin + ": " + message.vepupdates.sequenceNumber);
+            const adapter = this;
+            update[1].attributesMap.forEach(async (element) => {
+              await adapter.extendObjectAsync(vin + ".state." + element[0], {
+                type: "channel",
+                common: {
+                  name: element[0],
+                  write: false,
+                  read: true,
+                },
+                native: {},
+              });
+              Object.keys(element[1]).forEach(async (state) => {
+                if (
+                  state === "displayValue" ||
+                  state === "status" ||
+                  state === "changed" ||
+                  state === "boolValue" ||
+                  state === "doubleValue" ||
+                  state === "intValue" ||
+                  state === "nilValue" ||
+                  state === "stringValue" ||
+                  state === "unsupportedValue" ||
+                  element[1][state]
+                ) {
+                  await adapter.extendObjectAsync(vin + ".state." + element[0] + "." + state, {
+                    type: "state",
+                    common: {
+                      name: state,
+                      role: this.getRole(element[1][state], false),
+                      type: typeof element[1][state],
+                      write: false,
+                      read: true,
+                    },
+                    native: {},
+                  });
+                  let value = element[1][state];
+                  if (typeof value === "object") {
+                    value = JSON.stringify(value);
+                  }
+                  adapter.setState(vin + ".state." + element[0] + "." + state, value, true);
+                }
+              });
+            });
+          });
         }
       } catch (error) {
         this.log.error("Websocket parse error");
