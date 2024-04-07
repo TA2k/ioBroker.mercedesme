@@ -1454,7 +1454,7 @@ class Mercedesme extends utils.Adapter {
       this.wsPingInterval = setInterval(() => {
         this.log.debug("Ping");
         this.ws.ping();
-      }, 30 * 1000); //30s
+      }, 45 * 1000); //30s
       clearInterval(this.reconnectInterval);
       this.reconnectInterval = setInterval(() => {
         this.log.info("Try to reconnect");
