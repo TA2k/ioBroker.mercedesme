@@ -1599,6 +1599,7 @@ class Mercedesme extends utils.Adapter {
                   this.vinStates[vin] = [element[0]];
                 }
               }
+              this.log.debug("write " + Object.keys(element[1]).length + " states to " + vin);
               for (const state of Object.keys(element[1])) {
                 if (
                   state === "displayValue" ||
@@ -1612,25 +1613,33 @@ class Mercedesme extends utils.Adapter {
                   state === "unsupportedValue" ||
                   element[1][state]
                 ) {
-                  await adapter.extendObjectAsync(vin + ".state." + element[0] + "." + state, {
-                    type: "state",
-                    common: {
-                      name: state,
-                      role: this.getRole(element[1][state], false),
-                      type: typeof element[1][state],
-                      write: false,
-                      read: true,
-                    },
-                    native: {},
-                  });
+                  if (!this.vinStates[vin] || !this.vinStates[vin].includes(element[0] + state)) {
+                    await adapter.extendObjectAsync(vin + ".state." + element[0] + "." + state, {
+                      type: "state",
+                      common: {
+                        name: state,
+                        role: this.getRole(element[1][state], false),
+                        type: typeof element[1][state],
+                        write: false,
+                        read: true,
+                      },
+                      native: {},
+                    });
+                    if (this.vinStates[vin]) {
+                      this.vinStates[vin].push(element[0] + state);
+                    } else {
+                      this.vinStates[vin] = [element[0] + state];
+                    }
+                  }
                   let value = element[1][state];
                   if (typeof value === "object") {
                     value = JSON.stringify(value);
                   }
-                  this.log.debug("Set State: " + vin + ".state." + element[0] + "." + state + " to " + value);
+
                   await adapter.setStateAsync(vin + ".state." + element[0] + "." + state, value, true);
                 }
               }
+              this.log.debug("write done");
             }
           }
         }
