@@ -1599,7 +1599,7 @@ class Mercedesme extends utils.Adapter {
                   this.vinStates[vin] = [element[0]];
                 }
               }
-              this.log.debug("write " + Object.keys(element[1]).length + " states to " + vin);
+              this.log.debug("write " + Object.keys(element[1]).length + " states to " + element[0]);
               for (const state of Object.keys(element[1])) {
                 if (
                   state === "displayValue" ||
