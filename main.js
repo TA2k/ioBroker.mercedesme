@@ -45,6 +45,7 @@ class Mercedesme extends utils.Adapter {
     this.xTracking = uuidv4();
     this.deviceuuid = uuidv4();
     this.Json2iob = new Json2iob(this);
+    this.vinStates = {};
   }
 
   /**
@@ -624,6 +625,15 @@ class Mercedesme extends utils.Adapter {
                 type: "channel",
                 common: {
                   name: "Masterdata of the new mercedesMe App",
+                },
+                native: {},
+              });
+              await this.extendObjectAsync(fin + ".state", {
+                type: "channel",
+                common: {
+                  name: "State of the new mercedesMe App",
+                  write: false,
+                  read: true,
                 },
                 native: {},
               });
@@ -1566,30 +1576,30 @@ class Mercedesme extends utils.Adapter {
           clientMessage.setAcknowledgeVepUpdatesByVin(ackCommand);
           this.ws.send(clientMessage.serializeBinary());
 
-          message.vepupdates.updatesMap.forEach(async (update) => {
+          for (const update of message.vepupdates.updatesMap) {
             const vin = update[0];
-            await this.extendObjectAsync(vin + ".state", {
-              type: "channel",
-              common: {
-                name: "State of the new mercedesMe App",
-                write: false,
-                read: true,
-              },
-              native: {},
-            });
+
             this.log.debug("update for " + vin + ": " + message.vepupdates.sequenceNumber);
             const adapter = this;
-            update[1].attributesMap.forEach(async (element) => {
-              await adapter.extendObjectAsync(vin + ".state." + element[0], {
-                type: "channel",
-                common: {
-                  name: element[0],
-                  write: false,
-                  read: true,
-                },
-                native: {},
-              });
-              Object.keys(element[1]).forEach(async (state) => {
+
+            for (const element of update[1].attributesMap) {
+              if (!this.vinStates[vin].includes(element[0])) {
+                await adapter.extendObjectAsync(vin + ".state." + element[0], {
+                  type: "channel",
+                  common: {
+                    name: element[0],
+                    write: false,
+                    read: true,
+                  },
+                  native: {},
+                });
+                if (this.vinStates[vin]) {
+                  this.vinStates[vin].push(element[0]);
+                } else {
+                  this.vinStates[vin] = [element[0]];
+                }
+              }
+              for (const state of Object.keys(element[1])) {
                 if (
                   state === "displayValue" ||
                   state === "status" ||
@@ -1617,11 +1627,12 @@ class Mercedesme extends utils.Adapter {
                   if (typeof value === "object") {
                     value = JSON.stringify(value);
                   }
-                  adapter.setState(vin + ".state." + element[0] + "." + state, value, true);
+                  this.log.debug("Set State: " + vin + ".state." + element[0] + "." + state + " to " + value);
+                  await adapter.setStateAsync(vin + ".state." + element[0] + "." + state, value, true);
                 }
-              });
-            });
-          });
+              }
+            }
+          }
         }
       } catch (error) {
         this.log.error("Websocket parse error");
