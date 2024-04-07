@@ -38,6 +38,7 @@ class Mercedesme extends utils.Adapter {
     this.locationEtag = "";
     this.ws = null;
     this.wsHeartbeatTimeout = null;
+    this.wsPingInterval = null;
 
     this.reconnectInterval = null;
     this.xSession = uuidv4();
@@ -1449,11 +1450,17 @@ class Mercedesme extends utils.Adapter {
     headers.Authorization = this.atoken;
     this.log.debug("Connect to WebSocket");
     try {
+      clearInterval(this.wsPingInterval);
+      this.wsPingInterval = setInterval(() => {
+        this.log.debug("Ping");
+        this.ws.ping();
+      }, 30 * 1000); //30s
       clearInterval(this.reconnectInterval);
       this.reconnectInterval = setInterval(() => {
         this.log.info("Try to reconnect");
         this.connectWS();
       }, 5 * 60 * 1000); // 5min
+
       this.ws = new WebSocket("wss://websocket.emea-prod.mobilesdk.mercedes-benz.com/ws", {
         headers: headers,
       });
@@ -1481,11 +1488,20 @@ class Mercedesme extends utils.Adapter {
         this.log.error(error);
       }
     });
+    this.ws.on("pong", () => {
+      this.log.debug("Pong");
+    });
     this.ws.on("close", (data) => {
       this.log.debug(data);
-
       this.setState("info.connection", false, true);
       this.log.debug("Websocket closed");
+      if (this.wsHeartbeatTimeout) {
+        clearTimeout(this.wsHeartbeatTimeout);
+        clearInterval(this.reconnectInterval);
+      }
+      setTimeout(() => {
+        this.connectWS();
+      }, 2000);
     });
     this.ws.on("message", async (data, isBinary) => {
       data = isBinary ? data : data.toString();

@@ -8,10 +8,10 @@
   },
   "bundleDependencies": [],
   "dependencies": {
-    "@iobroker/adapter-core": "^3.0.4",
-    "axios": "^1.6.7",
+    "@iobroker/adapter-core": "^3.0.6",
+    "axios": "^1.6.8",
     "google-protobuf": "3.21.2",
-    "json2iob": "^2.6.6",
+    "json2iob": "^2.6.8",
     "request": "^2.88.2",
     "uuid": "^9.0.1",
     "ws": "^8.16.0"
@@ -23,11 +23,11 @@
     "@alcalzone/release-script-plugin-iobroker": "^3.7.0",
     "@alcalzone/release-script-plugin-license": "^3.7.0",
     "@alcalzone/release-script-plugin-manual-review": "^3.7.0",
-    "@iobroker/testing": "^4.1.0",
-    "@tsconfig/node16": "^16.1.1",
-    "@types/node": "^20.11.19",
-    "eslint": "^8.56.0",
-    "typescript": "~5.3.3"
+    "@iobroker/testing": "^4.1.1",
+    "@tsconfig/node16": "^16.1.3",
+    "@types/node": "^20.12.5",
+    "eslint": "^8.57.0",
+    "typescript": "~5.4.4"
   },
   "engines": {
     "node": ">=16"
