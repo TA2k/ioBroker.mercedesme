@@ -104,7 +104,8 @@ class Mercedesme extends utils.Adapter {
 
     this.initLoading();
 
-    this.subscribeStates("*");
+    this.subscribeStates("*.remote.*");
+    this.subscribeStates("*.commands.*");
   }
 
   async initLoading() {
