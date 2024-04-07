@@ -1583,7 +1583,7 @@ class Mercedesme extends utils.Adapter {
             const adapter = this;
 
             for (const element of update[1].attributesMap) {
-              if (!this.vinStates[vin].includes(element[0])) {
+              if (!this.vinStates[vin] || !this.vinStates[vin].includes(element[0])) {
                 await adapter.extendObjectAsync(vin + ".state." + element[0], {
                   type: "channel",
                   common: {
