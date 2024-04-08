@@ -108,6 +108,13 @@ class Mercedesme extends utils.Adapter {
 
     this.subscribeStates("*.remote.*");
     this.subscribeStates("*.commands.*");
+    this.subscribeStates("*.state.tanklevelpercent.intValue");
+    this.subscribeStates("*.state.soc.intValue");
+    this.subscribeStates("*.state.doorLockStatusOverall.intValue");
+    this.subscribeStates("*.state.windowStatusOverall.intValue");
+    this.subscribeStates("*.state.precondActive.boolValue");
+    this.subscribeStates("*.state.precondNow.boolValue");
+    this.subscribeStates("*.state.auxheatActive.boolValue");
   }
 
   async initLoading() {

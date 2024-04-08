@@ -1,9 +1,9 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "news": {
-      "0.2.1": {
+      "0.2.2": {
         "en": "reduce cpu usage\nadd error logs",
         "de": "Fix für zu hohe CPU Auslastung\nFehlerprotokolle hinzugefügt",
         "ru": "сокращение использования кпу\nдобавить журналы ошибок",
