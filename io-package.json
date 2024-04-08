@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "news": {
+      "0.2.1": {
+        "en": "reduce cpu usage\nadd error logs",
+        "de": "Fix für zu hohe CPU Auslastung\nFehlerprotokolle hinzugefügt",
+        "ru": "сокращение использования кпу\nдобавить журналы ошибок",
+        "pt": "reduzir o uso de cpu\nadicionar logs de erro",
+        "nl": "cpu gebruik verminderen\nfoutlogs toevoegen",
+        "fr": "réduire l'utilisation de cpu\najouter des journaux d'erreurs",
+        "it": "ridurre l'utilizzo di cpu\naggiungere i log di errore",
+        "es": "reducir el uso de cpu\nagregar registros de errores",
+        "pl": "zmniejszyć wykorzystanie cpu\ndodaj dzienniki błędów",
+        "uk": "зменшити використання cpu\nдодати журнали помилок",
+        "zh-cn": "减少 cpu 使用量\n添加错误日志"
+      },
       "0.2.0": {
         "en": "reduce cpu usage",
         "de": "Fix für zu hohe CPU Auslastung",
@@ -40,9 +53,6 @@
       },
       "0.1.0": {
         "en": "fix login"
-      },
-      "0.0.59": {
-        "en": "fix dependencies"
       }
     },
     "titleLang": {

@@ -56,5 +56,5 @@
     "test:unit": "mocha test/unit --exit",
     "release": "release-script"
   },
-  "version": "0.2.0"
+  "version": "0.2.1"
 }
