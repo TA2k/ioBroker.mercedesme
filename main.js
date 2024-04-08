@@ -75,14 +75,15 @@ class Mercedesme extends utils.Adapter {
       "X-TrackingId": this.xTracking,
       "RIS-OS-Name": "ios",
       "X-SessionId": this.xSession,
+      "ris-websocket-type": "ios-native",
       Accept: "*/*",
       "X-ApplicationName": "mycar-store-ece",
       "Accept-Language": "de-DE;q=1.0",
       "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
       "X-Request-Id": this.xTracking,
-      "RIS-SDK-Version": "2.114.0",
+      "RIS-SDK-Version": "9.114.0",
       "User-Agent": "MyCar/2168 CFNetwork/1494.0.7 Darwin/23.4.0",
-      "ris-application-version": "1.42.0 (2168)",
+      "ris-application-version": "9.42.0 (2168)",
       "device-uuid": this.deviceuuid,
       "X-Locale": this.config.acceptLanguage,
     };
@@ -1469,7 +1470,7 @@ class Mercedesme extends utils.Adapter {
       this.wsPingInterval = setInterval(() => {
         this.log.debug("Ping");
         this.ws.ping();
-      }, 45 * 1000); //30s
+      }, 30 * 1000); //30s
       clearInterval(this.reconnectInterval);
       this.reconnectInterval = setInterval(() => {
         this.log.info("Try to reconnect");
@@ -1494,6 +1495,12 @@ class Mercedesme extends utils.Adapter {
 
       this.setState("info.connection", false, true);
       try {
+        if (data.message.indexOf("428") !== -1) {
+          this.log.warn("Too many requests. Your IP is maybe blocked");
+        }
+        if (data.message.indexOf("429") !== -1) {
+          this.log.warn("Too many requests. Please reduce reconnect");
+        }
         if (data.message.indexOf("403") !== -1) {
           this.refreshToken(true).catch(() => {
             this.log.error("Refresh Token Failed ");
