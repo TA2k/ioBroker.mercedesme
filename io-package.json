@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.1.9",
+    "version": "0.2.0",
     "news": {
+      "0.2.0": {
+        "en": "reduce cpu usage",
+        "de": "Fix für zu hohe CPU Auslastung",
+        "ru": "сокращение использования кпу",
+        "pt": "reduzir o uso de cpu",
+        "nl": "cpu gebruik verminderen",
+        "fr": "réduire l'utilisation de cpu",
+        "it": "ridurre l'utilizzo di cpu",
+        "es": "reducir el uso de cpu",
+        "pl": "zmniejszyć wykorzystanie cpu",
+        "uk": "зменшити використання cpu",
+        "zh-cn": "减少 cpu 使用量"
+      },
       "0.1.8": {
         "en": "improve code sending",
         "de": "Code Senden verbessert",
@@ -30,9 +43,6 @@
       },
       "0.0.59": {
         "en": "fix dependencies"
-      },
-      "0.0.58": {
-        "en": "fix for new vehicles without fin"
       }
     },
     "titleLang": {
