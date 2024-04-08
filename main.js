@@ -71,7 +71,7 @@ class Mercedesme extends utils.Adapter {
     });
     this.config.acceptLanguage = this.config.acceptLanguage ? this.config.acceptLanguage : "de-DE";
     this.baseHeader = {
-      "ris-os-version": "16.7.2",
+      "ris-os-version": "17.4.1",
       "X-TrackingId": this.xTracking,
       "RIS-OS-Name": "ios",
       "X-SessionId": this.xSession,
@@ -80,9 +80,9 @@ class Mercedesme extends utils.Adapter {
       "Accept-Language": "de-DE;q=1.0",
       "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
       "X-Request-Id": this.xTracking,
-      "RIS-SDK-Version": "9.99.0",
-      "User-Agent": "MyCar/1.39.0 (com.daimler.ris.mercedesme.ece.ios; build:2066; iOS 16.7.2) Alamofire/5.4.0",
-      "ris-application-version": "9.99.0 (1337)",
+      "RIS-SDK-Version": "2.114.0",
+      "User-Agent": "MyCar/2168 CFNetwork/1494.0.7 Darwin/23.4.0",
+      "ris-application-version": "1.42.0 (2168)",
       "device-uuid": this.deviceuuid,
       "X-Locale": this.config.acceptLanguage,
     };
