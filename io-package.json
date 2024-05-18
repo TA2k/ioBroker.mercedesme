@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.2.2",
+    "version": "0.2.3",
     "news": {
+      "0.2.3": {
+        "en": "improve websocket ping with not internet connection",
+        "de": "websocket-ping ohne internet-verbindung verbessert",
+        "ru": "улучшить websocket ping с не подключением к интернету",
+        "pt": "melhorar websocket ping com não conexão de internet",
+        "nl": "verbeteren websocket ping met niet internetverbinding",
+        "fr": "améliorer websocket ping sans connexion internet",
+        "it": "migliorare websocket ping con connessione internet non",
+        "es": "mejorar el ping websocket con conexión a internet",
+        "pl": "ulepszyć ping websocket bez połączenia internetowego",
+        "uk": "покращити пінг з веб-додатком без підключення до інтернету",
+        "zh-cn": "改善不连接互联网的网络安全"
+      },
       "0.2.2": {
         "en": "reduce cpu usage\nadd error logs",
         "de": "Fix für zu hohe CPU Auslastung\nFehlerprotokolle hinzugefügt",
@@ -49,9 +62,6 @@
         "en": "fix login"
       },
       "0.1.1": {
-        "en": "fix login"
-      },
-      "0.1.0": {
         "en": "fix login"
       }
     },
