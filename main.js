@@ -1489,7 +1489,7 @@ class Mercedesme extends utils.Adapter {
         this.connectWS();
       }, 5 * 60 * 1000); // 5min
 
-      this.ws = new WebSocket("wss://websocket.emea-prod.mobilesdk.mercedes-benz.com/ws", {
+      this.ws = new WebSocket("wss://websocket.emea-prod.mobilesdk.mercedes-benz.com/v2/ws", {
         headers: headers,
       });
     } catch (error) {

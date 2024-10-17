@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.2.3",
+    "version": "0.2.4",
     "news": {
+      "0.2.4": {
+        "en": "fix websocket connection",
+        "de": "fix für websocket verbindung",
+        "ru": "фиксация webocket",
+        "pt": "corrigir conexão websocket",
+        "nl": "fix websocket verbinding",
+        "fr": "correction de la connexion websocket",
+        "it": "correggere il collegamento websocket",
+        "es": "fijar conexión websocket",
+        "pl": "naprawić połączenie websocket",
+        "uk": "фіксувати підключення websocket",
+        "zh-cn": "修复网锁连接"
+      },
       "0.2.3": {
         "en": "improve websocket ping with not internet connection",
         "de": "websocket-ping ohne internet-verbindung verbessert",
@@ -59,9 +72,6 @@
         "en": "fix login"
       },
       "0.1.3": {
-        "en": "fix login"
-      },
-      "0.1.1": {
         "en": "fix login"
       }
     },
