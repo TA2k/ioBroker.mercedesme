@@ -1,5 +1,5 @@
 // @ts-nocheck
-/* eslint-disable quotes */
+
 "use strict";
 /*
  * Created with @iobroker/create-adapter v1.12.1
@@ -222,6 +222,7 @@ class Mercedesme extends utils.Adapter {
 
       callback();
     } catch (e) {
+      this.log.error("Error onUnload: " + e);
       callback();
     }
   }
@@ -466,6 +467,7 @@ class Mercedesme extends utils.Adapter {
                   try {
                     currenJsonHistory = JSON.parse(currenJsonHistoryState.val);
                   } catch (error) {
+                    this.log.debug("Error parsing json " + error);
                     currenJsonHistory = [];
                   }
                 }
@@ -511,6 +513,7 @@ class Mercedesme extends utils.Adapter {
     });
   }
   async getGasPrice(vin) {
+    // eslint-disable-next-line
     return new Promise(async (resolve) => {
       const pre = this.name + "." + this.instance;
 
@@ -556,6 +559,8 @@ class Mercedesme extends utils.Adapter {
             }
             this.log.debug(tankk.stations[0].price);
             resolve(tankk.stations[0].price);
+
+            // eslint-disable-next-line
           } catch (error) {
             resolve(0);
           }
@@ -1245,6 +1250,7 @@ class Mercedesme extends utils.Adapter {
   isJsonString(str) {
     try {
       JSON.parse(str);
+      // eslint-disable-next-line
     } catch (e) {
       return false;
     }
@@ -1341,6 +1347,7 @@ class Mercedesme extends utils.Adapter {
     });
   }
   login() {
+    // eslint-disable-next-line
     return new Promise(async (resolve, reject) => {
       this.log.debug("Login");
 
@@ -1355,6 +1362,7 @@ class Mercedesme extends utils.Adapter {
             if (error) {
               this.log.error("Connection error no login possible. Relogin in 5min");
               this.reLoginTimeout = setTimeout(() => {
+                this.log.info("Start initial loading");
                 this.initLoading();
               }, 5 * 60 * 1000);
               reject();
