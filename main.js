@@ -1511,20 +1511,18 @@ class Mercedesme extends utils.Adapter {
       clearInterval(this.reconnectInterval);
     });
     this.ws.on("error", (data) => {
-      this.log.error("WS error:" + data);
-
       this.setState("info.connection", false, true);
       try {
         if (data.message.indexOf("428") !== -1) {
           this.log.warn("Too many requests. Your IP is maybe blocked");
-        }
-        if (data.message.indexOf("429") !== -1) {
-          this.log.warn("Too many requests. Please reduce reconnect");
-        }
-        if (data.message.indexOf("403") !== -1) {
+        } else if (data.message.indexOf("429") !== -1) {
+          this.log.info("429 Too many requests. The account is blocked until 0:00");
+        } else if (data.message.indexOf("403") !== -1) {
           this.refreshToken(true).catch(() => {
             this.log.error("Refresh Token Failed ");
           });
+        } else {
+          this.log.error("WS error:" + data);
         }
       } catch (error) {
         this.log.error(error);
@@ -1554,7 +1552,7 @@ class Mercedesme extends utils.Adapter {
         setTimeout(() => {
           this.connectWS();
         }, 2000);
-      }, 1 * 60 * 1000); //1min
+      }, 2 * 60 * 1000); //2min
       try {
         const message = VehicleEvents.PushMessage.deserializeBinary(data).toObject();
         if (message.debugmessage) {
