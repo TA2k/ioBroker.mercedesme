@@ -1552,7 +1552,7 @@ class Mercedesme extends utils.Adapter {
         setTimeout(() => {
           this.connectWS();
         }, 2000);
-      }, 2 * 60 * 1000); //2min
+      }, 1.5 * 60 * 1000); //1.5min
       try {
         const message = VehicleEvents.PushMessage.deserializeBinary(data).toObject();
         if (message.debugmessage) {
