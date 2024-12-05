@@ -1530,6 +1530,9 @@ class Mercedesme extends utils.Adapter {
     });
     this.ws.on("pong", () => {
       this.log.debug("Pong");
+      if (this.wsHeartbeatTimeout) {
+        clearTimeout(this.wsHeartbeatTimeout);
+      }
     });
     this.ws.on("close", (data) => {
       this.log.debug(data);
@@ -1552,7 +1555,7 @@ class Mercedesme extends utils.Adapter {
         setTimeout(() => {
           this.connectWS();
         }, 2000);
-      }, 1.5 * 60 * 1000); //1.5min
+      }, 3 * 60 * 1000); //3min
       try {
         const message = VehicleEvents.PushMessage.deserializeBinary(data).toObject();
         if (message.debugmessage) {
