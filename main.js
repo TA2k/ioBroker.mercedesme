@@ -1068,7 +1068,7 @@ class Mercedesme extends utils.Adapter {
           {
             jar: this.jar,
             gzip: true,
-            url: "https://bff.emea-prod.mobilesdk.mercedes-benz.com//v2/user/self",
+            url: "https://bff.emea-prod.mobilesdk.mercedes-benz.com//v1/user",
             headers: headers,
             json: true,
           },
