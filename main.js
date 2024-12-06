@@ -611,7 +611,7 @@ class Mercedesme extends utils.Adapter {
       method: "get",
       headers: headers,
       jar: this.jar,
-      url: "https://bff.emea-prod.mobilesdk.mercedes-benz.com//v2/vehicles?locale=" + this.config.acceptLanguage,
+      url: "https://bff.emea-prod.mobilesdk.mercedes-benz.com/v2/vehicles?locale=" + this.config.acceptLanguage,
     })
       .then(async (res) => {
         const body = res.data;
@@ -873,13 +873,13 @@ class Mercedesme extends utils.Adapter {
       headers.Authorization = this.atoken;
       this.vinArray.forEach((vin) => {
         this.log.debug(
-          "https://bff.emea-prod.mobilesdk.mercedes-benz.com//v1/vehicle/" + vin + "/capabilities/commands",
+          "https://bff.emea-prod.mobilesdk.mercedes-benz.com/v1/vehicle/" + vin + "/capabilities/commands",
         );
         request.get(
           {
             jar: this.jar,
             gzip: true,
-            url: "https://bff.emea-prod.mobilesdk.mercedes-benz.com//v1/vehicle/" + vin + "/capabilities/commands",
+            url: "https://bff.emea-prod.mobilesdk.mercedes-benz.com/v1/vehicle/" + vin + "/capabilities/commands",
             headers: headers,
             json: true,
           },
@@ -1024,7 +1024,7 @@ class Mercedesme extends utils.Adapter {
           {
             jar: this.jar,
             gzip: true,
-            url: "https://bff.emea-prod.mobilesdk.mercedes-benz.com//v1/geofencing/fences/?vin=" + vin,
+            url: "https://bff.emea-prod.mobilesdk.mercedes-benz.com/v1/geofencing/fences/?vin=" + vin,
             headers: headers,
             json: true,
           },
@@ -1068,7 +1068,7 @@ class Mercedesme extends utils.Adapter {
           {
             jar: this.jar,
             gzip: true,
-            url: "https://bff.emea-prod.mobilesdk.mercedes-benz.com//v1/user",
+            url: "https://bff.emea-prod.mobilesdk.mercedes-benz.com/v1/user",
             headers: headers,
             json: true,
           },
