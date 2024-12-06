@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.2.4",
+    "version": "0.3.0",
     "news": {
+      "0.3.0": {
+        "en": "fix for too many request error",
+        "de": "Fix für zu viele Anfragen Fehler",
+        "ru": "исправить слишком много ошибок запроса",
+        "pt": "corrigir para muitos erro de solicitação",
+        "nl": "fix voor te veel verzoek fout",
+        "fr": "corriger pour trop d'erreur de requête",
+        "it": "correzione per troppi errori di richiesta",
+        "es": "solución para demasiados errores de solicitud",
+        "pl": "naprawić błąd zbyt wielu żądań",
+        "uk": "виправити занадто багато помилок запиту",
+        "zh-cn": "修正过多的请求错误"
+      },
       "0.2.4": {
         "en": "fix websocket connection",
         "de": "fix für websocket verbindung",
@@ -69,9 +82,6 @@
         "zh-cn": "改进代码发送"
       },
       "0.1.6": {
-        "en": "fix login"
-      },
-      "0.1.3": {
         "en": "fix login"
       }
     },
