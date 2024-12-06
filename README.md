@@ -18,7 +18,8 @@ Unter commands das commando auf klappen und den button neben start drücken wenn
 Remote sind vorgefertige Remote Befehle
 
 ## Changelog
-### 0.3.0 (2024-12-06)
+
+### 0.3.2 (2024-12-06)
 
 - fix for too many request error
 

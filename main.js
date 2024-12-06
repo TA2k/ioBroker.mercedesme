@@ -1533,6 +1533,13 @@ class Mercedesme extends utils.Adapter {
       if (this.wsHeartbeatTimeout) {
         clearTimeout(this.wsHeartbeatTimeout);
       }
+      this.wsHeartbeatTimeout = setTimeout(() => {
+        this.log.info("Lost WebSocket connection. Reconnect WebSocket");
+        this.ws.close();
+        setTimeout(() => {
+          this.connectWS();
+        }, 2000);
+      }, 1 * 60 * 1000); //1min
     });
     this.ws.on("close", (data) => {
       this.log.debug(data);
@@ -1555,7 +1562,7 @@ class Mercedesme extends utils.Adapter {
         setTimeout(() => {
           this.connectWS();
         }, 2000);
-      }, 3 * 60 * 1000); //3min
+      }, 1 * 60 * 1000); //1min
       try {
         const message = VehicleEvents.PushMessage.deserializeBinary(data).toObject();
         if (message.debugmessage) {

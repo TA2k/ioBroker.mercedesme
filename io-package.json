@@ -1,9 +1,9 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.3.0",
+    "version": "0.3.3",
     "news": {
-      "0.3.0": {
+      "0.3.3": {
         "en": "fix for too many request error",
         "de": "Fix für zu viele Anfragen Fehler",
         "ru": "исправить слишком много ошибок запроса",
