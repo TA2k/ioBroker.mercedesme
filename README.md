@@ -18,6 +18,9 @@ Unter commands das commando auf klappen und den button neben start drücken wenn
 Remote sind vorgefertige Remote Befehle
 
 ## Changelog
+### 0.3.4 (2024-12-08)
+
+- added config parameter for reconnect delay
 
 ### 0.3.2 (2024-12-06)
 

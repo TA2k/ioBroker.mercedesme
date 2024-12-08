@@ -1539,7 +1539,7 @@ class Mercedesme extends utils.Adapter {
         setTimeout(() => {
           this.connectWS();
         }, 2000);
-      }, 1 * 60 * 1000); //1min
+      }, this.config.reconnectDelay * 1000);
     });
     this.ws.on("close", (data) => {
       this.log.debug(data);
@@ -1552,17 +1552,10 @@ class Mercedesme extends utils.Adapter {
       // let parsed = new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
       // const foo =Client.ClientMessage.deserializeBinary(parsed).toObject()
       this.log.silly("WS Message Length: " + data.length);
-      if (this.wsHeartbeatTimeout) {
-        clearTimeout(this.wsHeartbeatTimeout);
+      if (this.reconnectInterval) {
         clearInterval(this.reconnectInterval);
       }
-      this.wsHeartbeatTimeout = setTimeout(() => {
-        this.log.info("Lost WebSocket connection. Reconnect WebSocket");
-        this.ws.close();
-        setTimeout(() => {
-          this.connectWS();
-        }, 2000);
-      }, 1 * 60 * 1000); //1min
+
       try {
         const message = VehicleEvents.PushMessage.deserializeBinary(data).toObject();
         if (message.debugmessage) {

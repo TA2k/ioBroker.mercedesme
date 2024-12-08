@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.3.3",
+    "version": "0.3.4",
     "news": {
+      "0.3.4": {
+        "en": "added config parameter for reconnect delay",
+        "de": "Konfigurationsparameter hinzugefügt für Reconnect-Verzögerung",
+        "ru": "добавлен параметр настройки для задержки перезаключения",
+        "pt": "parâmetro de configuração adicionado para reconectar o atraso",
+        "nl": "toegevoegde config parameter voor reconnect delay",
+        "fr": "paramètre de configuration ajouté pour reconnecter le délai",
+        "it": "parametro di configurazione aggiunto per riconnettere il ritardo",
+        "es": "parámetro de configuración añadido para el retraso de reconexión",
+        "pl": "dodany parametr konfiguracyjny dla opóźnienia ponownego połączenia",
+        "uk": "додано параметр налаштування для затримки відключення",
+        "zh-cn": "添加重连接延迟的配置参数"
+      },
       "0.3.3": {
         "en": "fix for too many request error",
         "de": "Fix für zu viele Anfragen Fehler",
@@ -80,9 +93,6 @@
         "pl": "poprawić wysyłanie kodu",
         "uk": "поліпшення відправки коду",
         "zh-cn": "改进代码发送"
-      },
-      "0.1.6": {
-        "en": "fix login"
       }
     },
     "titleLang": {
@@ -159,7 +169,8 @@
     "disableSocket": false,
     "isAdapter": false,
     "ciam": "",
-    "resetAccess": false
+    "resetAccess": false,
+    "reconnectDelay": 60
   },
   "objects": [],
   "instanceObjects": [

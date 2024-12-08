@@ -1,133 +1,154 @@
 <html>
-    <head>
-        <!-- Load ioBroker scripts and styles-->
-        <link rel="stylesheet" type="text/css" href="../../css/adapter.css" />
-        <link rel="stylesheet" type="text/css" href="../../lib/css/materialize.css" />
+  <head>
+    <!-- Load ioBroker scripts and styles-->
+    <link rel="stylesheet" type="text/css" href="../../css/adapter.css" />
+    <link rel="stylesheet" type="text/css" href="../../lib/css/materialize.css" />
 
-        <script type="text/javascript" src="../../lib/js/jquery-3.2.1.min.js"></script>
-        <script type="text/javascript" src="../../socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="../../lib/js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="../../socket.io/socket.io.js"></script>
 
-        <script type="text/javascript" src="../../js/translate.js"></script>
-        <script type="text/javascript" src="../../lib/js/materialize.js"></script>
-        <script type="text/javascript" src="../../js/adapter-settings.js"></script>
+    <script type="text/javascript" src="../../js/translate.js"></script>
+    <script type="text/javascript" src="../../lib/js/materialize.js"></script>
+    <script type="text/javascript" src="../../js/adapter-settings.js"></script>
 
-        <!-- Load our own files -->
-        <link rel="stylesheet" type="text/css" href="style.css" />
-        <script type="text/javascript" src="words.js"></script>
+    <!-- Load our own files -->
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script type="text/javascript" src="words.js"></script>
 
-        <script type="text/javascript">
-            // This will be called by the admin adapter when the settings page loads
-            function load(settings, onChange) {
-                // example: select elements with id=key and class=value and insert value
-                if (!settings) return;
-                $(".value").each(function () {
-                    var $key = $(this);
-                    var id = $key.attr("id");
-                    if ($key.attr("type") === "checkbox") {
-                        // do not call onChange direct, because onChange could expect some arguments
-                        $key.prop("checked", settings[id]).on("change", () => onChange());
-                    } else {
-                        // do not call onChange direct, because onChange could expect some arguments
-                        $key.val(settings[id])
-                            .on("change", () => onChange())
-                            .on("keyup", () => onChange());
-                    }
-                });
-                onChange(false);
-                // reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
-                if (M) M.updateTextFields();
-            }
+    <script type="text/javascript">
+      // This will be called by the admin adapter when the settings page loads
+      function load(settings, onChange) {
+        // example: select elements with id=key and class=value and insert value
+        if (!settings) return;
+        $(".value").each(function () {
+          var $key = $(this);
+          var id = $key.attr("id");
+          if ($key.attr("type") === "checkbox") {
+            // do not call onChange direct, because onChange could expect some arguments
+            $key.prop("checked", settings[id]).on("change", () => onChange());
+          } else {
+            // do not call onChange direct, because onChange could expect some arguments
+            $key
+              .val(settings[id])
+              .on("change", () => onChange())
+              .on("keyup", () => onChange());
+          }
+        });
+        onChange(false);
+        // reinitialize all the Materialize labels on the page if you are dynamically adding inputs:
+        if (M) M.updateTextFields();
+      }
 
-            // This will be called by the admin adapter when the user presses the save button
-            function save(callback) {
-                // example: select elements with class=value and build settings object
-                var obj = {};
-                $(".value").each(function () {
-                    var $this = $(this);
-                    if ($this.attr("type") === "checkbox") {
-                        obj[$this.attr("id")] = $this.prop("checked");
-                    } else {
-                        obj[$this.attr("id")] = $this.val();
-                    }
-                });
-                callback(obj);
-            }
-        </script>
-    </head>
+      // This will be called by the admin adapter when the user presses the save button
+      function save(callback) {
+        // example: select elements with class=value and build settings object
+        var obj = {};
+        $(".value").each(function () {
+          var $this = $(this);
+          if ($this.attr("type") === "checkbox") {
+            obj[$this.attr("id")] = $this.prop("checked");
+          } else {
+            obj[$this.attr("id")] = $this.val();
+          }
+        });
+        callback(obj);
+      }
+    </script>
+  </head>
 
-    <body>
-        <div class="m adapter-container">
-            <div class="row">
-                <div class="col s12 m4 l2">
-                    <img src="mercedesme.png" class="logo" />
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="input-field col col s3">
-                    <input class="value" id="mail" type="text" />
-                    <label for="mail" class="translate">mercedes me mail</label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-field col col s3">
-                    <input class="value" id="loginCode" type="text" />
-                    <label for="loginCode" class="translate">NACH DEM ERSTEN START HIER E-MAIL SICHERHEITSCODE EINGEBEN</label>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="input-field col col s3">
-                    <input class="value" id="pin" type="number" />
-                    <label for="pin" class="translate">App Pin to open car</label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col s2">
-                    <input class="value" id="resetAccess" type="checkbox" />
-                    <label class="translate" for="resetAccess">Logout</label>
-
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-field col col s4">
-                    <input class="value" id="tank" type="text" />
-                    <label for="tank" class="translate">Tankvolumen für Tankhistorie (Komma getrennt für mehrere Fahrzeuge)</label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-field col col s8">
-                    <input class="value" id="capacity" type="text" />
-                    <label for="capacity" class="translate">Batterieladekapazität für Stromladehistorie MIT PUNKT TRENNEN nicht KOMMA nutzen. (Komma getrennt für mehrere Fahrzeuge)</label>
-                </div>
-                <div class="input-field col col s4">
-                    <input class="value" id="kwprice" type="text" />
-                    <label for="kwprice" class="translate">kW Preis MIT PUNKT TRENNEN</label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-field col col s4">
-                    <input class="value" id="apiKey" type="text" />
-                    <label for="apiKey" class="translate">Tankerkönig API Key für aktuellen Treibstoffpreis</label>
-                </div>
-                <div class="input-field col col s3">
-                    <input class="value" id="gas" type="text" />
-                    <label for="gas" class="translate">Treibstoffart (diesel, e5, e10)</label>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="input-field col col s4">
-                    <input class="value" id="acceptLanguage" type="text" />
-                    <label for="acceptLanguage" class="translate">Accept Language only non German</label>
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-field col col s4">
-                    <input class="value" id="countryC" type="text" />
-                    <label for="countryC" class="translate">Country Code only non German</label>
-                </div>
-            </div>
+  <body>
+    <div class="m adapter-container">
+      <div class="row">
+        <div class="col s12 m4 l2">
+          <img src="mercedesme.png" class="logo" />
         </div>
-    </body>
+      </div>
+
+      <div class="row">
+        <div class="input-field col col s3">
+          <input class="value" id="mail" type="text" />
+          <label for="mail" class="translate">mercedes me mail</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col col s3">
+          <input class="value" id="loginCode" type="text" />
+          <label for="loginCode" class="translate">NACH DEM ERSTEN START HIER E-MAIL SICHERHEITSCODE EINGEBEN</label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="input-field col col s3">
+          <input class="value" id="pin" type="number" />
+          <label for="pin" class="translate">App Pin to open car</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col s2">
+          <input class="value" id="resetAccess" type="checkbox" />
+          <label class="translate" for="resetAccess">Logout</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col col s4">
+          <input class="value" id="tank" type="text" />
+          <label for="tank" class="translate"
+            >Tankvolumen für Tankhistorie (Komma getrennt für mehrere Fahrzeuge)</label
+          >
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col col s8">
+          <input class="value" id="capacity" type="text" />
+          <label for="capacity" class="translate"
+            >Batterieladekapazität für Stromladehistorie MIT PUNKT TRENNEN nicht KOMMA nutzen. (Komma getrennt für
+            mehrere Fahrzeuge)</label
+          >
+        </div>
+        <div class="input-field col col s4">
+          <input class="value" id="kwprice" type="text" />
+          <label for="kwprice" class="translate">kW Preis MIT PUNKT TRENNEN</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col col s4">
+          <input class="value" id="apiKey" type="text" />
+          <label for="apiKey" class="translate">Tankerkönig API Key für aktuellen Treibstoffpreis</label>
+        </div>
+        <div class="input-field col col s3">
+          <input class="value" id="gas" type="text" />
+          <label for="gas" class="translate">Treibstoffart (diesel, e5, e10)</label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="input-field col col s4">
+          <input class="value" id="acceptLanguage" type="text" />
+          <label for="acceptLanguage" class="translate">Accept Language only non German</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col col s4">
+          <input class="value" id="countryC" type="text" />
+          <label for="countryC" class="translate">Country Code only non German</label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="input-field col col s3">
+          <input class="value" id="pin" type="number" />
+          <label for="pin" class="translate">App Pin to open car</label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="input-field col col s3">
+          <input class="value" id="reconnectDelay" type="number" />
+          <label for="reconnectDelay" class="translate"
+            >Delay between reconnects in seconds. Increase to prevent rate limit</label
+          >
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
