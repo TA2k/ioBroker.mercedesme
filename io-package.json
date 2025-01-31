@@ -153,6 +153,7 @@
   },
   "native": {
     "mail": "",
+    "password": "",
     "loginCode": "",
     "manuelvin": "",
     "interval": 30,

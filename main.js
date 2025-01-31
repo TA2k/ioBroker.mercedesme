@@ -77,6 +77,10 @@ class Mercedesme extends utils.Adapter {
         });
       }
     });
+    if (!this.config.mail || !this.config.password) {
+      this.log.error("No credentials found please enter your credentials in the instance settings");
+      return;
+    }
     this.config.acceptLanguage = this.config.acceptLanguage ? this.config.acceptLanguage : "de-DE";
     this.baseHeader = {
       "ris-os-version": "17.4.1",
@@ -1443,7 +1447,7 @@ class Mercedesme extends utils.Adapter {
           referer: "https://id.mercedes-benz.com/ciam/auth/login",
         },
         data: {
-          username: this.config.username,
+          username: this.config.mail,
         },
       })
         .then((response) => {
@@ -1470,7 +1474,7 @@ class Mercedesme extends utils.Adapter {
           referer: "https://id.mercedes-benz.com/ciam/auth/login",
         },
         data: {
-          username: this.config.username,
+          username: this.config.mail,
           password: this.config.password,
           rememberMe: false,
           rid: rid,
