@@ -11,7 +11,9 @@ const { v4: uuidv4 } = require("uuid");
 const axios = require("axios").default;
 const WebSocket = require("ws");
 const Json2iob = require("json2iob");
-
+const qs = require("qs");
+const { CookieJar } = require("tough-cookie");
+const { HttpCookieAgent, HttpsCookieAgent } = require("http-cookie-agent/http");
 // const Eventpush = require("./Proto/eventpush_pb");
 // const UserEvents = require("./Proto/user-events_pb");
 const VehicleCommands = require("./Proto/vehicle-commands_pb");
@@ -46,6 +48,12 @@ class Mercedesme extends utils.Adapter {
     this.deviceuuid = uuidv4();
     this.Json2iob = new Json2iob(this);
     this.vinStates = {};
+    const jar = new CookieJar();
+
+    this.requestClient = axios.create({
+      httpAgent: new HttpCookieAgent({ cookies: { jar } }),
+      httpsAgent: new HttpsCookieAgent({ cookies: { jar } }),
+    });
   }
 
   /**
@@ -169,7 +177,8 @@ class Mercedesme extends utils.Adapter {
     if (rTokenState) {
       this.rtoken = rTokenState.val;
     }
-    await this.login()
+
+    await this.loginNew()
       .then(async () => {
         this.log.debug("Login successful");
         this.setState("info.connection", true, true);
@@ -1345,6 +1354,231 @@ class Mercedesme extends utils.Adapter {
         },
       );
     });
+  }
+  loginNew() {
+    return new Promise(async (resolve, reject) => {
+      this.log.debug("Login");
+
+      if (this.atoken) {
+        await this.refreshToken()
+          .then(() => {
+            resolve();
+
+            return;
+          })
+          .catch((error) => {
+            if (error) {
+              this.log.error("Connection error no login possible. Relogin in 5min");
+              this.reLoginTimeout = setTimeout(() => {
+                this.log.info("Start initial loading");
+                this.initLoading();
+              }, 5 * 60 * 1000);
+              reject();
+            } else {
+              reject();
+              this.log.error("No Login possible. Deleting auth tokens. Please enter new email code.");
+              this.atoken = "";
+              this.rtoken = "";
+              this.setState("auth.access_token", "", true);
+              this.setState("auth.refresh_token", "", true);
+            }
+          });
+      }
+      await this.requestClient({
+        method: "get",
+        maxBodyLength: Infinity,
+        url: "https://id.mercedes-benz.com/as/authorization.oauth2",
+        params: {
+          client_id: "62778dc4-1de3-44f4-af95-115f06a3a008",
+          code_challenge: "r8oYWOJpwrTlaIrsxNspbXLFR9PLvyW6c11b_BiTkGs",
+          code_challenge_method: "S256",
+          redirect_uri: "rismycar://login-callback",
+          response_type: "code",
+          scope: "email profile ciam-uid phone openid offline_access",
+        },
+        headers: {
+          "user-agent":
+            "Mozilla/5.0 (iPhone; CPU iPhone OS 15_8_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.6.6 Mobile/15E148 Safari/604.1",
+          accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+          "accept-language": "de-DE,de;q=0.9",
+        },
+      }).catch((error) => {
+        this.log.error("Not able to get login page");
+        this.log.error(error);
+        reject();
+      });
+      this.requestClient({
+        method: "post",
+        maxBodyLength: Infinity,
+        url: "https://id.mercedes-benz.com/ciam/auth/ua",
+        headers: {
+          accept: "*/*",
+          "content-type": "application/json",
+          origin: "https://id.mercedes-benz.com",
+          "accept-language": "de-DE,de;q=0.9",
+          "user-agent":
+            "Mozilla/5.0 (iPhone; CPU iPhone OS 15_8_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.6.6 Mobile/15E148 Safari/604.1",
+        },
+        data: {
+          browserName: "Mobile Safari",
+          browserVersion: "15.6.6",
+          osName: "iOS",
+        },
+      }).catch((error) => {
+        this.log.error("Not able to get ua page");
+        this.log.error(error);
+        reject();
+      });
+      this.requestClient({
+        method: "post",
+        maxBodyLength: Infinity,
+        url: "https://id.mercedes-benz.com/ciam/auth/login/user",
+        headers: {
+          accept: "application/json, text/plain, */*",
+          "content-type": "application/json",
+          origin: "https://id.mercedes-benz.com",
+          "accept-language": "de-DE,de;q=0.9",
+          "user-agent":
+            "Mozilla/5.0 (iPhone; CPU iPhone OS 15_8_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.6.6 Mobile/15E148 Safari/604.1",
+          referer: "https://id.mercedes-benz.com/ciam/auth/login",
+        },
+        data: {
+          username: this.config.username,
+        },
+      })
+        .then((response) => {
+          this.log.debug(JSON.stringify(response.data));
+        })
+        .catch((error) => {
+          this.log.error("Not able to get userlogin page");
+          this.log.error(error);
+          reject();
+        });
+      //generate random 32 char string
+      const rid = this.generateRandomString(32);
+      const preLoginData = this.requestClient({
+        method: "post",
+        maxBodyLength: Infinity,
+        url: "https://id.mercedes-benz.com/ciam/auth/login/pass",
+        headers: {
+          accept: "application/json, text/plain, */*",
+          "content-type": "application/json",
+          origin: "https://id.mercedes-benz.com",
+          "accept-language": "de-DE,de;q=0.9",
+          "user-agent":
+            "Mozilla/5.0 (iPhone; CPU iPhone OS 15_8_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.6.6 Mobile/15E148 Safari/604.1",
+          referer: "https://id.mercedes-benz.com/ciam/auth/login",
+        },
+        data: {
+          username: this.config.username,
+          password: this.config.password,
+          rememberMe: false,
+          rid: rid,
+        },
+      })
+        .then((response) => {
+          this.log.debug(JSON.stringify(response.data));
+          return response.data;
+        })
+        .catch((error) => {
+          this.log.error("Not able to get user password page");
+          this.log.error(error);
+          error.response && this.log.error(JSON.stringify(error.response.data));
+          reject();
+        });
+      const code = this.requestClient({
+        method: "post",
+        maxBodyLength: Infinity,
+        url: "https://id.mercedes-benz.com/as/vbhPQVj5m4/resume/as/authorization.ping",
+        headers: {
+          accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+          "content-type": "application/x-www-form-urlencoded",
+          origin: "https://id.mercedes-benz.com",
+          cookie: "INGRESSCOOKIE=1738329299.285.481.835213|45196634e7eccf7a4e21b2a92617a3c2",
+          "accept-language": "de-DE,de;q=0.9",
+          "user-agent":
+            "Mozilla/5.0 (iPhone; CPU iPhone OS 15_8_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.6.6 Mobile/15E148 Safari/604.1",
+          referer: "https://id.mercedes-benz.com/ciam/auth/login",
+        },
+        data: { token: preLoginData.token },
+      })
+        .then((response) => {
+          this.log.error(JSON.stringify(response.data));
+        })
+        .catch((error) => {
+          const code = "";
+          if (error.message && error.message.includes("Unsupported protocol")) {
+            if (error.config) {
+              this.log.debug(JSON.stringify(error.config.url));
+              const parameters = qs.parse(error.request._options.path.split("?")[1]);
+              this.log.debug(JSON.stringify(parameters));
+              return parameters.code;
+            }
+            return code;
+          }
+          this.log.error(error);
+          error.response && this.log.error(JSON.stringify(error.response.data));
+        });
+      this.requestClient({
+        method: "post",
+        maxBodyLength: Infinity,
+        url: "https://id.mercedes-benz.com/as/token.oauth2",
+        headers: {
+          "device-uuid": this.deviceuuid,
+          "x-sessionid": "56A39234-50CA-4B8B-8B54-399DCA7EA31E",
+          "user-agent": "MyCar/1.51.0 (com.daimler.ris.mercedesme.ece.ios; build:2578; iOS 15.8.3) Alamofire/5.9.1",
+          "ris-os-version": "15.8.3",
+          "ris-application-version": "1.51.0 (2578)",
+          "x-device-id": "18E6FF44-40EA-4A77-AB69-49CDF5E7A834",
+          "x-trackingid": "4D4831F3-5553-4367-8B80-D1332109ADA6",
+          stage: "prod",
+          "ris-sdk-version": "2.132.2",
+          "x-applicationname": "mycar-store-ece",
+          "ris-os-name": "ios",
+          "x-locale": "de-DE",
+          "accept-language": "de-DE;q=1.0",
+          "x-request-id": "4D4831F3-5553-4367-8B80-D1332109ADA6",
+          accept: "*/*",
+          "content-type": "application/x-www-form-urlencoded; charset=utf-8",
+        },
+
+        data: {
+          client_id: " 62778dc4-1de3-44f4-af95-115f06a3a008",
+          code: code,
+          code_verifier: "Vg4OnWSQLDHLnDMmAKdURg0Ey_sSPsNRrx75B_losEg",
+          grant_type: "authorization_code",
+          redirect_uri: "rismycar://login-callback",
+        },
+      })
+        .then((response) => {
+          this.log.debug(JSON.stringify(response.status));
+          this.log.debug(JSON.stringify(response.data));
+
+          this.atoken = response.data.access_token;
+          this.rtoken = response.data.refresh_token;
+          this.setState("auth.access_token", response.data.access_token, true);
+          this.setState("auth.refresh_token", response.data.refresh_token, true);
+          this.setState("auth.loginNonce", "", true);
+
+          resolve();
+          return;
+        })
+        .catch((error) => {
+          this.log.error("Token fetching error");
+          this.log.error(error);
+          error.response && this.log.error(JSON.stringify(error.response.data));
+          reject();
+        });
+    });
+  }
+  generateRandomString(length) {
+    let result = "";
+    const characters = "abcdef0123456789";
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
   }
   login() {
     // eslint-disable-next-line
