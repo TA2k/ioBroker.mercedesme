@@ -1358,13 +1358,13 @@ class Mercedesme extends utils.Adapter {
             }
           });
       }
-      await this.requestClient({
+      const resumeUrl = await this.requestClient({
         method: "get",
         maxBodyLength: Infinity,
         url: "https://id.mercedes-benz.com/as/authorization.oauth2",
         params: {
           client_id: "62778dc4-1de3-44f4-af95-115f06a3a008",
-          code_challenge: "r8oYWOJpwrTlaIrsxNspbXLFR9PLvyW6c11b_BiTkGs",
+          code_challenge: "ofGuD7msh1a63x2zoM2ZjbaRldc6LoPme4nCEeZP5RI",
           code_challenge_method: "S256",
           redirect_uri: "rismycar://login-callback",
           response_type: "code",
@@ -1376,12 +1376,20 @@ class Mercedesme extends utils.Adapter {
           accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
           "accept-language": "de-DE,de;q=0.9",
         },
-      }).catch((error) => {
-        this.log.error("Not able to get login page");
-        this.log.error(error);
-        reject();
-      });
-      this.requestClient({
+      })
+        .then((response) => {
+          this.log.debug(JSON.stringify(response.data));
+          //extract paramter resume from url
+          const url = response.request.res.responseUrl;
+          const parameters = qs.parse(url.split("?")[1]);
+          return parameters.resume;
+        })
+        .catch((error) => {
+          this.log.error("Not able to get login page");
+          this.log.error(error);
+          reject();
+        });
+      await this.requestClient({
         method: "post",
         maxBodyLength: Infinity,
         url: "https://id.mercedes-benz.com/ciam/auth/ua",
@@ -1403,7 +1411,7 @@ class Mercedesme extends utils.Adapter {
         this.log.error(error);
         reject();
       });
-      this.requestClient({
+      await this.requestClient({
         method: "post",
         maxBodyLength: Infinity,
         url: "https://id.mercedes-benz.com/ciam/auth/login/user",
@@ -1430,7 +1438,7 @@ class Mercedesme extends utils.Adapter {
         });
       //generate random 32 char string
       const rid = this.generateRandomString(32);
-      const preLoginData = this.requestClient({
+      const preLoginData = await this.requestClient({
         method: "post",
         maxBodyLength: Infinity,
         url: "https://id.mercedes-benz.com/ciam/auth/login/pass",
@@ -1460,15 +1468,15 @@ class Mercedesme extends utils.Adapter {
           error.response && this.log.error(JSON.stringify(error.response.data));
           reject();
         });
-      const code = this.requestClient({
+      const code = await this.requestClient({
         method: "post",
         maxBodyLength: Infinity,
-        url: "https://id.mercedes-benz.com/as/vbhPQVj5m4/resume/as/authorization.ping",
+        url: "https://id.mercedes-benz.com" + resumeUrl,
         headers: {
           accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
           "content-type": "application/x-www-form-urlencoded",
           origin: "https://id.mercedes-benz.com",
-          cookie: "INGRESSCOOKIE=1738329299.285.481.835213|45196634e7eccf7a4e21b2a92617a3c2",
+
           "accept-language": "de-DE,de;q=0.9",
           "user-agent":
             "Mozilla/5.0 (iPhone; CPU iPhone OS 15_8_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.6.6 Mobile/15E148 Safari/604.1",
@@ -1493,31 +1501,32 @@ class Mercedesme extends utils.Adapter {
           this.log.error(error);
           error.response && this.log.error(JSON.stringify(error.response.data));
         });
-      this.requestClient({
+      await this.requestClient({
         method: "post",
         maxBodyLength: Infinity,
         url: "https://id.mercedes-benz.com/as/token.oauth2",
-        headers: {
-          "device-uuid": this.deviceuuid,
-          "x-sessionid": "56A39234-50CA-4B8B-8B54-399DCA7EA31E",
-          "user-agent": "MyCar/1.51.0 (com.daimler.ris.mercedesme.ece.ios; build:2578; iOS 15.8.3) Alamofire/5.9.1",
-          "ris-os-version": "15.8.3",
-          "ris-application-version": "1.51.0 (2578)",
-          "x-device-id": "18E6FF44-40EA-4A77-AB69-49CDF5E7A834",
-          "x-trackingid": "4D4831F3-5553-4367-8B80-D1332109ADA6",
-          stage: "prod",
-          "ris-sdk-version": "2.132.2",
-          "x-applicationname": "mycar-store-ece",
-          "ris-os-name": "ios",
-          "x-locale": "de-DE",
-          "accept-language": "de-DE;q=1.0",
-          "x-request-id": "4D4831F3-5553-4367-8B80-D1332109ADA6",
-          accept: "*/*",
-          "content-type": "application/x-www-form-urlencoded; charset=utf-8",
-        },
+        // headers: {
+        //   "device-uuid": this.deviceuuid,
+        //   "x-sessionid": "56A39234",
+        //   "user-agent": "MyCar/1.51.0 (com.daimler.ris.mercedesme.ece.ios; build:2578; iOS 15.8.3) Alamofire/5.9.1",
+        //   "ris-os-version": "15.8.3",
+        //   "ris-application-version": "1.51.0 (2578)",
+        //   "x-device-id": "18E6FF44",
+        //   "x-trackingid": "4D4831F3",
+        //   stage: "prod",
+        //   "ris-sdk-version": "2.132.2",
+        //   "x-applicationname": "mycar-store-ece",
+        //   "ris-os-name": "ios",
+        //   "x-locale": "de-DE",
+        //   "accept-language": "de-DE;q=1.0",
+        //   "x-request-id": "4D4831F3",
+        //   accept: "*/*",
+        //   "content-type": "application/x-www-form-urlencoded; charset=utf-8",
+        // },
+        headers: this.baseHeader,
 
         data: {
-          client_id: " 62778dc4-1de3-44f4-af95-115f06a3a008",
+          client_id: "62778dc4-1de3-44f4-af95-115f06a3a008",
           code: code,
           code_verifier: "Vg4OnWSQLDHLnDMmAKdURg0Ey_sSPsNRrx75B_losEg",
           grant_type: "authorization_code",
