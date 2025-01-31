@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.3.4",
+    "version": "0.3.5",
     "news": {
+      "0.3.5": {
+        "en": "fix new login flow",
+        "de": "neuen login-flow",
+        "ru": "исправить новый поток входа",
+        "pt": "corrigir novo fluxo de login",
+        "nl": "fix nieuwe aanmeldstroom",
+        "fr": "correction du nouveau flux de connexion",
+        "it": "correzione del nuovo flusso di login",
+        "es": "fijar nuevo flujo de inicio de sesión",
+        "pl": "naprawić nowy przepływ logowania",
+        "uk": "виправити новий потік логіна",
+        "zh-cn": "修正新登录流程"
+      },
       "0.3.4": {
         "en": "added config parameter for reconnect delay",
         "de": "Konfigurationsparameter hinzugefügt für Reconnect-Verzögerung",
@@ -80,19 +93,6 @@
         "pl": "zmniejszyć wykorzystanie cpu",
         "uk": "зменшити використання cpu",
         "zh-cn": "减少 cpu 使用量"
-      },
-      "0.1.8": {
-        "en": "improve code sending",
-        "de": "Code Senden verbessert",
-        "ru": "улучшить отправку кода",
-        "pt": "melhorar o envio de código",
-        "nl": "code verzenden verbeteren",
-        "fr": "améliorer l'envoi de code",
-        "it": "migliorare l'invio di codice",
-        "es": "mejorar el código de envío",
-        "pl": "poprawić wysyłanie kodu",
-        "uk": "поліпшення відправки коду",
-        "zh-cn": "改进代码发送"
       }
     },
     "titleLang": {
@@ -119,8 +119,15 @@
       "pl": "Adapter Mercedes me do ioBroker",
       "zh-cn": "梅赛德斯适用于ioBroker的适配器"
     },
-    "authors": ["TA2k <tombox2020@gmail.com>"],
-    "keywords": ["mercedes", "mercedes me", "mercedes benz", "daimler"],
+    "authors": [
+      "TA2k <tombox2020@gmail.com>"
+    ],
+    "keywords": [
+      "mercedes",
+      "mercedes me",
+      "mercedes benz",
+      "daimler"
+    ],
     "license": "MIT",
     "platform": "Javascript/Node.js",
     "main": "main.js",

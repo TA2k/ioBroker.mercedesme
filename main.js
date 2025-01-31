@@ -6,7 +6,6 @@
  */
 
 const utils = require("@iobroker/adapter-core");
-const request = require("request");
 const { v4: uuidv4 } = require("uuid");
 const axios = require("axios").default;
 const WebSocket = require("ws");
@@ -1330,6 +1329,7 @@ class Mercedesme extends utils.Adapter {
     });
   }
   loginNew() {
+    //eslint-disable-next-line
     return new Promise(async (resolve, reject) => {
       this.log.debug("Login");
 
