@@ -13,7 +13,7 @@ const WebSocket = require("ws");
 const Json2iob = require("json2iob");
 const qs = require("qs");
 const { CookieJar } = require("tough-cookie");
-const { HttpCookieAgent, HttpsCookieAgent } = require("http-cookie-agent/http");
+const { HttpsCookieAgent } = require("http-cookie-agent/http");
 // const Eventpush = require("./Proto/eventpush_pb");
 // const UserEvents = require("./Proto/user-events_pb");
 const VehicleCommands = require("./Proto/vehicle-commands_pb");
@@ -31,7 +31,7 @@ class Mercedesme extends utils.Adapter {
     this.on("ready", this.onReady.bind(this));
     this.on("stateChange", this.onStateChange.bind(this));
     this.on("unload", this.onUnload.bind(this));
-    this.jar = request.jar();
+
     this.vinArray = [];
     this.refreshTokenInterval = null;
     this.retryTimeout = null;
@@ -51,7 +51,6 @@ class Mercedesme extends utils.Adapter {
     const jar = new CookieJar();
 
     this.requestClient = axios.create({
-      httpAgent: new HttpCookieAgent({ cookies: { jar } }),
       httpsAgent: new HttpsCookieAgent({ cookies: { jar } }),
     });
   }
@@ -547,38 +546,33 @@ class Mercedesme extends utils.Adapter {
           "&apikey=" +
           this.config.apiKey,
       );
-      request.get(
-        {
-          url:
-            "https://creativecommons.tankerkoenig.de/json/list.php?lat=" +
-            lat.val +
-            "&lng=" +
-            long.val +
-            "&rad=4&sort=dist&type=" +
-            this.config.gas +
-            "&apikey=" +
-            this.config.apiKey,
-          followAllRedirects: true,
-        },
-        (err, resp, body) => {
-          if (err || resp.statusCode >= 400 || !body) {
+      this.requestClient({
+        method: "get",
+        url:
+          "https://creativecommons.tankerkoenig.de/json/list.php?lat=" +
+          lat.val +
+          "&lng=" +
+          long.val +
+          "&rad=4&sort=dist&type=" +
+          this.config.gas +
+          "&apikey=" +
+          this.config.apiKey,
+        followAllRedirects: true,
+      })
+        .then((response) => {
+          const body = response.data;
+          this.log.debug(body);
+          if (body.status === "error") {
             resolve(0);
+          } else {
+            this.log.debug(body.stations[0].price);
+            resolve(body.stations[0].price);
           }
-          try {
-            this.log.debug(body);
-            const tankk = JSON.parse(body);
-            if (tankk.status === "error") {
-              resolve(0);
-            }
-            this.log.debug(tankk.stations[0].price);
-            resolve(tankk.stations[0].price);
-
-            // eslint-disable-next-line
-          } catch (error) {
-            resolve(0);
-          }
-        },
-      );
+        })
+        .catch((error) => {
+          this.log.error(error);
+          resolve(0);
+        });
     });
   }
   extractUnit(value, element) {
@@ -888,23 +882,15 @@ class Mercedesme extends utils.Adapter {
         this.log.debug(
           "https://bff.emea-prod.mobilesdk.mercedes-benz.com/v1/vehicle/" + vin + "/capabilities/commands",
         );
-        request.get(
-          {
-            jar: this.jar,
-            gzip: true,
-            url: "https://bff.emea-prod.mobilesdk.mercedes-benz.com/v1/vehicle/" + vin + "/capabilities/commands",
-            headers: headers,
-            json: true,
-          },
-          (err, resp, body) => {
-            if (err || resp.statusCode >= 400 || !body) {
-              this.log.error("Getting commands for " + vin + " failed");
-              err && this.log.error(JSON.stringify(err));
-              resp && this.log.error(resp.statusCode.toString());
-              body && this.log.error(JSON.stringify(body));
-              reject();
-              return;
-            }
+        axios({
+          method: "get",
+          url: "https://bff.emea-prod.mobilesdk.mercedes-benz.com/v1/vehicle/" + vin + "/capabilities/commands",
+          headers: headers,
+          jar: this.jar,
+          gzip: true,
+        })
+          .then((response) => {
+            const body = response.data;
             this.log.debug(JSON.stringify(body));
             try {
               this.setObjectNotExists(vin + ".commands", {
@@ -1023,8 +1009,13 @@ class Mercedesme extends utils.Adapter {
               this.log.error(error);
               reject();
             }
-          },
-        );
+          })
+          .catch((error) => {
+            this.log.error("Getting commands for " + vin + " failed");
+            this.log.error(error);
+            error.response && this.log.error(JSON.stringify(error.response.data));
+            reject();
+          });
       });
     });
   }
@@ -1033,22 +1024,15 @@ class Mercedesme extends utils.Adapter {
       const headers = this.baseHeader;
       headers.Authorization = this.atoken;
       this.vinArray.forEach((vin) => {
-        request.get(
-          {
-            jar: this.jar,
-            gzip: true,
-            url: "https://bff.emea-prod.mobilesdk.mercedes-benz.com/v1/geofencing/fences/?vin=" + vin,
-            headers: headers,
-            json: true,
-          },
-          (err, resp, body) => {
-            if (err || resp.statusCode >= 400 || !body) {
-              err && this.log.error(JSON.stringify(err));
-              resp && this.log.error(resp.statusCode.toString());
-              body && this.log.error(JSON.stringify(body));
-              reject();
-              return;
-            }
+        axios({
+          method: "get",
+          url: "https://bff.emea-prod.mobilesdk.mercedes-benz.com/v1/geofencing/fences/?vin=" + vin,
+          headers: headers,
+          jar: this.jar,
+          gzip: true,
+        })
+          .then((response) => {
+            const body = response.data;
             this.log.debug(JSON.stringify(body));
             try {
               this.setObjectNotExists(vin + ".geofencing", {
@@ -1067,8 +1051,12 @@ class Mercedesme extends utils.Adapter {
               this.log.error(error);
               reject();
             }
-          },
-        );
+          })
+          .catch((error) => {
+            this.log.warn(error);
+            error.response && this.log.warn(JSON.stringify(error.response.data));
+            reject();
+          });
       });
     });
   }
@@ -1077,22 +1065,15 @@ class Mercedesme extends utils.Adapter {
       const headers = this.baseHeader;
       headers.Authorization = this.atoken;
       this.vinArray.forEach((vin) => {
-        request.get(
-          {
-            jar: this.jar,
-            gzip: true,
-            url: "https://bff.emea-prod.mobilesdk.mercedes-benz.com/v1/user",
-            headers: headers,
-            json: true,
-          },
-          (err, resp, body) => {
-            if (err || resp.statusCode >= 400 || !body) {
-              err && this.log.error(JSON.stringify(err));
-              resp && this.log.error(resp.statusCode.toString());
-              body && this.log.error(JSON.stringify(body));
-              reject();
-              return;
-            }
+        axios({
+          method: "get",
+          url: "https://bff.emea-prod.mobilesdk.mercedes-benz.com/v1/user",
+          headers: headers,
+          jar: this.jar,
+          gzip: true,
+        })
+          .then((response) => {
+            const body = response.data;
             this.log.debug(JSON.stringify(body));
             try {
               this.setObjectNotExists(vin + ".user", {
@@ -1109,8 +1090,12 @@ class Mercedesme extends utils.Adapter {
               this.log.error(error);
               reject();
             }
-          },
-        );
+          })
+          .catch((error) => {
+            this.log.error(error);
+            error.response && this.log.error(JSON.stringify(error.response.data));
+            reject();
+          });
       });
     });
   }
@@ -1301,62 +1286,47 @@ class Mercedesme extends utils.Adapter {
       this.log.debug("refreshToken");
 
       const headers = this.baseHeader;
-      request.post(
-        {
-          jar: this.jar,
-          gzip: true,
-          url: "https://id.mercedes-benz.com/as/token.oauth2",
-          headers: headers,
-          followAllRedirects: false,
-          body: "grant_type=refresh_token&refresh_token=" + this.rtoken,
-        },
-        (err, resp, body) => {
-          if (err || (resp && resp.statusCode >= 400) || !body) {
-            err && this.log.error(err);
-            if (resp && resp.statusCode >= 400 && resp.statusCode < 500) {
-              resp && this.log.error(resp.statusCode.toString());
-              body && this.log.error(JSON.stringify(body));
+      this.requestClient({
+        method: "post",
+        url: "https://id.mercedes-benz.com/as/token.oauth2",
+        headers: headers,
+        data: qs.stringify({
+          grant_type: "refresh_token",
+          refresh_token: this.rtoken,
+        }),
+      })
+        .then((response) => {
+          const token = response.data;
+          this.log.debug(JSON.stringify(token));
+          this.atoken = token.access_token;
+          this.setState("auth.access_token", token.access_token, true);
+          if (token.refresh_token) {
+            this.rtoken = token.refresh_token;
+            this.log.debug("setRefreshToken: " + token.refresh_token);
+            this.setState("auth.refresh_token", token.refresh_token, true);
+          }
+          if (reconnect) {
+            this.log.debug("Reconnect after refresh token");
+            this.ws.close();
+            setTimeout(() => {
+              this.connectWS();
+            }, 2000);
+          }
+          resolve();
+        })
+        .catch((error) => {
+          this.log.error("Error refresh token");
+          this.log.error(error);
+          if (error.response) {
+            this.log.error(JSON.stringify(error.response.data));
+            if (error.response.status >= 400 && error.response.status < 500) {
               this.log.error("RefreshToken: " + this.rtoken);
               reject();
               return;
-            } else {
-              resolve();
-              return;
             }
           }
-          try {
-            const token = JSON.parse(body);
-
-            this.log.debug(JSON.stringify(token));
-            this.atoken = token.access_token;
-
-            this.setState("auth.access_token", token.access_token, true);
-            if (token.refresh_token) {
-              this.rtoken = token.refresh_token;
-              this.log.debug("setRefrehToken: " + token.refresh_token);
-              this.setState("auth.refresh_token", token.refresh_token, true);
-            }
-
-            if (reconnect) {
-              this.log.debug("Reconnect after refreshtoken");
-              this.ws.close();
-              setTimeout(() => {
-                this.connectWS();
-              }, 2000);
-            }
-            resolve();
-          } catch (error) {
-            this.log.error("Error refresh token");
-            this.log.error(error);
-            this.log.error("refresh result: " + body);
-            this.atoken = "";
-            this.rtoken = "";
-            this.setState("auth.access_token", "", true);
-            this.setState("auth.refresh_token", "", true);
-            reject();
-          }
-        },
-      );
+          resolve();
+        });
     });
   }
   loginNew() {
