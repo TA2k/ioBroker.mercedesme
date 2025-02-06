@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.3.5",
+    "version": "0.3.6",
     "news": {
+      "0.3.6": {
+        "en": "Fix for Login and WS connection",
+        "de": "Fix für Login und WS-Verbindung",
+        "ru": "Fix для подключения входа и WS",
+        "pt": "Correção para login e conexão WS",
+        "nl": "Fix voor Login en WS-verbinding",
+        "fr": "Correction pour connexion Login et WS",
+        "it": "Fissare per connessione Login e WS",
+        "es": "Fijación para el acceso y conexión WS",
+        "pl": "Napraw dla połączenia Login i WS",
+        "uk": "Виправлення для входу та підключення WS",
+        "zh-cn": "登录和WS连接的固定"
+      },
       "0.3.5": {
         "en": "fix new login flow",
         "de": "neuen login-flow",
@@ -80,19 +93,6 @@
         "pl": "zmniejszyć wykorzystanie cpu\ndodaj dzienniki błędów",
         "uk": "зменшити використання cpu\nдодати журнали помилок",
         "zh-cn": "减少 cpu 使用量\n添加错误日志"
-      },
-      "0.2.0": {
-        "en": "reduce cpu usage",
-        "de": "Fix für zu hohe CPU Auslastung",
-        "ru": "сокращение использования кпу",
-        "pt": "reduzir o uso de cpu",
-        "nl": "cpu gebruik verminderen",
-        "fr": "réduire l'utilisation de cpu",
-        "it": "ridurre l'utilizzo di cpu",
-        "es": "reducir el uso de cpu",
-        "pl": "zmniejszyć wykorzystanie cpu",
-        "uk": "зменшити використання cpu",
-        "zh-cn": "减少 cpu 使用量"
       }
     },
     "titleLang": {
