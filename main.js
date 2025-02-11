@@ -40,6 +40,7 @@ class Mercedesme extends utils.Adapter {
     this.ws = null;
     this.wsHeartbeatTimeout = null;
     this.wsPingInterval = null;
+    this.wsReconnectCount = 0;
 
     this.reconnectInterval = null;
     this.xSession = uuidv4();
@@ -115,7 +116,7 @@ class Mercedesme extends utils.Adapter {
     }
 
     this.initLoading();
-
+    this.scheduleDailyTask();
     this.subscribeStates("*.remote.*");
     this.subscribeStates("*.commands.*");
     this.subscribeStates("*.state.tanklevelpercent.intValue");
@@ -217,6 +218,27 @@ class Mercedesme extends utils.Adapter {
         this.setState("info.connection", false, true);
         return;
       });
+  }
+
+  scheduleDailyTask() {
+    const now = new Date();
+    // Create a date for today at 00:01
+    const nextRun = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 1, 0);
+
+    // If 00:01 has already passed today, set it for tomorrow.
+    if (now > nextRun) {
+      nextRun.setDate(nextRun.getDate() + 1);
+    }
+
+    // Calculate the delay in milliseconds until nextRun
+    const delay = nextRun - now;
+
+    setTimeout(() => {
+      // Run your task
+      this.wsReconnectCount = 0;
+      // After running the task, schedule it for the next day.
+      this.scheduleDailyTask();
+    }, delay);
   }
 
   /**
@@ -1305,7 +1327,7 @@ class Mercedesme extends utils.Adapter {
           this.setState("auth.refresh_token", token.refresh_token, true);
         }
         if (reconnect) {
-          this.log.debug("Reconnect after refresh token");
+          this.log.info("Reconnect after refresh token");
           this.ws.close();
           setTimeout(() => {
             this.connectWS();
@@ -1329,8 +1351,10 @@ class Mercedesme extends utils.Adapter {
     this.log.debug("Login");
 
     if (this.atoken) {
+      this.log.info("Found old session. Try to refresh token");
       await this.refreshToken()
         .then(() => {
+          this.log.info("Refresh token successfull");
           return;
         })
         .catch((error) => {
@@ -1348,7 +1372,9 @@ class Mercedesme extends utils.Adapter {
             this.setState("auth.refresh_token", "", true);
           }
         });
+      return;
     }
+    this.log.info("Start Login");
     const resumeUrl = await this.requestClient({
       method: "get",
       maxBodyLength: Infinity,
@@ -1678,6 +1704,7 @@ class Mercedesme extends utils.Adapter {
     });
   }
   connectWS() {
+    this.wsReconnectCounter++;
     const headers = this.baseHeader;
     headers.Authorization = this.atoken;
     this.log.debug("Connect to WebSocket");
@@ -1717,7 +1744,9 @@ class Mercedesme extends utils.Adapter {
         if (data.message.indexOf("428") !== -1) {
           this.log.warn("Too many requests. Your IP is maybe blocked");
         } else if (data.message.indexOf("429") !== -1) {
-          this.log.info("429 Too many requests. The account is blocked until 0:00");
+          this.log.info(
+            "429 Too many requests. The account is blocked until 0:00. Reconnects Today: " + this.wsReconnectCounter,
+          );
         } else if (data.message.indexOf("403") !== -1) {
           this.refreshToken(true).catch(() => {
             this.log.error("Refresh Token Failed ");
@@ -1735,7 +1764,12 @@ class Mercedesme extends utils.Adapter {
         clearTimeout(this.wsHeartbeatTimeout);
       }
       this.wsHeartbeatTimeout = setTimeout(() => {
-        this.log.info("Lost WebSocket connection. Reconnect WebSocket");
+        this.log.info(
+          "No Data since " +
+            this.config.reconnectDelay +
+            " seconds. Lost WebSocket connection. Reconnect WebSocket. Reconnects Today: " +
+            this.wsReconnectCounter,
+        );
         this.ws.close();
         setTimeout(() => {
           this.connectWS();
@@ -1753,6 +1787,7 @@ class Mercedesme extends utils.Adapter {
       // let parsed = new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
       // const foo =Client.ClientMessage.deserializeBinary(parsed).toObject()
       this.log.silly("WS Message Length: " + data.length);
+      this.ws.ping();
       if (this.reconnectInterval) {
         clearInterval(this.reconnectInterval);
       }
@@ -1873,6 +1908,7 @@ class Mercedesme extends utils.Adapter {
         this.log.error("Websocket parse error");
         this.log.error(error);
         // this.log.error(data);
+        this.log.info("Reconnect WebSocket");
         this.ws.close();
         setTimeout(() => {
           this.connectWS();

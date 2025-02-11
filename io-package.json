@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.3.6",
+    "version": "0.3.7",
     "news": {
+      "0.3.7": {
+        "en": "fix relogin after adapter restart\nadd logs for reconnect",
+        "de": "relogin nach adapterneustart\nprotokolle für die wiederverschaltung hinzufügen",
+        "ru": "исправить relogin после перезагрузки адаптера\nдобавить журналы для повторного подключения",
+        "pt": "corrigir o relogin após o reinício do adaptador\nadicionar logs para reconectar",
+        "nl": "relogin repareren na herstart van de adapter\nlogs toevoegen voor opnieuw verbinden",
+        "fr": "correction du relogin après redémarrage de l'adaptateur\najouter des journaux pour reconnecter",
+        "it": "correzione relogin dopo riavvio dell'adattatore\naggiungere i log per riconnettere",
+        "es": "fijar relogin después del reinicio del adaptador\nañadir registros para la reconexión",
+        "pl": "naprawić relogowanie po ponownym uruchomieniu adaptera\ndodaj logi do ponownego połączenia",
+        "uk": "фіксувати перелогін після перезавантаження адаптера\nдодати журнали для підключення",
+        "zh-cn": "调整适配器重新启动后的重新登录\n添加重新连接日志"
+      },
       "0.3.6": {
         "en": "Fix for Login and WS connection",
         "de": "Fix für Login und WS-Verbindung",
@@ -80,19 +93,6 @@
         "pl": "ulepszyć ping websocket bez połączenia internetowego",
         "uk": "покращити пінг з веб-додатком без підключення до інтернету",
         "zh-cn": "改善不连接互联网的网络安全"
-      },
-      "0.2.2": {
-        "en": "reduce cpu usage\nadd error logs",
-        "de": "Fix für zu hohe CPU Auslastung\nFehlerprotokolle hinzugefügt",
-        "ru": "сокращение использования кпу\nдобавить журналы ошибок",
-        "pt": "reduzir o uso de cpu\nadicionar logs de erro",
-        "nl": "cpu gebruik verminderen\nfoutlogs toevoegen",
-        "fr": "réduire l'utilisation de cpu\najouter des journaux d'erreurs",
-        "it": "ridurre l'utilizzo di cpu\naggiungere i log di errore",
-        "es": "reducir el uso de cpu\nagregar registros de errores",
-        "pl": "zmniejszyć wykorzystanie cpu\ndodaj dzienniki błędów",
-        "uk": "зменшити використання cpu\nдодати журнали помилок",
-        "zh-cn": "减少 cpu 使用量\n添加错误日志"
       }
     },
     "titleLang": {

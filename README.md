@@ -18,6 +18,11 @@ Unter commands das commando auf klappen und den button neben start drücken wenn
 Remote sind vorgefertige Remote Befehle
 
 ## Changelog
+### 0.3.7 (2025-02-11)
+
+- fix relogin after adapter restart
+- add logs for reconnect
+
 ### 0.3.6 (2025-02-06)
 
 - Fix for Login and WS connection
