@@ -186,6 +186,7 @@ class Mercedesme extends utils.Adapter {
         this.log.debug("Login successful");
         this.setState("info.connection", true, true);
         this.log.debug("start refresh interval");
+        const expiresin = this.session.expires_in - 100 || 14399 - 100;
         this.refreshTokenInterval = setInterval(() => {
           this.log.debug("Refresh Token");
           this.refreshToken(true).catch(() => {
@@ -194,7 +195,7 @@ class Mercedesme extends utils.Adapter {
               this.log.error("Relogin failed");
             });
           });
-        }, 60 * 60 * 1000); // 60min
+        }, expiresin * 1000);
         await this.getVehicles()
           .then(() => {
             this.getCommands().catch(() => {
@@ -1318,6 +1319,7 @@ class Mercedesme extends utils.Adapter {
     })
       .then((response) => {
         const token = response.data;
+        this.session = token;
         this.log.debug(JSON.stringify(token));
         this.atoken = token.access_token;
         this.setState("auth.access_token", token.access_token, true);
@@ -1327,7 +1329,7 @@ class Mercedesme extends utils.Adapter {
           this.setState("auth.refresh_token", token.refresh_token, true);
         }
         if (reconnect) {
-          this.log.info("Reconnect after refresh token");
+          this.log.info("Reconnect after refresh token. Count: " + this.reconnectCounter);
           this.ws.close();
           setTimeout(() => {
             this.connectWS();
@@ -1549,7 +1551,7 @@ class Mercedesme extends utils.Adapter {
       .then((response) => {
         this.log.debug(JSON.stringify(response.status));
         this.log.debug(JSON.stringify(response.data));
-
+        this.session = response.data;
         this.atoken = response.data.access_token;
         this.rtoken = response.data.refresh_token;
         this.setState("auth.access_token", response.data.access_token, true);
