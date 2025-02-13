@@ -40,7 +40,7 @@ class Mercedesme extends utils.Adapter {
     this.ws = null;
     this.wsHeartbeatTimeout = null;
     this.wsPingInterval = null;
-    this.wsReconnectCount = 0;
+    this.wsReconnectCounter = 0;
 
     this.reconnectInterval = null;
     this.xSession = uuidv4();
@@ -235,7 +235,7 @@ class Mercedesme extends utils.Adapter {
 
     setTimeout(() => {
       // Run your task
-      this.wsReconnectCount = 0;
+      this.wsReconnectCounter = 0;
       // After running the task, schedule it for the next day.
       this.scheduleDailyTask();
     }, delay);
