@@ -1329,7 +1329,7 @@ class Mercedesme extends utils.Adapter {
           this.setState("auth.refresh_token", token.refresh_token, true);
         }
         if (reconnect) {
-          this.log.info("Reconnect after refresh token. Count: " + this.reconnectCounter);
+          this.log.info("Reconnect after refresh token. Count: " + this.wsReconnectCounter);
           this.ws.close();
           setTimeout(() => {
             this.connectWS();
