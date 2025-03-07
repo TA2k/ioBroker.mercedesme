@@ -119,15 +119,8 @@
       "pl": "Adapter Mercedes me do ioBroker",
       "zh-cn": "梅赛德斯适用于ioBroker的适配器"
     },
-    "authors": [
-      "TA2k <tombox2020@gmail.com>"
-    ],
-    "keywords": [
-      "mercedes",
-      "mercedes me",
-      "mercedes benz",
-      "daimler"
-    ],
+    "authors": ["TA2k <tombox2020@gmail.com>"],
+    "keywords": ["mercedes", "mercedes me", "mercedes benz", "daimler"],
     "license": "MIT",
     "platform": "Javascript/Node.js",
     "main": "main.js",
@@ -178,7 +171,7 @@
     "isAdapter": false,
     "ciam": "",
     "resetAccess": false,
-    "reconnectDelay": 60
+    "reconnectDelay": 210
   },
   "objects": [],
   "instanceObjects": [
