@@ -1339,6 +1339,7 @@ class Mercedesme extends utils.Adapter {
       .catch((error) => {
         this.log.error("Error refresh token");
         this.log.error(error);
+        this.log.error("Please delete object folder mercedesme.0.auth and restart adapter");
         if (error.response) {
           this.log.error(JSON.stringify(error.response.data));
           if (error.response.status >= 400 && error.response.status < 500) {
