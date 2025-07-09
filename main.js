@@ -1306,6 +1306,17 @@ class Mercedesme extends utils.Adapter {
   }
   async refreshToken(reconnect) {
     this.log.debug("refreshToken");
+    this.log.debug("Do hard relogin");
+    await this.loginNew();
+    if (reconnect) {
+      this.log.info("Reconnect after refresh token. Count: " + this.wsReconnectCounter);
+      this.ws.close();
+      setTimeout(() => {
+        this.connectWS();
+      }, 2000);
+      return;
+    }
+    return;
 
     const headers = this.baseHeader;
     await this.requestClient({
@@ -1348,12 +1359,14 @@ class Mercedesme extends utils.Adapter {
             return;
           }
         }
+        throw error;
       });
   }
   async loginNew() {
     this.log.debug("Login");
 
-    if (this.atoken) {
+    // if (this.atoken) {
+    if (false) {
       this.log.info("Found old session. Try to refresh token");
       await this.refreshToken()
         .then(() => {
