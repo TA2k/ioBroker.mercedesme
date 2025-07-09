@@ -1417,10 +1417,52 @@ class Mercedesme extends utils.Adapter {
         const parameters = qs.parse(url.split("?")[1]);
         return parameters.resume;
       })
-      .catch((error) => {
+      .catch(async (error) => {
+        let code = "";
+        if (error.message && error.message.includes("Unsupported protocol")) {
+          if (error.config) {
+            this.log.debug(JSON.stringify(error.config.url));
+            const parameters = qs.parse(error.request._options.path.split("?")[1]);
+            this.log.debug(JSON.stringify(parameters));
+            code = parameters.code;
+          }
+          await this.requestClient({
+            method: "post",
+            maxBodyLength: Infinity,
+            url: "https://id.mercedes-benz.com/as/token.oauth2",
+            headers: this.baseHeader,
+            data: {
+              client_id: "62778dc4-1de3-44f4-af95-115f06a3a008",
+              code: code,
+              code_verifier: "Vg4OnWSQLDHLnDMmAKdURg0Ey_sSPsNRrx75B_losEg",
+              grant_type: "authorization_code",
+              redirect_uri: "rismycar://login-callback",
+            },
+          })
+            .then((response) => {
+              this.log.debug(JSON.stringify(response.status));
+              this.log.debug(JSON.stringify(response.data));
+              this.session = response.data;
+              this.atoken = response.data.access_token;
+              this.rtoken = response.data.refresh_token;
+              this.setState("auth.access_token", response.data.access_token, true);
+              this.setState("auth.refresh_token", response.data.refresh_token, true);
+              this.setState("auth.loginNonce", "", true);
+            })
+            .catch((error) => {
+              this.log.error("Token fetching error");
+              this.log.error(error);
+              error.response && this.log.error(JSON.stringify(error.response.data));
+            });
+          return "success";
+        }
         this.log.error("Not able to get login page");
         this.log.error(error);
       });
+    if (resumeUrl === "success") {
+      this.log.debug("Login Refresh successful");
+      return;
+    }
     await this.requestClient({
       method: "post",
       maxBodyLength: Infinity,
