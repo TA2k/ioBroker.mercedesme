@@ -202,7 +202,7 @@ class Mercedesme extends utils.Adapter {
               this.log.error("Error getting Commands");
             });
             this.getGeoFence().catch(() => {
-              this.log.warn("Error getting GeoFence");
+              this.log.info("Error getting GeoFence. Maybe Service is not activated");
             });
             this.getUserInformation().catch(() => {
               this.log.error("Error getting user infos");
@@ -1070,14 +1070,14 @@ class Mercedesme extends utils.Adapter {
 
               resolve();
             } catch (error) {
-              this.log.warn("Geofence not found");
-              this.log.error(error);
+              this.log.info("Geofence not found");
+              this.log.debug(error);
               reject();
             }
           })
           .catch((error) => {
-            this.log.warn(error);
-            error.response && this.log.warn(JSON.stringify(error.response.data));
+            this.log.debug(error);
+            error.response && this.log.debug(JSON.stringify(error.response.data));
             reject();
           });
       });
