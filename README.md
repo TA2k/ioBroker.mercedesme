@@ -18,7 +18,7 @@ Unter commands das commando auf klappen und den button neben start drücken wenn
 Remote sind vorgefertige Remote Befehle
 
 ## Changelog
-### 0.3.8-beta.0 (2025-07-09)
+### 0.3.8-beta.1 (2025-07-10)
 
 - change token refresh mechanism
 

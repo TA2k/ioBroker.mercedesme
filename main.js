@@ -43,6 +43,7 @@ class Mercedesme extends utils.Adapter {
     this.wsReconnectCounter = 0;
 
     this.reconnectInterval = null;
+    this.lastHardRelogin = 0;
     this.xSession = uuidv4();
     this.xTracking = uuidv4();
     this.deviceuuid = uuidv4();
@@ -1306,17 +1307,26 @@ class Mercedesme extends utils.Adapter {
   }
   async refreshToken(reconnect) {
     this.log.debug("refreshToken");
-    this.log.debug("Do hard relogin");
-    await this.loginNew();
-    if (reconnect) {
-      this.log.info("Reconnect after refresh token. Count: " + this.wsReconnectCounter);
-      this.ws.close();
-      setTimeout(() => {
-        this.connectWS();
-      }, 2000);
-      return;
+
+    // Check if 6 hours (21600000 ms) have passed since last hard relogin
+    const now = Date.now();
+    const sixHours = 6 * 60 * 60 * 1000; // 6 hours in milliseconds
+
+    if (now - this.lastHardRelogin >= sixHours) {
+      this.log.debug("6 hours passed, doing hard relogin");
+      this.lastHardRelogin = now;
+      await this.loginNew();
+      if (reconnect) {
+        this.log.info("Reconnect after refresh token. Count: " + this.wsReconnectCounter);
+        this.ws.close();
+        setTimeout(() => {
+          this.connectWS();
+        }, 2000);
+        return;
+      }
+    } else {
+      this.log.debug("Less than 6 hours since last hard relogin, using refresh token");
     }
-    return;
 
     const headers = this.baseHeader;
     await this.requestClient({
@@ -1445,6 +1455,7 @@ class Mercedesme extends utils.Adapter {
               this.session = response.data;
               this.atoken = response.data.access_token;
               this.rtoken = response.data.refresh_token;
+              this.lastHardRelogin = Date.now();
               this.setState("auth.access_token", response.data.access_token, true);
               this.setState("auth.refresh_token", response.data.refresh_token, true);
               this.setState("auth.loginNonce", "", true);
@@ -1610,6 +1621,7 @@ class Mercedesme extends utils.Adapter {
         this.session = response.data;
         this.atoken = response.data.access_token;
         this.rtoken = response.data.refresh_token;
+        this.lastHardRelogin = Date.now();
         this.setState("auth.access_token", response.data.access_token, true);
         this.setState("auth.refresh_token", response.data.refresh_token, true);
         this.setState("auth.loginNonce", "", true);
@@ -1686,6 +1698,7 @@ class Mercedesme extends utils.Adapter {
 
             this.atoken = response.data.access_token;
             this.rtoken = response.data.refresh_token;
+            this.lastHardRelogin = Date.now();
             this.setState("auth.access_token", response.data.access_token, true);
             this.setState("auth.refresh_token", response.data.refresh_token, true);
             this.setState("auth.loginNonce", "", true);
