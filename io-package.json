@@ -136,6 +136,7 @@
     "extIcon": "https://raw.githubusercontent.com/TA2k/ioBroker.mercedesme/master/admin/mercedesme.png",
     "readme": "https://github.com/TA2k/ioBroker.mercedesme/blob/master/README.md",
     "loglevel": "info",
+    "tier": 2,
     "mode": "daemon",
     "type": "vehicle",
     "compact": true,
