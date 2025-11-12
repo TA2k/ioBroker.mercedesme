@@ -1521,7 +1521,7 @@ class Mercedesme extends utils.Adapter {
       });
     //generate random 32 char string
     const rid = this.generateRandomString(32);
-    const preLoginData = await this.requestClient({
+    let preLoginData = await this.requestClient({
       method: "post",
       maxBodyLength: Infinity,
       url: "https://id.mercedes-benz.com/ciam/auth/login/pass",
@@ -1550,6 +1550,19 @@ class Mercedesme extends utils.Adapter {
         this.log.error(error);
         error.response && this.log.error(JSON.stringify(error.response.data));
       });
+
+    // Check if legal terms acceptance is required
+    if (preLoginData && preLoginData.result === "GOTO_LOGIN_LEGAL_TEXTS") {
+      this.log.info("Legal terms acceptance required");
+      const homeCountry = preLoginData.homeCountry || "";
+      const consentCountry = preLoginData.consentCountry || "";
+      preLoginData = await this.submitLegalConsent(homeCountry, consentCountry);
+      if (preLoginData.result !== "RESUME2OIDCP") {
+        this.log.error("Problem accepting legal terms during login: " + JSON.stringify(preLoginData));
+        throw new Error("Legal terms acceptance failed");
+      }
+    }
+
     const code = await this.requestClient({
       method: "post",
       maxBodyLength: Infinity,
@@ -1634,6 +1647,47 @@ class Mercedesme extends utils.Adapter {
         error.response && this.log.error(JSON.stringify(error.response.data));
       });
   }
+
+  async submitLegalConsent(homeCountry, consentCountry) {
+    this.log.debug("Submitting legal consent");
+
+    // Generate random request ID (32 hex chars)
+    const rid = this.generateRandomString(32);
+
+    const response = await this.requestClient({
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "https://id.mercedes-benz.com/ciam/auth/toas/saveLoginConsent",
+      headers: {
+        accept: "application/json, text/plain, */*",
+        "content-type": "application/json",
+        origin: "https://id.mercedes-benz.com",
+        "accept-language": "de-DE,de;q=0.9",
+        "user-agent":
+          "Mozilla/5.0 (iPhone; CPU iPhone OS 15_8_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.6.6 Mobile/15E148 Safari/604.1",
+        referer: "https://id.mercedes-benz.com/ciam/auth/login",
+      },
+      data: {
+        texts: {},
+        homeCountry: homeCountry,
+        consentCountry: consentCountry,
+        rid: rid,
+      },
+    })
+      .then((response) => {
+        this.log.debug("Legal consent response: " + JSON.stringify(response.data));
+        return response.data;
+      })
+      .catch((error) => {
+        this.log.error("Legal consent submission failed");
+        this.log.error(error);
+        error.response && this.log.error(JSON.stringify(error.response.data));
+        throw error;
+      });
+
+    return response;
+  }
+
   generateRandomString(length) {
     let result = "";
     const characters = "abcdef0123456789";
