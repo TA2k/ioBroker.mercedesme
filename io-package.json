@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.3.8",
+    "version": "0.3.9",
     "news": {
+      "0.3.9": {
+        "en": "fix login flow",
+        "de": "fehlerbehebung",
+        "ru": "фиксировать логиновый поток",
+        "pt": "corrigir fluxo de login",
+        "nl": "fix login stroom",
+        "fr": "correction du flux de connexion",
+        "it": "correzione del flusso di login",
+        "es": "corrección de flujo de inicio",
+        "pl": "naprawić przepływ logowania",
+        "uk": "фіксувати потік логіна",
+        "zh-cn": "固定登录流量"
+      },
       "0.3.8": {
         "en": "change token refresh mechanism",
         "de": "wechseln sie den auffrischungsmechanismus",
@@ -80,19 +93,6 @@
         "pl": "Napraw dla połączenia Login i WS",
         "uk": "Виправлення для входу та підключення WS",
         "zh-cn": "登录和WS连接的固定"
-      },
-      "0.3.5": {
-        "en": "fix new login flow",
-        "de": "neuen login-flow",
-        "ru": "исправить новый поток входа",
-        "pt": "corrigir novo fluxo de login",
-        "nl": "fix nieuwe aanmeldstroom",
-        "fr": "correction du nouveau flux de connexion",
-        "it": "correzione del nuovo flusso di login",
-        "es": "fijar nuevo flujo de inicio de sesión",
-        "pl": "naprawić nowy przepływ logowania",
-        "uk": "виправити новий потік логіна",
-        "zh-cn": "修正新登录流程"
       }
     },
     "titleLang": {
