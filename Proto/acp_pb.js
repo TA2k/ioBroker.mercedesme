@@ -2,15 +2,24 @@
 /**
  * @fileoverview
  * @enhanceable
+ * @suppress {missingRequire} reports error on implicit type usages.
  * @suppress {messageConventions} JS Compiler reports an error if a variable or
  *     field starts with 'MSG_' and isn't a translatable message.
  * @public
  */
 // GENERATED CODE -- DO NOT EDIT!
+/* eslint-disable */
+// @ts-nocheck
 
 var jspb = require('google-protobuf');
 var goog = jspb;
-var global = Function('return this')();
+var global = (function() {
+  if (this) { return this; }
+  if (typeof window !== 'undefined') { return window; }
+  if (typeof global !== 'undefined') { return global; }
+  if (typeof self !== 'undefined') { return self; }
+  return Function('return this')();
+}.call(null));
 
 var github_com_gogo_protobuf_gogoproto_gogo_pb = require('./github.com/gogo/protobuf/gogoproto/gogo_pb.js');
 goog.object.extend(proto, github_com_gogo_protobuf_gogoproto_gogo_pb);
@@ -196,7 +205,11 @@ proto.proto.VVA.CommandState = {
   ENQUEUED: 1016,
   PROCESSING: 1012,
   SUSPENDED: 1017,
-  FINISHED: 1018
+  FINISHED: 1018,
+  WAKEUP_SENT: 1020,
+  WAITING_WAKEUP: 1022,
+  WAITING_SYNC: 1023,
+  COMMAND_SENT: 1030
 };
 
 /**
@@ -325,7 +338,13 @@ proto.proto.VehicleAPI.CommandState = {
   PROCESSING: 3,
   WAITING: 4,
   FINISHED: 5,
-  FAILED: 6
+  FAILED: 6,
+  ACKED_BY_APPTWIN: 7,
+  PIN_VALID: 8,
+  WAKEUP_SENT: 9,
+  WAITING_WAKEUP: 10,
+  WAITING_SYNC: 11,
+  COMMAND_SENT: 12
 };
 
 /**
@@ -376,9 +395,7 @@ proto.proto.VehicleAPI.QueueType = {
   RTMCONFIG: 41,
   MAINTENANCECOMPUTER: 42,
   MECALL2: 43,
-  AUTOMATEDVALETPARKING: 44,
-  CHARGECONTROL: 45,
-  SPEEDALERT: 46
+  AUTOMATEDVALETPARKING: 44
 };
 
 
@@ -500,7 +517,6 @@ proto.proto.ACP.CommandType = {
   AUXHEATCONFIGURE: 320,
   TEMPERATURECONFIGURE: 350,
   WEEKPROFILECONFIGURE: 360,
-  WEEKPROFILEV2CONFIGURE: 370,
   PRECONDSTART: 400,
   PRECONDSTOP: 410,
   PRECONDCONFIGURE: 420,
@@ -604,8 +620,6 @@ proto.proto.ACP.CommandType = {
   IMMOBILIZERSEARCHKEYLINE: 1610,
   IMMOBILIZERRELEASEKEYLINE: 1620,
   IMMOBILIZERLOCKKEYLINE: 1630,
-  IMMOBILIZERLOCKVEHICLE: 1631,
-  IMMOBILIZERRELEASEVEHICLE: 1621,
   SETRENTALSIGNAL: 1700,
   BLACKCHANNELDOWNLOAD: 1800,
   BLACKCHANNELUPLOAD: 1810,
@@ -615,8 +629,7 @@ proto.proto.ACP.CommandType = {
   RELAYRENTALREQUESTTOCSB: 1903,
   RTMDOWNLOADCONFIG: 2400,
   RTMREADCONFIG: 2410,
-  AVPACTIVATE: 2700,
-  CHARGECONTROLCONFIGURE: 2800
+  AVPACTIVATE: 2700
 };
 
 goog.object.extend(exports, proto.proto);

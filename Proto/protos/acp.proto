@@ -14,6 +14,10 @@ message VVA {
         PROCESSING = 1012;
         SUSPENDED = 1017;
         FINISHED = 1018;
+        WAKEUP_SENT = 1020;
+        WAITING_WAKEUP = 1022;
+        WAITING_SYNC = 1023;
+        COMMAND_SENT = 1030;
     }
 
     enum CommandCondition {
@@ -46,6 +50,18 @@ message VehicleAPI {
         FINISHED = 5;
         // There was an error while executing the command process.
         FAILED = 6;
+        // Command acknowledged by AppTwin backend.
+        ACKED_BY_APPTWIN = 7;
+        // PIN validation successful.
+        PIN_VALID = 8;
+        // Wakeup signal sent to vehicle.
+        WAKEUP_SENT = 9;
+        // Waiting for vehicle wakeup.
+        WAITING_WAKEUP = 10;
+        // Waiting for sync with vehicle.
+        WAITING_SYNC = 11;
+        // Command sent to vehicle.
+        COMMAND_SENT = 12;
     }
 
     enum AttributeStatus {
