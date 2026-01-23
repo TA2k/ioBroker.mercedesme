@@ -2,9 +2,8 @@ syntax = "proto3";
 package proto;
 
 import "acp.proto";
-import "vehicle-commands.proto";
 import "google/protobuf/struct.proto";
-import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "gogo.proto";
 
 option (gogoproto.goproto_enum_prefix_all) = true;
 option java_package = "com.daimler.mbcarkit.proto";

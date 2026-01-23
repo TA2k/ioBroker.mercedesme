@@ -1,199 +1,10 @@
 syntax = "proto3";
 package proto;
-import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "gogo.proto";
+import "google/protobuf/wrappers.proto";
 
 option (gogoproto.goproto_enum_prefix_all) = true;
 option java_package = "com.daimler.mbcarkit.proto";
-
-// Part of a CommandStatusUpdate
-// Sending direction: App <- BFF <- AppTwin
-message CommandStatus {
-
-  // The remote VVA process id of the command.
-  int64 process_id = 5;
-
-  // The id of the command with which the app created it. Only set on the first transmission to the app.
-  string request_id = 7;
-
-  // The initial CommandStatus from the response of the VVA has a timestamp of -1
-  int64 timestamp = 6;
-
-  // The initial CommandStatus from the response of the VVA has a timestamp of -1
-  int64 timestamp_in_ms = 25;
-
-  enum AcpError {
-    UNKNOWN_ACP_ERROR = 0;
-    VALUE_OUT_OF_RANGE = 1;
-    WRONG_DATA_TYPE = 2;
-    VALUE_OVERFLOW = 3;
-    INCOMPLETE_VALUES = 4;
-    SYNTAX_ERROR = 5;
-    NULL_INF_VALUES = 6;
-    LOCK_FAILED = 7;
-    FAILED_DUE_TO_DOOR_IS_OPEN = 8;
-    FAILED_DUE_TO_IGNITION_IS_ON = 9;
-    LOCK_REQUEST_NOT_AUTHORIZED = 10;
-    UNLOCK_FAILED = 11;
-    FAILED_DUE_TO_TIMEOUT = 12;
-    FAILED_DUE_TO_INVALID_SMS_TIME = 13;
-    FAILED_BECAUSE_VEHICLE_IS_IN_MOTION = 14;
-    FAILED_DUE_TO_IGNITION_TRANSITION = 15;
-    UNLOCK_REQUEST_NOT_AUTHORIZED = 16;
-    DOOR_IS_OPEN_AFTER_UNLOCK_COMMAND = 17;
-    PROCESSING_FAILED = 18;
-    SERVICE_NOT_AUTHORIZED = 19;
-    REMOTE_WINDOW_ROOF_COMMAND_FAILED = 20;
-    REMOTE_WINDOW_ROOF_COMMAND_FAILED_VEHICLE_STATE_IN_IGN = 21;
-    REMOTE_WINDOW_ROOF_COMMAND_FAILED_WINDOW_NOT_NORMED = 22;
-    REMOTE_WINDOW_ROOF_COMMAND_FAILED_SERVICE_NOT_AUTHORIZED_IN_TCU = 62;
-    // The user entered the wrong pin
-    PIN_INVALID = 23;
-    // There were too many failed pin attempts for this CiamId -> the user can only another try after blockingTime is expired.
-    CIAM_ID_BLOCKED = 24;
-    RS_ABORTED_DOORS_NOT_LOCKED = 27;
-    RS_ABORTED_DOORS_OPEN = 28;
-    RS_ABORTED_HOOD_OPEN = 29;
-    RS_ABORTED_ALARM_ACTIVE = 30;
-    RS_ABORTED_FUEL_LOW = 31;
-    RS_ABORTED_GAS_PEDAL_PRESSED = 32;
-    RS_ABORTED_NOT_ALLOWED_BY_EIS = 33;
-    RS_ABORTED_ENGINE_UNEXPECTED_SHUT_OFF = 34;
-    RS_DENIED_NOT_ALLOWED_BY_EIS = 35;
-    RS_DENIED_VEHICLE_NOT_IN_PARK = 36;
-    RS_DENIED_DOORS_NOT_LOCKED = 37;
-    RS_DENIED_DOORS_OPEN = 38;
-    RS_DENIED_WINDOWS_OPEN = 39;
-    RS_DENIED_HOOD_OPEN = 40;
-    RS_DENIED_ALARM_ACTIVE = 41;
-    RS_DENIED_FUEL_LOW = 42;
-    RS_DENIED_GAS_PEDAL_PRESSED = 43;
-    RS_DENIED_DELAY_NOT_EXPIRED = 44;
-    RS_ABORTED_INVALID_CHALLENGE_RESPONSE = 45;
-    RS_DENIED_NUMBER_OF_REQUESTS_EXPIRED = 46;
-    RS_ABORTED_REQUEST_REFUSED_BY_ENGINE = 47;
-    RS_NO_CAN_ACKNOWLEDGEMENT = 48;
-    RS_DENIED_NOT_AUTHORIZED = 49;
-    RS_ABORTED_CHARGE_CABLE_PLUGGED = 50;
-    RS_FBS_RESP_GENERATION_NOT_POSSIBLE_FOR_VIN = 51;
-    RS_FBS_MAINTENANCE = 52;
-    RS_CALLBACK_TIMEOUT = 53;
-    RS_FBS_GENERAL_ERROR = 54;
-    RS_CURRENTLY_BLOCKED = 55;
-    RS_DENIED_AFTER_CHALLENGE_DOORS_NOT_LOCKED = 56;
-    RS_DENIED_AFTER_CHALLENGE_DOORS_OPEN = 57;
-    RS_DENIED_AFTER_CHALLENGE_HOOD_OPEN = 58;
-    RS_DENIED_AFTER_CHALLENGE_ALARM_ACTIVE = 59;
-    RS_DENIED_AFTER_CHALLENGE_NOT_ALLOWED_BY_EIS = 60;
-    ENERGY_LEVEL_IN_BATTERY_IS_TOO_LOW = 63;
-    CONFIGURATION_PROCESSING_FAILED = 65;
-    PROCESSING_FAILED_CUSTOMER_MAX_SOC_BELOW_VEHICLE_THRESHOLD = 66;
-    CONFIGURATION_NOT_AUTHORIZED = 67;
-    ZEV_WEEK_DEPT_SET_PROCESSING_FAILED = 68;
-    ZEV_WEEK_DEPT_SET_NOT_AUTHORIZED = 69;
-    ZEV_WEEK_DEPT_SET_PROCESSING_OVERWRITTEN = 70;
-    ZEV_WEEK_DEPT_SET_PROCESSING_NOT_POSSIBLE_DUE_TO_INSTANT_CHARGING = 71;
-    FASTPATH_TIMEOUT = 72;
-    ZEV_CHARGE_PROGRAM_NOT_SUPPORTED_BY_VEHICLE = 73;
-    // Remote Vehicle Finder
-    SIGPOS_FAILED = 74;
-    SIGPOS_VEHICLE_IN_IGNITION = 75;
-    SIGPOS_NOT_AUTHORIZED = 76;
-    // Vehicle Theft Alarm
-    REMOTE_VTA_FAILED = 25;
-    REMOTE_VTA_SERVICE_NOT_AUTHORIZED = 26;
-    REMOTE_VTA_IGNITION_NOT_LOCKED = 77;
-    REMOTE_VTA_VVR_VALUE_NOT_SET = 78;
-    REMOTE_VTA_VVR_NOT_ALLOWED = 79;
-
-    // Rising Stars Errors
-    NO_APPTWIN_CONNECTED = 61;
-    VVA_RESPONDED_SERVICE_NOT_ACTIVATED = 64;
-  }
-
-  // Potential ACP error if the command request could not be fulfilled
-  repeated AcpError errors = 4;
-
-  // Potential timestamp until user cannot send login/pin requests. Data in seconds since Unix epoch
-  int64 blocking_time_seconds = 13;
-
-  // Potential amount of failed pin attempts.
-  int32 pin_attempts = 14;
-
-  // The type of command the CommandStatus belongs to. Not guaranteed to be always set.
-  oneof type {
-    AuxheatStart auxheat_start = 9;
-    AuxheatStop auxheat_stop = 10;
-    AuxheatConfigure auxheat_configure = 28;
-
-    DoorsLock doors_lock = 11;
-    DoorsUnlock doors_unlock = 12;
-
-    SunroofOpen sunroof_open = 15;
-    SunroofClose sunroof_close = 16;
-    SunroofLift sunroof_lift = 17;
-
-    WindowsOpen windows_open = 18;
-    WindowsClose windows_close = 19;
-
-    EngineStart engine_start = 26;
-    EngineStop engine_stop = 27;
-  }
-
-  enum State {
-    UNKOWN_STATE_TYPE = 0;
-    CREATED           = 1;
-    ENQUEUED          = 2;
-    PROCESSING        = 3;
-    SUSPENDED         = 4;
-    FINISHED          = 5;
-  }
-  State state = 2;
-
-  enum Condition {
-    UNKOWN_CONDITION_TYPE = 0;
-    NONE                  = 1;
-    ACCEPTED              = 2;
-    REJECTED              = 3;
-    TERMINATE             = 4;
-    SUCCESS               = 5;
-    FAILED                = 6;
-    OVERWRITTEN           = 7;
-    TIMEOUT               = 8;
-
-    // Not from DaiVB
-    DUPLICATE             = 9;
-  }
-  Condition condition = 3;
-}
-
-
-// acknowledge that the CommandStatusUpdate-Messages of up to `sequence_number` have been received
-// Sending direction: App -> BFF -> AppTwin
-message AcknowledgeCommandStatusUpdateRequest {
-  int32 sequence_number = 1;
-}
-
-// Sending direction: App <- BFF <- AppTwin
-message CommandStatusUpdatesByVIN {
-  map<string, CommandStatusUpdate> updates = 1;
-}
-
-// Sending direction: App <- BFF <- AppTwin
-message CommandStatusUpdate {
-
-  int32 sequence_number = 1;
-
-  string vin = 2;
-
-  // when was the event emitted? This is the time of the update, (seconds in Unix time) (deprecated)
-  // not when the attributes where changed. To compare attribute changes, you need to look into each attribute timestamp
-  int64 emit_timestamp = 3;
-
-  // When was the event emitted (milliseconds in Unix time)
-  int64 emit_timestamp_in_ms = 7;
-
-  map<int64, CommandStatus> updates = 6;
-}
 
 // Acknowledge the CommandRequest reached the apptwin actor
 // Websocket <- Apptwin
@@ -233,9 +44,12 @@ message CommandRequest {
     SunroofOpen sunroof_open = 9;
     SunroofClose sunroof_close = 10;
     SunroofLift sunroof_lift = 11;
+    SunroofMove sunroof_move = 47;
 
     WindowsOpen windows_open = 12;
     WindowsClose windows_close = 13;
+    WindowsVentilate windows_ventilate = 43;
+    WindowsMove windows_move = 44;
 
     EngineStart engine_start = 19;
     EngineStop engine_stop = 20;
@@ -245,8 +59,6 @@ message CommandRequest {
     ZEVPreconditioningConfigure zev_precondition_configure = 25;
     ZEVPreconditioningConfigureSeats zev_precondition_configure_seats = 26;
 
-    // WindowVentilate window_ventilate = 14;
-
     SpeedalertStart speedalert_start = 23;
     SpeedalertStop speedalert_stop = 24;
 
@@ -254,6 +66,7 @@ message CommandRequest {
     BatteryMaxSocConfigure battery_max_soc = 28;
 
     ChargeProgramConfigure charge_program_configure = 34;
+    ChargeControlConfigure charge_control_configure = 40;
 
     ChargeOptConfigure charge_opt_configure = 29;
     ChargeOptStart charge_opt_start = 30;
@@ -262,10 +75,11 @@ message CommandRequest {
     TemperatureConfigure temperature_configure = 32;
 
     WeekProfileConfigure week_profile_configure = 33;
+    WeekProfileConfigureV2 week_profile_configure_v2 = 41;
 
     SigPosStart sigpos_start = 35;
 
-    TheftalarmConfirmDamagedetection theftalarm_confirm_damagedetection = 8;
+    // TheftalarmConfirmDamagedetection theftalarm_confirm_damagedetection = 8; # removed 1.62 
     TheftalarmDeselectDamagedetection theftalarm_deselect_damagedetection= 14;
     TheftalarmDeselectInterior theftalarm_deselect_interior = 15;
     TheftalarmDeselectTow theftalarm_deselect_tow = 16;
@@ -274,7 +88,44 @@ message CommandRequest {
     TheftalarmSelectTow theftalarm_select_tow = 37;
     TheftalarmStart theftalarm_start = 38;
     TheftalarmStop theftalarm_stop = 39;
+
+    AutomaticValetParkingActivate automatic_valet_parking_activate = 42;
+
+    // ChargeFlapUnlock charge_flap_unlock = 45; # removed 1.51
+    ChargeCouplerUnlock charge_coupler_unlock = 46;
+
+    DeactivateVehicleKeys deactivate_vehicle_keys = 48;
+    ActivateVehicleKeys activate_vehicle_keys = 49;
+
+    ChargingBreakClocktimerConfigure chargingbreak_clocktimer_configure = 50;
+    // WiperHealthReset wiper_health_reset = 64; # removed 1.62
+
+    HvBatteryStartConditioning hv_battery_start_conditioning = 76;
+    HvBatteryStopConditioning hv_battery_stop_conditioning = 77;
+
+
   }
+}
+
+message HvBatteryStartConditioning {}
+message HvBatteryStopConditioning {}
+
+message DeactivateVehicleKeys {
+  string pin = 1;
+
+  int64 expiration_unix = 2;
+
+  string expiration_seconds = 3 [ json_name = "expirationSeconds" ];
+  string expiration_milliseconds = 4 [ json_name = "expirationMilliseconds" ];
+}
+
+message ActivateVehicleKeys {
+  string pin = 1;
+
+  int64 expiration_unix = 2;
+
+  string expiration_seconds = 3 [ json_name = "expirationSeconds" ];
+  string expiration_milliseconds = 4 [ json_name = "expirationMilliseconds" ];
 }
 
 message AuxheatStart {}
@@ -288,16 +139,16 @@ message AuxheatConfigure {
     TIME_3       = 3;
   }
 
-  Selection time_selection = 1;
+  Selection time_selection = 1 [ json_name = "auxheattimeselection" ];
 
   // Minutes from midnight.
-  int32 time_1 = 2;
+  int32 time_1 = 2 [ json_name = "auxheattime1" ];
 
   // Minutes from midnight.
-  int32 time_2 = 3;
+  int32 time_2 = 3 [ json_name = "auxheattime2" ];
 
   // Minutes from midnight.
-  int32 time_3 = 4;
+  int32 time_3 = 4 [ json_name = "auxheattime3" ];
 }
 
 enum Door {
@@ -334,6 +185,7 @@ message DoorsLock {
   // leave empty to target all doors
   repeated Door doors = 1;
 }
+
 message DoorsUnlock {
   string pin = 1;
   // doors / flaps to unlock (only supported by TCU type RAMSES)
@@ -341,26 +193,50 @@ message DoorsUnlock {
   repeated Door doors = 2;
 }
 
- message EngineStart {
-   string pin = 1;
- }
- message EngineStop {}
+message EngineStart {
+  string pin = 1;
+}
+
+message EngineStop {}
 
 message SunroofOpen {
   string pin = 1;
 }
 message SunroofClose {}
-message SunroofLift {}
+message SunroofLift {
+  string pin = 1;
+}
+
+message SunroofMove {
+  string pin = 1;
+  google.protobuf.Int32Value sunroof             = 2 [ json_name = "sunroof" ];
+  google.protobuf.Int32Value sunroof_blind_front = 3 [ json_name = "sunroofblindfront" ];
+  google.protobuf.Int32Value sunroof_blind_rear  = 4 [ json_name = "sunroofblindrear" ];
+}
 
 message WindowsOpen {
   string pin = 1;
 }
 message WindowsClose {}
-// message WindowVentilate {}
+
+message WindowsVentilate {
+  string pin = 1;
+}
+
+message WindowsMove {
+  string pin = 1;
+  google.protobuf.Int32Value front_left       = 2 [ json_name = "windowfrontleft" ];
+  google.protobuf.Int32Value front_right      = 3 [ json_name = "windowfrontright" ];
+  google.protobuf.Int32Value rear_blind       = 4 [ json_name = "windowrearblind" ];
+  google.protobuf.Int32Value rear_left        = 5 [ json_name = "windowrearleft" ];
+  google.protobuf.Int32Value rear_left_blind  = 6 [ json_name = "windowrearleftblind" ];
+  google.protobuf.Int32Value rear_right       = 7 [ json_name = "windowrearright" ];
+  google.protobuf.Int32Value rear_right_blind = 8 [ json_name = "windowrearrightblind" ];
+}
 
 message SpeedalertStart {
-  int32 threshold = 1;
-  int32 alert_end_time = 2;
+  int32 threshold = 1 [ json_name = "speedAlertThreshold" ];
+  int64 alert_end_time = 2 [ json_name = "speedAlertEndTime" ];
 }
 message SpeedalertStop {}
 
@@ -442,24 +318,57 @@ message BatteryMaxSocConfigure {
 }
 
 // Select the given charge program and enables the consumer to configure it.
-// Not yet usable, but will be deployed in the beginning of July 2019 on ece-int
 message ChargeProgramConfigure {
   enum ChargeProgram {
-    DEFAULT_CHARGEPROGRAM = 0;
-    INSTANT_CHARGEPROGRAM = 1;
-    HOME_CHARGEPROGRAM = 2;
-    WORK_CHARGEPROGRAM = 3;
+    DEFAULT_CHARGE_PROGRAM = 0;
+    // Instant charge program should not be used
+    // INSTANT_CHARGE_PROGRAM = 1;
+    HOME_CHARGE_PROGRAM = 2;
+    WORK_CHARGE_PROGRAM = 3;
   }
   ChargeProgram charge_program = 1 [ json_name = "chargeprogram" ];
 
   // Values need to be between 50 and 100 and divisible by ten
-  int32 max_soc = 2 [ json_name = "maxsoc" ];
+  // Maximum value for the state of charge of the HV battery [in %].
+  // Valid value range = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+  google.protobuf.Int32Value max_soc = 2 [ json_name = "maxsoc" ];
 
   // unlock the plug after charging is finished
-  bool auto_unlock = 3 [ json_name = "autounlock" ];
+  // Denotes whether the charge cable should be unlocked automatically if the HV battery is fully charged resp. charged til Max. SoC value.
+  // true - unlock automatically, false - do not unlock automatically
+  // can only be used if chargeprogram is set to home or work. Otherwise it will be ignored.
+  google.protobuf.BoolValue auto_unlock = 3 [ json_name = "autounlock" ];
 
   // automatically switch between home and work program, based on the location of the car
-  bool location_based_charging = 4 [ json_name = "locationbasedcharging" ];
+  // Denotes whether location based charging should be used.
+  // true - use location based charging, false - do not use location based charging
+  // can only be used if chargeprogram is set to home or work. Otherwise it will be ignored.
+  google.protobuf.BoolValue location_based_charging = 4 [ json_name = "locationbasedcharging" ];
+
+  // enable or disable week-profile
+  // Denotes whether weekly profile (aka. weekprofile) should be used.
+  // true - use weekly profile, false - do not use weekly profile
+  // The parameter weekprofile should not be used.
+  // google.protobuf.BoolValue weekly_profile = 5 [ json_name = "weeklyprofile" ];
+
+  // enable or disable clocktimer
+  google.protobuf.BoolValue clock_timer = 6 [ json_name = "clocktimer" ];
+
+  // enable or disable ecocharging
+  google.protobuf.BoolValue eco_charging = 7 [ json_name = "ecocharging" ];
+}
+
+// This is an experimental command
+message ChargeControlConfigure {
+  // Enables/Disables bidrectional charging
+  google.protobuf.BoolValue bi_charging_enabled = 1 [ json_name = "bidichargingenabled" ];
+
+  // Sets the charging power in kW with a resolution of 0.1 kW. The value has an offset of -100 kW. So
+  // a value of 0 is equivalent to -100 kW.
+  google.protobuf.FloatValue charging_power = 2 [ json_name = "chargingpower" ];
+
+  // must not be above max_soc
+  google.protobuf.Int32Value min_soc = 3 [ json_name = "minsoc" ];
 }
 
 // Provide functionality to initiate a charge optimization configuration
@@ -493,6 +402,8 @@ message ChargeOptStop {
 // Set the temperature points of the vehicle
 message TemperatureConfigure {
   message TemperaturePoint {
+    reserved 2;
+
     enum Zone {
       // the JSON enum values are lowercase, but lowercase values are not exported in golang, so
       // we allow aliasing all values.
@@ -537,7 +448,6 @@ message TemperatureConfigure {
     }
     Zone zone = 1 [ json_name = "zone" ];
 
-    int32 temperature = 2 [ deprecated = true ];
     double temperature_in_celsius = 3 [ json_name = "temp" ];
   }
 
@@ -562,6 +472,57 @@ message WeekProfileConfigure {
   }
 
   repeated WeeklySetHU weekly_set_hu = 1 [ json_name = "weeklySetHU" ];
+}
+
+// Set the week profile for the weekly departure time settings version 2
+message WeekProfileConfigureV2 {
+  // * The whole list of timeProfiles must always be provided
+  repeated TimeProfile time_profiles = 1 [ json_name = "timeprofiles" ];
+}
+
+message TimeProfile {
+  //=> only if time profile entry is unchanged, do not provide attribute "id" if new profile entry shall be added
+  //   If a new time profile shall be added: do not provide the ID => ID will be set by MIC / vehicle
+  google.protobuf.Int32Value identifier = 1 [ json_name = "id" ];
+
+  // Hour after midnight range [0, 23]
+  google.protobuf.Int32Value hour = 2 [json_name = "hour" ];
+
+  // Minute after full hour range [0, 59]
+  google.protobuf.Int32Value minute = 3 [json_name = "min" ];
+
+  // Days for which the above time should be applied
+  repeated TimeProfileDay days = 4 [json_name = "day" ];
+
+  // Whether this profile entry is active or not
+  google.protobuf.BoolValue active = 5 [json_name = "active" ];
+
+  // If a timeProfile is changed or added the respective applicationId must be provided by the SDK
+  //   11 = Internal Apps
+  //   12 = External Apps
+  int32 application_identifier = 6 [ json_name = "applicationId" ];
+}
+
+enum TimeProfileDay {
+  option allow_alias = true;
+  // the short versions are for json (en)coding purposes only. The upper case version should be the preferred
+  // enum values to be used in code.
+  // These definitions need to come before upper case versions
+  Mo = 0;
+  Tu = 1;
+  We = 2;
+  Th = 3;
+  Fr = 4;
+  Sa = 5;
+  Su = 6;
+
+  MONDAY = 0;
+  TUESDAY = 1;
+  WEDNESDAY = 2;
+  THURSDAY = 3;
+  FRIDAY = 4;
+  SATURDAY = 5;
+  SUNDAY = 6;
 }
 
 // Invoke the Remote Vehicle Finder for signalling the vehicle’s position with lights, horn or panic alarm.
@@ -643,3 +604,40 @@ message TheftalarmStart {
 message TheftalarmStop {
   // empty
 }
+
+enum DriveType {
+  UNKNOWN_DRIVE_TYPE = 0;
+  PICK_UP = 1;
+  DROP_OFF = 2;
+}
+
+message AutomaticValetParkingActivate {
+  string booking_id = 1 [ json_name = "bookingId" ];
+  DriveType drive_type = 2 [ json_name = "driveType" ];
+}
+
+// message ChargeFlapUnlock {} # removed 1.51
+
+message ChargeCouplerUnlock {}
+
+message ChargingBreakClocktimerConfigure {
+  repeated ChargingBreakClockTimerConfigureEntry chargingbreak_clocktimer_configure_entry = 1;
+}
+
+
+enum ChargingBreakClockTimerEntryStatus {
+  DELETE = 0;
+  INACTIVE = 1;
+  ACTIVE = 2;
+}
+
+message ChargingBreakClockTimerConfigureEntry {
+  ChargingBreakClockTimerEntryStatus action = 1;
+  int32 endTimeHour = 2;
+  int32 endTimeMinute = 3;
+  int32 startTimeHour = 4;
+  int32 startTimeMinute = 5;
+  int32 timerId = 6;
+}
+
+message WiperHealthReset {}

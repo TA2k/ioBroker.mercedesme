@@ -13,6 +13,7 @@ option java_package = "com.daimler.mbcarkit.proto";
 // message that is sent from the client
 // Sending direction: App -> Websocket (-> AppTwin)
 message ClientMessage {
+  reserved 8;
   string tracking_id = 5;
   oneof msg {
     UnsubscribeRequest unsubscribeRequest = 2;
@@ -20,7 +21,6 @@ message ClientMessage {
     TrackingEvent tracking_event = 4;
     ConfigurePingInterval ping_interval = 6;
     AcknowledgeVEPRequest acknowledge_vep_request = 7;
-    AcknowledgeCommandStatusUpdateRequest acknowledge_command_status_update_request = 8;
     AcknowledgeServiceStatusUpdatesByVIN acknowledge_service_status_updates_by_vin = 9;
     AcknowledgeServiceStatusUpdate acknowledge_service_status_update = 13;
     AcknowledgeUserDataUpdate acknowledge_user_data_update = 10;
@@ -35,7 +35,8 @@ message ClientMessage {
     Logout logout = 20;
     AppTwinPendingCommandsResponse apptwin_pending_commands_response = 21;
     AcknowledgeVEPUpdatesByVIN acknowledge_vep_updates_by_vin = 22;
-    AcknowledgeAppTwinInitialized acknowledge_apptwin_initialized = 23;
+    AcknowledgeAssignedVehicles acknowledge_assigned_vehicles = 23;
+    AcknowledgeDataChangeEvent acknowledge_data_change_event = 26;
   }
 }
 

@@ -1,7 +1,7 @@
 syntax = "proto3";
 package proto;
 
-import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "gogo.proto";
 
 option (gogoproto.goproto_enum_prefix_all) = true;
 option java_package = "com.daimler.mbcarkit.proto";
@@ -116,6 +116,8 @@ message VehicleAPI {
         MAINTENANCECOMPUTER = 42;
         MECALL2 = 43;
         AUTOMATEDVALETPARKING = 44;
+        CHARGECONTROL = 45;
+        SPEEDALERT = 46;
 
         unknowncommandqueuetype = 0;
         doors = 10;
@@ -152,6 +154,8 @@ message VehicleAPI {
         maintenancecomputer = 42;
         mecall2 = 43;
         automatedvaletparking = 44;
+        chargecontrol = 45;
+        speedalert = 46;
     }
 }
 
@@ -168,7 +172,7 @@ message ACP {
         DOORSUNLOCK = 110;
         TRUNKUNLOCK = 115;
         FUELFLAPUNLOCK = 116;
-        CHARGEFLAPUNLOCK = 117;
+        // CHARGEFLAPUNLOCK = 117; - removed 1.51
         CHARGECOUPLERUNLOCK = 118;
         DOORSPREPARERENTAL = 120;
         DOORSSECUREVEHICLE = 130;
@@ -177,6 +181,7 @@ message ACP {
         AUXHEATCONFIGURE = 320;
         TEMPERATURECONFIGURE = 350;
         WEEKPROFILECONFIGURE = 360;
+        WEEKPROFILEV2CONFIGURE = 370;
         PRECONDSTART = 400;
         PRECONDSTOP = 410;
         PRECONDCONFIGURE = 420;
@@ -280,6 +285,8 @@ message ACP {
         IMMOBILIZERSEARCHKEYLINE = 1610;
         IMMOBILIZERRELEASEKEYLINE = 1620;
         IMMOBILIZERLOCKKEYLINE = 1630;
+        IMMOBILIZERLOCKVEHICLE = 1631;
+        IMMOBILIZERRELEASEVEHICLE = 1621;
         SETRENTALSIGNAL = 1700;
         BLACKCHANNELDOWNLOAD = 1800;
         BLACKCHANNELUPLOAD = 1810;
@@ -290,13 +297,16 @@ message ACP {
         RTMDOWNLOADCONFIG = 2400;
         RTMREADCONFIG = 2410;
         AVPACTIVATE = 2700;
+        CHARGECONTROLCONFIGURE = 2800;
+        CHARGINGBREAKCLOCKTIMERCONFIGURE = 3000;
+        WIPERRESET = 3110;
 
         unknownCommandType = 0;
         doorsLock = 100;
         doorsUnlock = 110;
         trunkUnlock = 115;
         fuelflapUnlock = 116;
-        chargeflapUnlock = 117;
+        // chargeflapUnlock = 117;  - removed 1.51
         chargecouplerUnlock = 118;
         doorsPrepareRental = 120;
         doorsSecureVehicle = 130;
@@ -305,6 +315,7 @@ message ACP {
         auxheatConfigure = 320;
         temperatureConfigure = 350;
         weekprofileConfigure = 360;
+        weekprofileV2Configure = 370;
         precondStart = 400;
         precondStop = 410;
         precondConfigure = 420;
@@ -408,6 +419,8 @@ message ACP {
         immobilizerSearchKeyline = 1610;
         immobilizerReleaseKeyline = 1620;
         immobilizerLockKeyline = 1630;
+        immobilizerLockVehicle = 1631;
+        immobilizerReleaseVehicle = 1621;
         setRentalSignal = 1700;
         blackchannelDownload = 1800;
         blackchannelUpload = 1810;
@@ -418,5 +431,8 @@ message ACP {
         rtmDownloadConfig = 2400;
         rtmReadConfig = 2410;
         avpActivate = 2700;
+        chargecontrolconfigure = 2800;
+        chargingbreakclocktimerconfigure = 3000;
+        wiperreset = 3110;
     }
 }

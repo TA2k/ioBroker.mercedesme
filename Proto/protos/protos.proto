@@ -80,6 +80,22 @@ message SubscribeToAppTwinRequest {
     string sdk_version = 10;
 }
 
+message ResubscribeToAppTwinRequest {
+    string session_id = 1;
+    string ciam_id = 2;
+}
+
+message ResubscribeToAppTwinResponse {
+    enum ResubscribeResult {
+        UNKNOWN_ERROR = 0;
+        SUCCESS = 1;
+        INVALID_JWT_ERROR = 2;
+        TARGET_DOES_NOT_EXIST = 3;
+    }
+
+    ResubscribeResult result = 1;
+}
+
 enum OperatingSystemName {
     UNKNOWN_OPERATING_SYSTEM = 0;
     IOS = 1;
@@ -107,13 +123,14 @@ message UnsubscribeFromAppTwinResponse {
 message Heartbeat {}
 
 
-// This message is used to tell the App that the AppTwin is fully initialized (i.e. when it received the first vcb-response)
+// This message is used to tell the App which vehicles are assigned to the current user.
+// The message is sent when the AppTwin is fully initialized (i.e. when it received the first vcb-response)
 //
 // The list of VINs is needed when a user gets unassigned from a vehicle while not connected to an AppTwin
 // In this case the vehicle would still show in the app the next time the user starts it (see https://appsfactory.atlassian.net/browse/DAIM-3831)
 // To prevent this, we tell the App which VINs are assigned via this message
-message AppTwinInitialized {
+message AssignedVehicles {
     repeated string vins = 1;
 }
 
-message AcknowledgeAppTwinInitialized {}
+message AcknowledgeAssignedVehicles {}
