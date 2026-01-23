@@ -2,15 +2,24 @@
 /**
  * @fileoverview
  * @enhanceable
+ * @suppress {missingRequire} reports error on implicit type usages.
  * @suppress {messageConventions} JS Compiler reports an error if a variable or
  *     field starts with 'MSG_' and isn't a translatable message.
  * @public
  */
 // GENERATED CODE -- DO NOT EDIT!
+/* eslint-disable */
+// @ts-nocheck
 
 var jspb = require('google-protobuf');
 var goog = jspb;
-var global = Function('return this')();
+var global = (function() {
+  if (this) { return this; }
+  if (typeof window !== 'undefined') { return window; }
+  if (typeof global !== 'undefined') { return global; }
+  if (typeof self !== 'undefined') { return self; }
+  return Function('return this')();
+}.call(null));
 
 var protos_pb = require('./protos_pb.js');
 goog.object.extend(proto, protos_pb);
@@ -78,7 +87,7 @@ if (goog.DEBUG && !COMPILED) {
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.proto.ClientMessage.oneofGroups_ = [[2,3,4,6,7,9,13,10,11,12,14,15,16,17,18,19,20,21,22,23]];
+proto.proto.ClientMessage.oneofGroups_ = [[2,3,4,6,7,9,13,10,11,12,14,15,16,17,18,19,20,21,22,23,26]];
 
 /**
  * @enum {number}
@@ -104,7 +113,8 @@ proto.proto.ClientMessage.MsgCase = {
   LOGOUT: 20,
   APPTWIN_PENDING_COMMANDS_RESPONSE: 21,
   ACKNOWLEDGE_VEP_UPDATES_BY_VIN: 22,
-  ACKNOWLEDGE_ASSIGNED_VEHICLES: 23
+  ACKNOWLEDGE_ASSIGNED_VEHICLES: 23,
+  ACKNOWLEDGE_DATA_CHANGE_EVENT: 26
 };
 
 /**
@@ -165,7 +175,8 @@ proto.proto.ClientMessage.toObject = function(includeInstance, msg) {
     logout: (f = msg.getLogout()) && proto.proto.Logout.toObject(includeInstance, f),
     apptwinPendingCommandsResponse: (f = msg.getApptwinPendingCommandsResponse()) && vehicleapi_pb.AppTwinPendingCommandsResponse.toObject(includeInstance, f),
     acknowledgeVepUpdatesByVin: (f = msg.getAcknowledgeVepUpdatesByVin()) && vehicle$events_pb.AcknowledgeVEPUpdatesByVIN.toObject(includeInstance, f),
-    acknowledgeAssignedVehicles: (f = msg.getAcknowledgeAssignedVehicles()) && protos_pb.AcknowledgeAssignedVehicles.toObject(includeInstance, f)
+    acknowledgeAssignedVehicles: (f = msg.getAcknowledgeAssignedVehicles()) && protos_pb.AcknowledgeAssignedVehicles.toObject(includeInstance, f),
+    acknowledgeDataChangeEvent: (f = msg.getAcknowledgeDataChangeEvent()) && vehicle$events_pb.AcknowledgeDataChangeEvent.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -305,6 +316,11 @@ proto.proto.ClientMessage.deserializeBinaryFromReader = function(msg, reader) {
       var value = new protos_pb.AcknowledgeAssignedVehicles;
       reader.readMessage(value,protos_pb.AcknowledgeAssignedVehicles.deserializeBinaryFromReader);
       msg.setAcknowledgeAssignedVehicles(value);
+      break;
+    case 26:
+      var value = new vehicle$events_pb.AcknowledgeDataChangeEvent;
+      reader.readMessage(value,vehicle$events_pb.AcknowledgeDataChangeEvent.deserializeBinaryFromReader);
+      msg.setAcknowledgeDataChangeEvent(value);
       break;
     default:
       reader.skipField();
@@ -500,6 +516,14 @@ proto.proto.ClientMessage.serializeBinaryToWriter = function(message, writer) {
       23,
       f,
       protos_pb.AcknowledgeAssignedVehicles.serializeBinaryToWriter
+    );
+  }
+  f = message.getAcknowledgeDataChangeEvent();
+  if (f != null) {
+    writer.writeMessage(
+      26,
+      f,
+      vehicle$events_pb.AcknowledgeDataChangeEvent.serializeBinaryToWriter
     );
   }
 };
@@ -1260,6 +1284,43 @@ proto.proto.ClientMessage.prototype.clearAcknowledgeAssignedVehicles = function(
  */
 proto.proto.ClientMessage.prototype.hasAcknowledgeAssignedVehicles = function() {
   return jspb.Message.getField(this, 23) != null;
+};
+
+
+/**
+ * optional AcknowledgeDataChangeEvent acknowledge_data_change_event = 26;
+ * @return {?proto.proto.AcknowledgeDataChangeEvent}
+ */
+proto.proto.ClientMessage.prototype.getAcknowledgeDataChangeEvent = function() {
+  return /** @type{?proto.proto.AcknowledgeDataChangeEvent} */ (
+    jspb.Message.getWrapperField(this, vehicle$events_pb.AcknowledgeDataChangeEvent, 26));
+};
+
+
+/**
+ * @param {?proto.proto.AcknowledgeDataChangeEvent|undefined} value
+ * @return {!proto.proto.ClientMessage} returns this
+*/
+proto.proto.ClientMessage.prototype.setAcknowledgeDataChangeEvent = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 26, proto.proto.ClientMessage.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.ClientMessage} returns this
+ */
+proto.proto.ClientMessage.prototype.clearAcknowledgeDataChangeEvent = function() {
+  return this.setAcknowledgeDataChangeEvent(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.ClientMessage.prototype.hasAcknowledgeDataChangeEvent = function() {
+  return jspb.Message.getField(this, 26) != null;
 };
 
 

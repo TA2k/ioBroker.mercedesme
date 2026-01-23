@@ -2,15 +2,24 @@
 /**
  * @fileoverview
  * @enhanceable
+ * @suppress {missingRequire} reports error on implicit type usages.
  * @suppress {messageConventions} JS Compiler reports an error if a variable or
  *     field starts with 'MSG_' and isn't a translatable message.
  * @public
  */
 // GENERATED CODE -- DO NOT EDIT!
+/* eslint-disable */
+// @ts-nocheck
 
 var jspb = require('google-protobuf');
 var goog = jspb;
-var global = Function('return this')();
+var global = (function() {
+  if (this) { return this; }
+  if (typeof window !== 'undefined') { return window; }
+  if (typeof global !== 'undefined') { return global; }
+  if (typeof self !== 'undefined') { return self; }
+  return Function('return this')();
+}.call(null));
 
 var service$activation_pb = require('./service-activation_pb.js');
 goog.object.extend(proto, service$activation_pb);
@@ -22,36 +31,96 @@ var protos_pb = require('./protos_pb.js');
 goog.object.extend(proto, protos_pb);
 var vehicleapi_pb = require('./vehicleapi_pb.js');
 goog.object.extend(proto, vehicleapi_pb);
+var google_protobuf_timestamp_pb = require('google-protobuf/google/protobuf/timestamp_pb.js');
+goog.object.extend(proto, google_protobuf_timestamp_pb);
+goog.exportSymbol('proto.proto.AcknowledgeDataChangeEvent', null, global);
 goog.exportSymbol('proto.proto.AcknowledgePreferredDealerChange', null, global);
 goog.exportSymbol('proto.proto.AcknowledgeVEPRequest', null, global);
 goog.exportSymbol('proto.proto.AcknowledgeVEPUpdatesByVIN', null, global);
 goog.exportSymbol('proto.proto.AcknowledgeVehicleUpdated', null, global);
 goog.exportSymbol('proto.proto.AttributeStatus', null, global);
+goog.exportSymbol('proto.proto.ChargeFlaps', null, global);
+goog.exportSymbol('proto.proto.ChargeFlapsEntry', null, global);
+goog.exportSymbol('proto.proto.ChargeFlapsPositionState', null, global);
+goog.exportSymbol('proto.proto.ChargeInlets', null, global);
+goog.exportSymbol('proto.proto.ChargeInletsEntry', null, global);
+goog.exportSymbol('proto.proto.ChargeInletsEntry.ChargeInletsCouplerState', null, global);
+goog.exportSymbol('proto.proto.ChargeInletsEntry.ChargeInletsLockState', null, global);
 goog.exportSymbol('proto.proto.ChargeProgram', null, global);
 goog.exportSymbol('proto.proto.ChargeProgramParameters', null, global);
 goog.exportSymbol('proto.proto.ChargeProgramsValue', null, global);
+goog.exportSymbol('proto.proto.ChargingBreakClockTimerEntry', null, global);
+goog.exportSymbol('proto.proto.ChargingBreakClockTimerValue', null, global);
+goog.exportSymbol('proto.proto.ChargingCompatibilityError', null, global);
+goog.exportSymbol('proto.proto.ChargingFlapErrorDetails', null, global);
+goog.exportSymbol('proto.proto.ChargingPowerControl', null, global);
+goog.exportSymbol('proto.proto.ChargingPowerControl.ChargingStatusForPowerControl', null, global);
+goog.exportSymbol('proto.proto.ChargingPowerRestriction', null, global);
+goog.exportSymbol('proto.proto.ChargingPowerRestrictions', null, global);
+goog.exportSymbol('proto.proto.ChargingPredictionDepartureTime', null, global);
+goog.exportSymbol('proto.proto.ChargingPredictionSoc', null, global);
+goog.exportSymbol('proto.proto.ChargingScheduleRequested', null, global);
+goog.exportSymbol('proto.proto.ChargingScheduleRequested.ChargingScheduleUseCaseId', null, global);
+goog.exportSymbol('proto.proto.ChargingScheduleRequested.ScheduleIdStatus', null, global);
+goog.exportSymbol('proto.proto.ChargingTimer', null, global);
+goog.exportSymbol('proto.proto.ChargingTimerEntry', null, global);
+goog.exportSymbol('proto.proto.ChargingTimerEntry.ChargingTimerAction', null, global);
 goog.exportSymbol('proto.proto.ConfigurePingInterval', null, global);
+goog.exportSymbol('proto.proto.DataChangeEvent', null, global);
 goog.exportSymbol('proto.proto.DebugMessage', null, global);
 goog.exportSymbol('proto.proto.EcoHistogramBin', null, global);
 goog.exportSymbol('proto.proto.EcoHistogramValue', null, global);
+goog.exportSymbol('proto.proto.EmergencyPowerSupply', null, global);
+goog.exportSymbol('proto.proto.EvsePairingState', null, global);
+goog.exportSymbol('proto.proto.HvBatteryPrecondAvailability', null, global);
+goog.exportSymbol('proto.proto.HvBatteryPrecondRequestState', null, global);
+goog.exportSymbol('proto.proto.HvBatteryPrecondState', null, global);
+goog.exportSymbol('proto.proto.HvBatteryPrecondStatesCharging', null, global);
+goog.exportSymbol('proto.proto.HvBatteryPrecondStatesDischarging', null, global);
+goog.exportSymbol('proto.proto.InteriorProtectionActivationStatus', null, global);
+goog.exportSymbol('proto.proto.InteriorProtectionSelectionStatus', null, global);
+goog.exportSymbol('proto.proto.MainCategory', null, global);
+goog.exportSymbol('proto.proto.Method', null, global);
+goog.exportSymbol('proto.proto.PanicAlarmActive', null, global);
+goog.exportSymbol('proto.proto.ParkCollisionActivationStatus', null, global);
+goog.exportSymbol('proto.proto.ParkCollisionInactiveReason', null, global);
+goog.exportSymbol('proto.proto.ParkCollisionPictureTransferStatus', null, global);
+goog.exportSymbol('proto.proto.ParkCollisionSelectionStatus', null, global);
+goog.exportSymbol('proto.proto.ParkEventPictureSelectionStatus', null, global);
 goog.exportSymbol('proto.proto.PayloadValue', null, global);
 goog.exportSymbol('proto.proto.PayloadValue.MsgCase', null, global);
+goog.exportSymbol('proto.proto.PictureRecordingStatus', null, global);
+goog.exportSymbol('proto.proto.PrecondOperabilityState', null, global);
+goog.exportSymbol('proto.proto.PrecondOperabilityState.PrecondErrorState', null, global);
+goog.exportSymbol('proto.proto.PrecondState', null, global);
+goog.exportSymbol('proto.proto.PrecondStateType', null, global);
 goog.exportSymbol('proto.proto.PreferredDealerChange', null, global);
 goog.exportSymbol('proto.proto.PushMessage', null, global);
 goog.exportSymbol('proto.proto.PushMessage.MsgCase', null, global);
+goog.exportSymbol('proto.proto.Scope', null, global);
+goog.exportSymbol('proto.proto.Scopes', null, global);
+goog.exportSymbol('proto.proto.SpecificCategory', null, global);
 goog.exportSymbol('proto.proto.SpeedAlertConfiguration', null, global);
 goog.exportSymbol('proto.proto.SpeedAlertConfigurationValue', null, global);
 goog.exportSymbol('proto.proto.StateOfCharge', null, global);
 goog.exportSymbol('proto.proto.StateOfChargeProfileValue', null, global);
+goog.exportSymbol('proto.proto.Status', null, global);
+goog.exportSymbol('proto.proto.SubCategory', null, global);
 goog.exportSymbol('proto.proto.Tariff', null, global);
 goog.exportSymbol('proto.proto.TemperaturePoint', null, global);
 goog.exportSymbol('proto.proto.TemperaturePointsValue', null, global);
+goog.exportSymbol('proto.proto.TowProtectionActivationStatus', null, global);
+goog.exportSymbol('proto.proto.TowProtectionSelectionStatus', null, global);
 goog.exportSymbol('proto.proto.TrackingEvent', null, global);
 goog.exportSymbol('proto.proto.VEPUpdate', null, global);
 goog.exportSymbol('proto.proto.VEPUpdatesByVIN', null, global);
 goog.exportSymbol('proto.proto.VVRTimeProfile', null, global);
 goog.exportSymbol('proto.proto.VehicleAttributeStatus', null, global);
 goog.exportSymbol('proto.proto.VehicleAttributeStatus.AttributeTypeCase', null, global);
+goog.exportSymbol('proto.proto.VehicleAttributeStatus.ChargingCouplerErrorDetails', null, global);
+goog.exportSymbol('proto.proto.VehicleAttributeStatus.ChargingErrorImpossibleChangeTo400V', null, global);
+goog.exportSymbol('proto.proto.VehicleAttributeStatus.ChargingErrorImpossibleChangeTo800V', null, global);
+goog.exportSymbol('proto.proto.VehicleAttributeStatus.ChargingErrorVehicleNoSupport400V', null, global);
 goog.exportSymbol('proto.proto.VehicleAttributeStatus.ClockHourUnit', null, global);
 goog.exportSymbol('proto.proto.VehicleAttributeStatus.CombustionConsumptionUnit', null, global);
 goog.exportSymbol('proto.proto.VehicleAttributeStatus.DisplayUnitCase', null, global);
@@ -62,8 +131,10 @@ goog.exportSymbol('proto.proto.VehicleAttributeStatus.PressureUnit', null, globa
 goog.exportSymbol('proto.proto.VehicleAttributeStatus.RatioUnit', null, global);
 goog.exportSymbol('proto.proto.VehicleAttributeStatus.SpeedDistanceUnit', null, global);
 goog.exportSymbol('proto.proto.VehicleAttributeStatus.SpeedUnit', null, global);
+goog.exportSymbol('proto.proto.VehicleAttributeStatus.TcuConnectionStateLowChannelStatus', null, global);
 goog.exportSymbol('proto.proto.VehicleAttributeStatus.TemperatureUnit', null, global);
 goog.exportSymbol('proto.proto.VehicleStatus', null, global);
+goog.exportSymbol('proto.proto.VehicleTheftAlarmInactiveReason', null, global);
 goog.exportSymbol('proto.proto.VehicleUpdated', null, global);
 goog.exportSymbol('proto.proto.WeekdayTariffValue', null, global);
 goog.exportSymbol('proto.proto.WeekendTariffValue', null, global);
@@ -111,6 +182,363 @@ if (goog.DEBUG && !COMPILED) {
    * @override
    */
   proto.proto.VehicleAttributeStatus.displayName = 'proto.proto.VehicleAttributeStatus';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.HvBatteryPrecondState = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.proto.HvBatteryPrecondState, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.HvBatteryPrecondState.displayName = 'proto.proto.HvBatteryPrecondState';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.HvBatteryPrecondRequestState = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.proto.HvBatteryPrecondRequestState, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.HvBatteryPrecondRequestState.displayName = 'proto.proto.HvBatteryPrecondRequestState';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.PrecondOperabilityState = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.proto.PrecondOperabilityState, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.PrecondOperabilityState.displayName = 'proto.proto.PrecondOperabilityState';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.ChargingScheduleRequested = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.proto.ChargingScheduleRequested, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.ChargingScheduleRequested.displayName = 'proto.proto.ChargingScheduleRequested';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.ChargingTimer = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, proto.proto.ChargingTimer.repeatedFields_, null);
+};
+goog.inherits(proto.proto.ChargingTimer, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.ChargingTimer.displayName = 'proto.proto.ChargingTimer';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.ChargingTimerEntry = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, proto.proto.ChargingTimerEntry.repeatedFields_, null);
+};
+goog.inherits(proto.proto.ChargingTimerEntry, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.ChargingTimerEntry.displayName = 'proto.proto.ChargingTimerEntry';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.ChargingPredictionSoc = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.proto.ChargingPredictionSoc, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.ChargingPredictionSoc.displayName = 'proto.proto.ChargingPredictionSoc';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.ChargingPredictionDepartureTime = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.proto.ChargingPredictionDepartureTime, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.ChargingPredictionDepartureTime.displayName = 'proto.proto.ChargingPredictionDepartureTime';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.ChargeInletsEntry = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.proto.ChargeInletsEntry, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.ChargeInletsEntry.displayName = 'proto.proto.ChargeInletsEntry';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.ChargeInlets = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, proto.proto.ChargeInlets.repeatedFields_, null);
+};
+goog.inherits(proto.proto.ChargeInlets, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.ChargeInlets.displayName = 'proto.proto.ChargeInlets';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.ChargeFlapsEntry = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.proto.ChargeFlapsEntry, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.ChargeFlapsEntry.displayName = 'proto.proto.ChargeFlapsEntry';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.ChargeFlaps = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, proto.proto.ChargeFlaps.repeatedFields_, null);
+};
+goog.inherits(proto.proto.ChargeFlaps, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.ChargeFlaps.displayName = 'proto.proto.ChargeFlaps';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.ChargingPowerRestrictions = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, proto.proto.ChargingPowerRestrictions.repeatedFields_, null);
+};
+goog.inherits(proto.proto.ChargingPowerRestrictions, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.ChargingPowerRestrictions.displayName = 'proto.proto.ChargingPowerRestrictions';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.ChargingBreakClockTimerValue = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, proto.proto.ChargingBreakClockTimerValue.repeatedFields_, null);
+};
+goog.inherits(proto.proto.ChargingBreakClockTimerValue, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.ChargingBreakClockTimerValue.displayName = 'proto.proto.ChargingBreakClockTimerValue';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.PrecondState = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, proto.proto.PrecondState.repeatedFields_, null);
+};
+goog.inherits(proto.proto.PrecondState, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.PrecondState.displayName = 'proto.proto.PrecondState';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.ChargingPowerControl = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.proto.ChargingPowerControl, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.ChargingPowerControl.displayName = 'proto.proto.ChargingPowerControl';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.ChargingBreakClockTimerEntry = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.proto.ChargingBreakClockTimerEntry, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.ChargingBreakClockTimerEntry.displayName = 'proto.proto.ChargingBreakClockTimerEntry';
 }
 /**
  * Generated by JsPbCodeGenerator.
@@ -742,6 +1170,69 @@ if (goog.DEBUG && !COMPILED) {
    */
   proto.proto.PreferredDealerChange.displayName = 'proto.proto.PreferredDealerChange';
 }
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.AcknowledgeDataChangeEvent = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.proto.AcknowledgeDataChangeEvent, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.AcknowledgeDataChangeEvent.displayName = 'proto.proto.AcknowledgeDataChangeEvent';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.Scopes = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.proto.Scopes, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.Scopes.displayName = 'proto.proto.Scopes';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.DataChangeEvent = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, proto.proto.DataChangeEvent.repeatedFields_, null);
+};
+goog.inherits(proto.proto.DataChangeEvent, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.DataChangeEvent.displayName = 'proto.proto.DataChangeEvent';
+}
 
 
 
@@ -1041,7 +1532,7 @@ proto.proto.VehicleAttributeStatus.repeatedFields_ = [30];
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.proto.VehicleAttributeStatus.oneofGroups_ = [[12,13,14,15,25,26,16,17,18,19],[4,5,6,7,8,9,20,21,22,23,24,27,28,29,31]];
+proto.proto.VehicleAttributeStatus.oneofGroups_ = [[12,13,14,15,25,26,16,17,18,19],[4,5,6,7,8,9,20,21,22,23,24,27,28,29,31,32,33,38,44,55,56,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,78,79,80,81,84,85,86,88,89,90,91,92,93]];
 
 /**
  * @enum {number}
@@ -1086,7 +1577,42 @@ proto.proto.VehicleAttributeStatus.AttributeTypeCase = {
   SPEED_ALERT_CONFIGURATION_VALUE: 27,
   ECO_HISTOGRAM_VALUE: 28,
   WEEKLY_PROFILE_VALUE: 29,
-  CHARGE_PROGRAMS_VALUE: 31
+  CHARGE_PROGRAMS_VALUE: 31,
+  CHARGINGBREAK_CLOCKTIMER_VALUE: 32,
+  CHARGING_POWER_CONTROL: 33,
+  TCU_CONNECTION_STATE_LOW_CHANNEL: 38,
+  PRECOND_STATE: 44,
+  CHARGING_POWER_RESTRICTIONS: 55,
+  CHARGING_COUPLER_ERROR_DETAILS: 56,
+  CHARGING_ERROR_VEHICLE_NO_SUPPORT_400V: 58,
+  CHARGING_ERROR_IMPOSSIBLE_CHANGE_TO_400V: 59,
+  CHARGING_ERROR_IMPOSSIBLE_CHANGE_TO_800V: 60,
+  PRECOND_OPERABILITY_STATE: 61,
+  PICTURE_RECORDING_STATUS: 62,
+  PARK_EVENT_PICTURE_SELECTION_STATUS: 63,
+  PANIC_ALARM_ACTIVE: 64,
+  INTERIOR_PROTECTION_SELECTION_STATUS: 65,
+  INTERIOR_PROTECTION_ACTIVATION_STATUS: 66,
+  TOW_PROTECTION_SELECTION_STATUS: 67,
+  TOW_PROTECTION_ACTIVATION_STATUS: 68,
+  VEHICLE_THEFT_ALARM_INACTIVE_REASON: 69,
+  PARK_COLLISION_SELECTION_STATUS: 70,
+  PARK_COLLISION_ACTIVATION_STATUS: 71,
+  PARK_COLLISION_INACTIVE_REASON: 72,
+  PARK_COLLISION_PICTURE_TRANSFER_STATUS: 73,
+  EMERGENCY_POWER_SUPPLY: 78,
+  EVSE_PAIRING_STATE: 79,
+  CHARGING_PREDICTION_SOC: 80,
+  CHARGING_PREDICTION_DEPARTURE_TIME: 81,
+  CHARGE_FLAPS: 84,
+  CHARGE_INLETS: 85,
+  CHARGING_TIMER: 86,
+  CHARGING_SCHEDULE_REQUESTED: 88,
+  CHARGING_FLAP_ERROR_DETAILS: 89,
+  CHARGING_COMPATIBILITY_ERROR: 90,
+  HV_BATTERY_PRECOND_AVAILABILITY: 91,
+  HV_BATTERY_PRECOND_REQUEST_STATE: 92,
+  HV_BATTERY_PRECOND_STATE: 93
 };
 
 /**
@@ -1157,7 +1683,42 @@ proto.proto.VehicleAttributeStatus.toObject = function(includeInstance, msg) {
     speedAlertConfigurationValue: (f = msg.getSpeedAlertConfigurationValue()) && proto.proto.SpeedAlertConfigurationValue.toObject(includeInstance, f),
     ecoHistogramValue: (f = msg.getEcoHistogramValue()) && proto.proto.EcoHistogramValue.toObject(includeInstance, f),
     weeklyProfileValue: (f = msg.getWeeklyProfileValue()) && proto.proto.WeeklyProfileValue.toObject(includeInstance, f),
-    chargeProgramsValue: (f = msg.getChargeProgramsValue()) && proto.proto.ChargeProgramsValue.toObject(includeInstance, f)
+    chargeProgramsValue: (f = msg.getChargeProgramsValue()) && proto.proto.ChargeProgramsValue.toObject(includeInstance, f),
+    chargingbreakClocktimerValue: (f = msg.getChargingbreakClocktimerValue()) && proto.proto.ChargingBreakClockTimerValue.toObject(includeInstance, f),
+    chargingPowerControl: (f = msg.getChargingPowerControl()) && proto.proto.ChargingPowerControl.toObject(includeInstance, f),
+    tcuConnectionStateLowChannel: jspb.Message.getFieldWithDefault(msg, 38, 0),
+    precondState: (f = msg.getPrecondState()) && proto.proto.PrecondState.toObject(includeInstance, f),
+    chargingPowerRestrictions: (f = msg.getChargingPowerRestrictions()) && proto.proto.ChargingPowerRestrictions.toObject(includeInstance, f),
+    chargingCouplerErrorDetails: jspb.Message.getFieldWithDefault(msg, 56, 0),
+    chargingErrorVehicleNoSupport400v: jspb.Message.getFieldWithDefault(msg, 58, 0),
+    chargingErrorImpossibleChangeTo400v: jspb.Message.getFieldWithDefault(msg, 59, 0),
+    chargingErrorImpossibleChangeTo800v: jspb.Message.getFieldWithDefault(msg, 60, 0),
+    precondOperabilityState: (f = msg.getPrecondOperabilityState()) && proto.proto.PrecondOperabilityState.toObject(includeInstance, f),
+    pictureRecordingStatus: jspb.Message.getFieldWithDefault(msg, 62, 0),
+    parkEventPictureSelectionStatus: jspb.Message.getFieldWithDefault(msg, 63, 0),
+    panicAlarmActive: jspb.Message.getFieldWithDefault(msg, 64, 0),
+    interiorProtectionSelectionStatus: jspb.Message.getFieldWithDefault(msg, 65, 0),
+    interiorProtectionActivationStatus: jspb.Message.getFieldWithDefault(msg, 66, 0),
+    towProtectionSelectionStatus: jspb.Message.getFieldWithDefault(msg, 67, 0),
+    towProtectionActivationStatus: jspb.Message.getFieldWithDefault(msg, 68, 0),
+    vehicleTheftAlarmInactiveReason: jspb.Message.getFieldWithDefault(msg, 69, 0),
+    parkCollisionSelectionStatus: jspb.Message.getFieldWithDefault(msg, 70, 0),
+    parkCollisionActivationStatus: jspb.Message.getFieldWithDefault(msg, 71, 0),
+    parkCollisionInactiveReason: jspb.Message.getFieldWithDefault(msg, 72, 0),
+    parkCollisionPictureTransferStatus: jspb.Message.getFieldWithDefault(msg, 73, 0),
+    emergencyPowerSupply: jspb.Message.getFieldWithDefault(msg, 78, 0),
+    evsePairingState: jspb.Message.getFieldWithDefault(msg, 79, 0),
+    chargingPredictionSoc: (f = msg.getChargingPredictionSoc()) && proto.proto.ChargingPredictionSoc.toObject(includeInstance, f),
+    chargingPredictionDepartureTime: (f = msg.getChargingPredictionDepartureTime()) && proto.proto.ChargingPredictionDepartureTime.toObject(includeInstance, f),
+    chargeFlaps: (f = msg.getChargeFlaps()) && proto.proto.ChargeFlaps.toObject(includeInstance, f),
+    chargeInlets: (f = msg.getChargeInlets()) && proto.proto.ChargeInlets.toObject(includeInstance, f),
+    chargingTimer: (f = msg.getChargingTimer()) && proto.proto.ChargingTimer.toObject(includeInstance, f),
+    chargingScheduleRequested: (f = msg.getChargingScheduleRequested()) && proto.proto.ChargingScheduleRequested.toObject(includeInstance, f),
+    chargingFlapErrorDetails: jspb.Message.getFieldWithDefault(msg, 89, 0),
+    chargingCompatibilityError: jspb.Message.getFieldWithDefault(msg, 90, 0),
+    hvBatteryPrecondAvailability: jspb.Message.getFieldWithDefault(msg, 91, 0),
+    hvBatteryPrecondRequestState: (f = msg.getHvBatteryPrecondRequestState()) && proto.proto.HvBatteryPrecondRequestState.toObject(includeInstance, f),
+    hvBatteryPrecondState: (f = msg.getHvBatteryPrecondState()) && proto.proto.HvBatteryPrecondState.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -1211,8 +1772,10 @@ proto.proto.VehicleAttributeStatus.deserializeBinaryFromReader = function(msg, r
       msg.setStatus(value);
       break;
     case 30:
-      var value = /** @type {!Array<number>} */ (reader.readPackedInt32());
-      msg.setServiceIdsList(value);
+      var values = /** @type {!Array<number>} */ (reader.isDelimited() ? reader.readPackedInt32() : [reader.readInt32()]);
+      for (var i = 0; i < values.length; i++) {
+        msg.addServiceIds(values[i]);
+      }
       break;
     case 11:
       var value = /** @type {string} */ (reader.readString());
@@ -1326,6 +1889,159 @@ proto.proto.VehicleAttributeStatus.deserializeBinaryFromReader = function(msg, r
       var value = new proto.proto.ChargeProgramsValue;
       reader.readMessage(value,proto.proto.ChargeProgramsValue.deserializeBinaryFromReader);
       msg.setChargeProgramsValue(value);
+      break;
+    case 32:
+      var value = new proto.proto.ChargingBreakClockTimerValue;
+      reader.readMessage(value,proto.proto.ChargingBreakClockTimerValue.deserializeBinaryFromReader);
+      msg.setChargingbreakClocktimerValue(value);
+      break;
+    case 33:
+      var value = new proto.proto.ChargingPowerControl;
+      reader.readMessage(value,proto.proto.ChargingPowerControl.deserializeBinaryFromReader);
+      msg.setChargingPowerControl(value);
+      break;
+    case 38:
+      var value = /** @type {!proto.proto.VehicleAttributeStatus.TcuConnectionStateLowChannelStatus} */ (reader.readEnum());
+      msg.setTcuConnectionStateLowChannel(value);
+      break;
+    case 44:
+      var value = new proto.proto.PrecondState;
+      reader.readMessage(value,proto.proto.PrecondState.deserializeBinaryFromReader);
+      msg.setPrecondState(value);
+      break;
+    case 55:
+      var value = new proto.proto.ChargingPowerRestrictions;
+      reader.readMessage(value,proto.proto.ChargingPowerRestrictions.deserializeBinaryFromReader);
+      msg.setChargingPowerRestrictions(value);
+      break;
+    case 56:
+      var value = /** @type {!proto.proto.VehicleAttributeStatus.ChargingCouplerErrorDetails} */ (reader.readEnum());
+      msg.setChargingCouplerErrorDetails(value);
+      break;
+    case 58:
+      var value = /** @type {!proto.proto.VehicleAttributeStatus.ChargingErrorVehicleNoSupport400V} */ (reader.readEnum());
+      msg.setChargingErrorVehicleNoSupport400v(value);
+      break;
+    case 59:
+      var value = /** @type {!proto.proto.VehicleAttributeStatus.ChargingErrorImpossibleChangeTo400V} */ (reader.readEnum());
+      msg.setChargingErrorImpossibleChangeTo400v(value);
+      break;
+    case 60:
+      var value = /** @type {!proto.proto.VehicleAttributeStatus.ChargingErrorImpossibleChangeTo800V} */ (reader.readEnum());
+      msg.setChargingErrorImpossibleChangeTo800v(value);
+      break;
+    case 61:
+      var value = new proto.proto.PrecondOperabilityState;
+      reader.readMessage(value,proto.proto.PrecondOperabilityState.deserializeBinaryFromReader);
+      msg.setPrecondOperabilityState(value);
+      break;
+    case 62:
+      var value = /** @type {!proto.proto.PictureRecordingStatus} */ (reader.readEnum());
+      msg.setPictureRecordingStatus(value);
+      break;
+    case 63:
+      var value = /** @type {!proto.proto.ParkEventPictureSelectionStatus} */ (reader.readEnum());
+      msg.setParkEventPictureSelectionStatus(value);
+      break;
+    case 64:
+      var value = /** @type {!proto.proto.PanicAlarmActive} */ (reader.readEnum());
+      msg.setPanicAlarmActive(value);
+      break;
+    case 65:
+      var value = /** @type {!proto.proto.InteriorProtectionSelectionStatus} */ (reader.readEnum());
+      msg.setInteriorProtectionSelectionStatus(value);
+      break;
+    case 66:
+      var value = /** @type {!proto.proto.InteriorProtectionActivationStatus} */ (reader.readEnum());
+      msg.setInteriorProtectionActivationStatus(value);
+      break;
+    case 67:
+      var value = /** @type {!proto.proto.TowProtectionSelectionStatus} */ (reader.readEnum());
+      msg.setTowProtectionSelectionStatus(value);
+      break;
+    case 68:
+      var value = /** @type {!proto.proto.TowProtectionActivationStatus} */ (reader.readEnum());
+      msg.setTowProtectionActivationStatus(value);
+      break;
+    case 69:
+      var value = /** @type {!proto.proto.VehicleTheftAlarmInactiveReason} */ (reader.readEnum());
+      msg.setVehicleTheftAlarmInactiveReason(value);
+      break;
+    case 70:
+      var value = /** @type {!proto.proto.ParkCollisionSelectionStatus} */ (reader.readEnum());
+      msg.setParkCollisionSelectionStatus(value);
+      break;
+    case 71:
+      var value = /** @type {!proto.proto.ParkCollisionActivationStatus} */ (reader.readEnum());
+      msg.setParkCollisionActivationStatus(value);
+      break;
+    case 72:
+      var value = /** @type {!proto.proto.ParkCollisionInactiveReason} */ (reader.readEnum());
+      msg.setParkCollisionInactiveReason(value);
+      break;
+    case 73:
+      var value = /** @type {!proto.proto.ParkCollisionPictureTransferStatus} */ (reader.readEnum());
+      msg.setParkCollisionPictureTransferStatus(value);
+      break;
+    case 78:
+      var value = /** @type {!proto.proto.EmergencyPowerSupply} */ (reader.readEnum());
+      msg.setEmergencyPowerSupply(value);
+      break;
+    case 79:
+      var value = /** @type {!proto.proto.EvsePairingState} */ (reader.readEnum());
+      msg.setEvsePairingState(value);
+      break;
+    case 80:
+      var value = new proto.proto.ChargingPredictionSoc;
+      reader.readMessage(value,proto.proto.ChargingPredictionSoc.deserializeBinaryFromReader);
+      msg.setChargingPredictionSoc(value);
+      break;
+    case 81:
+      var value = new proto.proto.ChargingPredictionDepartureTime;
+      reader.readMessage(value,proto.proto.ChargingPredictionDepartureTime.deserializeBinaryFromReader);
+      msg.setChargingPredictionDepartureTime(value);
+      break;
+    case 84:
+      var value = new proto.proto.ChargeFlaps;
+      reader.readMessage(value,proto.proto.ChargeFlaps.deserializeBinaryFromReader);
+      msg.setChargeFlaps(value);
+      break;
+    case 85:
+      var value = new proto.proto.ChargeInlets;
+      reader.readMessage(value,proto.proto.ChargeInlets.deserializeBinaryFromReader);
+      msg.setChargeInlets(value);
+      break;
+    case 86:
+      var value = new proto.proto.ChargingTimer;
+      reader.readMessage(value,proto.proto.ChargingTimer.deserializeBinaryFromReader);
+      msg.setChargingTimer(value);
+      break;
+    case 88:
+      var value = new proto.proto.ChargingScheduleRequested;
+      reader.readMessage(value,proto.proto.ChargingScheduleRequested.deserializeBinaryFromReader);
+      msg.setChargingScheduleRequested(value);
+      break;
+    case 89:
+      var value = /** @type {!proto.proto.ChargingFlapErrorDetails} */ (reader.readEnum());
+      msg.setChargingFlapErrorDetails(value);
+      break;
+    case 90:
+      var value = /** @type {!proto.proto.ChargingCompatibilityError} */ (reader.readEnum());
+      msg.setChargingCompatibilityError(value);
+      break;
+    case 91:
+      var value = /** @type {!proto.proto.HvBatteryPrecondAvailability} */ (reader.readEnum());
+      msg.setHvBatteryPrecondAvailability(value);
+      break;
+    case 92:
+      var value = new proto.proto.HvBatteryPrecondRequestState;
+      reader.readMessage(value,proto.proto.HvBatteryPrecondRequestState.deserializeBinaryFromReader);
+      msg.setHvBatteryPrecondRequestState(value);
+      break;
+    case 93:
+      var value = new proto.proto.HvBatteryPrecondState;
+      reader.readMessage(value,proto.proto.HvBatteryPrecondState.deserializeBinaryFromReader);
+      msg.setHvBatteryPrecondState(value);
       break;
     default:
       reader.skipField();
@@ -1582,6 +2298,264 @@ proto.proto.VehicleAttributeStatus.serializeBinaryToWriter = function(message, w
       proto.proto.ChargeProgramsValue.serializeBinaryToWriter
     );
   }
+  f = message.getChargingbreakClocktimerValue();
+  if (f != null) {
+    writer.writeMessage(
+      32,
+      f,
+      proto.proto.ChargingBreakClockTimerValue.serializeBinaryToWriter
+    );
+  }
+  f = message.getChargingPowerControl();
+  if (f != null) {
+    writer.writeMessage(
+      33,
+      f,
+      proto.proto.ChargingPowerControl.serializeBinaryToWriter
+    );
+  }
+  f = /** @type {!proto.proto.VehicleAttributeStatus.TcuConnectionStateLowChannelStatus} */ (jspb.Message.getField(message, 38));
+  if (f != null) {
+    writer.writeEnum(
+      38,
+      f
+    );
+  }
+  f = message.getPrecondState();
+  if (f != null) {
+    writer.writeMessage(
+      44,
+      f,
+      proto.proto.PrecondState.serializeBinaryToWriter
+    );
+  }
+  f = message.getChargingPowerRestrictions();
+  if (f != null) {
+    writer.writeMessage(
+      55,
+      f,
+      proto.proto.ChargingPowerRestrictions.serializeBinaryToWriter
+    );
+  }
+  f = /** @type {!proto.proto.VehicleAttributeStatus.ChargingCouplerErrorDetails} */ (jspb.Message.getField(message, 56));
+  if (f != null) {
+    writer.writeEnum(
+      56,
+      f
+    );
+  }
+  f = /** @type {!proto.proto.VehicleAttributeStatus.ChargingErrorVehicleNoSupport400V} */ (jspb.Message.getField(message, 58));
+  if (f != null) {
+    writer.writeEnum(
+      58,
+      f
+    );
+  }
+  f = /** @type {!proto.proto.VehicleAttributeStatus.ChargingErrorImpossibleChangeTo400V} */ (jspb.Message.getField(message, 59));
+  if (f != null) {
+    writer.writeEnum(
+      59,
+      f
+    );
+  }
+  f = /** @type {!proto.proto.VehicleAttributeStatus.ChargingErrorImpossibleChangeTo800V} */ (jspb.Message.getField(message, 60));
+  if (f != null) {
+    writer.writeEnum(
+      60,
+      f
+    );
+  }
+  f = message.getPrecondOperabilityState();
+  if (f != null) {
+    writer.writeMessage(
+      61,
+      f,
+      proto.proto.PrecondOperabilityState.serializeBinaryToWriter
+    );
+  }
+  f = /** @type {!proto.proto.PictureRecordingStatus} */ (jspb.Message.getField(message, 62));
+  if (f != null) {
+    writer.writeEnum(
+      62,
+      f
+    );
+  }
+  f = /** @type {!proto.proto.ParkEventPictureSelectionStatus} */ (jspb.Message.getField(message, 63));
+  if (f != null) {
+    writer.writeEnum(
+      63,
+      f
+    );
+  }
+  f = /** @type {!proto.proto.PanicAlarmActive} */ (jspb.Message.getField(message, 64));
+  if (f != null) {
+    writer.writeEnum(
+      64,
+      f
+    );
+  }
+  f = /** @type {!proto.proto.InteriorProtectionSelectionStatus} */ (jspb.Message.getField(message, 65));
+  if (f != null) {
+    writer.writeEnum(
+      65,
+      f
+    );
+  }
+  f = /** @type {!proto.proto.InteriorProtectionActivationStatus} */ (jspb.Message.getField(message, 66));
+  if (f != null) {
+    writer.writeEnum(
+      66,
+      f
+    );
+  }
+  f = /** @type {!proto.proto.TowProtectionSelectionStatus} */ (jspb.Message.getField(message, 67));
+  if (f != null) {
+    writer.writeEnum(
+      67,
+      f
+    );
+  }
+  f = /** @type {!proto.proto.TowProtectionActivationStatus} */ (jspb.Message.getField(message, 68));
+  if (f != null) {
+    writer.writeEnum(
+      68,
+      f
+    );
+  }
+  f = /** @type {!proto.proto.VehicleTheftAlarmInactiveReason} */ (jspb.Message.getField(message, 69));
+  if (f != null) {
+    writer.writeEnum(
+      69,
+      f
+    );
+  }
+  f = /** @type {!proto.proto.ParkCollisionSelectionStatus} */ (jspb.Message.getField(message, 70));
+  if (f != null) {
+    writer.writeEnum(
+      70,
+      f
+    );
+  }
+  f = /** @type {!proto.proto.ParkCollisionActivationStatus} */ (jspb.Message.getField(message, 71));
+  if (f != null) {
+    writer.writeEnum(
+      71,
+      f
+    );
+  }
+  f = /** @type {!proto.proto.ParkCollisionInactiveReason} */ (jspb.Message.getField(message, 72));
+  if (f != null) {
+    writer.writeEnum(
+      72,
+      f
+    );
+  }
+  f = /** @type {!proto.proto.ParkCollisionPictureTransferStatus} */ (jspb.Message.getField(message, 73));
+  if (f != null) {
+    writer.writeEnum(
+      73,
+      f
+    );
+  }
+  f = /** @type {!proto.proto.EmergencyPowerSupply} */ (jspb.Message.getField(message, 78));
+  if (f != null) {
+    writer.writeEnum(
+      78,
+      f
+    );
+  }
+  f = /** @type {!proto.proto.EvsePairingState} */ (jspb.Message.getField(message, 79));
+  if (f != null) {
+    writer.writeEnum(
+      79,
+      f
+    );
+  }
+  f = message.getChargingPredictionSoc();
+  if (f != null) {
+    writer.writeMessage(
+      80,
+      f,
+      proto.proto.ChargingPredictionSoc.serializeBinaryToWriter
+    );
+  }
+  f = message.getChargingPredictionDepartureTime();
+  if (f != null) {
+    writer.writeMessage(
+      81,
+      f,
+      proto.proto.ChargingPredictionDepartureTime.serializeBinaryToWriter
+    );
+  }
+  f = message.getChargeFlaps();
+  if (f != null) {
+    writer.writeMessage(
+      84,
+      f,
+      proto.proto.ChargeFlaps.serializeBinaryToWriter
+    );
+  }
+  f = message.getChargeInlets();
+  if (f != null) {
+    writer.writeMessage(
+      85,
+      f,
+      proto.proto.ChargeInlets.serializeBinaryToWriter
+    );
+  }
+  f = message.getChargingTimer();
+  if (f != null) {
+    writer.writeMessage(
+      86,
+      f,
+      proto.proto.ChargingTimer.serializeBinaryToWriter
+    );
+  }
+  f = message.getChargingScheduleRequested();
+  if (f != null) {
+    writer.writeMessage(
+      88,
+      f,
+      proto.proto.ChargingScheduleRequested.serializeBinaryToWriter
+    );
+  }
+  f = /** @type {!proto.proto.ChargingFlapErrorDetails} */ (jspb.Message.getField(message, 89));
+  if (f != null) {
+    writer.writeEnum(
+      89,
+      f
+    );
+  }
+  f = /** @type {!proto.proto.ChargingCompatibilityError} */ (jspb.Message.getField(message, 90));
+  if (f != null) {
+    writer.writeEnum(
+      90,
+      f
+    );
+  }
+  f = /** @type {!proto.proto.HvBatteryPrecondAvailability} */ (jspb.Message.getField(message, 91));
+  if (f != null) {
+    writer.writeEnum(
+      91,
+      f
+    );
+  }
+  f = message.getHvBatteryPrecondRequestState();
+  if (f != null) {
+    writer.writeMessage(
+      92,
+      f,
+      proto.proto.HvBatteryPrecondRequestState.serializeBinaryToWriter
+    );
+  }
+  f = message.getHvBatteryPrecondState();
+  if (f != null) {
+    writer.writeMessage(
+      93,
+      f,
+      proto.proto.HvBatteryPrecondState.serializeBinaryToWriter
+    );
+  }
 };
 
 
@@ -1679,6 +2653,52 @@ proto.proto.VehicleAttributeStatus.ClockHourUnit = {
   UNSPECIFIED_CLOCK_HOUR_UNIT: 0,
   T12H: 1,
   T24H: 2
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.VehicleAttributeStatus.TcuConnectionStateLowChannelStatus = {
+  UNKNOWN_TCU_CONNECTION_STATE: 0,
+  INITIALLY_CONNECTED: 1,
+  RECONNECTED: 2,
+  DISCONNECTED: 3,
+  UNPLANNED_DISCONNECTED: 4
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.VehicleAttributeStatus.ChargingCouplerErrorDetails = {
+  CHARING_COUPLER_ERROR_DETAILS_NO_INFO_OR_ERROR_MESSAGE: 0,
+  CHARING_COUPLER_ERROR_DETAILS_RELIEVE_CHARGE_COUPLER_AND_RETRY: 1,
+  CHARING_COUPLER_ERROR_DETAILS_CONTACT_SERVICE_HOTLINE_FOR_EMERGENCY_UNLOCK: 2,
+  CHARING_COUPLER_ERROR_DETAILS_UNPLUG_AND_REPLUG_CHARGE_COUPLER: 3,
+  CHARING_COUPLER_ERROR_DETAILS_CHARGE_COUPLER_LOCK_DEFECT: 4
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.VehicleAttributeStatus.ChargingErrorImpossibleChangeTo400V = {
+  CHARGING_ERROR_IMPOSSIBLE_CHANGE_TO_400V_NO_INFO: 0,
+  CHARGING_ERROR_IMPOSSIBLE_CHANGE_TO_400V_400V_IMPOSSIBLE_STUCK_TO_800V: 1
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.VehicleAttributeStatus.ChargingErrorImpossibleChangeTo800V = {
+  CHARGING_ERROR_IMPOSSIBLE_CHANGE_TO_800V_NO_INFO: 0,
+  CHARGING_ERROR_IMPOSSIBLE_CHANGE_TO_800V_800V_IMPOSSIBLE_STUCK_TO_400V: 1
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.VehicleAttributeStatus.ChargingErrorVehicleNoSupport400V = {
+  CHARGING_ERROR_VEHICLE_NO_SUPPORT_400V_NO_INFO: 0,
+  CHARGING_ERROR_VEHICLE_NO_SUPPORT_400V_400V_CHARGING_NOT_POSSIBLE: 1
 };
 
 /**
@@ -2717,6 +3737,4745 @@ proto.proto.VehicleAttributeStatus.prototype.hasChargeProgramsValue = function()
 };
 
 
+/**
+ * optional ChargingBreakClockTimerValue chargingbreak_clocktimer_value = 32;
+ * @return {?proto.proto.ChargingBreakClockTimerValue}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getChargingbreakClocktimerValue = function() {
+  return /** @type{?proto.proto.ChargingBreakClockTimerValue} */ (
+    jspb.Message.getWrapperField(this, proto.proto.ChargingBreakClockTimerValue, 32));
+};
+
+
+/**
+ * @param {?proto.proto.ChargingBreakClockTimerValue|undefined} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+*/
+proto.proto.VehicleAttributeStatus.prototype.setChargingbreakClocktimerValue = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 32, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearChargingbreakClocktimerValue = function() {
+  return this.setChargingbreakClocktimerValue(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasChargingbreakClocktimerValue = function() {
+  return jspb.Message.getField(this, 32) != null;
+};
+
+
+/**
+ * optional ChargingPowerControl charging_power_control = 33;
+ * @return {?proto.proto.ChargingPowerControl}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getChargingPowerControl = function() {
+  return /** @type{?proto.proto.ChargingPowerControl} */ (
+    jspb.Message.getWrapperField(this, proto.proto.ChargingPowerControl, 33));
+};
+
+
+/**
+ * @param {?proto.proto.ChargingPowerControl|undefined} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+*/
+proto.proto.VehicleAttributeStatus.prototype.setChargingPowerControl = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 33, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearChargingPowerControl = function() {
+  return this.setChargingPowerControl(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasChargingPowerControl = function() {
+  return jspb.Message.getField(this, 33) != null;
+};
+
+
+/**
+ * optional TcuConnectionStateLowChannelStatus tcu_connection_state_low_channel = 38;
+ * @return {!proto.proto.VehicleAttributeStatus.TcuConnectionStateLowChannelStatus}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getTcuConnectionStateLowChannel = function() {
+  return /** @type {!proto.proto.VehicleAttributeStatus.TcuConnectionStateLowChannelStatus} */ (jspb.Message.getFieldWithDefault(this, 38, 0));
+};
+
+
+/**
+ * @param {!proto.proto.VehicleAttributeStatus.TcuConnectionStateLowChannelStatus} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.setTcuConnectionStateLowChannel = function(value) {
+  return jspb.Message.setOneofField(this, 38, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearTcuConnectionStateLowChannel = function() {
+  return jspb.Message.setOneofField(this, 38, proto.proto.VehicleAttributeStatus.oneofGroups_[1], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasTcuConnectionStateLowChannel = function() {
+  return jspb.Message.getField(this, 38) != null;
+};
+
+
+/**
+ * optional PrecondState precond_state = 44;
+ * @return {?proto.proto.PrecondState}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getPrecondState = function() {
+  return /** @type{?proto.proto.PrecondState} */ (
+    jspb.Message.getWrapperField(this, proto.proto.PrecondState, 44));
+};
+
+
+/**
+ * @param {?proto.proto.PrecondState|undefined} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+*/
+proto.proto.VehicleAttributeStatus.prototype.setPrecondState = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 44, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearPrecondState = function() {
+  return this.setPrecondState(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasPrecondState = function() {
+  return jspb.Message.getField(this, 44) != null;
+};
+
+
+/**
+ * optional ChargingPowerRestrictions charging_power_restrictions = 55;
+ * @return {?proto.proto.ChargingPowerRestrictions}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getChargingPowerRestrictions = function() {
+  return /** @type{?proto.proto.ChargingPowerRestrictions} */ (
+    jspb.Message.getWrapperField(this, proto.proto.ChargingPowerRestrictions, 55));
+};
+
+
+/**
+ * @param {?proto.proto.ChargingPowerRestrictions|undefined} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+*/
+proto.proto.VehicleAttributeStatus.prototype.setChargingPowerRestrictions = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 55, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearChargingPowerRestrictions = function() {
+  return this.setChargingPowerRestrictions(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasChargingPowerRestrictions = function() {
+  return jspb.Message.getField(this, 55) != null;
+};
+
+
+/**
+ * optional ChargingCouplerErrorDetails charging_coupler_error_details = 56;
+ * @return {!proto.proto.VehicleAttributeStatus.ChargingCouplerErrorDetails}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getChargingCouplerErrorDetails = function() {
+  return /** @type {!proto.proto.VehicleAttributeStatus.ChargingCouplerErrorDetails} */ (jspb.Message.getFieldWithDefault(this, 56, 0));
+};
+
+
+/**
+ * @param {!proto.proto.VehicleAttributeStatus.ChargingCouplerErrorDetails} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.setChargingCouplerErrorDetails = function(value) {
+  return jspb.Message.setOneofField(this, 56, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearChargingCouplerErrorDetails = function() {
+  return jspb.Message.setOneofField(this, 56, proto.proto.VehicleAttributeStatus.oneofGroups_[1], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasChargingCouplerErrorDetails = function() {
+  return jspb.Message.getField(this, 56) != null;
+};
+
+
+/**
+ * optional ChargingErrorVehicleNoSupport400V charging_error_vehicle_no_support_400v = 58;
+ * @return {!proto.proto.VehicleAttributeStatus.ChargingErrorVehicleNoSupport400V}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getChargingErrorVehicleNoSupport400v = function() {
+  return /** @type {!proto.proto.VehicleAttributeStatus.ChargingErrorVehicleNoSupport400V} */ (jspb.Message.getFieldWithDefault(this, 58, 0));
+};
+
+
+/**
+ * @param {!proto.proto.VehicleAttributeStatus.ChargingErrorVehicleNoSupport400V} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.setChargingErrorVehicleNoSupport400v = function(value) {
+  return jspb.Message.setOneofField(this, 58, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearChargingErrorVehicleNoSupport400v = function() {
+  return jspb.Message.setOneofField(this, 58, proto.proto.VehicleAttributeStatus.oneofGroups_[1], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasChargingErrorVehicleNoSupport400v = function() {
+  return jspb.Message.getField(this, 58) != null;
+};
+
+
+/**
+ * optional ChargingErrorImpossibleChangeTo400V charging_error_impossible_change_to_400v = 59;
+ * @return {!proto.proto.VehicleAttributeStatus.ChargingErrorImpossibleChangeTo400V}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getChargingErrorImpossibleChangeTo400v = function() {
+  return /** @type {!proto.proto.VehicleAttributeStatus.ChargingErrorImpossibleChangeTo400V} */ (jspb.Message.getFieldWithDefault(this, 59, 0));
+};
+
+
+/**
+ * @param {!proto.proto.VehicleAttributeStatus.ChargingErrorImpossibleChangeTo400V} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.setChargingErrorImpossibleChangeTo400v = function(value) {
+  return jspb.Message.setOneofField(this, 59, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearChargingErrorImpossibleChangeTo400v = function() {
+  return jspb.Message.setOneofField(this, 59, proto.proto.VehicleAttributeStatus.oneofGroups_[1], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasChargingErrorImpossibleChangeTo400v = function() {
+  return jspb.Message.getField(this, 59) != null;
+};
+
+
+/**
+ * optional ChargingErrorImpossibleChangeTo800V charging_error_impossible_change_to_800v = 60;
+ * @return {!proto.proto.VehicleAttributeStatus.ChargingErrorImpossibleChangeTo800V}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getChargingErrorImpossibleChangeTo800v = function() {
+  return /** @type {!proto.proto.VehicleAttributeStatus.ChargingErrorImpossibleChangeTo800V} */ (jspb.Message.getFieldWithDefault(this, 60, 0));
+};
+
+
+/**
+ * @param {!proto.proto.VehicleAttributeStatus.ChargingErrorImpossibleChangeTo800V} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.setChargingErrorImpossibleChangeTo800v = function(value) {
+  return jspb.Message.setOneofField(this, 60, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearChargingErrorImpossibleChangeTo800v = function() {
+  return jspb.Message.setOneofField(this, 60, proto.proto.VehicleAttributeStatus.oneofGroups_[1], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasChargingErrorImpossibleChangeTo800v = function() {
+  return jspb.Message.getField(this, 60) != null;
+};
+
+
+/**
+ * optional PrecondOperabilityState precond_operability_state = 61;
+ * @return {?proto.proto.PrecondOperabilityState}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getPrecondOperabilityState = function() {
+  return /** @type{?proto.proto.PrecondOperabilityState} */ (
+    jspb.Message.getWrapperField(this, proto.proto.PrecondOperabilityState, 61));
+};
+
+
+/**
+ * @param {?proto.proto.PrecondOperabilityState|undefined} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+*/
+proto.proto.VehicleAttributeStatus.prototype.setPrecondOperabilityState = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 61, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearPrecondOperabilityState = function() {
+  return this.setPrecondOperabilityState(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasPrecondOperabilityState = function() {
+  return jspb.Message.getField(this, 61) != null;
+};
+
+
+/**
+ * optional PictureRecordingStatus picture_recording_status = 62;
+ * @return {!proto.proto.PictureRecordingStatus}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getPictureRecordingStatus = function() {
+  return /** @type {!proto.proto.PictureRecordingStatus} */ (jspb.Message.getFieldWithDefault(this, 62, 0));
+};
+
+
+/**
+ * @param {!proto.proto.PictureRecordingStatus} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.setPictureRecordingStatus = function(value) {
+  return jspb.Message.setOneofField(this, 62, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearPictureRecordingStatus = function() {
+  return jspb.Message.setOneofField(this, 62, proto.proto.VehicleAttributeStatus.oneofGroups_[1], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasPictureRecordingStatus = function() {
+  return jspb.Message.getField(this, 62) != null;
+};
+
+
+/**
+ * optional ParkEventPictureSelectionStatus park_event_picture_selection_status = 63;
+ * @return {!proto.proto.ParkEventPictureSelectionStatus}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getParkEventPictureSelectionStatus = function() {
+  return /** @type {!proto.proto.ParkEventPictureSelectionStatus} */ (jspb.Message.getFieldWithDefault(this, 63, 0));
+};
+
+
+/**
+ * @param {!proto.proto.ParkEventPictureSelectionStatus} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.setParkEventPictureSelectionStatus = function(value) {
+  return jspb.Message.setOneofField(this, 63, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearParkEventPictureSelectionStatus = function() {
+  return jspb.Message.setOneofField(this, 63, proto.proto.VehicleAttributeStatus.oneofGroups_[1], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasParkEventPictureSelectionStatus = function() {
+  return jspb.Message.getField(this, 63) != null;
+};
+
+
+/**
+ * optional PanicAlarmActive panic_alarm_active = 64;
+ * @return {!proto.proto.PanicAlarmActive}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getPanicAlarmActive = function() {
+  return /** @type {!proto.proto.PanicAlarmActive} */ (jspb.Message.getFieldWithDefault(this, 64, 0));
+};
+
+
+/**
+ * @param {!proto.proto.PanicAlarmActive} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.setPanicAlarmActive = function(value) {
+  return jspb.Message.setOneofField(this, 64, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearPanicAlarmActive = function() {
+  return jspb.Message.setOneofField(this, 64, proto.proto.VehicleAttributeStatus.oneofGroups_[1], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasPanicAlarmActive = function() {
+  return jspb.Message.getField(this, 64) != null;
+};
+
+
+/**
+ * optional InteriorProtectionSelectionStatus interior_protection_selection_status = 65;
+ * @return {!proto.proto.InteriorProtectionSelectionStatus}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getInteriorProtectionSelectionStatus = function() {
+  return /** @type {!proto.proto.InteriorProtectionSelectionStatus} */ (jspb.Message.getFieldWithDefault(this, 65, 0));
+};
+
+
+/**
+ * @param {!proto.proto.InteriorProtectionSelectionStatus} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.setInteriorProtectionSelectionStatus = function(value) {
+  return jspb.Message.setOneofField(this, 65, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearInteriorProtectionSelectionStatus = function() {
+  return jspb.Message.setOneofField(this, 65, proto.proto.VehicleAttributeStatus.oneofGroups_[1], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasInteriorProtectionSelectionStatus = function() {
+  return jspb.Message.getField(this, 65) != null;
+};
+
+
+/**
+ * optional InteriorProtectionActivationStatus interior_protection_activation_status = 66;
+ * @return {!proto.proto.InteriorProtectionActivationStatus}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getInteriorProtectionActivationStatus = function() {
+  return /** @type {!proto.proto.InteriorProtectionActivationStatus} */ (jspb.Message.getFieldWithDefault(this, 66, 0));
+};
+
+
+/**
+ * @param {!proto.proto.InteriorProtectionActivationStatus} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.setInteriorProtectionActivationStatus = function(value) {
+  return jspb.Message.setOneofField(this, 66, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearInteriorProtectionActivationStatus = function() {
+  return jspb.Message.setOneofField(this, 66, proto.proto.VehicleAttributeStatus.oneofGroups_[1], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasInteriorProtectionActivationStatus = function() {
+  return jspb.Message.getField(this, 66) != null;
+};
+
+
+/**
+ * optional TowProtectionSelectionStatus tow_protection_selection_status = 67;
+ * @return {!proto.proto.TowProtectionSelectionStatus}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getTowProtectionSelectionStatus = function() {
+  return /** @type {!proto.proto.TowProtectionSelectionStatus} */ (jspb.Message.getFieldWithDefault(this, 67, 0));
+};
+
+
+/**
+ * @param {!proto.proto.TowProtectionSelectionStatus} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.setTowProtectionSelectionStatus = function(value) {
+  return jspb.Message.setOneofField(this, 67, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearTowProtectionSelectionStatus = function() {
+  return jspb.Message.setOneofField(this, 67, proto.proto.VehicleAttributeStatus.oneofGroups_[1], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasTowProtectionSelectionStatus = function() {
+  return jspb.Message.getField(this, 67) != null;
+};
+
+
+/**
+ * optional TowProtectionActivationStatus tow_protection_activation_status = 68;
+ * @return {!proto.proto.TowProtectionActivationStatus}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getTowProtectionActivationStatus = function() {
+  return /** @type {!proto.proto.TowProtectionActivationStatus} */ (jspb.Message.getFieldWithDefault(this, 68, 0));
+};
+
+
+/**
+ * @param {!proto.proto.TowProtectionActivationStatus} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.setTowProtectionActivationStatus = function(value) {
+  return jspb.Message.setOneofField(this, 68, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearTowProtectionActivationStatus = function() {
+  return jspb.Message.setOneofField(this, 68, proto.proto.VehicleAttributeStatus.oneofGroups_[1], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasTowProtectionActivationStatus = function() {
+  return jspb.Message.getField(this, 68) != null;
+};
+
+
+/**
+ * optional VehicleTheftAlarmInactiveReason vehicle_theft_alarm_inactive_reason = 69;
+ * @return {!proto.proto.VehicleTheftAlarmInactiveReason}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getVehicleTheftAlarmInactiveReason = function() {
+  return /** @type {!proto.proto.VehicleTheftAlarmInactiveReason} */ (jspb.Message.getFieldWithDefault(this, 69, 0));
+};
+
+
+/**
+ * @param {!proto.proto.VehicleTheftAlarmInactiveReason} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.setVehicleTheftAlarmInactiveReason = function(value) {
+  return jspb.Message.setOneofField(this, 69, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearVehicleTheftAlarmInactiveReason = function() {
+  return jspb.Message.setOneofField(this, 69, proto.proto.VehicleAttributeStatus.oneofGroups_[1], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasVehicleTheftAlarmInactiveReason = function() {
+  return jspb.Message.getField(this, 69) != null;
+};
+
+
+/**
+ * optional ParkCollisionSelectionStatus park_collision_selection_status = 70;
+ * @return {!proto.proto.ParkCollisionSelectionStatus}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getParkCollisionSelectionStatus = function() {
+  return /** @type {!proto.proto.ParkCollisionSelectionStatus} */ (jspb.Message.getFieldWithDefault(this, 70, 0));
+};
+
+
+/**
+ * @param {!proto.proto.ParkCollisionSelectionStatus} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.setParkCollisionSelectionStatus = function(value) {
+  return jspb.Message.setOneofField(this, 70, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearParkCollisionSelectionStatus = function() {
+  return jspb.Message.setOneofField(this, 70, proto.proto.VehicleAttributeStatus.oneofGroups_[1], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasParkCollisionSelectionStatus = function() {
+  return jspb.Message.getField(this, 70) != null;
+};
+
+
+/**
+ * optional ParkCollisionActivationStatus park_collision_activation_status = 71;
+ * @return {!proto.proto.ParkCollisionActivationStatus}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getParkCollisionActivationStatus = function() {
+  return /** @type {!proto.proto.ParkCollisionActivationStatus} */ (jspb.Message.getFieldWithDefault(this, 71, 0));
+};
+
+
+/**
+ * @param {!proto.proto.ParkCollisionActivationStatus} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.setParkCollisionActivationStatus = function(value) {
+  return jspb.Message.setOneofField(this, 71, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearParkCollisionActivationStatus = function() {
+  return jspb.Message.setOneofField(this, 71, proto.proto.VehicleAttributeStatus.oneofGroups_[1], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasParkCollisionActivationStatus = function() {
+  return jspb.Message.getField(this, 71) != null;
+};
+
+
+/**
+ * optional ParkCollisionInactiveReason park_collision_inactive_reason = 72;
+ * @return {!proto.proto.ParkCollisionInactiveReason}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getParkCollisionInactiveReason = function() {
+  return /** @type {!proto.proto.ParkCollisionInactiveReason} */ (jspb.Message.getFieldWithDefault(this, 72, 0));
+};
+
+
+/**
+ * @param {!proto.proto.ParkCollisionInactiveReason} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.setParkCollisionInactiveReason = function(value) {
+  return jspb.Message.setOneofField(this, 72, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearParkCollisionInactiveReason = function() {
+  return jspb.Message.setOneofField(this, 72, proto.proto.VehicleAttributeStatus.oneofGroups_[1], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasParkCollisionInactiveReason = function() {
+  return jspb.Message.getField(this, 72) != null;
+};
+
+
+/**
+ * optional ParkCollisionPictureTransferStatus park_collision_picture_transfer_status = 73;
+ * @return {!proto.proto.ParkCollisionPictureTransferStatus}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getParkCollisionPictureTransferStatus = function() {
+  return /** @type {!proto.proto.ParkCollisionPictureTransferStatus} */ (jspb.Message.getFieldWithDefault(this, 73, 0));
+};
+
+
+/**
+ * @param {!proto.proto.ParkCollisionPictureTransferStatus} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.setParkCollisionPictureTransferStatus = function(value) {
+  return jspb.Message.setOneofField(this, 73, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearParkCollisionPictureTransferStatus = function() {
+  return jspb.Message.setOneofField(this, 73, proto.proto.VehicleAttributeStatus.oneofGroups_[1], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasParkCollisionPictureTransferStatus = function() {
+  return jspb.Message.getField(this, 73) != null;
+};
+
+
+/**
+ * optional EmergencyPowerSupply emergency_power_supply = 78;
+ * @return {!proto.proto.EmergencyPowerSupply}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getEmergencyPowerSupply = function() {
+  return /** @type {!proto.proto.EmergencyPowerSupply} */ (jspb.Message.getFieldWithDefault(this, 78, 0));
+};
+
+
+/**
+ * @param {!proto.proto.EmergencyPowerSupply} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.setEmergencyPowerSupply = function(value) {
+  return jspb.Message.setOneofField(this, 78, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearEmergencyPowerSupply = function() {
+  return jspb.Message.setOneofField(this, 78, proto.proto.VehicleAttributeStatus.oneofGroups_[1], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasEmergencyPowerSupply = function() {
+  return jspb.Message.getField(this, 78) != null;
+};
+
+
+/**
+ * optional EvsePairingState evse_pairing_state = 79;
+ * @return {!proto.proto.EvsePairingState}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getEvsePairingState = function() {
+  return /** @type {!proto.proto.EvsePairingState} */ (jspb.Message.getFieldWithDefault(this, 79, 0));
+};
+
+
+/**
+ * @param {!proto.proto.EvsePairingState} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.setEvsePairingState = function(value) {
+  return jspb.Message.setOneofField(this, 79, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearEvsePairingState = function() {
+  return jspb.Message.setOneofField(this, 79, proto.proto.VehicleAttributeStatus.oneofGroups_[1], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasEvsePairingState = function() {
+  return jspb.Message.getField(this, 79) != null;
+};
+
+
+/**
+ * optional ChargingPredictionSoc charging_prediction_soc = 80;
+ * @return {?proto.proto.ChargingPredictionSoc}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getChargingPredictionSoc = function() {
+  return /** @type{?proto.proto.ChargingPredictionSoc} */ (
+    jspb.Message.getWrapperField(this, proto.proto.ChargingPredictionSoc, 80));
+};
+
+
+/**
+ * @param {?proto.proto.ChargingPredictionSoc|undefined} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+*/
+proto.proto.VehicleAttributeStatus.prototype.setChargingPredictionSoc = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 80, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearChargingPredictionSoc = function() {
+  return this.setChargingPredictionSoc(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasChargingPredictionSoc = function() {
+  return jspb.Message.getField(this, 80) != null;
+};
+
+
+/**
+ * optional ChargingPredictionDepartureTime charging_prediction_departure_time = 81;
+ * @return {?proto.proto.ChargingPredictionDepartureTime}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getChargingPredictionDepartureTime = function() {
+  return /** @type{?proto.proto.ChargingPredictionDepartureTime} */ (
+    jspb.Message.getWrapperField(this, proto.proto.ChargingPredictionDepartureTime, 81));
+};
+
+
+/**
+ * @param {?proto.proto.ChargingPredictionDepartureTime|undefined} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+*/
+proto.proto.VehicleAttributeStatus.prototype.setChargingPredictionDepartureTime = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 81, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearChargingPredictionDepartureTime = function() {
+  return this.setChargingPredictionDepartureTime(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasChargingPredictionDepartureTime = function() {
+  return jspb.Message.getField(this, 81) != null;
+};
+
+
+/**
+ * optional ChargeFlaps charge_flaps = 84;
+ * @return {?proto.proto.ChargeFlaps}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getChargeFlaps = function() {
+  return /** @type{?proto.proto.ChargeFlaps} */ (
+    jspb.Message.getWrapperField(this, proto.proto.ChargeFlaps, 84));
+};
+
+
+/**
+ * @param {?proto.proto.ChargeFlaps|undefined} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+*/
+proto.proto.VehicleAttributeStatus.prototype.setChargeFlaps = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 84, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearChargeFlaps = function() {
+  return this.setChargeFlaps(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasChargeFlaps = function() {
+  return jspb.Message.getField(this, 84) != null;
+};
+
+
+/**
+ * optional ChargeInlets charge_inlets = 85;
+ * @return {?proto.proto.ChargeInlets}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getChargeInlets = function() {
+  return /** @type{?proto.proto.ChargeInlets} */ (
+    jspb.Message.getWrapperField(this, proto.proto.ChargeInlets, 85));
+};
+
+
+/**
+ * @param {?proto.proto.ChargeInlets|undefined} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+*/
+proto.proto.VehicleAttributeStatus.prototype.setChargeInlets = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 85, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearChargeInlets = function() {
+  return this.setChargeInlets(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasChargeInlets = function() {
+  return jspb.Message.getField(this, 85) != null;
+};
+
+
+/**
+ * optional ChargingTimer charging_timer = 86;
+ * @return {?proto.proto.ChargingTimer}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getChargingTimer = function() {
+  return /** @type{?proto.proto.ChargingTimer} */ (
+    jspb.Message.getWrapperField(this, proto.proto.ChargingTimer, 86));
+};
+
+
+/**
+ * @param {?proto.proto.ChargingTimer|undefined} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+*/
+proto.proto.VehicleAttributeStatus.prototype.setChargingTimer = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 86, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearChargingTimer = function() {
+  return this.setChargingTimer(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasChargingTimer = function() {
+  return jspb.Message.getField(this, 86) != null;
+};
+
+
+/**
+ * optional ChargingScheduleRequested charging_schedule_requested = 88;
+ * @return {?proto.proto.ChargingScheduleRequested}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getChargingScheduleRequested = function() {
+  return /** @type{?proto.proto.ChargingScheduleRequested} */ (
+    jspb.Message.getWrapperField(this, proto.proto.ChargingScheduleRequested, 88));
+};
+
+
+/**
+ * @param {?proto.proto.ChargingScheduleRequested|undefined} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+*/
+proto.proto.VehicleAttributeStatus.prototype.setChargingScheduleRequested = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 88, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearChargingScheduleRequested = function() {
+  return this.setChargingScheduleRequested(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasChargingScheduleRequested = function() {
+  return jspb.Message.getField(this, 88) != null;
+};
+
+
+/**
+ * optional ChargingFlapErrorDetails charging_flap_error_details = 89;
+ * @return {!proto.proto.ChargingFlapErrorDetails}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getChargingFlapErrorDetails = function() {
+  return /** @type {!proto.proto.ChargingFlapErrorDetails} */ (jspb.Message.getFieldWithDefault(this, 89, 0));
+};
+
+
+/**
+ * @param {!proto.proto.ChargingFlapErrorDetails} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.setChargingFlapErrorDetails = function(value) {
+  return jspb.Message.setOneofField(this, 89, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearChargingFlapErrorDetails = function() {
+  return jspb.Message.setOneofField(this, 89, proto.proto.VehicleAttributeStatus.oneofGroups_[1], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasChargingFlapErrorDetails = function() {
+  return jspb.Message.getField(this, 89) != null;
+};
+
+
+/**
+ * optional ChargingCompatibilityError charging_compatibility_error = 90;
+ * @return {!proto.proto.ChargingCompatibilityError}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getChargingCompatibilityError = function() {
+  return /** @type {!proto.proto.ChargingCompatibilityError} */ (jspb.Message.getFieldWithDefault(this, 90, 0));
+};
+
+
+/**
+ * @param {!proto.proto.ChargingCompatibilityError} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.setChargingCompatibilityError = function(value) {
+  return jspb.Message.setOneofField(this, 90, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearChargingCompatibilityError = function() {
+  return jspb.Message.setOneofField(this, 90, proto.proto.VehicleAttributeStatus.oneofGroups_[1], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasChargingCompatibilityError = function() {
+  return jspb.Message.getField(this, 90) != null;
+};
+
+
+/**
+ * optional HvBatteryPrecondAvailability hv_battery_precond_availability = 91;
+ * @return {!proto.proto.HvBatteryPrecondAvailability}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getHvBatteryPrecondAvailability = function() {
+  return /** @type {!proto.proto.HvBatteryPrecondAvailability} */ (jspb.Message.getFieldWithDefault(this, 91, 0));
+};
+
+
+/**
+ * @param {!proto.proto.HvBatteryPrecondAvailability} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.setHvBatteryPrecondAvailability = function(value) {
+  return jspb.Message.setOneofField(this, 91, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearHvBatteryPrecondAvailability = function() {
+  return jspb.Message.setOneofField(this, 91, proto.proto.VehicleAttributeStatus.oneofGroups_[1], undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasHvBatteryPrecondAvailability = function() {
+  return jspb.Message.getField(this, 91) != null;
+};
+
+
+/**
+ * optional HvBatteryPrecondRequestState hv_battery_precond_request_state = 92;
+ * @return {?proto.proto.HvBatteryPrecondRequestState}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getHvBatteryPrecondRequestState = function() {
+  return /** @type{?proto.proto.HvBatteryPrecondRequestState} */ (
+    jspb.Message.getWrapperField(this, proto.proto.HvBatteryPrecondRequestState, 92));
+};
+
+
+/**
+ * @param {?proto.proto.HvBatteryPrecondRequestState|undefined} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+*/
+proto.proto.VehicleAttributeStatus.prototype.setHvBatteryPrecondRequestState = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 92, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearHvBatteryPrecondRequestState = function() {
+  return this.setHvBatteryPrecondRequestState(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasHvBatteryPrecondRequestState = function() {
+  return jspb.Message.getField(this, 92) != null;
+};
+
+
+/**
+ * optional HvBatteryPrecondState hv_battery_precond_state = 93;
+ * @return {?proto.proto.HvBatteryPrecondState}
+ */
+proto.proto.VehicleAttributeStatus.prototype.getHvBatteryPrecondState = function() {
+  return /** @type{?proto.proto.HvBatteryPrecondState} */ (
+    jspb.Message.getWrapperField(this, proto.proto.HvBatteryPrecondState, 93));
+};
+
+
+/**
+ * @param {?proto.proto.HvBatteryPrecondState|undefined} value
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+*/
+proto.proto.VehicleAttributeStatus.prototype.setHvBatteryPrecondState = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 93, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.VehicleAttributeStatus} returns this
+ */
+proto.proto.VehicleAttributeStatus.prototype.clearHvBatteryPrecondState = function() {
+  return this.setHvBatteryPrecondState(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VehicleAttributeStatus.prototype.hasHvBatteryPrecondState = function() {
+  return jspb.Message.getField(this, 93) != null;
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.HvBatteryPrecondState.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.HvBatteryPrecondState.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.HvBatteryPrecondState} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.HvBatteryPrecondState.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    charging: jspb.Message.getFieldWithDefault(msg, 1, 0),
+    discharging: jspb.Message.getFieldWithDefault(msg, 2, 0)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.HvBatteryPrecondState}
+ */
+proto.proto.HvBatteryPrecondState.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.HvBatteryPrecondState;
+  return proto.proto.HvBatteryPrecondState.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.HvBatteryPrecondState} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.HvBatteryPrecondState}
+ */
+proto.proto.HvBatteryPrecondState.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {!proto.proto.HvBatteryPrecondStatesCharging} */ (reader.readEnum());
+      msg.setCharging(value);
+      break;
+    case 2:
+      var value = /** @type {!proto.proto.HvBatteryPrecondStatesDischarging} */ (reader.readEnum());
+      msg.setDischarging(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.HvBatteryPrecondState.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.HvBatteryPrecondState.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.HvBatteryPrecondState} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.HvBatteryPrecondState.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getCharging();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      1,
+      f
+    );
+  }
+  f = message.getDischarging();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      2,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional HvBatteryPrecondStatesCharging charging = 1;
+ * @return {!proto.proto.HvBatteryPrecondStatesCharging}
+ */
+proto.proto.HvBatteryPrecondState.prototype.getCharging = function() {
+  return /** @type {!proto.proto.HvBatteryPrecondStatesCharging} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/**
+ * @param {!proto.proto.HvBatteryPrecondStatesCharging} value
+ * @return {!proto.proto.HvBatteryPrecondState} returns this
+ */
+proto.proto.HvBatteryPrecondState.prototype.setCharging = function(value) {
+  return jspb.Message.setProto3EnumField(this, 1, value);
+};
+
+
+/**
+ * optional HvBatteryPrecondStatesDischarging discharging = 2;
+ * @return {!proto.proto.HvBatteryPrecondStatesDischarging}
+ */
+proto.proto.HvBatteryPrecondState.prototype.getDischarging = function() {
+  return /** @type {!proto.proto.HvBatteryPrecondStatesDischarging} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/**
+ * @param {!proto.proto.HvBatteryPrecondStatesDischarging} value
+ * @return {!proto.proto.HvBatteryPrecondState} returns this
+ */
+proto.proto.HvBatteryPrecondState.prototype.setDischarging = function(value) {
+  return jspb.Message.setProto3EnumField(this, 2, value);
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.HvBatteryPrecondRequestState.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.HvBatteryPrecondRequestState.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.HvBatteryPrecondRequestState} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.HvBatteryPrecondRequestState.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    mainCategory: jspb.Message.getFieldWithDefault(msg, 1, 0),
+    subCategory: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    specificCategory: jspb.Message.getFieldWithDefault(msg, 3, 0),
+    method: jspb.Message.getFieldWithDefault(msg, 4, 0),
+    status: jspb.Message.getFieldWithDefault(msg, 5, 0)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.HvBatteryPrecondRequestState}
+ */
+proto.proto.HvBatteryPrecondRequestState.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.HvBatteryPrecondRequestState;
+  return proto.proto.HvBatteryPrecondRequestState.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.HvBatteryPrecondRequestState} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.HvBatteryPrecondRequestState}
+ */
+proto.proto.HvBatteryPrecondRequestState.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {!proto.proto.MainCategory} */ (reader.readEnum());
+      msg.setMainCategory(value);
+      break;
+    case 2:
+      var value = /** @type {!proto.proto.SubCategory} */ (reader.readEnum());
+      msg.setSubCategory(value);
+      break;
+    case 3:
+      var value = /** @type {!proto.proto.SpecificCategory} */ (reader.readEnum());
+      msg.setSpecificCategory(value);
+      break;
+    case 4:
+      var value = /** @type {!proto.proto.Method} */ (reader.readEnum());
+      msg.setMethod(value);
+      break;
+    case 5:
+      var value = /** @type {!proto.proto.Status} */ (reader.readEnum());
+      msg.setStatus(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.HvBatteryPrecondRequestState.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.HvBatteryPrecondRequestState.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.HvBatteryPrecondRequestState} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.HvBatteryPrecondRequestState.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getMainCategory();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      1,
+      f
+    );
+  }
+  f = message.getSubCategory();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      2,
+      f
+    );
+  }
+  f = message.getSpecificCategory();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      3,
+      f
+    );
+  }
+  f = message.getMethod();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      4,
+      f
+    );
+  }
+  f = message.getStatus();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      5,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional MainCategory main_category = 1;
+ * @return {!proto.proto.MainCategory}
+ */
+proto.proto.HvBatteryPrecondRequestState.prototype.getMainCategory = function() {
+  return /** @type {!proto.proto.MainCategory} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/**
+ * @param {!proto.proto.MainCategory} value
+ * @return {!proto.proto.HvBatteryPrecondRequestState} returns this
+ */
+proto.proto.HvBatteryPrecondRequestState.prototype.setMainCategory = function(value) {
+  return jspb.Message.setProto3EnumField(this, 1, value);
+};
+
+
+/**
+ * optional SubCategory sub_category = 2;
+ * @return {!proto.proto.SubCategory}
+ */
+proto.proto.HvBatteryPrecondRequestState.prototype.getSubCategory = function() {
+  return /** @type {!proto.proto.SubCategory} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/**
+ * @param {!proto.proto.SubCategory} value
+ * @return {!proto.proto.HvBatteryPrecondRequestState} returns this
+ */
+proto.proto.HvBatteryPrecondRequestState.prototype.setSubCategory = function(value) {
+  return jspb.Message.setProto3EnumField(this, 2, value);
+};
+
+
+/**
+ * optional SpecificCategory specific_category = 3;
+ * @return {!proto.proto.SpecificCategory}
+ */
+proto.proto.HvBatteryPrecondRequestState.prototype.getSpecificCategory = function() {
+  return /** @type {!proto.proto.SpecificCategory} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+};
+
+
+/**
+ * @param {!proto.proto.SpecificCategory} value
+ * @return {!proto.proto.HvBatteryPrecondRequestState} returns this
+ */
+proto.proto.HvBatteryPrecondRequestState.prototype.setSpecificCategory = function(value) {
+  return jspb.Message.setProto3EnumField(this, 3, value);
+};
+
+
+/**
+ * optional Method method = 4;
+ * @return {!proto.proto.Method}
+ */
+proto.proto.HvBatteryPrecondRequestState.prototype.getMethod = function() {
+  return /** @type {!proto.proto.Method} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
+};
+
+
+/**
+ * @param {!proto.proto.Method} value
+ * @return {!proto.proto.HvBatteryPrecondRequestState} returns this
+ */
+proto.proto.HvBatteryPrecondRequestState.prototype.setMethod = function(value) {
+  return jspb.Message.setProto3EnumField(this, 4, value);
+};
+
+
+/**
+ * optional Status status = 5;
+ * @return {!proto.proto.Status}
+ */
+proto.proto.HvBatteryPrecondRequestState.prototype.getStatus = function() {
+  return /** @type {!proto.proto.Status} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+};
+
+
+/**
+ * @param {!proto.proto.Status} value
+ * @return {!proto.proto.HvBatteryPrecondRequestState} returns this
+ */
+proto.proto.HvBatteryPrecondRequestState.prototype.setStatus = function(value) {
+  return jspb.Message.setProto3EnumField(this, 5, value);
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.PrecondOperabilityState.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.PrecondOperabilityState.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.PrecondOperabilityState} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.PrecondOperabilityState.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    precondAvailable: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
+    precondErrorState: jspb.Message.getFieldWithDefault(msg, 2, 0)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.PrecondOperabilityState}
+ */
+proto.proto.PrecondOperabilityState.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.PrecondOperabilityState;
+  return proto.proto.PrecondOperabilityState.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.PrecondOperabilityState} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.PrecondOperabilityState}
+ */
+proto.proto.PrecondOperabilityState.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setPrecondAvailable(value);
+      break;
+    case 2:
+      var value = /** @type {!proto.proto.PrecondOperabilityState.PrecondErrorState} */ (reader.readEnum());
+      msg.setPrecondErrorState(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.PrecondOperabilityState.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.PrecondOperabilityState.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.PrecondOperabilityState} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.PrecondOperabilityState.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getPrecondAvailable();
+  if (f) {
+    writer.writeBool(
+      1,
+      f
+    );
+  }
+  f = message.getPrecondErrorState();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      2,
+      f
+    );
+  }
+};
+
+
+/**
+ * @enum {number}
+ */
+proto.proto.PrecondOperabilityState.PrecondErrorState = {
+  PRECOND_ERROR_STATE_NO_ERROR: 0,
+  PRECOND_ERROR_STATE_PLAY_PROTECTION: 1,
+  PRECOND_ERROR_STATE_NO_ENERGY_BUDGET_AVAILABLE: 2,
+  PRECOND_ERROR_STATE_LOW_BUDGET: 3,
+  PRECOND_ERROR_STATE_SYSTEM_NOT_AVAILABLE: 4,
+  PRECOND_ERROR_STATE_PRECONDITIONING_ABORTED: 5,
+  PRECOND_ERROR_STATE_REGULAR_CLIMATIZATION_ACTIVE: 6
+};
+
+/**
+ * optional bool precond_available = 1;
+ * @return {boolean}
+ */
+proto.proto.PrecondOperabilityState.prototype.getPrecondAvailable = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 1, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.proto.PrecondOperabilityState} returns this
+ */
+proto.proto.PrecondOperabilityState.prototype.setPrecondAvailable = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 1, value);
+};
+
+
+/**
+ * optional PrecondErrorState precond_error_state = 2;
+ * @return {!proto.proto.PrecondOperabilityState.PrecondErrorState}
+ */
+proto.proto.PrecondOperabilityState.prototype.getPrecondErrorState = function() {
+  return /** @type {!proto.proto.PrecondOperabilityState.PrecondErrorState} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/**
+ * @param {!proto.proto.PrecondOperabilityState.PrecondErrorState} value
+ * @return {!proto.proto.PrecondOperabilityState} returns this
+ */
+proto.proto.PrecondOperabilityState.prototype.setPrecondErrorState = function(value) {
+  return jspb.Message.setProto3EnumField(this, 2, value);
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.ChargingScheduleRequested.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.ChargingScheduleRequested.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.ChargingScheduleRequested} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargingScheduleRequested.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    scheduleIdStatus: jspb.Message.getFieldWithDefault(msg, 1, 0),
+    useCaseId: jspb.Message.getFieldWithDefault(msg, 2, 0)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.ChargingScheduleRequested}
+ */
+proto.proto.ChargingScheduleRequested.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.ChargingScheduleRequested;
+  return proto.proto.ChargingScheduleRequested.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.ChargingScheduleRequested} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.ChargingScheduleRequested}
+ */
+proto.proto.ChargingScheduleRequested.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {!proto.proto.ChargingScheduleRequested.ScheduleIdStatus} */ (reader.readEnum());
+      msg.setScheduleIdStatus(value);
+      break;
+    case 2:
+      var value = /** @type {!proto.proto.ChargingScheduleRequested.ChargingScheduleUseCaseId} */ (reader.readEnum());
+      msg.setUseCaseId(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.ChargingScheduleRequested.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.ChargingScheduleRequested.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.ChargingScheduleRequested} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargingScheduleRequested.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getScheduleIdStatus();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      1,
+      f
+    );
+  }
+  f = message.getUseCaseId();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      2,
+      f
+    );
+  }
+};
+
+
+/**
+ * @enum {number}
+ */
+proto.proto.ChargingScheduleRequested.ScheduleIdStatus = {
+  SCHEDULE_ID_STATUS_DELETED: 0,
+  SCHEDULE_ID_STATUS_INITIAL: 1
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.ChargingScheduleRequested.ChargingScheduleUseCaseId = {
+  CHARGING_SCHEDULE_USE_CASE_ID_SMART_CHARGING: 0,
+  CHARGING_SCHEDULE_USE_CASE_ID_MERCEDES_INTELLIGENT_CHARGING: 1,
+  CHARGING_SCHEDULE_USE_CASE_ID_BETA_COMMUNITY_CHARGING: 2,
+  CHARGING_SCHEDULE_USE_CASE_ID_SOLAR_CHARGING: 3,
+  CHARGING_SCHEDULE_USE_CASE_ID_GREEN_CHARGING: 4,
+  CHARGING_SCHEDULE_USE_CASE_ID_EFFICIENT_CHARGING: 5,
+  CHARGING_SCHEDULE_USE_CASE_ID_ECO_FRIENDLY_CHARGING: 6,
+  CHARGING_SCHEDULE_USE_CASE_ID_SUSTAINABLE_CHARGING: 7,
+  CHARGING_SCHEDULE_USE_CASE_ID_INTELLIGENT_CHARGING: 8,
+  CHARGING_SCHEDULE_USE_CASE_ID_WORKPLACE_CHARGING_PLAN: 9,
+  CHARGING_SCHEDULE_USE_CASE_ID_HOME_CHARGING_PLAN: 10,
+  CHARGING_SCHEDULE_USE_CASE_ID_FLEET_MANAGED_CHARGING: 11,
+  CHARGING_SCHEDULE_USE_CASE_ID_PRICE_OPTIMIZED_CHARGING: 12,
+  CHARGING_SCHEDULE_USE_CASE_ID_BATTERY_FRIENDLY_CHARGING: 13,
+  CHARGING_SCHEDULE_USE_CASE_ID_EXTERNAL_NOISE_OPTIMIZED_CHARGING: 14,
+  CHARGING_SCHEDULE_USE_CASE_ID_VIDEO_WATCHING_OPTIMIZED_CHARGING: 15,
+  CHARGING_SCHEDULE_USE_CASE_ID_TIME_CONTROLLED_CHARGING: 16,
+  CHARGING_SCHEDULE_USE_CASE_ID_PEAK_SHAVING_CHARGING: 17,
+  CHARGING_SCHEDULE_USE_CASE_ID_DYNAMIC_LOAD_BALANCED_CHARGING: 18,
+  CHARGING_SCHEDULE_USE_CASE_ID_BUSINESS_SPECIFIC_CHARGING: 19,
+  CHARGING_SCHEDULE_USE_CASE_ID_PREFERRED_CHARGING_TIMES: 20,
+  CHARGING_SCHEDULE_USE_CASE_ID_ENPAL: 21,
+  CHARGING_SCHEDULE_USE_CASE_ID_TIBBER: 22,
+  CHARGING_SCHEDULE_USE_CASE_ID_THE_MOBILITY_HOUSE: 23,
+  CHARGING_SCHEDULE_USE_CASE_ID_AWATTAR: 24,
+  CHARGING_SCHEDULE_USE_CASE_ID_TRONITY: 25,
+  CHARGING_SCHEDULE_USE_CASE_ID_DPD: 26,
+  CHARGING_SCHEDULE_USE_CASE_ID_DEUTSCHE_POST: 27,
+  CHARGING_SCHEDULE_USE_CASE_ID_HACKATHON: 28,
+  CHARGING_SCHEDULE_USE_CASE_ID_SANDBOX_MODE: 29,
+  CHARGING_SCHEDULE_USE_CASE_ID_DEVELOPER_MODE: 30,
+  CHARGING_SCHEDULE_USE_CASE_ID_TEST_MODE: 31,
+  CHARGING_SCHEDULE_USE_CASE_ID_DEBUG_MODE: 32
+};
+
+/**
+ * optional ScheduleIdStatus schedule_id_status = 1;
+ * @return {!proto.proto.ChargingScheduleRequested.ScheduleIdStatus}
+ */
+proto.proto.ChargingScheduleRequested.prototype.getScheduleIdStatus = function() {
+  return /** @type {!proto.proto.ChargingScheduleRequested.ScheduleIdStatus} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/**
+ * @param {!proto.proto.ChargingScheduleRequested.ScheduleIdStatus} value
+ * @return {!proto.proto.ChargingScheduleRequested} returns this
+ */
+proto.proto.ChargingScheduleRequested.prototype.setScheduleIdStatus = function(value) {
+  return jspb.Message.setProto3EnumField(this, 1, value);
+};
+
+
+/**
+ * optional ChargingScheduleUseCaseId use_case_id = 2;
+ * @return {!proto.proto.ChargingScheduleRequested.ChargingScheduleUseCaseId}
+ */
+proto.proto.ChargingScheduleRequested.prototype.getUseCaseId = function() {
+  return /** @type {!proto.proto.ChargingScheduleRequested.ChargingScheduleUseCaseId} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/**
+ * @param {!proto.proto.ChargingScheduleRequested.ChargingScheduleUseCaseId} value
+ * @return {!proto.proto.ChargingScheduleRequested} returns this
+ */
+proto.proto.ChargingScheduleRequested.prototype.setUseCaseId = function(value) {
+  return jspb.Message.setProto3EnumField(this, 2, value);
+};
+
+
+
+/**
+ * List of repeated fields within this message type.
+ * @private {!Array<number>}
+ * @const
+ */
+proto.proto.ChargingTimer.repeatedFields_ = [1];
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.ChargingTimer.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.ChargingTimer.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.ChargingTimer} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargingTimer.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    entriesList: jspb.Message.toObjectList(msg.getEntriesList(),
+    proto.proto.ChargingTimerEntry.toObject, includeInstance)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.ChargingTimer}
+ */
+proto.proto.ChargingTimer.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.ChargingTimer;
+  return proto.proto.ChargingTimer.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.ChargingTimer} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.ChargingTimer}
+ */
+proto.proto.ChargingTimer.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = new proto.proto.ChargingTimerEntry;
+      reader.readMessage(value,proto.proto.ChargingTimerEntry.deserializeBinaryFromReader);
+      msg.addEntries(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.ChargingTimer.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.ChargingTimer.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.ChargingTimer} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargingTimer.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getEntriesList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
+      1,
+      f,
+      proto.proto.ChargingTimerEntry.serializeBinaryToWriter
+    );
+  }
+};
+
+
+/**
+ * repeated ChargingTimerEntry entries = 1;
+ * @return {!Array<!proto.proto.ChargingTimerEntry>}
+ */
+proto.proto.ChargingTimer.prototype.getEntriesList = function() {
+  return /** @type{!Array<!proto.proto.ChargingTimerEntry>} */ (
+    jspb.Message.getRepeatedWrapperField(this, proto.proto.ChargingTimerEntry, 1));
+};
+
+
+/**
+ * @param {!Array<!proto.proto.ChargingTimerEntry>} value
+ * @return {!proto.proto.ChargingTimer} returns this
+*/
+proto.proto.ChargingTimer.prototype.setEntriesList = function(value) {
+  return jspb.Message.setRepeatedWrapperField(this, 1, value);
+};
+
+
+/**
+ * @param {!proto.proto.ChargingTimerEntry=} opt_value
+ * @param {number=} opt_index
+ * @return {!proto.proto.ChargingTimerEntry}
+ */
+proto.proto.ChargingTimer.prototype.addEntries = function(opt_value, opt_index) {
+  return jspb.Message.addToRepeatedWrapperField(this, 1, opt_value, proto.proto.ChargingTimerEntry, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ * @return {!proto.proto.ChargingTimer} returns this
+ */
+proto.proto.ChargingTimer.prototype.clearEntriesList = function() {
+  return this.setEntriesList([]);
+};
+
+
+
+/**
+ * List of repeated fields within this message type.
+ * @private {!Array<number>}
+ * @const
+ */
+proto.proto.ChargingTimerEntry.repeatedFields_ = [7];
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.ChargingTimerEntry.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.ChargingTimerEntry.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.ChargingTimerEntry} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargingTimerEntry.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    timerid: jspb.Message.getFieldWithDefault(msg, 1, 0),
+    action: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    startTimeHour: jspb.Message.getFieldWithDefault(msg, 3, 0),
+    startTimeMin: jspb.Message.getFieldWithDefault(msg, 4, 0),
+    endTimeHour: jspb.Message.getFieldWithDefault(msg, 5, 0),
+    endTimeMin: jspb.Message.getFieldWithDefault(msg, 6, 0),
+    dayList: (f = jspb.Message.getRepeatedField(msg, 7)) == null ? undefined : f
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.ChargingTimerEntry}
+ */
+proto.proto.ChargingTimerEntry.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.ChargingTimerEntry;
+  return proto.proto.ChargingTimerEntry.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.ChargingTimerEntry} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.ChargingTimerEntry}
+ */
+proto.proto.ChargingTimerEntry.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {number} */ (reader.readInt64());
+      msg.setTimerid(value);
+      break;
+    case 2:
+      var value = /** @type {!proto.proto.ChargingTimerEntry.ChargingTimerAction} */ (reader.readEnum());
+      msg.setAction(value);
+      break;
+    case 3:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setStartTimeHour(value);
+      break;
+    case 4:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setStartTimeMin(value);
+      break;
+    case 5:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setEndTimeHour(value);
+      break;
+    case 6:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setEndTimeMin(value);
+      break;
+    case 7:
+      var values = /** @type {!Array<!proto.proto.TimeProfileDay>} */ (reader.isDelimited() ? reader.readPackedEnum() : [reader.readEnum()]);
+      for (var i = 0; i < values.length; i++) {
+        msg.addDay(values[i]);
+      }
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.ChargingTimerEntry.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.ChargingTimerEntry.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.ChargingTimerEntry} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargingTimerEntry.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getTimerid();
+  if (f !== 0) {
+    writer.writeInt64(
+      1,
+      f
+    );
+  }
+  f = message.getAction();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      2,
+      f
+    );
+  }
+  f = message.getStartTimeHour();
+  if (f !== 0) {
+    writer.writeInt32(
+      3,
+      f
+    );
+  }
+  f = message.getStartTimeMin();
+  if (f !== 0) {
+    writer.writeInt32(
+      4,
+      f
+    );
+  }
+  f = message.getEndTimeHour();
+  if (f !== 0) {
+    writer.writeInt32(
+      5,
+      f
+    );
+  }
+  f = message.getEndTimeMin();
+  if (f !== 0) {
+    writer.writeInt32(
+      6,
+      f
+    );
+  }
+  f = message.getDayList();
+  if (f.length > 0) {
+    writer.writePackedEnum(
+      7,
+      f
+    );
+  }
+};
+
+
+/**
+ * @enum {number}
+ */
+proto.proto.ChargingTimerEntry.ChargingTimerAction = {
+  CHARGING_TIMER_ACTION_UNKNOWN: 0,
+  CHARGING_TIMER_ACTION_DEACTIVATED: 1,
+  CHARGING_TIMER_ACTION_ACTIVE: 2,
+  CHARGING_TIMER_ACTION_DELETED: 3
+};
+
+/**
+ * optional int64 timerId = 1;
+ * @return {number}
+ */
+proto.proto.ChargingTimerEntry.prototype.getTimerid = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ChargingTimerEntry} returns this
+ */
+proto.proto.ChargingTimerEntry.prototype.setTimerid = function(value) {
+  return jspb.Message.setProto3IntField(this, 1, value);
+};
+
+
+/**
+ * optional ChargingTimerAction action = 2;
+ * @return {!proto.proto.ChargingTimerEntry.ChargingTimerAction}
+ */
+proto.proto.ChargingTimerEntry.prototype.getAction = function() {
+  return /** @type {!proto.proto.ChargingTimerEntry.ChargingTimerAction} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/**
+ * @param {!proto.proto.ChargingTimerEntry.ChargingTimerAction} value
+ * @return {!proto.proto.ChargingTimerEntry} returns this
+ */
+proto.proto.ChargingTimerEntry.prototype.setAction = function(value) {
+  return jspb.Message.setProto3EnumField(this, 2, value);
+};
+
+
+/**
+ * optional int32 start_time_hour = 3;
+ * @return {number}
+ */
+proto.proto.ChargingTimerEntry.prototype.getStartTimeHour = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ChargingTimerEntry} returns this
+ */
+proto.proto.ChargingTimerEntry.prototype.setStartTimeHour = function(value) {
+  return jspb.Message.setProto3IntField(this, 3, value);
+};
+
+
+/**
+ * optional int32 start_time_min = 4;
+ * @return {number}
+ */
+proto.proto.ChargingTimerEntry.prototype.getStartTimeMin = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ChargingTimerEntry} returns this
+ */
+proto.proto.ChargingTimerEntry.prototype.setStartTimeMin = function(value) {
+  return jspb.Message.setProto3IntField(this, 4, value);
+};
+
+
+/**
+ * optional int32 end_time_hour = 5;
+ * @return {number}
+ */
+proto.proto.ChargingTimerEntry.prototype.getEndTimeHour = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ChargingTimerEntry} returns this
+ */
+proto.proto.ChargingTimerEntry.prototype.setEndTimeHour = function(value) {
+  return jspb.Message.setProto3IntField(this, 5, value);
+};
+
+
+/**
+ * optional int32 end_time_min = 6;
+ * @return {number}
+ */
+proto.proto.ChargingTimerEntry.prototype.getEndTimeMin = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 6, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ChargingTimerEntry} returns this
+ */
+proto.proto.ChargingTimerEntry.prototype.setEndTimeMin = function(value) {
+  return jspb.Message.setProto3IntField(this, 6, value);
+};
+
+
+/**
+ * repeated TimeProfileDay day = 7;
+ * @return {!Array<!proto.proto.TimeProfileDay>}
+ */
+proto.proto.ChargingTimerEntry.prototype.getDayList = function() {
+  return /** @type {!Array<!proto.proto.TimeProfileDay>} */ (jspb.Message.getRepeatedField(this, 7));
+};
+
+
+/**
+ * @param {!Array<!proto.proto.TimeProfileDay>} value
+ * @return {!proto.proto.ChargingTimerEntry} returns this
+ */
+proto.proto.ChargingTimerEntry.prototype.setDayList = function(value) {
+  return jspb.Message.setField(this, 7, value || []);
+};
+
+
+/**
+ * @param {!proto.proto.TimeProfileDay} value
+ * @param {number=} opt_index
+ * @return {!proto.proto.ChargingTimerEntry} returns this
+ */
+proto.proto.ChargingTimerEntry.prototype.addDay = function(value, opt_index) {
+  return jspb.Message.addToRepeatedField(this, 7, value, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ * @return {!proto.proto.ChargingTimerEntry} returns this
+ */
+proto.proto.ChargingTimerEntry.prototype.clearDayList = function() {
+  return this.setDayList([]);
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.ChargingPredictionSoc.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.ChargingPredictionSoc.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.ChargingPredictionSoc} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargingPredictionSoc.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    predictedEndTime: (f = msg.getPredictedEndTime()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f),
+    predictedElectricalEnergyRange: jspb.Message.getFieldWithDefault(msg, 2, 0)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.ChargingPredictionSoc}
+ */
+proto.proto.ChargingPredictionSoc.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.ChargingPredictionSoc;
+  return proto.proto.ChargingPredictionSoc.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.ChargingPredictionSoc} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.ChargingPredictionSoc}
+ */
+proto.proto.ChargingPredictionSoc.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = new google_protobuf_timestamp_pb.Timestamp;
+      reader.readMessage(value,google_protobuf_timestamp_pb.Timestamp.deserializeBinaryFromReader);
+      msg.setPredictedEndTime(value);
+      break;
+    case 2:
+      var value = /** @type {number} */ (reader.readInt64());
+      msg.setPredictedElectricalEnergyRange(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.ChargingPredictionSoc.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.ChargingPredictionSoc.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.ChargingPredictionSoc} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargingPredictionSoc.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getPredictedEndTime();
+  if (f != null) {
+    writer.writeMessage(
+      1,
+      f,
+      google_protobuf_timestamp_pb.Timestamp.serializeBinaryToWriter
+    );
+  }
+  f = message.getPredictedElectricalEnergyRange();
+  if (f !== 0) {
+    writer.writeInt64(
+      2,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional google.protobuf.Timestamp predicted_end_time = 1;
+ * @return {?proto.google.protobuf.Timestamp}
+ */
+proto.proto.ChargingPredictionSoc.prototype.getPredictedEndTime = function() {
+  return /** @type{?proto.google.protobuf.Timestamp} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_timestamp_pb.Timestamp, 1));
+};
+
+
+/**
+ * @param {?proto.google.protobuf.Timestamp|undefined} value
+ * @return {!proto.proto.ChargingPredictionSoc} returns this
+*/
+proto.proto.ChargingPredictionSoc.prototype.setPredictedEndTime = function(value) {
+  return jspb.Message.setWrapperField(this, 1, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.ChargingPredictionSoc} returns this
+ */
+proto.proto.ChargingPredictionSoc.prototype.clearPredictedEndTime = function() {
+  return this.setPredictedEndTime(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.ChargingPredictionSoc.prototype.hasPredictedEndTime = function() {
+  return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * optional int64 predicted_electrical_energy_range = 2;
+ * @return {number}
+ */
+proto.proto.ChargingPredictionSoc.prototype.getPredictedElectricalEnergyRange = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ChargingPredictionSoc} returns this
+ */
+proto.proto.ChargingPredictionSoc.prototype.setPredictedElectricalEnergyRange = function(value) {
+  return jspb.Message.setProto3IntField(this, 2, value);
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.ChargingPredictionDepartureTime.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.ChargingPredictionDepartureTime.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.ChargingPredictionDepartureTime} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargingPredictionDepartureTime.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    predictedSoc: jspb.Message.getFieldWithDefault(msg, 1, 0),
+    predictedElectricalEnergyRange: jspb.Message.getFieldWithDefault(msg, 2, 0)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.ChargingPredictionDepartureTime}
+ */
+proto.proto.ChargingPredictionDepartureTime.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.ChargingPredictionDepartureTime;
+  return proto.proto.ChargingPredictionDepartureTime.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.ChargingPredictionDepartureTime} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.ChargingPredictionDepartureTime}
+ */
+proto.proto.ChargingPredictionDepartureTime.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setPredictedSoc(value);
+      break;
+    case 2:
+      var value = /** @type {number} */ (reader.readInt64());
+      msg.setPredictedElectricalEnergyRange(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.ChargingPredictionDepartureTime.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.ChargingPredictionDepartureTime.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.ChargingPredictionDepartureTime} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargingPredictionDepartureTime.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getPredictedSoc();
+  if (f !== 0) {
+    writer.writeInt32(
+      1,
+      f
+    );
+  }
+  f = message.getPredictedElectricalEnergyRange();
+  if (f !== 0) {
+    writer.writeInt64(
+      2,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional int32 predicted_soc = 1;
+ * @return {number}
+ */
+proto.proto.ChargingPredictionDepartureTime.prototype.getPredictedSoc = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ChargingPredictionDepartureTime} returns this
+ */
+proto.proto.ChargingPredictionDepartureTime.prototype.setPredictedSoc = function(value) {
+  return jspb.Message.setProto3IntField(this, 1, value);
+};
+
+
+/**
+ * optional int64 predicted_electrical_energy_range = 2;
+ * @return {number}
+ */
+proto.proto.ChargingPredictionDepartureTime.prototype.getPredictedElectricalEnergyRange = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ChargingPredictionDepartureTime} returns this
+ */
+proto.proto.ChargingPredictionDepartureTime.prototype.setPredictedElectricalEnergyRange = function(value) {
+  return jspb.Message.setProto3IntField(this, 2, value);
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.ChargeInletsEntry.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.ChargeInletsEntry.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.ChargeInletsEntry} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargeInletsEntry.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    id: jspb.Message.getFieldWithDefault(msg, 1, 0),
+    couplerState: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    lockState: jspb.Message.getFieldWithDefault(msg, 3, 0)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.ChargeInletsEntry}
+ */
+proto.proto.ChargeInletsEntry.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.ChargeInletsEntry;
+  return proto.proto.ChargeInletsEntry.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.ChargeInletsEntry} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.ChargeInletsEntry}
+ */
+proto.proto.ChargeInletsEntry.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {number} */ (reader.readInt64());
+      msg.setId(value);
+      break;
+    case 2:
+      var value = /** @type {!proto.proto.ChargeInletsEntry.ChargeInletsCouplerState} */ (reader.readEnum());
+      msg.setCouplerState(value);
+      break;
+    case 3:
+      var value = /** @type {!proto.proto.ChargeInletsEntry.ChargeInletsLockState} */ (reader.readEnum());
+      msg.setLockState(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.ChargeInletsEntry.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.ChargeInletsEntry.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.ChargeInletsEntry} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargeInletsEntry.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getId();
+  if (f !== 0) {
+    writer.writeInt64(
+      1,
+      f
+    );
+  }
+  f = message.getCouplerState();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      2,
+      f
+    );
+  }
+  f = message.getLockState();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      3,
+      f
+    );
+  }
+};
+
+
+/**
+ * @enum {number}
+ */
+proto.proto.ChargeInletsEntry.ChargeInletsCouplerState = {
+  CHARGE_INLETS_COUPLER_STATE_UNKNOWN: 0,
+  CHARGE_INLETS_COUPLER_STATE_PLUGGED: 1,
+  CHARGE_INLETS_COUPLER_STATE_VEHICLE_PLUGGED: 2,
+  CHARGE_INLETS_COUPLER_STATE_VEHICLE_NOT_PLUGGED: 3,
+  CHARGE_INLETS_COUPLER_STATE_DEFECT: 4
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.ChargeInletsEntry.ChargeInletsLockState = {
+  CHARGE_INLETS_LOCK_STATE_UNKNOWN: 0,
+  CHARGE_INLETS_LOCK_STATE_UNLOCKED: 1,
+  CHARGE_INLETS_LOCK_STATE_LOCKED: 2,
+  CHARGE_INLETS_LOCK_STATE_LOCK_STATE_NOT_CLEAR: 3,
+  CHARGE_INLETS_LOCK_STATE_NOT_AVAILABLE: 4
+};
+
+/**
+ * optional int64 id = 1;
+ * @return {number}
+ */
+proto.proto.ChargeInletsEntry.prototype.getId = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ChargeInletsEntry} returns this
+ */
+proto.proto.ChargeInletsEntry.prototype.setId = function(value) {
+  return jspb.Message.setProto3IntField(this, 1, value);
+};
+
+
+/**
+ * optional ChargeInletsCouplerState coupler_state = 2;
+ * @return {!proto.proto.ChargeInletsEntry.ChargeInletsCouplerState}
+ */
+proto.proto.ChargeInletsEntry.prototype.getCouplerState = function() {
+  return /** @type {!proto.proto.ChargeInletsEntry.ChargeInletsCouplerState} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/**
+ * @param {!proto.proto.ChargeInletsEntry.ChargeInletsCouplerState} value
+ * @return {!proto.proto.ChargeInletsEntry} returns this
+ */
+proto.proto.ChargeInletsEntry.prototype.setCouplerState = function(value) {
+  return jspb.Message.setProto3EnumField(this, 2, value);
+};
+
+
+/**
+ * optional ChargeInletsLockState lock_state = 3;
+ * @return {!proto.proto.ChargeInletsEntry.ChargeInletsLockState}
+ */
+proto.proto.ChargeInletsEntry.prototype.getLockState = function() {
+  return /** @type {!proto.proto.ChargeInletsEntry.ChargeInletsLockState} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+};
+
+
+/**
+ * @param {!proto.proto.ChargeInletsEntry.ChargeInletsLockState} value
+ * @return {!proto.proto.ChargeInletsEntry} returns this
+ */
+proto.proto.ChargeInletsEntry.prototype.setLockState = function(value) {
+  return jspb.Message.setProto3EnumField(this, 3, value);
+};
+
+
+
+/**
+ * List of repeated fields within this message type.
+ * @private {!Array<number>}
+ * @const
+ */
+proto.proto.ChargeInlets.repeatedFields_ = [1];
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.ChargeInlets.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.ChargeInlets.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.ChargeInlets} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargeInlets.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    entriesList: jspb.Message.toObjectList(msg.getEntriesList(),
+    proto.proto.ChargeInletsEntry.toObject, includeInstance)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.ChargeInlets}
+ */
+proto.proto.ChargeInlets.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.ChargeInlets;
+  return proto.proto.ChargeInlets.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.ChargeInlets} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.ChargeInlets}
+ */
+proto.proto.ChargeInlets.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = new proto.proto.ChargeInletsEntry;
+      reader.readMessage(value,proto.proto.ChargeInletsEntry.deserializeBinaryFromReader);
+      msg.addEntries(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.ChargeInlets.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.ChargeInlets.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.ChargeInlets} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargeInlets.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getEntriesList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
+      1,
+      f,
+      proto.proto.ChargeInletsEntry.serializeBinaryToWriter
+    );
+  }
+};
+
+
+/**
+ * repeated ChargeInletsEntry entries = 1;
+ * @return {!Array<!proto.proto.ChargeInletsEntry>}
+ */
+proto.proto.ChargeInlets.prototype.getEntriesList = function() {
+  return /** @type{!Array<!proto.proto.ChargeInletsEntry>} */ (
+    jspb.Message.getRepeatedWrapperField(this, proto.proto.ChargeInletsEntry, 1));
+};
+
+
+/**
+ * @param {!Array<!proto.proto.ChargeInletsEntry>} value
+ * @return {!proto.proto.ChargeInlets} returns this
+*/
+proto.proto.ChargeInlets.prototype.setEntriesList = function(value) {
+  return jspb.Message.setRepeatedWrapperField(this, 1, value);
+};
+
+
+/**
+ * @param {!proto.proto.ChargeInletsEntry=} opt_value
+ * @param {number=} opt_index
+ * @return {!proto.proto.ChargeInletsEntry}
+ */
+proto.proto.ChargeInlets.prototype.addEntries = function(opt_value, opt_index) {
+  return jspb.Message.addToRepeatedWrapperField(this, 1, opt_value, proto.proto.ChargeInletsEntry, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ * @return {!proto.proto.ChargeInlets} returns this
+ */
+proto.proto.ChargeInlets.prototype.clearEntriesList = function() {
+  return this.setEntriesList([]);
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.ChargeFlapsEntry.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.ChargeFlapsEntry.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.ChargeFlapsEntry} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargeFlapsEntry.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    id: jspb.Message.getFieldWithDefault(msg, 1, 0),
+    positionState: jspb.Message.getFieldWithDefault(msg, 2, 0)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.ChargeFlapsEntry}
+ */
+proto.proto.ChargeFlapsEntry.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.ChargeFlapsEntry;
+  return proto.proto.ChargeFlapsEntry.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.ChargeFlapsEntry} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.ChargeFlapsEntry}
+ */
+proto.proto.ChargeFlapsEntry.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {number} */ (reader.readInt64());
+      msg.setId(value);
+      break;
+    case 2:
+      var value = /** @type {!proto.proto.ChargeFlapsPositionState} */ (reader.readEnum());
+      msg.setPositionState(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.ChargeFlapsEntry.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.ChargeFlapsEntry.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.ChargeFlapsEntry} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargeFlapsEntry.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getId();
+  if (f !== 0) {
+    writer.writeInt64(
+      1,
+      f
+    );
+  }
+  f = message.getPositionState();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      2,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional int64 id = 1;
+ * @return {number}
+ */
+proto.proto.ChargeFlapsEntry.prototype.getId = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ChargeFlapsEntry} returns this
+ */
+proto.proto.ChargeFlapsEntry.prototype.setId = function(value) {
+  return jspb.Message.setProto3IntField(this, 1, value);
+};
+
+
+/**
+ * optional ChargeFlapsPositionState position_state = 2;
+ * @return {!proto.proto.ChargeFlapsPositionState}
+ */
+proto.proto.ChargeFlapsEntry.prototype.getPositionState = function() {
+  return /** @type {!proto.proto.ChargeFlapsPositionState} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/**
+ * @param {!proto.proto.ChargeFlapsPositionState} value
+ * @return {!proto.proto.ChargeFlapsEntry} returns this
+ */
+proto.proto.ChargeFlapsEntry.prototype.setPositionState = function(value) {
+  return jspb.Message.setProto3EnumField(this, 2, value);
+};
+
+
+
+/**
+ * List of repeated fields within this message type.
+ * @private {!Array<number>}
+ * @const
+ */
+proto.proto.ChargeFlaps.repeatedFields_ = [1];
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.ChargeFlaps.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.ChargeFlaps.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.ChargeFlaps} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargeFlaps.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    entriesList: jspb.Message.toObjectList(msg.getEntriesList(),
+    proto.proto.ChargeFlapsEntry.toObject, includeInstance)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.ChargeFlaps}
+ */
+proto.proto.ChargeFlaps.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.ChargeFlaps;
+  return proto.proto.ChargeFlaps.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.ChargeFlaps} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.ChargeFlaps}
+ */
+proto.proto.ChargeFlaps.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = new proto.proto.ChargeFlapsEntry;
+      reader.readMessage(value,proto.proto.ChargeFlapsEntry.deserializeBinaryFromReader);
+      msg.addEntries(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.ChargeFlaps.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.ChargeFlaps.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.ChargeFlaps} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargeFlaps.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getEntriesList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
+      1,
+      f,
+      proto.proto.ChargeFlapsEntry.serializeBinaryToWriter
+    );
+  }
+};
+
+
+/**
+ * repeated ChargeFlapsEntry entries = 1;
+ * @return {!Array<!proto.proto.ChargeFlapsEntry>}
+ */
+proto.proto.ChargeFlaps.prototype.getEntriesList = function() {
+  return /** @type{!Array<!proto.proto.ChargeFlapsEntry>} */ (
+    jspb.Message.getRepeatedWrapperField(this, proto.proto.ChargeFlapsEntry, 1));
+};
+
+
+/**
+ * @param {!Array<!proto.proto.ChargeFlapsEntry>} value
+ * @return {!proto.proto.ChargeFlaps} returns this
+*/
+proto.proto.ChargeFlaps.prototype.setEntriesList = function(value) {
+  return jspb.Message.setRepeatedWrapperField(this, 1, value);
+};
+
+
+/**
+ * @param {!proto.proto.ChargeFlapsEntry=} opt_value
+ * @param {number=} opt_index
+ * @return {!proto.proto.ChargeFlapsEntry}
+ */
+proto.proto.ChargeFlaps.prototype.addEntries = function(opt_value, opt_index) {
+  return jspb.Message.addToRepeatedWrapperField(this, 1, opt_value, proto.proto.ChargeFlapsEntry, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ * @return {!proto.proto.ChargeFlaps} returns this
+ */
+proto.proto.ChargeFlaps.prototype.clearEntriesList = function() {
+  return this.setEntriesList([]);
+};
+
+
+
+/**
+ * List of repeated fields within this message type.
+ * @private {!Array<number>}
+ * @const
+ */
+proto.proto.ChargingPowerRestrictions.repeatedFields_ = [1];
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.ChargingPowerRestrictions.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.ChargingPowerRestrictions.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.ChargingPowerRestrictions} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargingPowerRestrictions.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    chargingPowerRestrictionList: (f = jspb.Message.getRepeatedField(msg, 1)) == null ? undefined : f
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.ChargingPowerRestrictions}
+ */
+proto.proto.ChargingPowerRestrictions.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.ChargingPowerRestrictions;
+  return proto.proto.ChargingPowerRestrictions.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.ChargingPowerRestrictions} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.ChargingPowerRestrictions}
+ */
+proto.proto.ChargingPowerRestrictions.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var values = /** @type {!Array<!proto.proto.ChargingPowerRestriction>} */ (reader.isDelimited() ? reader.readPackedEnum() : [reader.readEnum()]);
+      for (var i = 0; i < values.length; i++) {
+        msg.addChargingPowerRestriction(values[i]);
+      }
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.ChargingPowerRestrictions.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.ChargingPowerRestrictions.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.ChargingPowerRestrictions} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargingPowerRestrictions.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getChargingPowerRestrictionList();
+  if (f.length > 0) {
+    writer.writePackedEnum(
+      1,
+      f
+    );
+  }
+};
+
+
+/**
+ * repeated ChargingPowerRestriction charging_power_restriction = 1;
+ * @return {!Array<!proto.proto.ChargingPowerRestriction>}
+ */
+proto.proto.ChargingPowerRestrictions.prototype.getChargingPowerRestrictionList = function() {
+  return /** @type {!Array<!proto.proto.ChargingPowerRestriction>} */ (jspb.Message.getRepeatedField(this, 1));
+};
+
+
+/**
+ * @param {!Array<!proto.proto.ChargingPowerRestriction>} value
+ * @return {!proto.proto.ChargingPowerRestrictions} returns this
+ */
+proto.proto.ChargingPowerRestrictions.prototype.setChargingPowerRestrictionList = function(value) {
+  return jspb.Message.setField(this, 1, value || []);
+};
+
+
+/**
+ * @param {!proto.proto.ChargingPowerRestriction} value
+ * @param {number=} opt_index
+ * @return {!proto.proto.ChargingPowerRestrictions} returns this
+ */
+proto.proto.ChargingPowerRestrictions.prototype.addChargingPowerRestriction = function(value, opt_index) {
+  return jspb.Message.addToRepeatedField(this, 1, value, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ * @return {!proto.proto.ChargingPowerRestrictions} returns this
+ */
+proto.proto.ChargingPowerRestrictions.prototype.clearChargingPowerRestrictionList = function() {
+  return this.setChargingPowerRestrictionList([]);
+};
+
+
+
+/**
+ * List of repeated fields within this message type.
+ * @private {!Array<number>}
+ * @const
+ */
+proto.proto.ChargingBreakClockTimerValue.repeatedFields_ = [1];
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.ChargingBreakClockTimerValue.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.ChargingBreakClockTimerValue.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.ChargingBreakClockTimerValue} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargingBreakClockTimerValue.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    chargingbreakClocktimerEntryList: jspb.Message.toObjectList(msg.getChargingbreakClocktimerEntryList(),
+    proto.proto.ChargingBreakClockTimerEntry.toObject, includeInstance)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.ChargingBreakClockTimerValue}
+ */
+proto.proto.ChargingBreakClockTimerValue.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.ChargingBreakClockTimerValue;
+  return proto.proto.ChargingBreakClockTimerValue.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.ChargingBreakClockTimerValue} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.ChargingBreakClockTimerValue}
+ */
+proto.proto.ChargingBreakClockTimerValue.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = new proto.proto.ChargingBreakClockTimerEntry;
+      reader.readMessage(value,proto.proto.ChargingBreakClockTimerEntry.deserializeBinaryFromReader);
+      msg.addChargingbreakClocktimerEntry(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.ChargingBreakClockTimerValue.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.ChargingBreakClockTimerValue.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.ChargingBreakClockTimerValue} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargingBreakClockTimerValue.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getChargingbreakClocktimerEntryList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
+      1,
+      f,
+      proto.proto.ChargingBreakClockTimerEntry.serializeBinaryToWriter
+    );
+  }
+};
+
+
+/**
+ * repeated ChargingBreakClockTimerEntry chargingbreak_clocktimer_entry = 1;
+ * @return {!Array<!proto.proto.ChargingBreakClockTimerEntry>}
+ */
+proto.proto.ChargingBreakClockTimerValue.prototype.getChargingbreakClocktimerEntryList = function() {
+  return /** @type{!Array<!proto.proto.ChargingBreakClockTimerEntry>} */ (
+    jspb.Message.getRepeatedWrapperField(this, proto.proto.ChargingBreakClockTimerEntry, 1));
+};
+
+
+/**
+ * @param {!Array<!proto.proto.ChargingBreakClockTimerEntry>} value
+ * @return {!proto.proto.ChargingBreakClockTimerValue} returns this
+*/
+proto.proto.ChargingBreakClockTimerValue.prototype.setChargingbreakClocktimerEntryList = function(value) {
+  return jspb.Message.setRepeatedWrapperField(this, 1, value);
+};
+
+
+/**
+ * @param {!proto.proto.ChargingBreakClockTimerEntry=} opt_value
+ * @param {number=} opt_index
+ * @return {!proto.proto.ChargingBreakClockTimerEntry}
+ */
+proto.proto.ChargingBreakClockTimerValue.prototype.addChargingbreakClocktimerEntry = function(opt_value, opt_index) {
+  return jspb.Message.addToRepeatedWrapperField(this, 1, opt_value, proto.proto.ChargingBreakClockTimerEntry, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ * @return {!proto.proto.ChargingBreakClockTimerValue} returns this
+ */
+proto.proto.ChargingBreakClockTimerValue.prototype.clearChargingbreakClocktimerEntryList = function() {
+  return this.setChargingbreakClocktimerEntryList([]);
+};
+
+
+
+/**
+ * List of repeated fields within this message type.
+ * @private {!Array<number>}
+ * @const
+ */
+proto.proto.PrecondState.repeatedFields_ = [3];
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.PrecondState.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.PrecondState.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.PrecondState} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.PrecondState.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    activationState: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
+    precondImmediateSupport: jspb.Message.getBooleanFieldWithDefault(msg, 2, false),
+    precondStateTypesList: (f = jspb.Message.getRepeatedField(msg, 3)) == null ? undefined : f
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.PrecondState}
+ */
+proto.proto.PrecondState.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.PrecondState;
+  return proto.proto.PrecondState.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.PrecondState} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.PrecondState}
+ */
+proto.proto.PrecondState.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setActivationState(value);
+      break;
+    case 2:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setPrecondImmediateSupport(value);
+      break;
+    case 3:
+      var values = /** @type {!Array<!proto.proto.PrecondStateType>} */ (reader.isDelimited() ? reader.readPackedEnum() : [reader.readEnum()]);
+      for (var i = 0; i < values.length; i++) {
+        msg.addPrecondStateTypes(values[i]);
+      }
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.PrecondState.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.PrecondState.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.PrecondState} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.PrecondState.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getActivationState();
+  if (f) {
+    writer.writeBool(
+      1,
+      f
+    );
+  }
+  f = message.getPrecondImmediateSupport();
+  if (f) {
+    writer.writeBool(
+      2,
+      f
+    );
+  }
+  f = message.getPrecondStateTypesList();
+  if (f.length > 0) {
+    writer.writePackedEnum(
+      3,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional bool activation_state = 1;
+ * @return {boolean}
+ */
+proto.proto.PrecondState.prototype.getActivationState = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 1, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.proto.PrecondState} returns this
+ */
+proto.proto.PrecondState.prototype.setActivationState = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 1, value);
+};
+
+
+/**
+ * optional bool precond_immediate_support = 2;
+ * @return {boolean}
+ */
+proto.proto.PrecondState.prototype.getPrecondImmediateSupport = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 2, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.proto.PrecondState} returns this
+ */
+proto.proto.PrecondState.prototype.setPrecondImmediateSupport = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 2, value);
+};
+
+
+/**
+ * repeated PrecondStateType precond_state_types = 3;
+ * @return {!Array<!proto.proto.PrecondStateType>}
+ */
+proto.proto.PrecondState.prototype.getPrecondStateTypesList = function() {
+  return /** @type {!Array<!proto.proto.PrecondStateType>} */ (jspb.Message.getRepeatedField(this, 3));
+};
+
+
+/**
+ * @param {!Array<!proto.proto.PrecondStateType>} value
+ * @return {!proto.proto.PrecondState} returns this
+ */
+proto.proto.PrecondState.prototype.setPrecondStateTypesList = function(value) {
+  return jspb.Message.setField(this, 3, value || []);
+};
+
+
+/**
+ * @param {!proto.proto.PrecondStateType} value
+ * @param {number=} opt_index
+ * @return {!proto.proto.PrecondState} returns this
+ */
+proto.proto.PrecondState.prototype.addPrecondStateTypes = function(value, opt_index) {
+  return jspb.Message.addToRepeatedField(this, 3, value, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ * @return {!proto.proto.PrecondState} returns this
+ */
+proto.proto.PrecondState.prototype.clearPrecondStateTypesList = function() {
+  return this.setPrecondStateTypesList([]);
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.ChargingPowerControl.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.ChargingPowerControl.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.ChargingPowerControl} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargingPowerControl.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    chargeStatus: jspb.Message.getFieldWithDefault(msg, 1, 0),
+    ctrlDuration: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    ctrlInfo: jspb.Message.getFieldWithDefault(msg, 3, 0),
+    chargePower: jspb.Message.getFieldWithDefault(msg, 4, 0),
+    servStat: jspb.Message.getFieldWithDefault(msg, 5, 0),
+    servAvail: jspb.Message.getFieldWithDefault(msg, 6, 0),
+    useCase: jspb.Message.getFieldWithDefault(msg, 7, 0)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.ChargingPowerControl}
+ */
+proto.proto.ChargingPowerControl.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.ChargingPowerControl;
+  return proto.proto.ChargingPowerControl.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.ChargingPowerControl} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.ChargingPowerControl}
+ */
+proto.proto.ChargingPowerControl.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {!proto.proto.ChargingPowerControl.ChargingStatusForPowerControl} */ (reader.readEnum());
+      msg.setChargeStatus(value);
+      break;
+    case 2:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setCtrlDuration(value);
+      break;
+    case 3:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setCtrlInfo(value);
+      break;
+    case 4:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setChargePower(value);
+      break;
+    case 5:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setServStat(value);
+      break;
+    case 6:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setServAvail(value);
+      break;
+    case 7:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setUseCase(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.ChargingPowerControl.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.ChargingPowerControl.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.ChargingPowerControl} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargingPowerControl.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getChargeStatus();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      1,
+      f
+    );
+  }
+  f = message.getCtrlDuration();
+  if (f !== 0) {
+    writer.writeInt32(
+      2,
+      f
+    );
+  }
+  f = message.getCtrlInfo();
+  if (f !== 0) {
+    writer.writeInt32(
+      3,
+      f
+    );
+  }
+  f = message.getChargePower();
+  if (f !== 0) {
+    writer.writeInt32(
+      4,
+      f
+    );
+  }
+  f = message.getServStat();
+  if (f !== 0) {
+    writer.writeInt32(
+      5,
+      f
+    );
+  }
+  f = message.getServAvail();
+  if (f !== 0) {
+    writer.writeInt32(
+      6,
+      f
+    );
+  }
+  f = message.getUseCase();
+  if (f !== 0) {
+    writer.writeInt32(
+      7,
+      f
+    );
+  }
+};
+
+
+/**
+ * @enum {number}
+ */
+proto.proto.ChargingPowerControl.ChargingStatusForPowerControl = {
+  NOT_DEFINED: 0,
+  DEACTIVATED: 1,
+  ACTIVATED: 2
+};
+
+/**
+ * optional ChargingStatusForPowerControl charge_status = 1;
+ * @return {!proto.proto.ChargingPowerControl.ChargingStatusForPowerControl}
+ */
+proto.proto.ChargingPowerControl.prototype.getChargeStatus = function() {
+  return /** @type {!proto.proto.ChargingPowerControl.ChargingStatusForPowerControl} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/**
+ * @param {!proto.proto.ChargingPowerControl.ChargingStatusForPowerControl} value
+ * @return {!proto.proto.ChargingPowerControl} returns this
+ */
+proto.proto.ChargingPowerControl.prototype.setChargeStatus = function(value) {
+  return jspb.Message.setProto3EnumField(this, 1, value);
+};
+
+
+/**
+ * optional int32 ctrl_duration = 2;
+ * @return {number}
+ */
+proto.proto.ChargingPowerControl.prototype.getCtrlDuration = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ChargingPowerControl} returns this
+ */
+proto.proto.ChargingPowerControl.prototype.setCtrlDuration = function(value) {
+  return jspb.Message.setProto3IntField(this, 2, value);
+};
+
+
+/**
+ * optional int32 ctrl_info = 3;
+ * @return {number}
+ */
+proto.proto.ChargingPowerControl.prototype.getCtrlInfo = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ChargingPowerControl} returns this
+ */
+proto.proto.ChargingPowerControl.prototype.setCtrlInfo = function(value) {
+  return jspb.Message.setProto3IntField(this, 3, value);
+};
+
+
+/**
+ * optional int32 charge_power = 4;
+ * @return {number}
+ */
+proto.proto.ChargingPowerControl.prototype.getChargePower = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ChargingPowerControl} returns this
+ */
+proto.proto.ChargingPowerControl.prototype.setChargePower = function(value) {
+  return jspb.Message.setProto3IntField(this, 4, value);
+};
+
+
+/**
+ * optional int32 serv_stat = 5;
+ * @return {number}
+ */
+proto.proto.ChargingPowerControl.prototype.getServStat = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ChargingPowerControl} returns this
+ */
+proto.proto.ChargingPowerControl.prototype.setServStat = function(value) {
+  return jspb.Message.setProto3IntField(this, 5, value);
+};
+
+
+/**
+ * optional int32 serv_avail = 6;
+ * @return {number}
+ */
+proto.proto.ChargingPowerControl.prototype.getServAvail = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 6, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ChargingPowerControl} returns this
+ */
+proto.proto.ChargingPowerControl.prototype.setServAvail = function(value) {
+  return jspb.Message.setProto3IntField(this, 6, value);
+};
+
+
+/**
+ * optional int32 use_case = 7;
+ * @return {number}
+ */
+proto.proto.ChargingPowerControl.prototype.getUseCase = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 7, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ChargingPowerControl} returns this
+ */
+proto.proto.ChargingPowerControl.prototype.setUseCase = function(value) {
+  return jspb.Message.setProto3IntField(this, 7, value);
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.ChargingBreakClockTimerEntry.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.ChargingBreakClockTimerEntry.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.ChargingBreakClockTimerEntry} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargingBreakClockTimerEntry.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    status: jspb.Message.getFieldWithDefault(msg, 1, 0),
+    endtimehour: jspb.Message.getFieldWithDefault(msg, 2, 0),
+    endtimeminute: jspb.Message.getFieldWithDefault(msg, 3, 0),
+    starttimehour: jspb.Message.getFieldWithDefault(msg, 4, 0),
+    starttimeminute: jspb.Message.getFieldWithDefault(msg, 5, 0),
+    timerid: jspb.Message.getFieldWithDefault(msg, 6, 0)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.ChargingBreakClockTimerEntry}
+ */
+proto.proto.ChargingBreakClockTimerEntry.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.ChargingBreakClockTimerEntry;
+  return proto.proto.ChargingBreakClockTimerEntry.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.ChargingBreakClockTimerEntry} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.ChargingBreakClockTimerEntry}
+ */
+proto.proto.ChargingBreakClockTimerEntry.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {!proto.proto.ChargingBreakClockTimerEntryStatus} */ (reader.readEnum());
+      msg.setStatus(value);
+      break;
+    case 2:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setEndtimehour(value);
+      break;
+    case 3:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setEndtimeminute(value);
+      break;
+    case 4:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setStarttimehour(value);
+      break;
+    case 5:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setStarttimeminute(value);
+      break;
+    case 6:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setTimerid(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.ChargingBreakClockTimerEntry.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.ChargingBreakClockTimerEntry.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.ChargingBreakClockTimerEntry} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargingBreakClockTimerEntry.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getStatus();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      1,
+      f
+    );
+  }
+  f = message.getEndtimehour();
+  if (f !== 0) {
+    writer.writeInt32(
+      2,
+      f
+    );
+  }
+  f = message.getEndtimeminute();
+  if (f !== 0) {
+    writer.writeInt32(
+      3,
+      f
+    );
+  }
+  f = message.getStarttimehour();
+  if (f !== 0) {
+    writer.writeInt32(
+      4,
+      f
+    );
+  }
+  f = message.getStarttimeminute();
+  if (f !== 0) {
+    writer.writeInt32(
+      5,
+      f
+    );
+  }
+  f = message.getTimerid();
+  if (f !== 0) {
+    writer.writeInt32(
+      6,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional ChargingBreakClockTimerEntryStatus status = 1;
+ * @return {!proto.proto.ChargingBreakClockTimerEntryStatus}
+ */
+proto.proto.ChargingBreakClockTimerEntry.prototype.getStatus = function() {
+  return /** @type {!proto.proto.ChargingBreakClockTimerEntryStatus} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/**
+ * @param {!proto.proto.ChargingBreakClockTimerEntryStatus} value
+ * @return {!proto.proto.ChargingBreakClockTimerEntry} returns this
+ */
+proto.proto.ChargingBreakClockTimerEntry.prototype.setStatus = function(value) {
+  return jspb.Message.setProto3EnumField(this, 1, value);
+};
+
+
+/**
+ * optional int32 endTimeHour = 2;
+ * @return {number}
+ */
+proto.proto.ChargingBreakClockTimerEntry.prototype.getEndtimehour = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ChargingBreakClockTimerEntry} returns this
+ */
+proto.proto.ChargingBreakClockTimerEntry.prototype.setEndtimehour = function(value) {
+  return jspb.Message.setProto3IntField(this, 2, value);
+};
+
+
+/**
+ * optional int32 endTimeMinute = 3;
+ * @return {number}
+ */
+proto.proto.ChargingBreakClockTimerEntry.prototype.getEndtimeminute = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ChargingBreakClockTimerEntry} returns this
+ */
+proto.proto.ChargingBreakClockTimerEntry.prototype.setEndtimeminute = function(value) {
+  return jspb.Message.setProto3IntField(this, 3, value);
+};
+
+
+/**
+ * optional int32 startTimeHour = 4;
+ * @return {number}
+ */
+proto.proto.ChargingBreakClockTimerEntry.prototype.getStarttimehour = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ChargingBreakClockTimerEntry} returns this
+ */
+proto.proto.ChargingBreakClockTimerEntry.prototype.setStarttimehour = function(value) {
+  return jspb.Message.setProto3IntField(this, 4, value);
+};
+
+
+/**
+ * optional int32 startTimeMinute = 5;
+ * @return {number}
+ */
+proto.proto.ChargingBreakClockTimerEntry.prototype.getStarttimeminute = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ChargingBreakClockTimerEntry} returns this
+ */
+proto.proto.ChargingBreakClockTimerEntry.prototype.setStarttimeminute = function(value) {
+  return jspb.Message.setProto3IntField(this, 5, value);
+};
+
+
+/**
+ * optional int32 timerId = 6;
+ * @return {number}
+ */
+proto.proto.ChargingBreakClockTimerEntry.prototype.getTimerid = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 6, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ChargingBreakClockTimerEntry} returns this
+ */
+proto.proto.ChargingBreakClockTimerEntry.prototype.setTimerid = function(value) {
+  return jspb.Message.setProto3IntField(this, 6, value);
+};
+
+
 
 /**
  * List of repeated fields within this message type.
@@ -3621,8 +9380,10 @@ proto.proto.VVRTimeProfile.deserializeBinaryFromReader = function(msg, reader) {
       msg.setMinute(value);
       break;
     case 4:
-      var value = /** @type {!Array<!proto.proto.TimeProfileDay>} */ (reader.readPackedEnum());
-      msg.setDaysList(value);
+      var values = /** @type {!Array<!proto.proto.TimeProfileDay>} */ (reader.isDelimited() ? reader.readPackedEnum() : [reader.readEnum()]);
+      for (var i = 0; i < values.length; i++) {
+        msg.addDays(values[i]);
+      }
       break;
     case 5:
       var value = /** @type {boolean} */ (reader.readBool());
@@ -6438,7 +12199,7 @@ proto.proto.VehicleStatus.prototype.clearAttributesMap = function() {
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.proto.PushMessage.oneofGroups_ = [[1,2,3,9,13,10,14,11,12,15,16,17,18,19]];
+proto.proto.PushMessage.oneofGroups_ = [[1,2,3,9,13,10,14,11,12,15,16,17,18,19,21]];
 
 /**
  * @enum {number}
@@ -6458,7 +12219,8 @@ proto.proto.PushMessage.MsgCase = {
   PREFERRED_DEALER_CHANGE: 16,
   APPTWIN_COMMAND_STATUS_UPDATES_BY_VIN: 17,
   APPTWIN_PENDING_COMMAND_REQUEST: 18,
-  ASSIGNED_VEHICLES: 19
+  ASSIGNED_VEHICLES: 19,
+  DATA_CHANGE_EVENT: 21
 };
 
 /**
@@ -6513,7 +12275,8 @@ proto.proto.PushMessage.toObject = function(includeInstance, msg) {
     preferredDealerChange: (f = msg.getPreferredDealerChange()) && proto.proto.PreferredDealerChange.toObject(includeInstance, f),
     apptwinCommandStatusUpdatesByVin: (f = msg.getApptwinCommandStatusUpdatesByVin()) && vehicleapi_pb.AppTwinCommandStatusUpdatesByVIN.toObject(includeInstance, f),
     apptwinPendingCommandRequest: (f = msg.getApptwinPendingCommandRequest()) && vehicleapi_pb.AppTwinPendingCommandsRequest.toObject(includeInstance, f),
-    assignedVehicles: (f = msg.getAssignedVehicles()) && protos_pb.AssignedVehicles.toObject(includeInstance, f)
+    assignedVehicles: (f = msg.getAssignedVehicles()) && protos_pb.AssignedVehicles.toObject(includeInstance, f),
+    dataChangeEvent: (f = msg.getDataChangeEvent()) && proto.proto.DataChangeEvent.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -6623,6 +12386,11 @@ proto.proto.PushMessage.deserializeBinaryFromReader = function(msg, reader) {
       var value = new protos_pb.AssignedVehicles;
       reader.readMessage(value,protos_pb.AssignedVehicles.deserializeBinaryFromReader);
       msg.setAssignedVehicles(value);
+      break;
+    case 21:
+      var value = new proto.proto.DataChangeEvent;
+      reader.readMessage(value,proto.proto.DataChangeEvent.deserializeBinaryFromReader);
+      msg.setDataChangeEvent(value);
       break;
     default:
       reader.skipField();
@@ -6770,6 +12538,14 @@ proto.proto.PushMessage.serializeBinaryToWriter = function(message, writer) {
       19,
       f,
       protos_pb.AssignedVehicles.serializeBinaryToWriter
+    );
+  }
+  f = message.getDataChangeEvent();
+  if (f != null) {
+    writer.writeMessage(
+      21,
+      f,
+      proto.proto.DataChangeEvent.serializeBinaryToWriter
     );
   }
 };
@@ -7308,6 +13084,43 @@ proto.proto.PushMessage.prototype.clearAssignedVehicles = function() {
  */
 proto.proto.PushMessage.prototype.hasAssignedVehicles = function() {
   return jspb.Message.getField(this, 19) != null;
+};
+
+
+/**
+ * optional DataChangeEvent data_change_event = 21;
+ * @return {?proto.proto.DataChangeEvent}
+ */
+proto.proto.PushMessage.prototype.getDataChangeEvent = function() {
+  return /** @type{?proto.proto.DataChangeEvent} */ (
+    jspb.Message.getWrapperField(this, proto.proto.DataChangeEvent, 21));
+};
+
+
+/**
+ * @param {?proto.proto.DataChangeEvent|undefined} value
+ * @return {!proto.proto.PushMessage} returns this
+*/
+proto.proto.PushMessage.prototype.setDataChangeEvent = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 21, proto.proto.PushMessage.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.PushMessage} returns this
+ */
+proto.proto.PushMessage.prototype.clearDataChangeEvent = function() {
+  return this.setDataChangeEvent(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.PushMessage.prototype.hasDataChangeEvent = function() {
+  return jspb.Message.getField(this, 21) != null;
 };
 
 
@@ -8944,6 +14757,928 @@ proto.proto.PreferredDealerChange.prototype.setEmitTimestampInMs = function(valu
 };
 
 
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.AcknowledgeDataChangeEvent.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.AcknowledgeDataChangeEvent.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.AcknowledgeDataChangeEvent} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.AcknowledgeDataChangeEvent.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.AcknowledgeDataChangeEvent}
+ */
+proto.proto.AcknowledgeDataChangeEvent.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.AcknowledgeDataChangeEvent;
+  return proto.proto.AcknowledgeDataChangeEvent.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.AcknowledgeDataChangeEvent} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.AcknowledgeDataChangeEvent}
+ */
+proto.proto.AcknowledgeDataChangeEvent.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setSequenceNumber(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.AcknowledgeDataChangeEvent.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.AcknowledgeDataChangeEvent.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.AcknowledgeDataChangeEvent} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.AcknowledgeDataChangeEvent.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getSequenceNumber();
+  if (f !== 0) {
+    writer.writeInt32(
+      1,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional int32 sequence_number = 1;
+ * @return {number}
+ */
+proto.proto.AcknowledgeDataChangeEvent.prototype.getSequenceNumber = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.AcknowledgeDataChangeEvent} returns this
+ */
+proto.proto.AcknowledgeDataChangeEvent.prototype.setSequenceNumber = function(value) {
+  return jspb.Message.setProto3IntField(this, 1, value);
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.Scopes.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.Scopes.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.Scopes} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.Scopes.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    scope: jspb.Message.getFieldWithDefault(msg, 1, 0),
+    ciamid: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    vin: jspb.Message.getFieldWithDefault(msg, 3, ""),
+    additionalResourcesMap: (f = msg.getAdditionalResourcesMap()) ? f.toObject(includeInstance, undefined) : [],
+    resourceCiamId: jspb.Message.getFieldWithDefault(msg, 5, ""),
+    resourceVin: jspb.Message.getFieldWithDefault(msg, 6, "")
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.Scopes}
+ */
+proto.proto.Scopes.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.Scopes;
+  return proto.proto.Scopes.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.Scopes} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.Scopes}
+ */
+proto.proto.Scopes.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {!proto.proto.Scope} */ (reader.readEnum());
+      msg.setScope(value);
+      break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setCiamid(value);
+      break;
+    case 3:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setVin(value);
+      break;
+    case 4:
+      var value = msg.getAdditionalResourcesMap();
+      reader.readMessage(value, function(message, reader) {
+        jspb.Map.deserializeBinary(message, reader, jspb.BinaryReader.prototype.readString, jspb.BinaryReader.prototype.readString, null, "", "");
+         });
+      break;
+    case 5:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setResourceCiamId(value);
+      break;
+    case 6:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setResourceVin(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.Scopes.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.Scopes.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.Scopes} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.Scopes.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getScope();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      1,
+      f
+    );
+  }
+  f = message.getCiamid();
+  if (f.length > 0) {
+    writer.writeString(
+      2,
+      f
+    );
+  }
+  f = message.getVin();
+  if (f.length > 0) {
+    writer.writeString(
+      3,
+      f
+    );
+  }
+  f = message.getAdditionalResourcesMap(true);
+  if (f && f.getLength() > 0) {
+    f.serializeBinary(4, writer, jspb.BinaryWriter.prototype.writeString, jspb.BinaryWriter.prototype.writeString);
+  }
+  f = message.getResourceCiamId();
+  if (f.length > 0) {
+    writer.writeString(
+      5,
+      f
+    );
+  }
+  f = message.getResourceVin();
+  if (f.length > 0) {
+    writer.writeString(
+      6,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional Scope scope = 1;
+ * @return {!proto.proto.Scope}
+ */
+proto.proto.Scopes.prototype.getScope = function() {
+  return /** @type {!proto.proto.Scope} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/**
+ * @param {!proto.proto.Scope} value
+ * @return {!proto.proto.Scopes} returns this
+ */
+proto.proto.Scopes.prototype.setScope = function(value) {
+  return jspb.Message.setProto3EnumField(this, 1, value);
+};
+
+
+/**
+ * optional string ciamId = 2;
+ * @return {string}
+ */
+proto.proto.Scopes.prototype.getCiamid = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.Scopes} returns this
+ */
+proto.proto.Scopes.prototype.setCiamid = function(value) {
+  return jspb.Message.setProto3StringField(this, 2, value);
+};
+
+
+/**
+ * optional string vin = 3;
+ * @return {string}
+ */
+proto.proto.Scopes.prototype.getVin = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.Scopes} returns this
+ */
+proto.proto.Scopes.prototype.setVin = function(value) {
+  return jspb.Message.setProto3StringField(this, 3, value);
+};
+
+
+/**
+ * map<string, string> additional_resources = 4;
+ * @param {boolean=} opt_noLazyCreate Do not create the map if
+ * empty, instead returning `undefined`
+ * @return {!jspb.Map<string,string>}
+ */
+proto.proto.Scopes.prototype.getAdditionalResourcesMap = function(opt_noLazyCreate) {
+  return /** @type {!jspb.Map<string,string>} */ (
+      jspb.Message.getMapField(this, 4, opt_noLazyCreate,
+      null));
+};
+
+
+/**
+ * Clears values from the map. The map will be non-null.
+ * @return {!proto.proto.Scopes} returns this
+ */
+proto.proto.Scopes.prototype.clearAdditionalResourcesMap = function() {
+  this.getAdditionalResourcesMap().clear();
+  return this;};
+
+
+/**
+ * optional string resource_ciam_id = 5;
+ * @return {string}
+ */
+proto.proto.Scopes.prototype.getResourceCiamId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.Scopes} returns this
+ */
+proto.proto.Scopes.prototype.setResourceCiamId = function(value) {
+  return jspb.Message.setProto3StringField(this, 5, value);
+};
+
+
+/**
+ * optional string resource_vin = 6;
+ * @return {string}
+ */
+proto.proto.Scopes.prototype.getResourceVin = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 6, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.Scopes} returns this
+ */
+proto.proto.Scopes.prototype.setResourceVin = function(value) {
+  return jspb.Message.setProto3StringField(this, 6, value);
+};
+
+
+
+/**
+ * List of repeated fields within this message type.
+ * @private {!Array<number>}
+ * @const
+ */
+proto.proto.DataChangeEvent.repeatedFields_ = [1];
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.DataChangeEvent.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.DataChangeEvent.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.DataChangeEvent} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.DataChangeEvent.toObject = function(includeInstance, msg) {
+  var f, obj = {
+    scopesList: jspb.Message.toObjectList(msg.getScopesList(),
+    proto.proto.Scopes.toObject, includeInstance),
+    trackingId: jspb.Message.getFieldWithDefault(msg, 2, ""),
+    sequenceNumber: jspb.Message.getFieldWithDefault(msg, 3, 0)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.DataChangeEvent}
+ */
+proto.proto.DataChangeEvent.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.DataChangeEvent;
+  return proto.proto.DataChangeEvent.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.DataChangeEvent} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.DataChangeEvent}
+ */
+proto.proto.DataChangeEvent.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = new proto.proto.Scopes;
+      reader.readMessage(value,proto.proto.Scopes.deserializeBinaryFromReader);
+      msg.addScopes(value);
+      break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setTrackingId(value);
+      break;
+    case 3:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setSequenceNumber(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.DataChangeEvent.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.DataChangeEvent.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.DataChangeEvent} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.DataChangeEvent.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getScopesList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
+      1,
+      f,
+      proto.proto.Scopes.serializeBinaryToWriter
+    );
+  }
+  f = message.getTrackingId();
+  if (f.length > 0) {
+    writer.writeString(
+      2,
+      f
+    );
+  }
+  f = message.getSequenceNumber();
+  if (f !== 0) {
+    writer.writeInt32(
+      3,
+      f
+    );
+  }
+};
+
+
+/**
+ * repeated Scopes scopes = 1;
+ * @return {!Array<!proto.proto.Scopes>}
+ */
+proto.proto.DataChangeEvent.prototype.getScopesList = function() {
+  return /** @type{!Array<!proto.proto.Scopes>} */ (
+    jspb.Message.getRepeatedWrapperField(this, proto.proto.Scopes, 1));
+};
+
+
+/**
+ * @param {!Array<!proto.proto.Scopes>} value
+ * @return {!proto.proto.DataChangeEvent} returns this
+*/
+proto.proto.DataChangeEvent.prototype.setScopesList = function(value) {
+  return jspb.Message.setRepeatedWrapperField(this, 1, value);
+};
+
+
+/**
+ * @param {!proto.proto.Scopes=} opt_value
+ * @param {number=} opt_index
+ * @return {!proto.proto.Scopes}
+ */
+proto.proto.DataChangeEvent.prototype.addScopes = function(opt_value, opt_index) {
+  return jspb.Message.addToRepeatedWrapperField(this, 1, opt_value, proto.proto.Scopes, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ * @return {!proto.proto.DataChangeEvent} returns this
+ */
+proto.proto.DataChangeEvent.prototype.clearScopesList = function() {
+  return this.setScopesList([]);
+};
+
+
+/**
+ * optional string tracking_id = 2;
+ * @return {string}
+ */
+proto.proto.DataChangeEvent.prototype.getTrackingId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.DataChangeEvent} returns this
+ */
+proto.proto.DataChangeEvent.prototype.setTrackingId = function(value) {
+  return jspb.Message.setProto3StringField(this, 2, value);
+};
+
+
+/**
+ * optional int32 sequence_number = 3;
+ * @return {number}
+ */
+proto.proto.DataChangeEvent.prototype.getSequenceNumber = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.DataChangeEvent} returns this
+ */
+proto.proto.DataChangeEvent.prototype.setSequenceNumber = function(value) {
+  return jspb.Message.setProto3IntField(this, 3, value);
+};
+
+
+/**
+ * @enum {number}
+ */
+proto.proto.HvBatteryPrecondStatesDischarging = {
+  DISCHARGING_INACTIVE: 0,
+  DISCHARGING_HEATING_ACTIVE: 1,
+  DISCHARGING_HEATING_SUCCESSFUL: 2,
+  DISCHARGING_HEATING_NOT_SUFFICIENT: 3,
+  DISCHARGING_HEATING_RECOMMENDATION: 4,
+  DISCHARGING_COOLING_ACTIVE: 5,
+  DISCHARGING_COOLING_SUCCESSFUL: 6,
+  DISCHARGING_COOLING_NOT_SUFFICIENT: 7,
+  DISCHARGING_COOLING_RECOMMENDATION: 8
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.HvBatteryPrecondStatesCharging = {
+  CHARGING_HEATING_INACTIVE: 0,
+  CHARGING_HEATING_ACTIVE: 1,
+  CHARGING_HEATING_SUCCESSFUL: 2,
+  CHARGING_HEATING_NOT_SUFFICIENT: 3,
+  CHARGING_HEATING_RECOMMENDATION: 4,
+  CHARGING_COOLING_ACTIVE: 5,
+  CHARGING_COOLING_SUCCESSFUL: 6,
+  CHARGING_COOLING_NOT_SUFFICIENT: 7,
+  CHARGING_COOLING_RECOMMENDATION: 8
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.MainCategory = {
+  MAIN_CATEGORY_SERVER: 0,
+  MAIN_CATEGORY_HMI: 1,
+  MAIN_CATEGORY_VEHICLE_SYSTEM: 2,
+  MAIN_CATEGORY_DIAGNOSTICS: 3,
+  MAIN_CATEGORY_REMOTE: 4,
+  MAIN_CATEGORY_CONTAINER_APPLICATION: 5
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.SubCategory = {
+  SUB_CATEGORY_UNKNOWN: 0,
+  SUB_CATEGORY_BATTERY_CONDITIONING: 1
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.SpecificCategory = {
+  SPECIFIC_CATEGORY_UNKNOWN: 0,
+  SPECIFIC_CATEGORY_PRECONDITIONING_BUTTON: 1
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.Method = {
+  METHOD_COND_REQ_TO_REACH_TARGET_TEMP: 0,
+  METHOD_COND_REQ_TO_REACH_TARGET_POWER: 1,
+  METHOD_OMIT_CONDITIONING_REQUEST: 2,
+  METHOD_SET_CONFIGURATION: 3
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.Status = {
+  STATE_OK: 0,
+  STATE_UNSPECIFIED_ERROR: 1,
+  STATE_CONDITIONING_NOT_NECESSARY: 2,
+  STATE_TIME_NOT_SUFFICIENT: 3,
+  STATE_BATTERY_LEVEL_LOW: 4
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.HvBatteryPrecondAvailability = {
+  HV_BATTERY_PRECOND_AVAILABILITY_NOT_AVAILABLE: 0,
+  HV_BATTERY_PRECOND_AVAILABILITY_FULLY_AVAILABLE: 1,
+  HV_BATTERY_PRECOND_AVAILABILITY_TEMPORARILY_NOT_AVAILABLE_LOW_SOC: 2,
+  HV_BATTERY_PRECOND_AVAILABILITY_TEMPORARILY_NOT_AVAILABLE_MECHATRONICS: 3,
+  HV_BATTERY_PRECOND_AVAILABILITY_TEMPORARILY_NOT_AVAILABLE_BATTERY_TEMPERATURE: 4,
+  HV_BATTERY_PRECOND_AVAILABILITY_LIMITED_AVAILABLE_LOW_SOC: 5,
+  HV_BATTERY_PRECOND_AVAILABILITY_LIMITED_AVAILABLE_MECHATRONICS: 6,
+  HV_BATTERY_PRECOND_AVAILABILITY_LIMITED_AVAILABLE_BATTERY_TEMPERATURE: 7
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.EvsePairingState = {
+  EVSE_PAIRING_STATE_IDLE: 0,
+  EVSE_PAIRING_STATE_FINISHED: 1,
+  EVSE_PAIRING_STATE_FAILED_TLS_ERROR: 2,
+  EVSE_PAIRING_STATE_FAILED_TIMEOUT: 3,
+  EVSE_PAIRING_STATE_FAILED_NO_INDEX_AVAILABLE: 4,
+  EVSE_PAIRING_STATE_PROCESS_ONGOING: 5,
+  EVSE_PAIRING_STATE_PROCESS_STOPPED: 6,
+  EVSE_PAIRING_STATE_CERTIFICATE_NOT_INSTALLED: 7,
+  EVSE_PAIRING_STATE_PAIRING_SERVICE_NOT_OFFERED_BY_EVSE: 8,
+  EVSE_PAIRING_STATE_BIDIRECTIONAL_POWER_TRANSFER_SERVICE_NOT_OFFERED_BY_EVSE: 9
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.EmergencyPowerSupply = {
+  EMERGENCY_POWER_SUPPLY_OFF: 0,
+  EMERGENCY_POWER_SUPPLY_ON: 1
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.ParkCollisionPictureTransferStatus = {
+  PARK_COLLISION_PICTURE_TRANSFER_STATUS_DESELETED: 0,
+  PARK_COLLISION_PICTURE_TRANSFER_STATUS_SELECTED: 1
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.PictureRecordingStatus = {
+  PICTURE_RECORDING_STATUS_NOT_ACTIVE: 0,
+  PICTURE_RECORDING_STATUS_ACTIVE: 1
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.ParkCollisionInactiveReason = {
+  PARK_COLLISION_INACTIVE_REASON_DISABLED: 0,
+  PARK_COLLISION_INACTIVE_REASON_WAIT_FOR_SYSTEM_ACTIVATION: 1,
+  PARK_COLLISION_INACTIVE_REASON_SYSTEM_ACTIVE: 2,
+  PARK_COLLISION_INACTIVE_REASON_TRUNK_OR_DOOR_OPEN: 3,
+  PARK_COLLISION_INACTIVE_REASON_DESELECTED: 4,
+  PARK_COLLISION_INACTIVE_REASON_COLLISION_LIMIT: 5,
+  PARK_COLLISION_INACTIVE_REASON_MONITORING_TIME: 6,
+  PARK_COLLISION_INACTIVE_REASON_CONVERTIBLE_TOP_OPEN: 7,
+  PARK_COLLISION_INACTIVE_REASON_TEST1: 8,
+  PARK_COLLISION_INACTIVE_REASON_TEST2: 9
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.ParkCollisionSelectionStatus = {
+  PARK_COLLISION_SELECTION_STATUS_DESELETED: 0,
+  PARK_COLLISION_SELECTION_STATUS_SELECTED: 1
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.VehicleTheftAlarmInactiveReason = {
+  VEHICLE_THEFT_ALARM_INACTIVE_REASON_NO_ERROR: 0,
+  VEHICLE_THEFT_ALARM_INACTIVE_REASON_SIREN_COM: 1,
+  VEHICLE_THEFT_ALARM_INACTIVE_REASON_SIREN_BAT: 2,
+  VEHICLE_THEFT_ALARM_INACTIVE_REASON_SENSOR: 3
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.TowProtectionActivationStatus = {
+  TOW_PROTECTION_ACTIVATION_STATUS_OFF: 0,
+  TOW_PROTECTION_ACTIVATION_STATUS_ON: 1,
+  TOW_PROTECTION_ACTIVATION_STATUS_INIT: 2
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.TowProtectionSelectionStatus = {
+  TOW_PROTECTION_SELECTION_STATUS_DESELETED: 0,
+  TOW_PROTECTION_SELECTION_STATUS_SELECTED: 1
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.InteriorProtectionActivationStatus = {
+  INTERIOR_PROTECTION_ACTIVATION_STATUS_OFF: 0,
+  INTERIOR_PROTECTION_ACTIVATION_STATUS_ON: 1,
+  INTERIOR_PROTECTION_ACTIVATION_STATUS_INIT: 2
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.InteriorProtectionSelectionStatus = {
+  INTERIOR_PROTECTION_SELECTION_STATUS_DESELETED: 0,
+  INTERIOR_PROTECTION_SELECTION_STATUS_SELECTED: 1
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.PanicAlarmActive = {
+  PANIC_ALARM_ACTIVE_CONFIRMED: 0,
+  PANIC_ALARM_ACTIVE_NOT_YET_CONFIRMED: 1
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.ParkEventPictureSelectionStatus = {
+  PARK_EVENT_PICTURE_SELECTION_STATUS_NOT_SELECTED: 0,
+  PARK_EVENT_PICTURE_SELECTION_STATUS_SELECTED: 1
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.ParkCollisionActivationStatus = {
+  PARK_COLLISION_ACTIVATION_STATUS_OFF: 0,
+  PARK_COLLISION_ACTIVATION_STATUS_ON: 1,
+  PARK_COLLISION_ACTIVATION_STATUS_INIT: 2
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.ChargingCompatibilityError = {
+  CHARGING_COMPATIBILITY_ERROR_DEFAULT: 0,
+  CHARGING_COMPATIBILITY_ERROR_FULL_COMPATIBILITY: 1,
+  CHARGING_COMPATIBILITY_ERROR_FULL_COMPATIBILITY_WITH_ADDITIONAL_HARDWARE: 2,
+  CHARGING_COMPATIBILITY_PARTIAL_COMPATIBILITY: 3,
+  CHARGING_COMPATIBILITY_PARTIAL_COMPATIBILITY_WITH_ADDITIONAL_DEVICE: 4,
+  CHARGING_COMPATIBILITY_ERROR_NO_COMPATIBILITY: 5
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.ChargingFlapErrorDetails = {
+  CHARGING_FLAP_ERROR_DETAILS_NO_INFO_OR_ERROR_MESSAGE: 0,
+  CHARGING_FLAP_ERROR_DETAILS_OPENING_DEFECT_SEARCH_WORKSHOP: 1,
+  CHARGING_FLAP_ERROR_DETAILS_BLOCKED: 2,
+  CHARGING_FLAP_ERROR_DETAILS_DRIVING_POSITION_NOT_PARKING: 3,
+  CHARGING_FLAP_ERROR_DETAILS_STATE_UNKNOWN: 4,
+  CHARGING_FLAP_ERROR_DETAILS_PRESSED_DETECTION_DEFECT: 5,
+  CHARGING_FLAP_ERROR_DETAILS_CLOSING_OF_AUTOMATED_FLAP_DEFECT: 6
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.ChargeFlapsPositionState = {
+  CHARGE_FLAPS_POSITION_STATE_DEFAULT: 0,
+  CHARGE_FLAPS_POSITION_STATE_OPEN: 1,
+  CHARGE_FLAPS_POSITION_STATE_CLOSED: 2,
+  CHARGE_FLAPS_POSITION_STATE_FLAP_PRESSED: 3,
+  CHARGE_FLAPS_POSITION_STATE_UNKNOWN: 4
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.ChargingPowerRestriction = {
+  CHARGING_POWER_RESTRICTION_NO_RESTRICTION: 0,
+  CHARGING_POWER_RESTRICTION_ECO_CHARGING_ACTIVE: 1,
+  CHARGING_POWER_RESTRICTION_REDUCED_DUE_TO_CUSTOMER_SETTING: 2,
+  CHARGING_POWER_RESTRICTION_REDUCED_DUE_TO_VEHICLE_CHARGING_SYSTEM: 3,
+  CHARGING_POWER_RESTRICTION_REDUCED_DUE_TO_REMOTE_CONTROL: 4,
+  CHARGING_POWER_RESTRICTION_REDUCED_DUE_TO_CHARGING_INFRASTRUCTURE: 5,
+  CHARGING_POWER_RESTRICTION_REDUCED_DUE_TO_CHARGING_STRATEGY: 6,
+  CHARGING_POWER_RESTRICTION_STATE_OF_CHARGE_TOO_LOW: 7,
+  CHARGING_POWER_RESTRICTION_STATE_OF_CHARGE_TOO_HIGH: 8,
+  CHARGING_POWER_RESTRICTION_BATTERY_TEMPERATURE_TOO_LOW: 9,
+  CHARGING_POWER_RESTRICTION_BATTERY_TEMPERATURE_TOO_HIGH: 10
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.PrecondStateType = {
+  PRECOND_STATE_TYPE_ON_UNLOCK: 0,
+  PRECOND_STATE_TYPE_AT_DEPARTURE_TIME: 1,
+  PRECOND_STATE_TYPE_IMMEDIATE: 2,
+  PRECOND_STATE_TYPE_CHILD_PRESENCE_DETECTION: 3
+};
+
 /**
  * @enum {number}
  */
@@ -8962,6 +15697,17 @@ proto.proto.AttributeStatus = {
   VALUE_NOT_RECEIVED: 1,
   VALUE_INVALID: 3,
   VALUE_NOT_AVAILABLE: 4
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.Scope = {
+  USER: 0,
+  ONBOARD_FENCES: 1,
+  USER_PIN: 3,
+  SERVICE_PREREQUISITE: 4,
+  USER_PROFILE_PICTURE: 5
 };
 
 goog.object.extend(exports, proto.proto);

@@ -2,22 +2,31 @@
 /**
  * @fileoverview
  * @enhanceable
+ * @suppress {missingRequire} reports error on implicit type usages.
  * @suppress {messageConventions} JS Compiler reports an error if a variable or
  *     field starts with 'MSG_' and isn't a translatable message.
  * @public
  */
 // GENERATED CODE -- DO NOT EDIT!
+/* eslint-disable */
+// @ts-nocheck
 
 var jspb = require('google-protobuf');
 var goog = jspb;
-var global = Function('return this')();
+var global = (function() {
+  if (this) { return this; }
+  if (typeof window !== 'undefined') { return window; }
+  if (typeof global !== 'undefined') { return global; }
+  if (typeof self !== 'undefined') { return self; }
+  return Function('return this')();
+}.call(null));
 
 var acp_pb = require('./acp_pb.js');
 goog.object.extend(proto, acp_pb);
 var google_protobuf_struct_pb = require('google-protobuf/google/protobuf/struct_pb.js');
 goog.object.extend(proto, google_protobuf_struct_pb);
-var github_com_gogo_protobuf_gogoproto_gogo_pb = require('./github.com/gogo/protobuf/gogoproto/gogo_pb.js');
-goog.object.extend(proto, github_com_gogo_protobuf_gogoproto_gogo_pb);
+var gogo_pb = require('./gogo_pb.js');
+goog.object.extend(proto, gogo_pb);
 goog.exportSymbol('proto.proto.AcknowledgeAppTwinCommandStatusUpdatesByVIN', null, global);
 goog.exportSymbol('proto.proto.AppTwinCommandStatus', null, global);
 goog.exportSymbol('proto.proto.AppTwinCommandStatusUpdatesByPID', null, global);

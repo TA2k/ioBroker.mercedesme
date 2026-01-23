@@ -21,8 +21,8 @@ var global = (function() {
   return Function('return this')();
 }.call(null));
 
-var github_com_gogo_protobuf_gogoproto_gogo_pb = require('./github.com/gogo/protobuf/gogoproto/gogo_pb.js');
-goog.object.extend(proto, github_com_gogo_protobuf_gogoproto_gogo_pb);
+var gogo_pb = require('./gogo_pb.js');
+goog.object.extend(proto, gogo_pb);
 goog.exportSymbol('proto.proto.ACP', null, global);
 goog.exportSymbol('proto.proto.ACP.CommandType', null, global);
 goog.exportSymbol('proto.proto.VVA', null, global);
