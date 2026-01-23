@@ -1376,6 +1376,7 @@ class Mercedesme extends utils.Adapter {
     this.log.debug("Login");
 
     // if (this.atoken) {
+    //eslint-disable-next-line
     if (false) {
       this.log.info("Found old session. Try to refresh token");
       await this.refreshToken()
