@@ -2,7 +2,7 @@
 .idea
 node_modules
 nbproject
-
+.docu
 # npm package files
 iobroker.*.tgz
 

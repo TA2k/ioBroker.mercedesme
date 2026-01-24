@@ -28,14 +28,14 @@
     "@eslint/eslintrc": "^3.3.3",
     "@eslint/js": "^9.39.2",
     "@iobroker/testing": "^5.2.2",
-    "@tsconfig/node16": "^16.1.8",
+    "@tsconfig/node20": "^20.1.8",
     "@types/node": "^25.0.10",
     "eslint": "^9.39.2",
     "globals": "^17.1.0",
     "typescript": "~5.9.3"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=20"
   },
   "homepage": "https://github.com/TA2k/ioBroker.mercedesme",
   "keywords": [
