@@ -1919,6 +1919,7 @@ class Mercedesme extends utils.Adapter {
       }
 
       try {
+        this.log.debug("WS parse data: " + Buffer.from(data).toString("hex"));
         const message = VehicleEvents.PushMessage.deserializeBinary(data).toObject();
         if (message.debugmessage) {
           this.log.debug(JSON.stringify(message.debugmessage));
