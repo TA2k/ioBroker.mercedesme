@@ -87,6 +87,8 @@ class Mercedesme extends utils.Adapter {
       "X-TrackingId": this.xTracking,
       "ris-os-name": "android",
       "X-SessionId": this.xSession,
+      "APP-SESSION-ID": this.xSession,
+      "OUTPUT-FORMAT": "PROTO",
       Accept: "*/*",
       "X-ApplicationName": "mycar-store-ece",
       "Accept-Language": "de-DE;q=1.0",
