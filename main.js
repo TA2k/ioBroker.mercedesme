@@ -300,7 +300,7 @@ class Mercedesme extends utils.Adapter {
                   vc.setType(3);
                 }
                 if (vc.setDepartureTime) {
-                  vc.setDepartureTime(0);
+                  vc.setDepartureTime(-1);
                 }
               }
             }
