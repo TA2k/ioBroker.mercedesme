@@ -47,6 +47,7 @@ class Mercedesme extends utils.Adapter {
     this.xSession = uuidv4();
     this.xTracking = uuidv4();
     this.deviceuuid = uuidv4();
+    this.userAgent = "mycar-store-ece v1.63.1, android 14, SDK 3.26.1";
     this.Json2iob = new Json2iob(this);
     this.vinStates = {};
     const jar = new CookieJar();
@@ -95,7 +96,7 @@ class Mercedesme extends utils.Adapter {
       "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
       "X-Request-Id": this.xTracking,
       "ris-sdk-version": "3.26.1",
-      "User-Agent": "mycar-store-ece v1.63.1, android 14, SDK 3.26.1",
+      "User-Agent": this.userAgent,
       "ris-application-version": "1.63.1",
       "device-uuid": this.deviceuuid,
       "X-Locale": this.config.acceptLanguage,
@@ -1415,8 +1416,7 @@ class Mercedesme extends utils.Adapter {
         scope: "email profile ciam-uid phone openid offline_access",
       },
       headers: {
-        "user-agent":
-          "Mozilla/5.0 (iPhone; CPU iPhone OS 15_8_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.6.6 Mobile/15E148 Safari/604.1",
+        "user-agent": this.userAgent,
         accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
         "accept-language": "de-DE,de;q=0.9",
       },
@@ -1484,8 +1484,7 @@ class Mercedesme extends utils.Adapter {
         "content-type": "application/json",
         origin: "https://id.mercedes-benz.com",
         "accept-language": "de-DE,de;q=0.9",
-        "user-agent":
-          "Mozilla/5.0 (iPhone; CPU iPhone OS 15_8_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.6.6 Mobile/15E148 Safari/604.1",
+        "user-agent": this.userAgent,
       },
       data: {
         browserName: "Mobile Safari",
@@ -1505,8 +1504,7 @@ class Mercedesme extends utils.Adapter {
         "content-type": "application/json",
         origin: "https://id.mercedes-benz.com",
         "accept-language": "de-DE,de;q=0.9",
-        "user-agent":
-          "Mozilla/5.0 (iPhone; CPU iPhone OS 15_8_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.6.6 Mobile/15E148 Safari/604.1",
+        "user-agent": this.userAgent,
         referer: "https://id.mercedes-benz.com/ciam/auth/login",
       },
       data: {
@@ -1531,8 +1529,7 @@ class Mercedesme extends utils.Adapter {
         "content-type": "application/json",
         origin: "https://id.mercedes-benz.com",
         "accept-language": "de-DE,de;q=0.9",
-        "user-agent":
-          "Mozilla/5.0 (iPhone; CPU iPhone OS 15_8_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.6.6 Mobile/15E148 Safari/604.1",
+        "user-agent": this.userAgent,
         referer: "https://id.mercedes-benz.com/ciam/auth/login",
       },
       data: {
@@ -1574,8 +1571,7 @@ class Mercedesme extends utils.Adapter {
         origin: "https://id.mercedes-benz.com",
 
         "accept-language": "de-DE,de;q=0.9",
-        "user-agent":
-          "Mozilla/5.0 (iPhone; CPU iPhone OS 15_8_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.6.6 Mobile/15E148 Safari/604.1",
+        "user-agent": this.userAgent,
         referer: "https://id.mercedes-benz.com/ciam/auth/login",
       },
       data: { token: preLoginData.token },
@@ -1664,8 +1660,7 @@ class Mercedesme extends utils.Adapter {
         "content-type": "application/json",
         origin: "https://id.mercedes-benz.com",
         "accept-language": "de-DE,de;q=0.9",
-        "user-agent":
-          "Mozilla/5.0 (iPhone; CPU iPhone OS 15_8_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.6.6 Mobile/15E148 Safari/604.1",
+        "user-agent": this.userAgent,
         referer: "https://id.mercedes-benz.com/ciam/auth/login",
       },
       data: {
