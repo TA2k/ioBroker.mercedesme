@@ -1831,8 +1831,12 @@ class Mercedesme extends utils.Adapter {
   }
   connectWS() {
     this.wsReconnectCounter++;
-    const headers = this.baseHeader;
-    headers.Authorization = this.atoken;
+    // APK only sends 3 headers for WebSocket connection
+    const wsHeaders = {
+      Authorization: this.atoken,
+      "APP-SESSION-ID": this.xSession,
+      "OUTPUT-FORMAT": "PROTO",
+    };
     this.log.debug("Connect to WebSocket");
     try {
       clearInterval(this.wsPingInterval);
@@ -1852,7 +1856,7 @@ class Mercedesme extends utils.Adapter {
       }, 5 * 60 * 1000); // 5min
 
       this.ws = new WebSocket("wss://websocket.emea-prod.mobilesdk.mercedes-benz.com/v2/ws", {
-        headers: headers,
+        headers: wsHeaders,
       });
     } catch (error) {
       this.log.error(error);
