@@ -278,7 +278,6 @@ class Mercedesme extends utils.Adapter {
             const commandIdCC = this.toCamel("_" + commandId.replace("zev", "ZEV"));
             const setCommandIdCC = this.toCamel("set_" + commandId);
             const command = new VehicleCommands.CommandRequest();
-            command.setBackend(1);
             command.setVin(vin);
             command.setRequestId(uuidv4());
             const vc = new VehicleCommands[commandIdCC]();
@@ -1919,7 +1918,6 @@ class Mercedesme extends utils.Adapter {
       }
 
       try {
-        this.log.debug("WS parse data: " + Buffer.from(data).toString("hex"));
         const message = VehicleEvents.PushMessage.deserializeBinary(data).toObject();
         if (message.debugmessage) {
           this.log.debug(JSON.stringify(message.debugmessage));
