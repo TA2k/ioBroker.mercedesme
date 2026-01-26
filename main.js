@@ -83,19 +83,18 @@ class Mercedesme extends utils.Adapter {
     }
     this.config.acceptLanguage = this.config.acceptLanguage ? this.config.acceptLanguage : "de-DE";
     this.baseHeader = {
-      "ris-os-version": "18.2.1",
+      "ris-os-version": "14",
       "X-TrackingId": this.xTracking,
-      "RIS-OS-Name": "ios",
+      "ris-os-name": "android",
       "X-SessionId": this.xSession,
-      "ris-websocket-type": "ios-native",
       Accept: "*/*",
       "X-ApplicationName": "mycar-store-ece",
       "Accept-Language": "de-DE;q=1.0",
       "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
       "X-Request-Id": this.xTracking,
-      "RIS-SDK-Version": "3.932.2",
-      "User-Agent": "MyCar/1.51.0 (com.daimler.ris.mercedesme.ece.ios; build:2578; iOS 18.2.1) Alamofire/5.9.1",
-      "ris-application-version": "1.91.0 (2578)",
+      "ris-sdk-version": "3.26.1",
+      "User-Agent": "mycar-store-ece v1.63.1, android 14, SDK 3.26.1",
+      "ris-application-version": "1.63.1",
       "device-uuid": this.deviceuuid,
       "X-Locale": this.config.acceptLanguage,
     };
@@ -301,7 +300,7 @@ class Mercedesme extends utils.Adapter {
                   vc.setType(3);
                 }
                 if (vc.setDepartureTime) {
-                  vc.setDepartureTime(-1);
+                  vc.setDepartureTime(0);
                 }
               }
             }
