@@ -47,7 +47,16 @@ class Mercedesme extends utils.Adapter {
     this.xSession = uuidv4();
     this.xTracking = uuidv4();
     this.deviceuuid = uuidv4();
-    this.userAgent = "mycar-store-ece v1.63.1, android 14, SDK 3.26.1";
+
+    // APK version info - update these when APK updates
+    this.appName = "mycar-store-ece";
+    this.appVersion = "1.63.1";
+    this.osName = "android";
+    this.osVersion = "14";
+    this.sdkVersion = "3.26.1";
+    // Built like APK: {appName} v{appVersion}, {osName} {osVersion}, SDK {sdkVersion}
+    this.userAgent = `${this.appName} v${this.appVersion}, ${this.osName} ${this.osVersion}, SDK ${this.sdkVersion}`;
+
     this.Json2iob = new Json2iob(this);
     this.vinStates = {};
     const jar = new CookieJar();
@@ -84,20 +93,20 @@ class Mercedesme extends utils.Adapter {
     }
     this.config.acceptLanguage = this.config.acceptLanguage ? this.config.acceptLanguage : "de-DE";
     this.baseHeader = {
-      "ris-os-version": "14",
+      "ris-os-version": this.osVersion,
       "X-TrackingId": this.xTracking,
-      "ris-os-name": "android",
+      "ris-os-name": this.osName,
       "X-SessionId": this.xSession,
       "APP-SESSION-ID": this.xSession,
       "OUTPUT-FORMAT": "PROTO",
       Accept: "*/*",
-      "X-ApplicationName": "mycar-store-ece",
+      "X-ApplicationName": this.appName,
       "Accept-Language": "de-DE;q=1.0",
       "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
       "X-Request-Id": this.xTracking,
-      "ris-sdk-version": "3.26.1",
+      "ris-sdk-version": this.sdkVersion,
       "User-Agent": this.userAgent,
-      "ris-application-version": "1.63.1",
+      "ris-application-version": this.appVersion,
       "device-uuid": this.deviceuuid,
       "X-Locale": this.config.acceptLanguage,
     };
