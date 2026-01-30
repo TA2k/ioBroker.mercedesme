@@ -1835,12 +1835,9 @@ class Mercedesme extends utils.Adapter {
   }
   connectWS() {
     this.wsReconnectCounter++;
-    // APK only sends 3 headers for WebSocket connection
-    const wsHeaders = {
-      Authorization: this.atoken,
-      "APP-SESSION-ID": this.xSession,
-      "OUTPUT-FORMAT": "PROTO",
-    };
+    // WebSocket needs full headers (tested: 3 headers fail with 400, full headers work)
+    const wsHeaders = { ...this.baseHeader };
+    wsHeaders.Authorization = this.atoken;
     this.log.debug("Connect to WebSocket");
     try {
       clearInterval(this.wsPingInterval);
