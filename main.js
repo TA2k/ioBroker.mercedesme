@@ -1835,13 +1835,13 @@ class Mercedesme extends utils.Adapter {
   }
   connectWS() {
     this.wsReconnectCounter++;
-    // WebSocket headers (HA style - tested: needs X-SessionId and X-TrackingId)
+    // WebSocket headers (APK style - new X-TrackingId per connect)
     const wsHeaders = {
       Authorization: this.atoken,
       "APP-SESSION-ID": this.xSession,
       "OUTPUT-FORMAT": "PROTO",
       "X-SessionId": this.xSession,
-      "X-TrackingId": this.xTracking,
+      "X-TrackingId": uuidv4(),
       "ris-os-name": this.osName,
       "ris-os-version": this.osVersion,
       "ris-sdk-version": this.sdkVersion,
