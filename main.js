@@ -1835,9 +1835,20 @@ class Mercedesme extends utils.Adapter {
   }
   connectWS() {
     this.wsReconnectCounter++;
-    // WebSocket needs full headers (tested: 3 headers fail with 400, full headers work)
-    const wsHeaders = { ...this.baseHeader };
-    wsHeaders.Authorization = this.atoken;
+    // APK WebSocket headers: 3 direct + 6 from RisHeaderInterceptor = 9 headers
+    const wsHeaders = {
+      // 3 direct headers from ReconnectableSocketConnection
+      Authorization: this.atoken,
+      "APP-SESSION-ID": this.xSession,
+      "OUTPUT-FORMAT": "PROTO",
+      // 6 headers from RisHeaderInterceptor
+      "X-ApplicationName": this.appName,
+      "ris-application-version": this.appVersion,
+      "ris-os-name": this.osName,
+      "ris-os-version": this.osVersion,
+      "ris-sdk-version": this.sdkVersion,
+      "User-Agent": this.userAgent,
+    };
     this.log.debug("Connect to WebSocket");
     try {
       clearInterval(this.wsPingInterval);
