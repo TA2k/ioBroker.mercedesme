@@ -92,9 +92,9 @@ class Mercedesme extends utils.Adapter {
       return;
     }
     this.config.acceptLanguage = this.config.acceptLanguage ? this.config.acceptLanguage : "de-DE";
+    // Static base headers (X-TrackingId added dynamically per request via getBaseHeader())
     this.baseHeader = {
       "ris-os-version": this.osVersion,
-      "X-TrackingId": this.xTracking,
       "ris-os-name": this.osName,
       "X-SessionId": this.xSession,
       "APP-SESSION-ID": this.xSession,
@@ -103,7 +103,6 @@ class Mercedesme extends utils.Adapter {
       "X-ApplicationName": this.appName,
       "Accept-Language": "de-DE;q=1.0",
       "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
-      "X-Request-Id": this.xTracking,
       "ris-sdk-version": this.sdkVersion,
       "User-Agent": this.userAgent,
       "ris-application-version": this.appVersion,
@@ -645,7 +644,7 @@ class Mercedesme extends utils.Adapter {
     return unit;
   }
   async getVehicles() {
-    const headers = this.baseHeader;
+    const headers = this.getBaseHeader();
     headers.Authorization = this.atoken;
     await axios({
       method: "get",
@@ -910,7 +909,7 @@ class Mercedesme extends utils.Adapter {
 
   getCommands() {
     return new Promise((resolve, reject) => {
-      const headers = this.baseHeader;
+      const headers = this.getBaseHeader();
       headers.Authorization = this.atoken;
       this.vinArray.forEach((vin) => {
         this.log.debug(
@@ -1055,7 +1054,7 @@ class Mercedesme extends utils.Adapter {
   }
   getGeoFence() {
     return new Promise((resolve, reject) => {
-      const headers = this.baseHeader;
+      const headers = this.getBaseHeader();
       headers.Authorization = this.atoken;
       this.vinArray.forEach((vin) => {
         axios({
@@ -1096,7 +1095,7 @@ class Mercedesme extends utils.Adapter {
   }
   getUserInformation() {
     return new Promise((resolve, reject) => {
-      const headers = this.baseHeader;
+      const headers = this.getBaseHeader();
       headers.Authorization = this.atoken;
       this.vinArray.forEach((vin) => {
         axios({
@@ -1338,7 +1337,7 @@ class Mercedesme extends utils.Adapter {
       this.log.debug("Less than 6 hours since last hard relogin, using refresh token");
     }
 
-    const headers = this.baseHeader;
+    const headers = this.getBaseHeader();
     await this.requestClient({
       method: "post",
       url: "https://id.mercedes-benz.com/as/token.oauth2",
@@ -1381,6 +1380,15 @@ class Mercedesme extends utils.Adapter {
         }
         throw error;
       });
+  }
+  // Returns headers with fresh X-TrackingId per request (like APK/HA)
+  getBaseHeader() {
+    const trackingId = uuidv4();
+    return {
+      ...this.baseHeader,
+      "X-TrackingId": trackingId,
+      "X-Request-Id": trackingId,
+    };
   }
   async loginNew() {
     this.log.debug("Login");
@@ -1450,7 +1458,7 @@ class Mercedesme extends utils.Adapter {
             method: "post",
             maxBodyLength: Infinity,
             url: "https://id.mercedes-benz.com/as/token.oauth2",
-            headers: this.baseHeader,
+            headers: this.getBaseHeader(),
             data: {
               client_id: "62778dc4-1de3-44f4-af95-115f06a3a008",
               code: code,
@@ -1624,7 +1632,7 @@ class Mercedesme extends utils.Adapter {
       //   accept: "*/*",
       //   "content-type": "application/x-www-form-urlencoded; charset=utf-8",
       // },
-      headers: this.baseHeader,
+      headers: this.getBaseHeader(),
 
       data: {
         client_id: "62778dc4-1de3-44f4-af95-115f06a3a008",
@@ -1735,7 +1743,7 @@ class Mercedesme extends utils.Adapter {
 
       const loginNonceState = await this.getStateAsync("auth.loginNonce");
       if (this.config.loginCode && !this.atoken && loginNonceState && loginNonceState.val) {
-        const headers = this.baseHeader;
+        const headers = this.getBaseHeader();
         await axios({
           method: "post",
           // jar: this.jar,
@@ -1780,9 +1788,8 @@ class Mercedesme extends utils.Adapter {
           });
       }
       if (!this.atoken) {
-        //deep copy
-        const headers = JSON.parse(JSON.stringify(this.baseHeader));
         //config fetch needed to get the login code
+        const headers = this.getBaseHeader();
         await axios({
           method: "get",
           url: "https://bff.emea-prod.mobilesdk.mercedes-benz.com/v1/config",
