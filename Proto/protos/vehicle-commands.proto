@@ -45,11 +45,13 @@ message CommandRequest {
     SunroofClose sunroof_close = 10;
     SunroofLift sunroof_lift = 11;
     SunroofMove sunroof_move = 47;
+    SunroofBlindsMove sunroof_blinds_move = 79;
 
     WindowsOpen windows_open = 12;
     WindowsClose windows_close = 13;
     WindowsVentilate windows_ventilate = 43;
     WindowsMove windows_move = 44;
+    WindowBlindsMove window_blinds_move = 80;
 
     EngineStart engine_start = 19;
     EngineStop engine_stop = 20;
@@ -67,6 +69,9 @@ message CommandRequest {
 
     ChargeProgramConfigure charge_program_configure = 34;
     ChargeControlConfigure charge_control_configure = 40;
+
+    StagemodeStart stagemode_start = 81;
+    StagemodeStop stagemode_stop = 82;
 
     ChargeOptConfigure charge_opt_configure = 29;
     ChargeOptStart charge_opt_start = 30;
@@ -88,21 +93,42 @@ message CommandRequest {
     TheftalarmSelectTow theftalarm_select_tow = 37;
     TheftalarmStart theftalarm_start = 38;
     TheftalarmStop theftalarm_stop = 39;
+    TheftAlarmSelectPictureTaking theftalarm_select_picture_taking = 83;
+    TheftAlarmDeselectPictureTaking theftalarm_deselect_picture_taking = 84;
 
     AutomaticValetParkingActivate automatic_valet_parking_activate = 42;
 
-    // ChargeFlapUnlock charge_flap_unlock = 45; # removed 1.51
+    ChargeFlapUnlock charge_flap_unlock = 45;
     ChargeCouplerUnlock charge_coupler_unlock = 46;
+    ChargeFlapOpen charge_flap_open = 85;
+    ChargeCouplerStop charge_coupler_stop = 86;
 
     DeactivateVehicleKeys deactivate_vehicle_keys = 48;
     ActivateVehicleKeys activate_vehicle_keys = 49;
 
     ChargingBreakClocktimerConfigure chargingbreak_clocktimer_configure = 50;
+    ClockTimerConfigure clock_timer_configure = 87;
     // WiperHealthReset wiper_health_reset = 64; # removed 1.62
+
+    CarsharingProvision carsharing_provision = 88;
+    CarsharingKeyLock carsharing_key_lock = 89;
+    CarsharingKeyRelease carsharing_key_release = 90;
+    CarsharingProvisionAndLock carsharing_provision_and_lock = 91;
+
+    SelectiveKeyDeactivation selective_key_deactivation = 92;
+
+    ChildPresenceDetectionDeactivateAlarm child_presence_detection_deactivate_alarm = 93;
+    ChildPresenceDetectionTakePicture child_presence_detection_take_picture = 94;
+
+    InteriorMonitoringTakePicture interior_monitoring_take_picture = 95;
+    ExteriorMonitoringTakePicture exterior_monitoring_take_picture = 96;
+
+    RemoteUpdateStart remote_update_start = 97;
 
     HvBatteryStartConditioning hv_battery_start_conditioning = 76;
     HvBatteryStopConditioning hv_battery_stop_conditioning = 77;
 
+    ChargingConfigure charging_configure = 78;
 
   }
 }
@@ -214,6 +240,12 @@ message SunroofMove {
   google.protobuf.Int32Value sunroof_blind_rear  = 4 [ json_name = "sunroofblindrear" ];
 }
 
+// Move sunroof blinds (from APK 1.63.1)
+message SunroofBlindsMove {
+  google.protobuf.Int32Value sunroof_blind_front = 1 [ json_name = "sunroofBlindFront" ];
+  google.protobuf.Int32Value sunroof_blind_rear  = 2 [ json_name = "sunroofBlindRear" ];
+}
+
 message WindowsOpen {
   string pin = 1;
 }
@@ -232,6 +264,13 @@ message WindowsMove {
   google.protobuf.Int32Value rear_left_blind  = 6 [ json_name = "windowrearleftblind" ];
   google.protobuf.Int32Value rear_right       = 7 [ json_name = "windowrearright" ];
   google.protobuf.Int32Value rear_right_blind = 8 [ json_name = "windowrearrightblind" ];
+}
+
+// Move window blinds (from APK 1.63.1)
+message WindowBlindsMove {
+  google.protobuf.Int32Value rear_blind       = 1 [ json_name = "rearBlind" ];
+  google.protobuf.Int32Value rear_left_blind  = 2 [ json_name = "rearLeftBlind" ];
+  google.protobuf.Int32Value rear_right_blind = 3 [ json_name = "rearRightBlind" ];
 }
 
 message SpeedalertStart {
@@ -605,6 +644,26 @@ message TheftalarmStop {
   // empty
 }
 
+// Select picture taking for theft alarm (from APK 1.63.1)
+message TheftAlarmSelectPictureTaking {
+  // empty
+}
+
+// Deselect picture taking for theft alarm (from APK 1.63.1)
+message TheftAlarmDeselectPictureTaking {
+  // empty
+}
+
+// AMG Stage Mode Start (from APK 1.63.1)
+message StagemodeStart {
+  // empty
+}
+
+// AMG Stage Mode Stop (from APK 1.63.1)
+message StagemodeStop {
+  // empty
+}
+
 enum DriveType {
   UNKNOWN_DRIVE_TYPE = 0;
   PICK_UP = 1;
@@ -616,9 +675,22 @@ message AutomaticValetParkingActivate {
   DriveType drive_type = 2 [ json_name = "driveType" ];
 }
 
-// message ChargeFlapUnlock {} # removed 1.51
+// Unlock charge flap (re-added in APK 1.63.1)
+message ChargeFlapUnlock {
+  // empty
+}
+
+// Open charge flap (from APK 1.63.1)
+message ChargeFlapOpen {
+  // empty
+}
 
 message ChargeCouplerUnlock {}
+
+// Stop charge coupler (from APK 1.63.1)
+message ChargeCouplerStop {
+  // empty
+}
 
 message ChargingBreakClocktimerConfigure {
   repeated ChargingBreakClockTimerConfigureEntry chargingbreak_clocktimer_configure_entry = 1;
@@ -641,3 +713,133 @@ message ChargingBreakClockTimerConfigureEntry {
 }
 
 message WiperHealthReset {}
+
+// Clock timer configuration (from APK 1.63.1)
+message ClockTimerConfigure {
+  repeated ClockTimerConfigureEntry clock_timer_configure_entry = 1 [ json_name = "clockTimerConfigureEntry" ];
+}
+
+message ClockTimerConfigureEntry {
+  ChargingBreakClockTimerEntryStatus action = 1;
+  int32 hour = 2;
+  int32 minute = 3;
+  repeated TimeProfileDay days = 4;
+  int32 id = 5;
+}
+
+// Carsharing provision (from APK 1.63.1)
+message CarsharingProvision {
+  string pin = 1;
+  int32 enable_disable = 2;
+  string expiration_milliseconds = 3;
+  string expiration_seconds = 4;
+  string keyline = 5;
+}
+
+// Carsharing key lock (from APK 1.63.1)
+message CarsharingKeyLock {
+  string pin = 1;
+}
+
+// Carsharing key release (from APK 1.63.1)
+message CarsharingKeyRelease {
+  string pin = 1;
+}
+
+// Carsharing provision and lock (from APK 1.63.1)
+message CarsharingProvisionAndLock {
+  string pin = 1;
+  CarsharingProvision carsharing_provision = 2;
+}
+
+// Selective key deactivation (from APK 1.63.1)
+message SelectiveKeyDeactivation {
+  string pin = 1;
+}
+
+// Child presence detection - deactivate alarm (from APK 1.63.1)
+message ChildPresenceDetectionDeactivateAlarm {
+  // empty
+}
+
+// Child presence detection - take picture (from APK 1.63.1)
+message ChildPresenceDetectionTakePicture {
+  // empty
+}
+
+// Interior monitoring - take picture (from APK 1.63.1)
+message InteriorMonitoringTakePicture {
+  // empty
+}
+
+// Exterior monitoring - take picture (from APK 1.63.1)
+message ExteriorMonitoringTakePicture {
+  // empty
+}
+
+// Remote update start (from APK 1.63.1)
+message RemoteUpdateStart {
+  string pkgId = 1;
+  string releasePkgId = 2;
+}
+
+// ChargingConfigure - new command for advanced charging configuration (from APK 1.63.1)
+message ChargingConfigure {
+  enum Action {
+    NO_ACTION_SELECTED = 0;
+    START = 1;
+    PAUSE = 2;
+    RESUME = 3;
+    STOP = 4;
+  }
+
+  enum DcChargingProfile {
+    NO_DC_CHARGING_PROFILE_SELECTED = 0;
+    STANDARD = 1;
+    SILENT_ECO = 2;
+    ULTRAFAST = 3;
+    PITSTOP = 4;
+    FAST_ECO_1 = 5;
+    FAST_ECO_2 = 6;
+  }
+
+  enum SohCalibrationActivation {
+    NO_SOH_CALIBRATION_ACTIVATION_SELECTED = 0;
+    SOH_ON = 1;
+    SOH_OFF = 2;
+  }
+
+  enum BptRequest {
+    NO_BPT_REQUEST_SELECTED = 0;
+    BPT_REQUEST_V2X_DISABLED = 1;
+    BPT_REQUEST_V2X_EXTERNAL_CONTROL_ENABLED = 2;
+    BPT_REQUEST_V2X_VEHICLE_CONTROL_ENABLED = 3;
+  }
+
+  enum EmergencyPowerSupply {
+    NO_EMERGENCY_POWER_SUPPLY_SELECTED = 0;
+    EMERGENCY_POWER_SUPPLY_OFF = 1;
+    EMERGENCY_POWER_SUPPLY_ON = 2;
+  }
+
+  enum ActionEvsePairing {
+    NO_ACTION_EVSE_PAIRING_SELECTED = 0;
+    ACTION_EVSE_PAIRING_START = 1;
+    ACTION_EVSE_PAIRING_STOP = 2;
+  }
+
+  Action action = 1 [ json_name = "action" ];
+  DcChargingProfile dc_charging_profile = 2 [ json_name = "dcChargingProfile" ];
+  google.protobuf.Int32Value charging_program = 3 [ json_name = "chargingProgram" ];
+  repeated int32 inlet_id = 4 [ json_name = "inletId" ];
+  google.protobuf.Int32Value max_soc = 5 [ json_name = "maxSoc" ];
+  google.protobuf.Int32Value min_soc = 6 [ json_name = "minSoc" ];
+  google.protobuf.Int32Value target_soc = 9 [ json_name = "targetSoc" ];
+  google.protobuf.Int64Value target_time = 10 [ json_name = "targetTime" ];
+  SohCalibrationActivation soh_calibration_activation = 11 [ json_name = "sohCalibrationActivation" ];
+  // ChargeSchedule charge_schedule = 13; // complex nested type - omitted for simplicity
+  google.protobuf.Int32Value charging_location_id = 14 [ json_name = "chargingLocationId" ];
+  BptRequest bpt_request = 15 [ json_name = "bptRequest" ];
+  EmergencyPowerSupply emergency_power_supply = 16 [ json_name = "emergencyPowerSupply" ];
+  ActionEvsePairing action_evse_pairing = 17 [ json_name = "actionEvsePairing" ];
+}

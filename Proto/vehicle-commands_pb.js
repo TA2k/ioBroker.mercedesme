@@ -13,13 +13,13 @@
 
 var jspb = require('google-protobuf');
 var goog = jspb;
-var global = (function() {
-  if (this) { return this; }
-  if (typeof window !== 'undefined') { return window; }
-  if (typeof global !== 'undefined') { return global; }
-  if (typeof self !== 'undefined') { return self; }
-  return Function('return this')();
-}.call(null));
+var global =
+    (typeof globalThis !== 'undefined' && globalThis) ||
+    (typeof window !== 'undefined' && window) ||
+    (typeof global !== 'undefined' && global) ||
+    (typeof self !== 'undefined' && self) ||
+    (function () { return this; }).call(null) ||
+    Function('return this')();
 
 var gogo_pb = require('./gogo_pb.js');
 goog.object.extend(proto, gogo_pb);
@@ -35,8 +35,15 @@ goog.exportSymbol('proto.proto.AuxheatStop', null, global);
 goog.exportSymbol('proto.proto.BatteryChargeProgramConfigure', null, global);
 goog.exportSymbol('proto.proto.BatteryChargeProgramConfigure.ChargeProgram', null, global);
 goog.exportSymbol('proto.proto.BatteryMaxSocConfigure', null, global);
+goog.exportSymbol('proto.proto.CarsharingKeyLock', null, global);
+goog.exportSymbol('proto.proto.CarsharingKeyRelease', null, global);
+goog.exportSymbol('proto.proto.CarsharingProvision', null, global);
+goog.exportSymbol('proto.proto.CarsharingProvisionAndLock', null, global);
 goog.exportSymbol('proto.proto.ChargeControlConfigure', null, global);
+goog.exportSymbol('proto.proto.ChargeCouplerStop', null, global);
 goog.exportSymbol('proto.proto.ChargeCouplerUnlock', null, global);
+goog.exportSymbol('proto.proto.ChargeFlapOpen', null, global);
+goog.exportSymbol('proto.proto.ChargeFlapUnlock', null, global);
 goog.exportSymbol('proto.proto.ChargeOptConfigure', null, global);
 goog.exportSymbol('proto.proto.ChargeOptConfigure.Tariff', null, global);
 goog.exportSymbol('proto.proto.ChargeOptConfigure.Tariff.Rate', null, global);
@@ -47,6 +54,17 @@ goog.exportSymbol('proto.proto.ChargeProgramConfigure.ChargeProgram', null, glob
 goog.exportSymbol('proto.proto.ChargingBreakClockTimerConfigureEntry', null, global);
 goog.exportSymbol('proto.proto.ChargingBreakClockTimerEntryStatus', null, global);
 goog.exportSymbol('proto.proto.ChargingBreakClocktimerConfigure', null, global);
+goog.exportSymbol('proto.proto.ChargingConfigure', null, global);
+goog.exportSymbol('proto.proto.ChargingConfigure.Action', null, global);
+goog.exportSymbol('proto.proto.ChargingConfigure.ActionEvsePairing', null, global);
+goog.exportSymbol('proto.proto.ChargingConfigure.BptRequest', null, global);
+goog.exportSymbol('proto.proto.ChargingConfigure.DcChargingProfile', null, global);
+goog.exportSymbol('proto.proto.ChargingConfigure.EmergencyPowerSupply', null, global);
+goog.exportSymbol('proto.proto.ChargingConfigure.SohCalibrationActivation', null, global);
+goog.exportSymbol('proto.proto.ChildPresenceDetectionDeactivateAlarm', null, global);
+goog.exportSymbol('proto.proto.ChildPresenceDetectionTakePicture', null, global);
+goog.exportSymbol('proto.proto.ClockTimerConfigure', null, global);
+goog.exportSymbol('proto.proto.ClockTimerConfigureEntry', null, global);
 goog.exportSymbol('proto.proto.CommandRequest', null, global);
 goog.exportSymbol('proto.proto.CommandRequest.Backend', null, global);
 goog.exportSymbol('proto.proto.CommandRequest.CommandCase', null, global);
@@ -57,14 +75,21 @@ goog.exportSymbol('proto.proto.DoorsUnlock', null, global);
 goog.exportSymbol('proto.proto.DriveType', null, global);
 goog.exportSymbol('proto.proto.EngineStart', null, global);
 goog.exportSymbol('proto.proto.EngineStop', null, global);
+goog.exportSymbol('proto.proto.ExteriorMonitoringTakePicture', null, global);
 goog.exportSymbol('proto.proto.HvBatteryStartConditioning', null, global);
 goog.exportSymbol('proto.proto.HvBatteryStopConditioning', null, global);
+goog.exportSymbol('proto.proto.InteriorMonitoringTakePicture', null, global);
+goog.exportSymbol('proto.proto.RemoteUpdateStart', null, global);
+goog.exportSymbol('proto.proto.SelectiveKeyDeactivation', null, global);
 goog.exportSymbol('proto.proto.SigPosStart', null, global);
 goog.exportSymbol('proto.proto.SigPosStart.HornType', null, global);
 goog.exportSymbol('proto.proto.SigPosStart.LightType', null, global);
 goog.exportSymbol('proto.proto.SigPosStart.SigposType', null, global);
 goog.exportSymbol('proto.proto.SpeedalertStart', null, global);
 goog.exportSymbol('proto.proto.SpeedalertStop', null, global);
+goog.exportSymbol('proto.proto.StagemodeStart', null, global);
+goog.exportSymbol('proto.proto.StagemodeStop', null, global);
+goog.exportSymbol('proto.proto.SunroofBlindsMove', null, global);
 goog.exportSymbol('proto.proto.SunroofClose', null, global);
 goog.exportSymbol('proto.proto.SunroofLift', null, global);
 goog.exportSymbol('proto.proto.SunroofMove', null, global);
@@ -72,6 +97,8 @@ goog.exportSymbol('proto.proto.SunroofOpen', null, global);
 goog.exportSymbol('proto.proto.TemperatureConfigure', null, global);
 goog.exportSymbol('proto.proto.TemperatureConfigure.TemperaturePoint', null, global);
 goog.exportSymbol('proto.proto.TemperatureConfigure.TemperaturePoint.Zone', null, global);
+goog.exportSymbol('proto.proto.TheftAlarmDeselectPictureTaking', null, global);
+goog.exportSymbol('proto.proto.TheftAlarmSelectPictureTaking', null, global);
 goog.exportSymbol('proto.proto.TheftalarmConfirmDamagedetection', null, global);
 goog.exportSymbol('proto.proto.TheftalarmDeselectDamagedetection', null, global);
 goog.exportSymbol('proto.proto.TheftalarmDeselectInterior', null, global);
@@ -87,6 +114,7 @@ goog.exportSymbol('proto.proto.WeekProfileConfigure', null, global);
 goog.exportSymbol('proto.proto.WeekProfileConfigure.WeeklySetHU', null, global);
 goog.exportSymbol('proto.proto.WeekProfileConfigure.WeeklySetHU.Day', null, global);
 goog.exportSymbol('proto.proto.WeekProfileConfigureV2', null, global);
+goog.exportSymbol('proto.proto.WindowBlindsMove', null, global);
 goog.exportSymbol('proto.proto.WindowsClose', null, global);
 goog.exportSymbol('proto.proto.WindowsMove', null, global);
 goog.exportSymbol('proto.proto.WindowsOpen', null, global);
@@ -465,6 +493,27 @@ if (goog.DEBUG && !COMPILED) {
  * @extends {jspb.Message}
  * @constructor
  */
+proto.proto.SunroofBlindsMove = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.proto.SunroofBlindsMove, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.SunroofBlindsMove.displayName = 'proto.proto.SunroofBlindsMove';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
 proto.proto.WindowsOpen = function(opt_data) {
   jspb.Message.initialize(this, opt_data, 0, -1, null, null);
 };
@@ -538,6 +587,27 @@ if (goog.DEBUG && !COMPILED) {
    * @override
    */
   proto.proto.WindowsMove.displayName = 'proto.proto.WindowsMove';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.WindowBlindsMove = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.proto.WindowBlindsMove, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.WindowBlindsMove.displayName = 'proto.proto.WindowBlindsMove';
 }
 /**
  * Generated by JsPbCodeGenerator.
@@ -1179,6 +1249,90 @@ if (goog.DEBUG && !COMPILED) {
  * @extends {jspb.Message}
  * @constructor
  */
+proto.proto.TheftAlarmSelectPictureTaking = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.proto.TheftAlarmSelectPictureTaking, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.TheftAlarmSelectPictureTaking.displayName = 'proto.proto.TheftAlarmSelectPictureTaking';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.TheftAlarmDeselectPictureTaking = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.proto.TheftAlarmDeselectPictureTaking, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.TheftAlarmDeselectPictureTaking.displayName = 'proto.proto.TheftAlarmDeselectPictureTaking';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.StagemodeStart = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.proto.StagemodeStart, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.StagemodeStart.displayName = 'proto.proto.StagemodeStart';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.StagemodeStop = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.proto.StagemodeStop, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.StagemodeStop.displayName = 'proto.proto.StagemodeStop';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
 proto.proto.AutomaticValetParkingActivate = function(opt_data) {
   jspb.Message.initialize(this, opt_data, 0, -1, null, null);
 };
@@ -1200,6 +1354,48 @@ if (goog.DEBUG && !COMPILED) {
  * @extends {jspb.Message}
  * @constructor
  */
+proto.proto.ChargeFlapUnlock = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.proto.ChargeFlapUnlock, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.ChargeFlapUnlock.displayName = 'proto.proto.ChargeFlapUnlock';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.ChargeFlapOpen = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.proto.ChargeFlapOpen, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.ChargeFlapOpen.displayName = 'proto.proto.ChargeFlapOpen';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
 proto.proto.ChargeCouplerUnlock = function(opt_data) {
   jspb.Message.initialize(this, opt_data, 0, -1, null, null);
 };
@@ -1210,6 +1406,27 @@ if (goog.DEBUG && !COMPILED) {
    * @override
    */
   proto.proto.ChargeCouplerUnlock.displayName = 'proto.proto.ChargeCouplerUnlock';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.ChargeCouplerStop = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.proto.ChargeCouplerStop, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.ChargeCouplerStop.displayName = 'proto.proto.ChargeCouplerStop';
 }
 /**
  * Generated by JsPbCodeGenerator.
@@ -1274,6 +1491,279 @@ if (goog.DEBUG && !COMPILED) {
    */
   proto.proto.WiperHealthReset.displayName = 'proto.proto.WiperHealthReset';
 }
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.ClockTimerConfigure = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, proto.proto.ClockTimerConfigure.repeatedFields_, null);
+};
+goog.inherits(proto.proto.ClockTimerConfigure, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.ClockTimerConfigure.displayName = 'proto.proto.ClockTimerConfigure';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.ClockTimerConfigureEntry = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, proto.proto.ClockTimerConfigureEntry.repeatedFields_, null);
+};
+goog.inherits(proto.proto.ClockTimerConfigureEntry, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.ClockTimerConfigureEntry.displayName = 'proto.proto.ClockTimerConfigureEntry';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.CarsharingProvision = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.proto.CarsharingProvision, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.CarsharingProvision.displayName = 'proto.proto.CarsharingProvision';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.CarsharingKeyLock = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.proto.CarsharingKeyLock, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.CarsharingKeyLock.displayName = 'proto.proto.CarsharingKeyLock';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.CarsharingKeyRelease = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.proto.CarsharingKeyRelease, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.CarsharingKeyRelease.displayName = 'proto.proto.CarsharingKeyRelease';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.CarsharingProvisionAndLock = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.proto.CarsharingProvisionAndLock, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.CarsharingProvisionAndLock.displayName = 'proto.proto.CarsharingProvisionAndLock';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.SelectiveKeyDeactivation = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.proto.SelectiveKeyDeactivation, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.SelectiveKeyDeactivation.displayName = 'proto.proto.SelectiveKeyDeactivation';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.ChildPresenceDetectionDeactivateAlarm = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.proto.ChildPresenceDetectionDeactivateAlarm, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.ChildPresenceDetectionDeactivateAlarm.displayName = 'proto.proto.ChildPresenceDetectionDeactivateAlarm';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.ChildPresenceDetectionTakePicture = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.proto.ChildPresenceDetectionTakePicture, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.ChildPresenceDetectionTakePicture.displayName = 'proto.proto.ChildPresenceDetectionTakePicture';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.InteriorMonitoringTakePicture = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.proto.InteriorMonitoringTakePicture, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.InteriorMonitoringTakePicture.displayName = 'proto.proto.InteriorMonitoringTakePicture';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.ExteriorMonitoringTakePicture = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.proto.ExteriorMonitoringTakePicture, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.ExteriorMonitoringTakePicture.displayName = 'proto.proto.ExteriorMonitoringTakePicture';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.RemoteUpdateStart = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+};
+goog.inherits(proto.proto.RemoteUpdateStart, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.RemoteUpdateStart.displayName = 'proto.proto.RemoteUpdateStart';
+}
+/**
+ * Generated by JsPbCodeGenerator.
+ * @param {Array=} opt_data Optional initial data array, typically from a
+ * server response, or constructed directly in Javascript. The array is used
+ * in place and becomes part of the constructed object. It is not cloned.
+ * If no data is provided, the constructed object will be empty, but still
+ * valid.
+ * @extends {jspb.Message}
+ * @constructor
+ */
+proto.proto.ChargingConfigure = function(opt_data) {
+  jspb.Message.initialize(this, opt_data, 0, -1, proto.proto.ChargingConfigure.repeatedFields_, null);
+};
+goog.inherits(proto.proto.ChargingConfigure, jspb.Message);
+if (goog.DEBUG && !COMPILED) {
+  /**
+   * @public
+   * @override
+   */
+  proto.proto.ChargingConfigure.displayName = 'proto.proto.ChargingConfigure';
+}
 
 
 
@@ -1306,7 +1796,7 @@ proto.proto.AcknowledgeCommandRequest.prototype.toObject = function(opt_includeI
  */
 proto.proto.AcknowledgeCommandRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    requestId: jspb.Message.getFieldWithDefault(msg, 1, "")
+requestId: jspb.Message.getFieldWithDefault(msg, 1, "")
   };
 
   if (includeInstance) {
@@ -1413,7 +1903,7 @@ proto.proto.AcknowledgeCommandRequest.prototype.setRequestId = function(value) {
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.proto.CommandRequest.oneofGroups_ = [[2,3,4,5,6,9,10,11,47,12,13,43,44,19,20,21,22,25,26,23,24,27,28,34,40,29,30,31,32,33,41,35,14,15,16,17,18,37,38,39,42,46,48,49,50,76,77]];
+proto.proto.CommandRequest.oneofGroups_ = [[2,3,4,5,6,9,10,11,47,79,12,13,43,44,80,19,20,21,22,25,26,23,24,27,28,34,40,81,82,29,30,31,32,33,41,35,14,15,16,17,18,37,38,39,83,84,42,45,46,85,86,48,49,50,87,88,89,90,91,92,93,94,95,96,97,76,77,78]];
 
 /**
  * @enum {number}
@@ -1429,10 +1919,12 @@ proto.proto.CommandRequest.CommandCase = {
   SUNROOF_CLOSE: 10,
   SUNROOF_LIFT: 11,
   SUNROOF_MOVE: 47,
+  SUNROOF_BLINDS_MOVE: 79,
   WINDOWS_OPEN: 12,
   WINDOWS_CLOSE: 13,
   WINDOWS_VENTILATE: 43,
   WINDOWS_MOVE: 44,
+  WINDOW_BLINDS_MOVE: 80,
   ENGINE_START: 19,
   ENGINE_STOP: 20,
   ZEV_PRECONDITIONING_START: 21,
@@ -1445,6 +1937,8 @@ proto.proto.CommandRequest.CommandCase = {
   BATTERY_MAX_SOC: 28,
   CHARGE_PROGRAM_CONFIGURE: 34,
   CHARGE_CONTROL_CONFIGURE: 40,
+  STAGEMODE_START: 81,
+  STAGEMODE_STOP: 82,
   CHARGE_OPT_CONFIGURE: 29,
   CHARGE_OPT_START: 30,
   CHARGE_OPT_STOP: 31,
@@ -1460,13 +1954,30 @@ proto.proto.CommandRequest.CommandCase = {
   THEFTALARM_SELECT_TOW: 37,
   THEFTALARM_START: 38,
   THEFTALARM_STOP: 39,
+  THEFTALARM_SELECT_PICTURE_TAKING: 83,
+  THEFTALARM_DESELECT_PICTURE_TAKING: 84,
   AUTOMATIC_VALET_PARKING_ACTIVATE: 42,
+  CHARGE_FLAP_UNLOCK: 45,
   CHARGE_COUPLER_UNLOCK: 46,
+  CHARGE_FLAP_OPEN: 85,
+  CHARGE_COUPLER_STOP: 86,
   DEACTIVATE_VEHICLE_KEYS: 48,
   ACTIVATE_VEHICLE_KEYS: 49,
   CHARGINGBREAK_CLOCKTIMER_CONFIGURE: 50,
+  CLOCK_TIMER_CONFIGURE: 87,
+  CARSHARING_PROVISION: 88,
+  CARSHARING_KEY_LOCK: 89,
+  CARSHARING_KEY_RELEASE: 90,
+  CARSHARING_PROVISION_AND_LOCK: 91,
+  SELECTIVE_KEY_DEACTIVATION: 92,
+  CHILD_PRESENCE_DETECTION_DEACTIVATE_ALARM: 93,
+  CHILD_PRESENCE_DETECTION_TAKE_PICTURE: 94,
+  INTERIOR_MONITORING_TAKE_PICTURE: 95,
+  EXTERIOR_MONITORING_TAKE_PICTURE: 96,
+  REMOTE_UPDATE_START: 97,
   HV_BATTERY_START_CONDITIONING: 76,
-  HV_BATTERY_STOP_CONDITIONING: 77
+  HV_BATTERY_STOP_CONDITIONING: 77,
+  CHARGING_CONFIGURE: 78
 };
 
 /**
@@ -1507,56 +2018,77 @@ proto.proto.CommandRequest.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.CommandRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    vin: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    requestId: jspb.Message.getFieldWithDefault(msg, 7, ""),
-    backend: jspb.Message.getFieldWithDefault(msg, 36, 0),
-    auxheatStart: (f = msg.getAuxheatStart()) && proto.proto.AuxheatStart.toObject(includeInstance, f),
-    auxheatStop: (f = msg.getAuxheatStop()) && proto.proto.AuxheatStop.toObject(includeInstance, f),
-    auxheatConfigure: (f = msg.getAuxheatConfigure()) && proto.proto.AuxheatConfigure.toObject(includeInstance, f),
-    doorsLock: (f = msg.getDoorsLock()) && proto.proto.DoorsLock.toObject(includeInstance, f),
-    doorsUnlock: (f = msg.getDoorsUnlock()) && proto.proto.DoorsUnlock.toObject(includeInstance, f),
-    sunroofOpen: (f = msg.getSunroofOpen()) && proto.proto.SunroofOpen.toObject(includeInstance, f),
-    sunroofClose: (f = msg.getSunroofClose()) && proto.proto.SunroofClose.toObject(includeInstance, f),
-    sunroofLift: (f = msg.getSunroofLift()) && proto.proto.SunroofLift.toObject(includeInstance, f),
-    sunroofMove: (f = msg.getSunroofMove()) && proto.proto.SunroofMove.toObject(includeInstance, f),
-    windowsOpen: (f = msg.getWindowsOpen()) && proto.proto.WindowsOpen.toObject(includeInstance, f),
-    windowsClose: (f = msg.getWindowsClose()) && proto.proto.WindowsClose.toObject(includeInstance, f),
-    windowsVentilate: (f = msg.getWindowsVentilate()) && proto.proto.WindowsVentilate.toObject(includeInstance, f),
-    windowsMove: (f = msg.getWindowsMove()) && proto.proto.WindowsMove.toObject(includeInstance, f),
-    engineStart: (f = msg.getEngineStart()) && proto.proto.EngineStart.toObject(includeInstance, f),
-    engineStop: (f = msg.getEngineStop()) && proto.proto.EngineStop.toObject(includeInstance, f),
-    zevPreconditioningStart: (f = msg.getZevPreconditioningStart()) && proto.proto.ZEVPreconditioningStart.toObject(includeInstance, f),
-    zevPreconditioningStop: (f = msg.getZevPreconditioningStop()) && proto.proto.ZEVPreconditioningStop.toObject(includeInstance, f),
-    zevPreconditionConfigure: (f = msg.getZevPreconditionConfigure()) && proto.proto.ZEVPreconditioningConfigure.toObject(includeInstance, f),
-    zevPreconditionConfigureSeats: (f = msg.getZevPreconditionConfigureSeats()) && proto.proto.ZEVPreconditioningConfigureSeats.toObject(includeInstance, f),
-    speedalertStart: (f = msg.getSpeedalertStart()) && proto.proto.SpeedalertStart.toObject(includeInstance, f),
-    speedalertStop: (f = msg.getSpeedalertStop()) && proto.proto.SpeedalertStop.toObject(includeInstance, f),
-    batteryChargeProgram: (f = msg.getBatteryChargeProgram()) && proto.proto.BatteryChargeProgramConfigure.toObject(includeInstance, f),
-    batteryMaxSoc: (f = msg.getBatteryMaxSoc()) && proto.proto.BatteryMaxSocConfigure.toObject(includeInstance, f),
-    chargeProgramConfigure: (f = msg.getChargeProgramConfigure()) && proto.proto.ChargeProgramConfigure.toObject(includeInstance, f),
-    chargeControlConfigure: (f = msg.getChargeControlConfigure()) && proto.proto.ChargeControlConfigure.toObject(includeInstance, f),
-    chargeOptConfigure: (f = msg.getChargeOptConfigure()) && proto.proto.ChargeOptConfigure.toObject(includeInstance, f),
-    chargeOptStart: (f = msg.getChargeOptStart()) && proto.proto.ChargeOptStart.toObject(includeInstance, f),
-    chargeOptStop: (f = msg.getChargeOptStop()) && proto.proto.ChargeOptStop.toObject(includeInstance, f),
-    temperatureConfigure: (f = msg.getTemperatureConfigure()) && proto.proto.TemperatureConfigure.toObject(includeInstance, f),
-    weekProfileConfigure: (f = msg.getWeekProfileConfigure()) && proto.proto.WeekProfileConfigure.toObject(includeInstance, f),
-    weekProfileConfigureV2: (f = msg.getWeekProfileConfigureV2()) && proto.proto.WeekProfileConfigureV2.toObject(includeInstance, f),
-    sigposStart: (f = msg.getSigposStart()) && proto.proto.SigPosStart.toObject(includeInstance, f),
-    theftalarmDeselectDamagedetection: (f = msg.getTheftalarmDeselectDamagedetection()) && proto.proto.TheftalarmDeselectDamagedetection.toObject(includeInstance, f),
-    theftalarmDeselectInterior: (f = msg.getTheftalarmDeselectInterior()) && proto.proto.TheftalarmDeselectInterior.toObject(includeInstance, f),
-    theftalarmDeselectTow: (f = msg.getTheftalarmDeselectTow()) && proto.proto.TheftalarmDeselectTow.toObject(includeInstance, f),
-    theftalarmSelectDamagedetection: (f = msg.getTheftalarmSelectDamagedetection()) && proto.proto.TheftalarmSelectDamagedetection.toObject(includeInstance, f),
-    theftalarmSelectInterior: (f = msg.getTheftalarmSelectInterior()) && proto.proto.TheftalarmSelectInterior.toObject(includeInstance, f),
-    theftalarmSelectTow: (f = msg.getTheftalarmSelectTow()) && proto.proto.TheftalarmSelectTow.toObject(includeInstance, f),
-    theftalarmStart: (f = msg.getTheftalarmStart()) && proto.proto.TheftalarmStart.toObject(includeInstance, f),
-    theftalarmStop: (f = msg.getTheftalarmStop()) && proto.proto.TheftalarmStop.toObject(includeInstance, f),
-    automaticValetParkingActivate: (f = msg.getAutomaticValetParkingActivate()) && proto.proto.AutomaticValetParkingActivate.toObject(includeInstance, f),
-    chargeCouplerUnlock: (f = msg.getChargeCouplerUnlock()) && proto.proto.ChargeCouplerUnlock.toObject(includeInstance, f),
-    deactivateVehicleKeys: (f = msg.getDeactivateVehicleKeys()) && proto.proto.DeactivateVehicleKeys.toObject(includeInstance, f),
-    activateVehicleKeys: (f = msg.getActivateVehicleKeys()) && proto.proto.ActivateVehicleKeys.toObject(includeInstance, f),
-    chargingbreakClocktimerConfigure: (f = msg.getChargingbreakClocktimerConfigure()) && proto.proto.ChargingBreakClocktimerConfigure.toObject(includeInstance, f),
-    hvBatteryStartConditioning: (f = msg.getHvBatteryStartConditioning()) && proto.proto.HvBatteryStartConditioning.toObject(includeInstance, f),
-    hvBatteryStopConditioning: (f = msg.getHvBatteryStopConditioning()) && proto.proto.HvBatteryStopConditioning.toObject(includeInstance, f)
+vin: jspb.Message.getFieldWithDefault(msg, 1, ""),
+requestId: jspb.Message.getFieldWithDefault(msg, 7, ""),
+backend: jspb.Message.getFieldWithDefault(msg, 36, 0),
+auxheatStart: (f = msg.getAuxheatStart()) && proto.proto.AuxheatStart.toObject(includeInstance, f),
+auxheatStop: (f = msg.getAuxheatStop()) && proto.proto.AuxheatStop.toObject(includeInstance, f),
+auxheatConfigure: (f = msg.getAuxheatConfigure()) && proto.proto.AuxheatConfigure.toObject(includeInstance, f),
+doorsLock: (f = msg.getDoorsLock()) && proto.proto.DoorsLock.toObject(includeInstance, f),
+doorsUnlock: (f = msg.getDoorsUnlock()) && proto.proto.DoorsUnlock.toObject(includeInstance, f),
+sunroofOpen: (f = msg.getSunroofOpen()) && proto.proto.SunroofOpen.toObject(includeInstance, f),
+sunroofClose: (f = msg.getSunroofClose()) && proto.proto.SunroofClose.toObject(includeInstance, f),
+sunroofLift: (f = msg.getSunroofLift()) && proto.proto.SunroofLift.toObject(includeInstance, f),
+sunroofMove: (f = msg.getSunroofMove()) && proto.proto.SunroofMove.toObject(includeInstance, f),
+sunroofBlindsMove: (f = msg.getSunroofBlindsMove()) && proto.proto.SunroofBlindsMove.toObject(includeInstance, f),
+windowsOpen: (f = msg.getWindowsOpen()) && proto.proto.WindowsOpen.toObject(includeInstance, f),
+windowsClose: (f = msg.getWindowsClose()) && proto.proto.WindowsClose.toObject(includeInstance, f),
+windowsVentilate: (f = msg.getWindowsVentilate()) && proto.proto.WindowsVentilate.toObject(includeInstance, f),
+windowsMove: (f = msg.getWindowsMove()) && proto.proto.WindowsMove.toObject(includeInstance, f),
+windowBlindsMove: (f = msg.getWindowBlindsMove()) && proto.proto.WindowBlindsMove.toObject(includeInstance, f),
+engineStart: (f = msg.getEngineStart()) && proto.proto.EngineStart.toObject(includeInstance, f),
+engineStop: (f = msg.getEngineStop()) && proto.proto.EngineStop.toObject(includeInstance, f),
+zevPreconditioningStart: (f = msg.getZevPreconditioningStart()) && proto.proto.ZEVPreconditioningStart.toObject(includeInstance, f),
+zevPreconditioningStop: (f = msg.getZevPreconditioningStop()) && proto.proto.ZEVPreconditioningStop.toObject(includeInstance, f),
+zevPreconditionConfigure: (f = msg.getZevPreconditionConfigure()) && proto.proto.ZEVPreconditioningConfigure.toObject(includeInstance, f),
+zevPreconditionConfigureSeats: (f = msg.getZevPreconditionConfigureSeats()) && proto.proto.ZEVPreconditioningConfigureSeats.toObject(includeInstance, f),
+speedalertStart: (f = msg.getSpeedalertStart()) && proto.proto.SpeedalertStart.toObject(includeInstance, f),
+speedalertStop: (f = msg.getSpeedalertStop()) && proto.proto.SpeedalertStop.toObject(includeInstance, f),
+batteryChargeProgram: (f = msg.getBatteryChargeProgram()) && proto.proto.BatteryChargeProgramConfigure.toObject(includeInstance, f),
+batteryMaxSoc: (f = msg.getBatteryMaxSoc()) && proto.proto.BatteryMaxSocConfigure.toObject(includeInstance, f),
+chargeProgramConfigure: (f = msg.getChargeProgramConfigure()) && proto.proto.ChargeProgramConfigure.toObject(includeInstance, f),
+chargeControlConfigure: (f = msg.getChargeControlConfigure()) && proto.proto.ChargeControlConfigure.toObject(includeInstance, f),
+stagemodeStart: (f = msg.getStagemodeStart()) && proto.proto.StagemodeStart.toObject(includeInstance, f),
+stagemodeStop: (f = msg.getStagemodeStop()) && proto.proto.StagemodeStop.toObject(includeInstance, f),
+chargeOptConfigure: (f = msg.getChargeOptConfigure()) && proto.proto.ChargeOptConfigure.toObject(includeInstance, f),
+chargeOptStart: (f = msg.getChargeOptStart()) && proto.proto.ChargeOptStart.toObject(includeInstance, f),
+chargeOptStop: (f = msg.getChargeOptStop()) && proto.proto.ChargeOptStop.toObject(includeInstance, f),
+temperatureConfigure: (f = msg.getTemperatureConfigure()) && proto.proto.TemperatureConfigure.toObject(includeInstance, f),
+weekProfileConfigure: (f = msg.getWeekProfileConfigure()) && proto.proto.WeekProfileConfigure.toObject(includeInstance, f),
+weekProfileConfigureV2: (f = msg.getWeekProfileConfigureV2()) && proto.proto.WeekProfileConfigureV2.toObject(includeInstance, f),
+sigposStart: (f = msg.getSigposStart()) && proto.proto.SigPosStart.toObject(includeInstance, f),
+theftalarmDeselectDamagedetection: (f = msg.getTheftalarmDeselectDamagedetection()) && proto.proto.TheftalarmDeselectDamagedetection.toObject(includeInstance, f),
+theftalarmDeselectInterior: (f = msg.getTheftalarmDeselectInterior()) && proto.proto.TheftalarmDeselectInterior.toObject(includeInstance, f),
+theftalarmDeselectTow: (f = msg.getTheftalarmDeselectTow()) && proto.proto.TheftalarmDeselectTow.toObject(includeInstance, f),
+theftalarmSelectDamagedetection: (f = msg.getTheftalarmSelectDamagedetection()) && proto.proto.TheftalarmSelectDamagedetection.toObject(includeInstance, f),
+theftalarmSelectInterior: (f = msg.getTheftalarmSelectInterior()) && proto.proto.TheftalarmSelectInterior.toObject(includeInstance, f),
+theftalarmSelectTow: (f = msg.getTheftalarmSelectTow()) && proto.proto.TheftalarmSelectTow.toObject(includeInstance, f),
+theftalarmStart: (f = msg.getTheftalarmStart()) && proto.proto.TheftalarmStart.toObject(includeInstance, f),
+theftalarmStop: (f = msg.getTheftalarmStop()) && proto.proto.TheftalarmStop.toObject(includeInstance, f),
+theftalarmSelectPictureTaking: (f = msg.getTheftalarmSelectPictureTaking()) && proto.proto.TheftAlarmSelectPictureTaking.toObject(includeInstance, f),
+theftalarmDeselectPictureTaking: (f = msg.getTheftalarmDeselectPictureTaking()) && proto.proto.TheftAlarmDeselectPictureTaking.toObject(includeInstance, f),
+automaticValetParkingActivate: (f = msg.getAutomaticValetParkingActivate()) && proto.proto.AutomaticValetParkingActivate.toObject(includeInstance, f),
+chargeFlapUnlock: (f = msg.getChargeFlapUnlock()) && proto.proto.ChargeFlapUnlock.toObject(includeInstance, f),
+chargeCouplerUnlock: (f = msg.getChargeCouplerUnlock()) && proto.proto.ChargeCouplerUnlock.toObject(includeInstance, f),
+chargeFlapOpen: (f = msg.getChargeFlapOpen()) && proto.proto.ChargeFlapOpen.toObject(includeInstance, f),
+chargeCouplerStop: (f = msg.getChargeCouplerStop()) && proto.proto.ChargeCouplerStop.toObject(includeInstance, f),
+deactivateVehicleKeys: (f = msg.getDeactivateVehicleKeys()) && proto.proto.DeactivateVehicleKeys.toObject(includeInstance, f),
+activateVehicleKeys: (f = msg.getActivateVehicleKeys()) && proto.proto.ActivateVehicleKeys.toObject(includeInstance, f),
+chargingbreakClocktimerConfigure: (f = msg.getChargingbreakClocktimerConfigure()) && proto.proto.ChargingBreakClocktimerConfigure.toObject(includeInstance, f),
+clockTimerConfigure: (f = msg.getClockTimerConfigure()) && proto.proto.ClockTimerConfigure.toObject(includeInstance, f),
+carsharingProvision: (f = msg.getCarsharingProvision()) && proto.proto.CarsharingProvision.toObject(includeInstance, f),
+carsharingKeyLock: (f = msg.getCarsharingKeyLock()) && proto.proto.CarsharingKeyLock.toObject(includeInstance, f),
+carsharingKeyRelease: (f = msg.getCarsharingKeyRelease()) && proto.proto.CarsharingKeyRelease.toObject(includeInstance, f),
+carsharingProvisionAndLock: (f = msg.getCarsharingProvisionAndLock()) && proto.proto.CarsharingProvisionAndLock.toObject(includeInstance, f),
+selectiveKeyDeactivation: (f = msg.getSelectiveKeyDeactivation()) && proto.proto.SelectiveKeyDeactivation.toObject(includeInstance, f),
+childPresenceDetectionDeactivateAlarm: (f = msg.getChildPresenceDetectionDeactivateAlarm()) && proto.proto.ChildPresenceDetectionDeactivateAlarm.toObject(includeInstance, f),
+childPresenceDetectionTakePicture: (f = msg.getChildPresenceDetectionTakePicture()) && proto.proto.ChildPresenceDetectionTakePicture.toObject(includeInstance, f),
+interiorMonitoringTakePicture: (f = msg.getInteriorMonitoringTakePicture()) && proto.proto.InteriorMonitoringTakePicture.toObject(includeInstance, f),
+exteriorMonitoringTakePicture: (f = msg.getExteriorMonitoringTakePicture()) && proto.proto.ExteriorMonitoringTakePicture.toObject(includeInstance, f),
+remoteUpdateStart: (f = msg.getRemoteUpdateStart()) && proto.proto.RemoteUpdateStart.toObject(includeInstance, f),
+hvBatteryStartConditioning: (f = msg.getHvBatteryStartConditioning()) && proto.proto.HvBatteryStartConditioning.toObject(includeInstance, f),
+hvBatteryStopConditioning: (f = msg.getHvBatteryStopConditioning()) && proto.proto.HvBatteryStopConditioning.toObject(includeInstance, f),
+chargingConfigure: (f = msg.getChargingConfigure()) && proto.proto.ChargingConfigure.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -1650,6 +2182,11 @@ proto.proto.CommandRequest.deserializeBinaryFromReader = function(msg, reader) {
       reader.readMessage(value,proto.proto.SunroofMove.deserializeBinaryFromReader);
       msg.setSunroofMove(value);
       break;
+    case 79:
+      var value = new proto.proto.SunroofBlindsMove;
+      reader.readMessage(value,proto.proto.SunroofBlindsMove.deserializeBinaryFromReader);
+      msg.setSunroofBlindsMove(value);
+      break;
     case 12:
       var value = new proto.proto.WindowsOpen;
       reader.readMessage(value,proto.proto.WindowsOpen.deserializeBinaryFromReader);
@@ -1669,6 +2206,11 @@ proto.proto.CommandRequest.deserializeBinaryFromReader = function(msg, reader) {
       var value = new proto.proto.WindowsMove;
       reader.readMessage(value,proto.proto.WindowsMove.deserializeBinaryFromReader);
       msg.setWindowsMove(value);
+      break;
+    case 80:
+      var value = new proto.proto.WindowBlindsMove;
+      reader.readMessage(value,proto.proto.WindowBlindsMove.deserializeBinaryFromReader);
+      msg.setWindowBlindsMove(value);
       break;
     case 19:
       var value = new proto.proto.EngineStart;
@@ -1729,6 +2271,16 @@ proto.proto.CommandRequest.deserializeBinaryFromReader = function(msg, reader) {
       var value = new proto.proto.ChargeControlConfigure;
       reader.readMessage(value,proto.proto.ChargeControlConfigure.deserializeBinaryFromReader);
       msg.setChargeControlConfigure(value);
+      break;
+    case 81:
+      var value = new proto.proto.StagemodeStart;
+      reader.readMessage(value,proto.proto.StagemodeStart.deserializeBinaryFromReader);
+      msg.setStagemodeStart(value);
+      break;
+    case 82:
+      var value = new proto.proto.StagemodeStop;
+      reader.readMessage(value,proto.proto.StagemodeStop.deserializeBinaryFromReader);
+      msg.setStagemodeStop(value);
       break;
     case 29:
       var value = new proto.proto.ChargeOptConfigure;
@@ -1805,15 +2357,40 @@ proto.proto.CommandRequest.deserializeBinaryFromReader = function(msg, reader) {
       reader.readMessage(value,proto.proto.TheftalarmStop.deserializeBinaryFromReader);
       msg.setTheftalarmStop(value);
       break;
+    case 83:
+      var value = new proto.proto.TheftAlarmSelectPictureTaking;
+      reader.readMessage(value,proto.proto.TheftAlarmSelectPictureTaking.deserializeBinaryFromReader);
+      msg.setTheftalarmSelectPictureTaking(value);
+      break;
+    case 84:
+      var value = new proto.proto.TheftAlarmDeselectPictureTaking;
+      reader.readMessage(value,proto.proto.TheftAlarmDeselectPictureTaking.deserializeBinaryFromReader);
+      msg.setTheftalarmDeselectPictureTaking(value);
+      break;
     case 42:
       var value = new proto.proto.AutomaticValetParkingActivate;
       reader.readMessage(value,proto.proto.AutomaticValetParkingActivate.deserializeBinaryFromReader);
       msg.setAutomaticValetParkingActivate(value);
       break;
+    case 45:
+      var value = new proto.proto.ChargeFlapUnlock;
+      reader.readMessage(value,proto.proto.ChargeFlapUnlock.deserializeBinaryFromReader);
+      msg.setChargeFlapUnlock(value);
+      break;
     case 46:
       var value = new proto.proto.ChargeCouplerUnlock;
       reader.readMessage(value,proto.proto.ChargeCouplerUnlock.deserializeBinaryFromReader);
       msg.setChargeCouplerUnlock(value);
+      break;
+    case 85:
+      var value = new proto.proto.ChargeFlapOpen;
+      reader.readMessage(value,proto.proto.ChargeFlapOpen.deserializeBinaryFromReader);
+      msg.setChargeFlapOpen(value);
+      break;
+    case 86:
+      var value = new proto.proto.ChargeCouplerStop;
+      reader.readMessage(value,proto.proto.ChargeCouplerStop.deserializeBinaryFromReader);
+      msg.setChargeCouplerStop(value);
       break;
     case 48:
       var value = new proto.proto.DeactivateVehicleKeys;
@@ -1830,6 +2407,61 @@ proto.proto.CommandRequest.deserializeBinaryFromReader = function(msg, reader) {
       reader.readMessage(value,proto.proto.ChargingBreakClocktimerConfigure.deserializeBinaryFromReader);
       msg.setChargingbreakClocktimerConfigure(value);
       break;
+    case 87:
+      var value = new proto.proto.ClockTimerConfigure;
+      reader.readMessage(value,proto.proto.ClockTimerConfigure.deserializeBinaryFromReader);
+      msg.setClockTimerConfigure(value);
+      break;
+    case 88:
+      var value = new proto.proto.CarsharingProvision;
+      reader.readMessage(value,proto.proto.CarsharingProvision.deserializeBinaryFromReader);
+      msg.setCarsharingProvision(value);
+      break;
+    case 89:
+      var value = new proto.proto.CarsharingKeyLock;
+      reader.readMessage(value,proto.proto.CarsharingKeyLock.deserializeBinaryFromReader);
+      msg.setCarsharingKeyLock(value);
+      break;
+    case 90:
+      var value = new proto.proto.CarsharingKeyRelease;
+      reader.readMessage(value,proto.proto.CarsharingKeyRelease.deserializeBinaryFromReader);
+      msg.setCarsharingKeyRelease(value);
+      break;
+    case 91:
+      var value = new proto.proto.CarsharingProvisionAndLock;
+      reader.readMessage(value,proto.proto.CarsharingProvisionAndLock.deserializeBinaryFromReader);
+      msg.setCarsharingProvisionAndLock(value);
+      break;
+    case 92:
+      var value = new proto.proto.SelectiveKeyDeactivation;
+      reader.readMessage(value,proto.proto.SelectiveKeyDeactivation.deserializeBinaryFromReader);
+      msg.setSelectiveKeyDeactivation(value);
+      break;
+    case 93:
+      var value = new proto.proto.ChildPresenceDetectionDeactivateAlarm;
+      reader.readMessage(value,proto.proto.ChildPresenceDetectionDeactivateAlarm.deserializeBinaryFromReader);
+      msg.setChildPresenceDetectionDeactivateAlarm(value);
+      break;
+    case 94:
+      var value = new proto.proto.ChildPresenceDetectionTakePicture;
+      reader.readMessage(value,proto.proto.ChildPresenceDetectionTakePicture.deserializeBinaryFromReader);
+      msg.setChildPresenceDetectionTakePicture(value);
+      break;
+    case 95:
+      var value = new proto.proto.InteriorMonitoringTakePicture;
+      reader.readMessage(value,proto.proto.InteriorMonitoringTakePicture.deserializeBinaryFromReader);
+      msg.setInteriorMonitoringTakePicture(value);
+      break;
+    case 96:
+      var value = new proto.proto.ExteriorMonitoringTakePicture;
+      reader.readMessage(value,proto.proto.ExteriorMonitoringTakePicture.deserializeBinaryFromReader);
+      msg.setExteriorMonitoringTakePicture(value);
+      break;
+    case 97:
+      var value = new proto.proto.RemoteUpdateStart;
+      reader.readMessage(value,proto.proto.RemoteUpdateStart.deserializeBinaryFromReader);
+      msg.setRemoteUpdateStart(value);
+      break;
     case 76:
       var value = new proto.proto.HvBatteryStartConditioning;
       reader.readMessage(value,proto.proto.HvBatteryStartConditioning.deserializeBinaryFromReader);
@@ -1839,6 +2471,11 @@ proto.proto.CommandRequest.deserializeBinaryFromReader = function(msg, reader) {
       var value = new proto.proto.HvBatteryStopConditioning;
       reader.readMessage(value,proto.proto.HvBatteryStopConditioning.deserializeBinaryFromReader);
       msg.setHvBatteryStopConditioning(value);
+      break;
+    case 78:
+      var value = new proto.proto.ChargingConfigure;
+      reader.readMessage(value,proto.proto.ChargingConfigure.deserializeBinaryFromReader);
+      msg.setChargingConfigure(value);
       break;
     default:
       reader.skipField();
@@ -1962,6 +2599,14 @@ proto.proto.CommandRequest.serializeBinaryToWriter = function(message, writer) {
       proto.proto.SunroofMove.serializeBinaryToWriter
     );
   }
+  f = message.getSunroofBlindsMove();
+  if (f != null) {
+    writer.writeMessage(
+      79,
+      f,
+      proto.proto.SunroofBlindsMove.serializeBinaryToWriter
+    );
+  }
   f = message.getWindowsOpen();
   if (f != null) {
     writer.writeMessage(
@@ -1992,6 +2637,14 @@ proto.proto.CommandRequest.serializeBinaryToWriter = function(message, writer) {
       44,
       f,
       proto.proto.WindowsMove.serializeBinaryToWriter
+    );
+  }
+  f = message.getWindowBlindsMove();
+  if (f != null) {
+    writer.writeMessage(
+      80,
+      f,
+      proto.proto.WindowBlindsMove.serializeBinaryToWriter
     );
   }
   f = message.getEngineStart();
@@ -2088,6 +2741,22 @@ proto.proto.CommandRequest.serializeBinaryToWriter = function(message, writer) {
       40,
       f,
       proto.proto.ChargeControlConfigure.serializeBinaryToWriter
+    );
+  }
+  f = message.getStagemodeStart();
+  if (f != null) {
+    writer.writeMessage(
+      81,
+      f,
+      proto.proto.StagemodeStart.serializeBinaryToWriter
+    );
+  }
+  f = message.getStagemodeStop();
+  if (f != null) {
+    writer.writeMessage(
+      82,
+      f,
+      proto.proto.StagemodeStop.serializeBinaryToWriter
     );
   }
   f = message.getChargeOptConfigure();
@@ -2210,6 +2879,22 @@ proto.proto.CommandRequest.serializeBinaryToWriter = function(message, writer) {
       proto.proto.TheftalarmStop.serializeBinaryToWriter
     );
   }
+  f = message.getTheftalarmSelectPictureTaking();
+  if (f != null) {
+    writer.writeMessage(
+      83,
+      f,
+      proto.proto.TheftAlarmSelectPictureTaking.serializeBinaryToWriter
+    );
+  }
+  f = message.getTheftalarmDeselectPictureTaking();
+  if (f != null) {
+    writer.writeMessage(
+      84,
+      f,
+      proto.proto.TheftAlarmDeselectPictureTaking.serializeBinaryToWriter
+    );
+  }
   f = message.getAutomaticValetParkingActivate();
   if (f != null) {
     writer.writeMessage(
@@ -2218,12 +2903,36 @@ proto.proto.CommandRequest.serializeBinaryToWriter = function(message, writer) {
       proto.proto.AutomaticValetParkingActivate.serializeBinaryToWriter
     );
   }
+  f = message.getChargeFlapUnlock();
+  if (f != null) {
+    writer.writeMessage(
+      45,
+      f,
+      proto.proto.ChargeFlapUnlock.serializeBinaryToWriter
+    );
+  }
   f = message.getChargeCouplerUnlock();
   if (f != null) {
     writer.writeMessage(
       46,
       f,
       proto.proto.ChargeCouplerUnlock.serializeBinaryToWriter
+    );
+  }
+  f = message.getChargeFlapOpen();
+  if (f != null) {
+    writer.writeMessage(
+      85,
+      f,
+      proto.proto.ChargeFlapOpen.serializeBinaryToWriter
+    );
+  }
+  f = message.getChargeCouplerStop();
+  if (f != null) {
+    writer.writeMessage(
+      86,
+      f,
+      proto.proto.ChargeCouplerStop.serializeBinaryToWriter
     );
   }
   f = message.getDeactivateVehicleKeys();
@@ -2250,6 +2959,94 @@ proto.proto.CommandRequest.serializeBinaryToWriter = function(message, writer) {
       proto.proto.ChargingBreakClocktimerConfigure.serializeBinaryToWriter
     );
   }
+  f = message.getClockTimerConfigure();
+  if (f != null) {
+    writer.writeMessage(
+      87,
+      f,
+      proto.proto.ClockTimerConfigure.serializeBinaryToWriter
+    );
+  }
+  f = message.getCarsharingProvision();
+  if (f != null) {
+    writer.writeMessage(
+      88,
+      f,
+      proto.proto.CarsharingProvision.serializeBinaryToWriter
+    );
+  }
+  f = message.getCarsharingKeyLock();
+  if (f != null) {
+    writer.writeMessage(
+      89,
+      f,
+      proto.proto.CarsharingKeyLock.serializeBinaryToWriter
+    );
+  }
+  f = message.getCarsharingKeyRelease();
+  if (f != null) {
+    writer.writeMessage(
+      90,
+      f,
+      proto.proto.CarsharingKeyRelease.serializeBinaryToWriter
+    );
+  }
+  f = message.getCarsharingProvisionAndLock();
+  if (f != null) {
+    writer.writeMessage(
+      91,
+      f,
+      proto.proto.CarsharingProvisionAndLock.serializeBinaryToWriter
+    );
+  }
+  f = message.getSelectiveKeyDeactivation();
+  if (f != null) {
+    writer.writeMessage(
+      92,
+      f,
+      proto.proto.SelectiveKeyDeactivation.serializeBinaryToWriter
+    );
+  }
+  f = message.getChildPresenceDetectionDeactivateAlarm();
+  if (f != null) {
+    writer.writeMessage(
+      93,
+      f,
+      proto.proto.ChildPresenceDetectionDeactivateAlarm.serializeBinaryToWriter
+    );
+  }
+  f = message.getChildPresenceDetectionTakePicture();
+  if (f != null) {
+    writer.writeMessage(
+      94,
+      f,
+      proto.proto.ChildPresenceDetectionTakePicture.serializeBinaryToWriter
+    );
+  }
+  f = message.getInteriorMonitoringTakePicture();
+  if (f != null) {
+    writer.writeMessage(
+      95,
+      f,
+      proto.proto.InteriorMonitoringTakePicture.serializeBinaryToWriter
+    );
+  }
+  f = message.getExteriorMonitoringTakePicture();
+  if (f != null) {
+    writer.writeMessage(
+      96,
+      f,
+      proto.proto.ExteriorMonitoringTakePicture.serializeBinaryToWriter
+    );
+  }
+  f = message.getRemoteUpdateStart();
+  if (f != null) {
+    writer.writeMessage(
+      97,
+      f,
+      proto.proto.RemoteUpdateStart.serializeBinaryToWriter
+    );
+  }
   f = message.getHvBatteryStartConditioning();
   if (f != null) {
     writer.writeMessage(
@@ -2264,6 +3061,14 @@ proto.proto.CommandRequest.serializeBinaryToWriter = function(message, writer) {
       77,
       f,
       proto.proto.HvBatteryStopConditioning.serializeBinaryToWriter
+    );
+  }
+  f = message.getChargingConfigure();
+  if (f != null) {
+    writer.writeMessage(
+      78,
+      f,
+      proto.proto.ChargingConfigure.serializeBinaryToWriter
     );
   }
 };
@@ -2665,6 +3470,43 @@ proto.proto.CommandRequest.prototype.hasSunroofMove = function() {
 
 
 /**
+ * optional SunroofBlindsMove sunroof_blinds_move = 79;
+ * @return {?proto.proto.SunroofBlindsMove}
+ */
+proto.proto.CommandRequest.prototype.getSunroofBlindsMove = function() {
+  return /** @type{?proto.proto.SunroofBlindsMove} */ (
+    jspb.Message.getWrapperField(this, proto.proto.SunroofBlindsMove, 79));
+};
+
+
+/**
+ * @param {?proto.proto.SunroofBlindsMove|undefined} value
+ * @return {!proto.proto.CommandRequest} returns this
+*/
+proto.proto.CommandRequest.prototype.setSunroofBlindsMove = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 79, proto.proto.CommandRequest.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.CommandRequest} returns this
+ */
+proto.proto.CommandRequest.prototype.clearSunroofBlindsMove = function() {
+  return this.setSunroofBlindsMove(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.CommandRequest.prototype.hasSunroofBlindsMove = function() {
+  return jspb.Message.getField(this, 79) != null;
+};
+
+
+/**
  * optional WindowsOpen windows_open = 12;
  * @return {?proto.proto.WindowsOpen}
  */
@@ -2809,6 +3651,43 @@ proto.proto.CommandRequest.prototype.clearWindowsMove = function() {
  */
 proto.proto.CommandRequest.prototype.hasWindowsMove = function() {
   return jspb.Message.getField(this, 44) != null;
+};
+
+
+/**
+ * optional WindowBlindsMove window_blinds_move = 80;
+ * @return {?proto.proto.WindowBlindsMove}
+ */
+proto.proto.CommandRequest.prototype.getWindowBlindsMove = function() {
+  return /** @type{?proto.proto.WindowBlindsMove} */ (
+    jspb.Message.getWrapperField(this, proto.proto.WindowBlindsMove, 80));
+};
+
+
+/**
+ * @param {?proto.proto.WindowBlindsMove|undefined} value
+ * @return {!proto.proto.CommandRequest} returns this
+*/
+proto.proto.CommandRequest.prototype.setWindowBlindsMove = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 80, proto.proto.CommandRequest.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.CommandRequest} returns this
+ */
+proto.proto.CommandRequest.prototype.clearWindowBlindsMove = function() {
+  return this.setWindowBlindsMove(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.CommandRequest.prototype.hasWindowBlindsMove = function() {
+  return jspb.Message.getField(this, 80) != null;
 };
 
 
@@ -3253,6 +4132,80 @@ proto.proto.CommandRequest.prototype.clearChargeControlConfigure = function() {
  */
 proto.proto.CommandRequest.prototype.hasChargeControlConfigure = function() {
   return jspb.Message.getField(this, 40) != null;
+};
+
+
+/**
+ * optional StagemodeStart stagemode_start = 81;
+ * @return {?proto.proto.StagemodeStart}
+ */
+proto.proto.CommandRequest.prototype.getStagemodeStart = function() {
+  return /** @type{?proto.proto.StagemodeStart} */ (
+    jspb.Message.getWrapperField(this, proto.proto.StagemodeStart, 81));
+};
+
+
+/**
+ * @param {?proto.proto.StagemodeStart|undefined} value
+ * @return {!proto.proto.CommandRequest} returns this
+*/
+proto.proto.CommandRequest.prototype.setStagemodeStart = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 81, proto.proto.CommandRequest.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.CommandRequest} returns this
+ */
+proto.proto.CommandRequest.prototype.clearStagemodeStart = function() {
+  return this.setStagemodeStart(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.CommandRequest.prototype.hasStagemodeStart = function() {
+  return jspb.Message.getField(this, 81) != null;
+};
+
+
+/**
+ * optional StagemodeStop stagemode_stop = 82;
+ * @return {?proto.proto.StagemodeStop}
+ */
+proto.proto.CommandRequest.prototype.getStagemodeStop = function() {
+  return /** @type{?proto.proto.StagemodeStop} */ (
+    jspb.Message.getWrapperField(this, proto.proto.StagemodeStop, 82));
+};
+
+
+/**
+ * @param {?proto.proto.StagemodeStop|undefined} value
+ * @return {!proto.proto.CommandRequest} returns this
+*/
+proto.proto.CommandRequest.prototype.setStagemodeStop = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 82, proto.proto.CommandRequest.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.CommandRequest} returns this
+ */
+proto.proto.CommandRequest.prototype.clearStagemodeStop = function() {
+  return this.setStagemodeStop(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.CommandRequest.prototype.hasStagemodeStop = function() {
+  return jspb.Message.getField(this, 82) != null;
 };
 
 
@@ -3812,6 +4765,80 @@ proto.proto.CommandRequest.prototype.hasTheftalarmStop = function() {
 
 
 /**
+ * optional TheftAlarmSelectPictureTaking theftalarm_select_picture_taking = 83;
+ * @return {?proto.proto.TheftAlarmSelectPictureTaking}
+ */
+proto.proto.CommandRequest.prototype.getTheftalarmSelectPictureTaking = function() {
+  return /** @type{?proto.proto.TheftAlarmSelectPictureTaking} */ (
+    jspb.Message.getWrapperField(this, proto.proto.TheftAlarmSelectPictureTaking, 83));
+};
+
+
+/**
+ * @param {?proto.proto.TheftAlarmSelectPictureTaking|undefined} value
+ * @return {!proto.proto.CommandRequest} returns this
+*/
+proto.proto.CommandRequest.prototype.setTheftalarmSelectPictureTaking = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 83, proto.proto.CommandRequest.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.CommandRequest} returns this
+ */
+proto.proto.CommandRequest.prototype.clearTheftalarmSelectPictureTaking = function() {
+  return this.setTheftalarmSelectPictureTaking(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.CommandRequest.prototype.hasTheftalarmSelectPictureTaking = function() {
+  return jspb.Message.getField(this, 83) != null;
+};
+
+
+/**
+ * optional TheftAlarmDeselectPictureTaking theftalarm_deselect_picture_taking = 84;
+ * @return {?proto.proto.TheftAlarmDeselectPictureTaking}
+ */
+proto.proto.CommandRequest.prototype.getTheftalarmDeselectPictureTaking = function() {
+  return /** @type{?proto.proto.TheftAlarmDeselectPictureTaking} */ (
+    jspb.Message.getWrapperField(this, proto.proto.TheftAlarmDeselectPictureTaking, 84));
+};
+
+
+/**
+ * @param {?proto.proto.TheftAlarmDeselectPictureTaking|undefined} value
+ * @return {!proto.proto.CommandRequest} returns this
+*/
+proto.proto.CommandRequest.prototype.setTheftalarmDeselectPictureTaking = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 84, proto.proto.CommandRequest.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.CommandRequest} returns this
+ */
+proto.proto.CommandRequest.prototype.clearTheftalarmDeselectPictureTaking = function() {
+  return this.setTheftalarmDeselectPictureTaking(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.CommandRequest.prototype.hasTheftalarmDeselectPictureTaking = function() {
+  return jspb.Message.getField(this, 84) != null;
+};
+
+
+/**
  * optional AutomaticValetParkingActivate automatic_valet_parking_activate = 42;
  * @return {?proto.proto.AutomaticValetParkingActivate}
  */
@@ -3849,6 +4876,43 @@ proto.proto.CommandRequest.prototype.hasAutomaticValetParkingActivate = function
 
 
 /**
+ * optional ChargeFlapUnlock charge_flap_unlock = 45;
+ * @return {?proto.proto.ChargeFlapUnlock}
+ */
+proto.proto.CommandRequest.prototype.getChargeFlapUnlock = function() {
+  return /** @type{?proto.proto.ChargeFlapUnlock} */ (
+    jspb.Message.getWrapperField(this, proto.proto.ChargeFlapUnlock, 45));
+};
+
+
+/**
+ * @param {?proto.proto.ChargeFlapUnlock|undefined} value
+ * @return {!proto.proto.CommandRequest} returns this
+*/
+proto.proto.CommandRequest.prototype.setChargeFlapUnlock = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 45, proto.proto.CommandRequest.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.CommandRequest} returns this
+ */
+proto.proto.CommandRequest.prototype.clearChargeFlapUnlock = function() {
+  return this.setChargeFlapUnlock(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.CommandRequest.prototype.hasChargeFlapUnlock = function() {
+  return jspb.Message.getField(this, 45) != null;
+};
+
+
+/**
  * optional ChargeCouplerUnlock charge_coupler_unlock = 46;
  * @return {?proto.proto.ChargeCouplerUnlock}
  */
@@ -3882,6 +4946,80 @@ proto.proto.CommandRequest.prototype.clearChargeCouplerUnlock = function() {
  */
 proto.proto.CommandRequest.prototype.hasChargeCouplerUnlock = function() {
   return jspb.Message.getField(this, 46) != null;
+};
+
+
+/**
+ * optional ChargeFlapOpen charge_flap_open = 85;
+ * @return {?proto.proto.ChargeFlapOpen}
+ */
+proto.proto.CommandRequest.prototype.getChargeFlapOpen = function() {
+  return /** @type{?proto.proto.ChargeFlapOpen} */ (
+    jspb.Message.getWrapperField(this, proto.proto.ChargeFlapOpen, 85));
+};
+
+
+/**
+ * @param {?proto.proto.ChargeFlapOpen|undefined} value
+ * @return {!proto.proto.CommandRequest} returns this
+*/
+proto.proto.CommandRequest.prototype.setChargeFlapOpen = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 85, proto.proto.CommandRequest.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.CommandRequest} returns this
+ */
+proto.proto.CommandRequest.prototype.clearChargeFlapOpen = function() {
+  return this.setChargeFlapOpen(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.CommandRequest.prototype.hasChargeFlapOpen = function() {
+  return jspb.Message.getField(this, 85) != null;
+};
+
+
+/**
+ * optional ChargeCouplerStop charge_coupler_stop = 86;
+ * @return {?proto.proto.ChargeCouplerStop}
+ */
+proto.proto.CommandRequest.prototype.getChargeCouplerStop = function() {
+  return /** @type{?proto.proto.ChargeCouplerStop} */ (
+    jspb.Message.getWrapperField(this, proto.proto.ChargeCouplerStop, 86));
+};
+
+
+/**
+ * @param {?proto.proto.ChargeCouplerStop|undefined} value
+ * @return {!proto.proto.CommandRequest} returns this
+*/
+proto.proto.CommandRequest.prototype.setChargeCouplerStop = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 86, proto.proto.CommandRequest.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.CommandRequest} returns this
+ */
+proto.proto.CommandRequest.prototype.clearChargeCouplerStop = function() {
+  return this.setChargeCouplerStop(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.CommandRequest.prototype.hasChargeCouplerStop = function() {
+  return jspb.Message.getField(this, 86) != null;
 };
 
 
@@ -3997,6 +5135,413 @@ proto.proto.CommandRequest.prototype.hasChargingbreakClocktimerConfigure = funct
 
 
 /**
+ * optional ClockTimerConfigure clock_timer_configure = 87;
+ * @return {?proto.proto.ClockTimerConfigure}
+ */
+proto.proto.CommandRequest.prototype.getClockTimerConfigure = function() {
+  return /** @type{?proto.proto.ClockTimerConfigure} */ (
+    jspb.Message.getWrapperField(this, proto.proto.ClockTimerConfigure, 87));
+};
+
+
+/**
+ * @param {?proto.proto.ClockTimerConfigure|undefined} value
+ * @return {!proto.proto.CommandRequest} returns this
+*/
+proto.proto.CommandRequest.prototype.setClockTimerConfigure = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 87, proto.proto.CommandRequest.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.CommandRequest} returns this
+ */
+proto.proto.CommandRequest.prototype.clearClockTimerConfigure = function() {
+  return this.setClockTimerConfigure(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.CommandRequest.prototype.hasClockTimerConfigure = function() {
+  return jspb.Message.getField(this, 87) != null;
+};
+
+
+/**
+ * optional CarsharingProvision carsharing_provision = 88;
+ * @return {?proto.proto.CarsharingProvision}
+ */
+proto.proto.CommandRequest.prototype.getCarsharingProvision = function() {
+  return /** @type{?proto.proto.CarsharingProvision} */ (
+    jspb.Message.getWrapperField(this, proto.proto.CarsharingProvision, 88));
+};
+
+
+/**
+ * @param {?proto.proto.CarsharingProvision|undefined} value
+ * @return {!proto.proto.CommandRequest} returns this
+*/
+proto.proto.CommandRequest.prototype.setCarsharingProvision = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 88, proto.proto.CommandRequest.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.CommandRequest} returns this
+ */
+proto.proto.CommandRequest.prototype.clearCarsharingProvision = function() {
+  return this.setCarsharingProvision(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.CommandRequest.prototype.hasCarsharingProvision = function() {
+  return jspb.Message.getField(this, 88) != null;
+};
+
+
+/**
+ * optional CarsharingKeyLock carsharing_key_lock = 89;
+ * @return {?proto.proto.CarsharingKeyLock}
+ */
+proto.proto.CommandRequest.prototype.getCarsharingKeyLock = function() {
+  return /** @type{?proto.proto.CarsharingKeyLock} */ (
+    jspb.Message.getWrapperField(this, proto.proto.CarsharingKeyLock, 89));
+};
+
+
+/**
+ * @param {?proto.proto.CarsharingKeyLock|undefined} value
+ * @return {!proto.proto.CommandRequest} returns this
+*/
+proto.proto.CommandRequest.prototype.setCarsharingKeyLock = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 89, proto.proto.CommandRequest.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.CommandRequest} returns this
+ */
+proto.proto.CommandRequest.prototype.clearCarsharingKeyLock = function() {
+  return this.setCarsharingKeyLock(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.CommandRequest.prototype.hasCarsharingKeyLock = function() {
+  return jspb.Message.getField(this, 89) != null;
+};
+
+
+/**
+ * optional CarsharingKeyRelease carsharing_key_release = 90;
+ * @return {?proto.proto.CarsharingKeyRelease}
+ */
+proto.proto.CommandRequest.prototype.getCarsharingKeyRelease = function() {
+  return /** @type{?proto.proto.CarsharingKeyRelease} */ (
+    jspb.Message.getWrapperField(this, proto.proto.CarsharingKeyRelease, 90));
+};
+
+
+/**
+ * @param {?proto.proto.CarsharingKeyRelease|undefined} value
+ * @return {!proto.proto.CommandRequest} returns this
+*/
+proto.proto.CommandRequest.prototype.setCarsharingKeyRelease = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 90, proto.proto.CommandRequest.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.CommandRequest} returns this
+ */
+proto.proto.CommandRequest.prototype.clearCarsharingKeyRelease = function() {
+  return this.setCarsharingKeyRelease(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.CommandRequest.prototype.hasCarsharingKeyRelease = function() {
+  return jspb.Message.getField(this, 90) != null;
+};
+
+
+/**
+ * optional CarsharingProvisionAndLock carsharing_provision_and_lock = 91;
+ * @return {?proto.proto.CarsharingProvisionAndLock}
+ */
+proto.proto.CommandRequest.prototype.getCarsharingProvisionAndLock = function() {
+  return /** @type{?proto.proto.CarsharingProvisionAndLock} */ (
+    jspb.Message.getWrapperField(this, proto.proto.CarsharingProvisionAndLock, 91));
+};
+
+
+/**
+ * @param {?proto.proto.CarsharingProvisionAndLock|undefined} value
+ * @return {!proto.proto.CommandRequest} returns this
+*/
+proto.proto.CommandRequest.prototype.setCarsharingProvisionAndLock = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 91, proto.proto.CommandRequest.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.CommandRequest} returns this
+ */
+proto.proto.CommandRequest.prototype.clearCarsharingProvisionAndLock = function() {
+  return this.setCarsharingProvisionAndLock(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.CommandRequest.prototype.hasCarsharingProvisionAndLock = function() {
+  return jspb.Message.getField(this, 91) != null;
+};
+
+
+/**
+ * optional SelectiveKeyDeactivation selective_key_deactivation = 92;
+ * @return {?proto.proto.SelectiveKeyDeactivation}
+ */
+proto.proto.CommandRequest.prototype.getSelectiveKeyDeactivation = function() {
+  return /** @type{?proto.proto.SelectiveKeyDeactivation} */ (
+    jspb.Message.getWrapperField(this, proto.proto.SelectiveKeyDeactivation, 92));
+};
+
+
+/**
+ * @param {?proto.proto.SelectiveKeyDeactivation|undefined} value
+ * @return {!proto.proto.CommandRequest} returns this
+*/
+proto.proto.CommandRequest.prototype.setSelectiveKeyDeactivation = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 92, proto.proto.CommandRequest.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.CommandRequest} returns this
+ */
+proto.proto.CommandRequest.prototype.clearSelectiveKeyDeactivation = function() {
+  return this.setSelectiveKeyDeactivation(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.CommandRequest.prototype.hasSelectiveKeyDeactivation = function() {
+  return jspb.Message.getField(this, 92) != null;
+};
+
+
+/**
+ * optional ChildPresenceDetectionDeactivateAlarm child_presence_detection_deactivate_alarm = 93;
+ * @return {?proto.proto.ChildPresenceDetectionDeactivateAlarm}
+ */
+proto.proto.CommandRequest.prototype.getChildPresenceDetectionDeactivateAlarm = function() {
+  return /** @type{?proto.proto.ChildPresenceDetectionDeactivateAlarm} */ (
+    jspb.Message.getWrapperField(this, proto.proto.ChildPresenceDetectionDeactivateAlarm, 93));
+};
+
+
+/**
+ * @param {?proto.proto.ChildPresenceDetectionDeactivateAlarm|undefined} value
+ * @return {!proto.proto.CommandRequest} returns this
+*/
+proto.proto.CommandRequest.prototype.setChildPresenceDetectionDeactivateAlarm = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 93, proto.proto.CommandRequest.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.CommandRequest} returns this
+ */
+proto.proto.CommandRequest.prototype.clearChildPresenceDetectionDeactivateAlarm = function() {
+  return this.setChildPresenceDetectionDeactivateAlarm(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.CommandRequest.prototype.hasChildPresenceDetectionDeactivateAlarm = function() {
+  return jspb.Message.getField(this, 93) != null;
+};
+
+
+/**
+ * optional ChildPresenceDetectionTakePicture child_presence_detection_take_picture = 94;
+ * @return {?proto.proto.ChildPresenceDetectionTakePicture}
+ */
+proto.proto.CommandRequest.prototype.getChildPresenceDetectionTakePicture = function() {
+  return /** @type{?proto.proto.ChildPresenceDetectionTakePicture} */ (
+    jspb.Message.getWrapperField(this, proto.proto.ChildPresenceDetectionTakePicture, 94));
+};
+
+
+/**
+ * @param {?proto.proto.ChildPresenceDetectionTakePicture|undefined} value
+ * @return {!proto.proto.CommandRequest} returns this
+*/
+proto.proto.CommandRequest.prototype.setChildPresenceDetectionTakePicture = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 94, proto.proto.CommandRequest.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.CommandRequest} returns this
+ */
+proto.proto.CommandRequest.prototype.clearChildPresenceDetectionTakePicture = function() {
+  return this.setChildPresenceDetectionTakePicture(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.CommandRequest.prototype.hasChildPresenceDetectionTakePicture = function() {
+  return jspb.Message.getField(this, 94) != null;
+};
+
+
+/**
+ * optional InteriorMonitoringTakePicture interior_monitoring_take_picture = 95;
+ * @return {?proto.proto.InteriorMonitoringTakePicture}
+ */
+proto.proto.CommandRequest.prototype.getInteriorMonitoringTakePicture = function() {
+  return /** @type{?proto.proto.InteriorMonitoringTakePicture} */ (
+    jspb.Message.getWrapperField(this, proto.proto.InteriorMonitoringTakePicture, 95));
+};
+
+
+/**
+ * @param {?proto.proto.InteriorMonitoringTakePicture|undefined} value
+ * @return {!proto.proto.CommandRequest} returns this
+*/
+proto.proto.CommandRequest.prototype.setInteriorMonitoringTakePicture = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 95, proto.proto.CommandRequest.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.CommandRequest} returns this
+ */
+proto.proto.CommandRequest.prototype.clearInteriorMonitoringTakePicture = function() {
+  return this.setInteriorMonitoringTakePicture(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.CommandRequest.prototype.hasInteriorMonitoringTakePicture = function() {
+  return jspb.Message.getField(this, 95) != null;
+};
+
+
+/**
+ * optional ExteriorMonitoringTakePicture exterior_monitoring_take_picture = 96;
+ * @return {?proto.proto.ExteriorMonitoringTakePicture}
+ */
+proto.proto.CommandRequest.prototype.getExteriorMonitoringTakePicture = function() {
+  return /** @type{?proto.proto.ExteriorMonitoringTakePicture} */ (
+    jspb.Message.getWrapperField(this, proto.proto.ExteriorMonitoringTakePicture, 96));
+};
+
+
+/**
+ * @param {?proto.proto.ExteriorMonitoringTakePicture|undefined} value
+ * @return {!proto.proto.CommandRequest} returns this
+*/
+proto.proto.CommandRequest.prototype.setExteriorMonitoringTakePicture = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 96, proto.proto.CommandRequest.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.CommandRequest} returns this
+ */
+proto.proto.CommandRequest.prototype.clearExteriorMonitoringTakePicture = function() {
+  return this.setExteriorMonitoringTakePicture(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.CommandRequest.prototype.hasExteriorMonitoringTakePicture = function() {
+  return jspb.Message.getField(this, 96) != null;
+};
+
+
+/**
+ * optional RemoteUpdateStart remote_update_start = 97;
+ * @return {?proto.proto.RemoteUpdateStart}
+ */
+proto.proto.CommandRequest.prototype.getRemoteUpdateStart = function() {
+  return /** @type{?proto.proto.RemoteUpdateStart} */ (
+    jspb.Message.getWrapperField(this, proto.proto.RemoteUpdateStart, 97));
+};
+
+
+/**
+ * @param {?proto.proto.RemoteUpdateStart|undefined} value
+ * @return {!proto.proto.CommandRequest} returns this
+*/
+proto.proto.CommandRequest.prototype.setRemoteUpdateStart = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 97, proto.proto.CommandRequest.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.CommandRequest} returns this
+ */
+proto.proto.CommandRequest.prototype.clearRemoteUpdateStart = function() {
+  return this.setRemoteUpdateStart(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.CommandRequest.prototype.hasRemoteUpdateStart = function() {
+  return jspb.Message.getField(this, 97) != null;
+};
+
+
+/**
  * optional HvBatteryStartConditioning hv_battery_start_conditioning = 76;
  * @return {?proto.proto.HvBatteryStartConditioning}
  */
@@ -4067,6 +5612,43 @@ proto.proto.CommandRequest.prototype.clearHvBatteryStopConditioning = function()
  */
 proto.proto.CommandRequest.prototype.hasHvBatteryStopConditioning = function() {
   return jspb.Message.getField(this, 77) != null;
+};
+
+
+/**
+ * optional ChargingConfigure charging_configure = 78;
+ * @return {?proto.proto.ChargingConfigure}
+ */
+proto.proto.CommandRequest.prototype.getChargingConfigure = function() {
+  return /** @type{?proto.proto.ChargingConfigure} */ (
+    jspb.Message.getWrapperField(this, proto.proto.ChargingConfigure, 78));
+};
+
+
+/**
+ * @param {?proto.proto.ChargingConfigure|undefined} value
+ * @return {!proto.proto.CommandRequest} returns this
+*/
+proto.proto.CommandRequest.prototype.setChargingConfigure = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 78, proto.proto.CommandRequest.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.CommandRequest} returns this
+ */
+proto.proto.CommandRequest.prototype.clearChargingConfigure = function() {
+  return this.setChargingConfigure(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.CommandRequest.prototype.hasChargingConfigure = function() {
+  return jspb.Message.getField(this, 78) != null;
 };
 
 
@@ -4304,10 +5886,10 @@ proto.proto.DeactivateVehicleKeys.prototype.toObject = function(opt_includeInsta
  */
 proto.proto.DeactivateVehicleKeys.toObject = function(includeInstance, msg) {
   var f, obj = {
-    pin: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    expirationUnix: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    expirationSeconds: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    expirationMilliseconds: jspb.Message.getFieldWithDefault(msg, 4, "")
+pin: jspb.Message.getFieldWithDefault(msg, 1, ""),
+expirationUnix: jspb.Message.getFieldWithDefault(msg, 2, 0),
+expirationSeconds: jspb.Message.getFieldWithDefault(msg, 3, ""),
+expirationMilliseconds: jspb.Message.getFieldWithDefault(msg, 4, "")
   };
 
   if (includeInstance) {
@@ -4524,10 +6106,10 @@ proto.proto.ActivateVehicleKeys.prototype.toObject = function(opt_includeInstanc
  */
 proto.proto.ActivateVehicleKeys.toObject = function(includeInstance, msg) {
   var f, obj = {
-    pin: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    expirationUnix: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    expirationSeconds: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    expirationMilliseconds: jspb.Message.getFieldWithDefault(msg, 4, "")
+pin: jspb.Message.getFieldWithDefault(msg, 1, ""),
+expirationUnix: jspb.Message.getFieldWithDefault(msg, 2, 0),
+expirationSeconds: jspb.Message.getFieldWithDefault(msg, 3, ""),
+expirationMilliseconds: jspb.Message.getFieldWithDefault(msg, 4, "")
   };
 
   if (includeInstance) {
@@ -4946,10 +6528,10 @@ proto.proto.AuxheatConfigure.prototype.toObject = function(opt_includeInstance) 
  */
 proto.proto.AuxheatConfigure.toObject = function(includeInstance, msg) {
   var f, obj = {
-    timeSelection: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    time1: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    time2: jspb.Message.getFieldWithDefault(msg, 3, 0),
-    time3: jspb.Message.getFieldWithDefault(msg, 4, 0)
+timeSelection: jspb.Message.getFieldWithDefault(msg, 1, 0),
+time1: jspb.Message.getFieldWithDefault(msg, 2, 0),
+time2: jspb.Message.getFieldWithDefault(msg, 3, 0),
+time3: jspb.Message.getFieldWithDefault(msg, 4, 0)
   };
 
   if (includeInstance) {
@@ -5183,7 +6765,7 @@ proto.proto.DoorsLock.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.DoorsLock.toObject = function(includeInstance, msg) {
   var f, obj = {
-    doorsList: (f = jspb.Message.getRepeatedField(msg, 1)) == null ? undefined : f
+doorsList: (f = jspb.Message.getRepeatedField(msg, 1)) == null ? undefined : f
   };
 
   if (includeInstance) {
@@ -5341,8 +6923,8 @@ proto.proto.DoorsUnlock.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.DoorsUnlock.toObject = function(includeInstance, msg) {
   var f, obj = {
-    pin: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    doorsList: (f = jspb.Message.getRepeatedField(msg, 2)) == null ? undefined : f
+pin: jspb.Message.getFieldWithDefault(msg, 1, ""),
+doorsList: (f = jspb.Message.getRepeatedField(msg, 2)) == null ? undefined : f
   };
 
   if (includeInstance) {
@@ -5522,7 +7104,7 @@ proto.proto.EngineStart.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.EngineStart.toObject = function(includeInstance, msg) {
   var f, obj = {
-    pin: jspb.Message.getFieldWithDefault(msg, 1, "")
+pin: jspb.Message.getFieldWithDefault(msg, 1, "")
   };
 
   if (includeInstance) {
@@ -5753,7 +7335,7 @@ proto.proto.SunroofOpen.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.SunroofOpen.toObject = function(includeInstance, msg) {
   var f, obj = {
-    pin: jspb.Message.getFieldWithDefault(msg, 1, "")
+pin: jspb.Message.getFieldWithDefault(msg, 1, "")
   };
 
   if (includeInstance) {
@@ -5984,7 +7566,7 @@ proto.proto.SunroofLift.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.SunroofLift.toObject = function(includeInstance, msg) {
   var f, obj = {
-    pin: jspb.Message.getFieldWithDefault(msg, 1, "")
+pin: jspb.Message.getFieldWithDefault(msg, 1, "")
   };
 
   if (includeInstance) {
@@ -6114,10 +7696,10 @@ proto.proto.SunroofMove.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.SunroofMove.toObject = function(includeInstance, msg) {
   var f, obj = {
-    pin: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    sunroof: (f = msg.getSunroof()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
-    sunroofBlindFront: (f = msg.getSunroofBlindFront()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
-    sunroofBlindRear: (f = msg.getSunroofBlindRear()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f)
+pin: jspb.Message.getFieldWithDefault(msg, 1, ""),
+sunroof: (f = msg.getSunroof()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
+sunroofBlindFront: (f = msg.getSunroofBlindFront()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
+sunroofBlindRear: (f = msg.getSunroofBlindRear()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -6381,6 +7963,208 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     http://goto/soy-param-migration
  * @return {!Object}
  */
+proto.proto.SunroofBlindsMove.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.SunroofBlindsMove.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.SunroofBlindsMove} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.SunroofBlindsMove.toObject = function(includeInstance, msg) {
+  var f, obj = {
+sunroofBlindFront: (f = msg.getSunroofBlindFront()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
+sunroofBlindRear: (f = msg.getSunroofBlindRear()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.SunroofBlindsMove}
+ */
+proto.proto.SunroofBlindsMove.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.SunroofBlindsMove;
+  return proto.proto.SunroofBlindsMove.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.SunroofBlindsMove} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.SunroofBlindsMove}
+ */
+proto.proto.SunroofBlindsMove.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = new google_protobuf_wrappers_pb.Int32Value;
+      reader.readMessage(value,google_protobuf_wrappers_pb.Int32Value.deserializeBinaryFromReader);
+      msg.setSunroofBlindFront(value);
+      break;
+    case 2:
+      var value = new google_protobuf_wrappers_pb.Int32Value;
+      reader.readMessage(value,google_protobuf_wrappers_pb.Int32Value.deserializeBinaryFromReader);
+      msg.setSunroofBlindRear(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.SunroofBlindsMove.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.SunroofBlindsMove.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.SunroofBlindsMove} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.SunroofBlindsMove.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getSunroofBlindFront();
+  if (f != null) {
+    writer.writeMessage(
+      1,
+      f,
+      google_protobuf_wrappers_pb.Int32Value.serializeBinaryToWriter
+    );
+  }
+  f = message.getSunroofBlindRear();
+  if (f != null) {
+    writer.writeMessage(
+      2,
+      f,
+      google_protobuf_wrappers_pb.Int32Value.serializeBinaryToWriter
+    );
+  }
+};
+
+
+/**
+ * optional google.protobuf.Int32Value sunroof_blind_front = 1;
+ * @return {?proto.google.protobuf.Int32Value}
+ */
+proto.proto.SunroofBlindsMove.prototype.getSunroofBlindFront = function() {
+  return /** @type{?proto.google.protobuf.Int32Value} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.Int32Value, 1));
+};
+
+
+/**
+ * @param {?proto.google.protobuf.Int32Value|undefined} value
+ * @return {!proto.proto.SunroofBlindsMove} returns this
+*/
+proto.proto.SunroofBlindsMove.prototype.setSunroofBlindFront = function(value) {
+  return jspb.Message.setWrapperField(this, 1, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.SunroofBlindsMove} returns this
+ */
+proto.proto.SunroofBlindsMove.prototype.clearSunroofBlindFront = function() {
+  return this.setSunroofBlindFront(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.SunroofBlindsMove.prototype.hasSunroofBlindFront = function() {
+  return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * optional google.protobuf.Int32Value sunroof_blind_rear = 2;
+ * @return {?proto.google.protobuf.Int32Value}
+ */
+proto.proto.SunroofBlindsMove.prototype.getSunroofBlindRear = function() {
+  return /** @type{?proto.google.protobuf.Int32Value} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.Int32Value, 2));
+};
+
+
+/**
+ * @param {?proto.google.protobuf.Int32Value|undefined} value
+ * @return {!proto.proto.SunroofBlindsMove} returns this
+*/
+proto.proto.SunroofBlindsMove.prototype.setSunroofBlindRear = function(value) {
+  return jspb.Message.setWrapperField(this, 2, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.SunroofBlindsMove} returns this
+ */
+proto.proto.SunroofBlindsMove.prototype.clearSunroofBlindRear = function() {
+  return this.setSunroofBlindRear(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.SunroofBlindsMove.prototype.hasSunroofBlindRear = function() {
+  return jspb.Message.getField(this, 2) != null;
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
 proto.proto.WindowsOpen.prototype.toObject = function(opt_includeInstance) {
   return proto.proto.WindowsOpen.toObject(opt_includeInstance, this);
 };
@@ -6397,7 +8181,7 @@ proto.proto.WindowsOpen.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.WindowsOpen.toObject = function(includeInstance, msg) {
   var f, obj = {
-    pin: jspb.Message.getFieldWithDefault(msg, 1, "")
+pin: jspb.Message.getFieldWithDefault(msg, 1, "")
   };
 
   if (includeInstance) {
@@ -6628,7 +8412,7 @@ proto.proto.WindowsVentilate.prototype.toObject = function(opt_includeInstance) 
  */
 proto.proto.WindowsVentilate.toObject = function(includeInstance, msg) {
   var f, obj = {
-    pin: jspb.Message.getFieldWithDefault(msg, 1, "")
+pin: jspb.Message.getFieldWithDefault(msg, 1, "")
   };
 
   if (includeInstance) {
@@ -6758,14 +8542,14 @@ proto.proto.WindowsMove.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.WindowsMove.toObject = function(includeInstance, msg) {
   var f, obj = {
-    pin: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    frontLeft: (f = msg.getFrontLeft()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
-    frontRight: (f = msg.getFrontRight()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
-    rearBlind: (f = msg.getRearBlind()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
-    rearLeft: (f = msg.getRearLeft()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
-    rearLeftBlind: (f = msg.getRearLeftBlind()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
-    rearRight: (f = msg.getRearRight()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
-    rearRightBlind: (f = msg.getRearRightBlind()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f)
+pin: jspb.Message.getFieldWithDefault(msg, 1, ""),
+frontLeft: (f = msg.getFrontLeft()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
+frontRight: (f = msg.getFrontRight()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
+rearBlind: (f = msg.getRearBlind()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
+rearLeft: (f = msg.getRearLeft()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
+rearLeftBlind: (f = msg.getRearLeftBlind()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
+rearRight: (f = msg.getRearRight()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
+rearRightBlind: (f = msg.getRearRightBlind()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -7229,6 +9013,259 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     http://goto/soy-param-migration
  * @return {!Object}
  */
+proto.proto.WindowBlindsMove.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.WindowBlindsMove.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.WindowBlindsMove} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.WindowBlindsMove.toObject = function(includeInstance, msg) {
+  var f, obj = {
+rearBlind: (f = msg.getRearBlind()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
+rearLeftBlind: (f = msg.getRearLeftBlind()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
+rearRightBlind: (f = msg.getRearRightBlind()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.WindowBlindsMove}
+ */
+proto.proto.WindowBlindsMove.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.WindowBlindsMove;
+  return proto.proto.WindowBlindsMove.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.WindowBlindsMove} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.WindowBlindsMove}
+ */
+proto.proto.WindowBlindsMove.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = new google_protobuf_wrappers_pb.Int32Value;
+      reader.readMessage(value,google_protobuf_wrappers_pb.Int32Value.deserializeBinaryFromReader);
+      msg.setRearBlind(value);
+      break;
+    case 2:
+      var value = new google_protobuf_wrappers_pb.Int32Value;
+      reader.readMessage(value,google_protobuf_wrappers_pb.Int32Value.deserializeBinaryFromReader);
+      msg.setRearLeftBlind(value);
+      break;
+    case 3:
+      var value = new google_protobuf_wrappers_pb.Int32Value;
+      reader.readMessage(value,google_protobuf_wrappers_pb.Int32Value.deserializeBinaryFromReader);
+      msg.setRearRightBlind(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.WindowBlindsMove.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.WindowBlindsMove.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.WindowBlindsMove} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.WindowBlindsMove.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getRearBlind();
+  if (f != null) {
+    writer.writeMessage(
+      1,
+      f,
+      google_protobuf_wrappers_pb.Int32Value.serializeBinaryToWriter
+    );
+  }
+  f = message.getRearLeftBlind();
+  if (f != null) {
+    writer.writeMessage(
+      2,
+      f,
+      google_protobuf_wrappers_pb.Int32Value.serializeBinaryToWriter
+    );
+  }
+  f = message.getRearRightBlind();
+  if (f != null) {
+    writer.writeMessage(
+      3,
+      f,
+      google_protobuf_wrappers_pb.Int32Value.serializeBinaryToWriter
+    );
+  }
+};
+
+
+/**
+ * optional google.protobuf.Int32Value rear_blind = 1;
+ * @return {?proto.google.protobuf.Int32Value}
+ */
+proto.proto.WindowBlindsMove.prototype.getRearBlind = function() {
+  return /** @type{?proto.google.protobuf.Int32Value} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.Int32Value, 1));
+};
+
+
+/**
+ * @param {?proto.google.protobuf.Int32Value|undefined} value
+ * @return {!proto.proto.WindowBlindsMove} returns this
+*/
+proto.proto.WindowBlindsMove.prototype.setRearBlind = function(value) {
+  return jspb.Message.setWrapperField(this, 1, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.WindowBlindsMove} returns this
+ */
+proto.proto.WindowBlindsMove.prototype.clearRearBlind = function() {
+  return this.setRearBlind(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.WindowBlindsMove.prototype.hasRearBlind = function() {
+  return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * optional google.protobuf.Int32Value rear_left_blind = 2;
+ * @return {?proto.google.protobuf.Int32Value}
+ */
+proto.proto.WindowBlindsMove.prototype.getRearLeftBlind = function() {
+  return /** @type{?proto.google.protobuf.Int32Value} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.Int32Value, 2));
+};
+
+
+/**
+ * @param {?proto.google.protobuf.Int32Value|undefined} value
+ * @return {!proto.proto.WindowBlindsMove} returns this
+*/
+proto.proto.WindowBlindsMove.prototype.setRearLeftBlind = function(value) {
+  return jspb.Message.setWrapperField(this, 2, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.WindowBlindsMove} returns this
+ */
+proto.proto.WindowBlindsMove.prototype.clearRearLeftBlind = function() {
+  return this.setRearLeftBlind(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.WindowBlindsMove.prototype.hasRearLeftBlind = function() {
+  return jspb.Message.getField(this, 2) != null;
+};
+
+
+/**
+ * optional google.protobuf.Int32Value rear_right_blind = 3;
+ * @return {?proto.google.protobuf.Int32Value}
+ */
+proto.proto.WindowBlindsMove.prototype.getRearRightBlind = function() {
+  return /** @type{?proto.google.protobuf.Int32Value} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.Int32Value, 3));
+};
+
+
+/**
+ * @param {?proto.google.protobuf.Int32Value|undefined} value
+ * @return {!proto.proto.WindowBlindsMove} returns this
+*/
+proto.proto.WindowBlindsMove.prototype.setRearRightBlind = function(value) {
+  return jspb.Message.setWrapperField(this, 3, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.WindowBlindsMove} returns this
+ */
+proto.proto.WindowBlindsMove.prototype.clearRearRightBlind = function() {
+  return this.setRearRightBlind(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.WindowBlindsMove.prototype.hasRearRightBlind = function() {
+  return jspb.Message.getField(this, 3) != null;
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
 proto.proto.SpeedalertStart.prototype.toObject = function(opt_includeInstance) {
   return proto.proto.SpeedalertStart.toObject(opt_includeInstance, this);
 };
@@ -7245,8 +9282,8 @@ proto.proto.SpeedalertStart.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.SpeedalertStart.toObject = function(includeInstance, msg) {
   var f, obj = {
-    threshold: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    alertEndTime: jspb.Message.getFieldWithDefault(msg, 2, 0)
+threshold: jspb.Message.getFieldWithDefault(msg, 1, 0),
+alertEndTime: jspb.Message.getFieldWithDefault(msg, 2, 0)
   };
 
   if (includeInstance) {
@@ -7506,8 +9543,8 @@ proto.proto.ZEVPreconditioningStart.prototype.toObject = function(opt_includeIns
  */
 proto.proto.ZEVPreconditioningStart.toObject = function(includeInstance, msg) {
   var f, obj = {
-    departureTime: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    type: jspb.Message.getFieldWithDefault(msg, 2, 0)
+departureTime: jspb.Message.getFieldWithDefault(msg, 1, 0),
+type: jspb.Message.getFieldWithDefault(msg, 2, 0)
   };
 
   if (includeInstance) {
@@ -7666,7 +9703,7 @@ proto.proto.ZEVPreconditioningStop.prototype.toObject = function(opt_includeInst
  */
 proto.proto.ZEVPreconditioningStop.toObject = function(includeInstance, msg) {
   var f, obj = {
-    type: jspb.Message.getFieldWithDefault(msg, 2, 0)
+type: jspb.Message.getFieldWithDefault(msg, 2, 0)
   };
 
   if (includeInstance) {
@@ -7796,8 +9833,8 @@ proto.proto.ZEVPreconditioningConfigure.prototype.toObject = function(opt_includ
  */
 proto.proto.ZEVPreconditioningConfigure.toObject = function(includeInstance, msg) {
   var f, obj = {
-    departureTimeMode: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    departureTime: jspb.Message.getFieldWithDefault(msg, 3, 0)
+departureTimeMode: jspb.Message.getFieldWithDefault(msg, 1, 0),
+departureTime: jspb.Message.getFieldWithDefault(msg, 3, 0)
   };
 
   if (includeInstance) {
@@ -7965,10 +10002,10 @@ proto.proto.ZEVPreconditioningConfigureSeats.prototype.toObject = function(opt_i
  */
 proto.proto.ZEVPreconditioningConfigureSeats.toObject = function(includeInstance, msg) {
   var f, obj = {
-    frontLeft: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
-    frontRight: jspb.Message.getBooleanFieldWithDefault(msg, 2, false),
-    rearLeft: jspb.Message.getBooleanFieldWithDefault(msg, 3, false),
-    rearRight: jspb.Message.getBooleanFieldWithDefault(msg, 4, false)
+frontLeft: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
+frontRight: jspb.Message.getBooleanFieldWithDefault(msg, 2, false),
+rearLeft: jspb.Message.getBooleanFieldWithDefault(msg, 3, false),
+rearRight: jspb.Message.getBooleanFieldWithDefault(msg, 4, false)
   };
 
   if (includeInstance) {
@@ -8185,7 +10222,7 @@ proto.proto.BatteryChargeProgramConfigure.prototype.toObject = function(opt_incl
  */
 proto.proto.BatteryChargeProgramConfigure.toObject = function(includeInstance, msg) {
   var f, obj = {
-    chargeProgram: jspb.Message.getFieldWithDefault(msg, 1, 0)
+chargeProgram: jspb.Message.getFieldWithDefault(msg, 1, 0)
   };
 
   if (includeInstance) {
@@ -8323,7 +10360,7 @@ proto.proto.BatteryMaxSocConfigure.prototype.toObject = function(opt_includeInst
  */
 proto.proto.BatteryMaxSocConfigure.toObject = function(includeInstance, msg) {
   var f, obj = {
-    maxSoc: jspb.Message.getFieldWithDefault(msg, 1, 0)
+maxSoc: jspb.Message.getFieldWithDefault(msg, 1, 0)
   };
 
   if (includeInstance) {
@@ -8453,12 +10490,12 @@ proto.proto.ChargeProgramConfigure.prototype.toObject = function(opt_includeInst
  */
 proto.proto.ChargeProgramConfigure.toObject = function(includeInstance, msg) {
   var f, obj = {
-    chargeProgram: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    maxSoc: (f = msg.getMaxSoc()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
-    autoUnlock: (f = msg.getAutoUnlock()) && google_protobuf_wrappers_pb.BoolValue.toObject(includeInstance, f),
-    locationBasedCharging: (f = msg.getLocationBasedCharging()) && google_protobuf_wrappers_pb.BoolValue.toObject(includeInstance, f),
-    clockTimer: (f = msg.getClockTimer()) && google_protobuf_wrappers_pb.BoolValue.toObject(includeInstance, f),
-    ecoCharging: (f = msg.getEcoCharging()) && google_protobuf_wrappers_pb.BoolValue.toObject(includeInstance, f)
+chargeProgram: jspb.Message.getFieldWithDefault(msg, 1, 0),
+maxSoc: (f = msg.getMaxSoc()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
+autoUnlock: (f = msg.getAutoUnlock()) && google_protobuf_wrappers_pb.BoolValue.toObject(includeInstance, f),
+locationBasedCharging: (f = msg.getLocationBasedCharging()) && google_protobuf_wrappers_pb.BoolValue.toObject(includeInstance, f),
+clockTimer: (f = msg.getClockTimer()) && google_protobuf_wrappers_pb.BoolValue.toObject(includeInstance, f),
+ecoCharging: (f = msg.getEcoCharging()) && google_protobuf_wrappers_pb.BoolValue.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -8847,9 +10884,9 @@ proto.proto.ChargeControlConfigure.prototype.toObject = function(opt_includeInst
  */
 proto.proto.ChargeControlConfigure.toObject = function(includeInstance, msg) {
   var f, obj = {
-    biChargingEnabled: (f = msg.getBiChargingEnabled()) && google_protobuf_wrappers_pb.BoolValue.toObject(includeInstance, f),
-    chargingPower: (f = msg.getChargingPower()) && google_protobuf_wrappers_pb.FloatValue.toObject(includeInstance, f),
-    minSoc: (f = msg.getMinSoc()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f)
+biChargingEnabled: (f = msg.getBiChargingEnabled()) && google_protobuf_wrappers_pb.BoolValue.toObject(includeInstance, f),
+chargingPower: (f = msg.getChargingPower()) && google_protobuf_wrappers_pb.FloatValue.toObject(includeInstance, f),
+minSoc: (f = msg.getMinSoc()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -9107,9 +11144,9 @@ proto.proto.ChargeOptConfigure.prototype.toObject = function(opt_includeInstance
  */
 proto.proto.ChargeOptConfigure.toObject = function(includeInstance, msg) {
   var f, obj = {
-    weekdayTariffList: jspb.Message.toObjectList(msg.getWeekdayTariffList(),
+weekdayTariffList: jspb.Message.toObjectList(msg.getWeekdayTariffList(),
     proto.proto.ChargeOptConfigure.Tariff.toObject, includeInstance),
-    weekendTariffList: jspb.Message.toObjectList(msg.getWeekendTariffList(),
+weekendTariffList: jspb.Message.toObjectList(msg.getWeekendTariffList(),
     proto.proto.ChargeOptConfigure.Tariff.toObject, includeInstance)
   };
 
@@ -9237,8 +11274,8 @@ proto.proto.ChargeOptConfigure.Tariff.prototype.toObject = function(opt_includeI
  */
 proto.proto.ChargeOptConfigure.Tariff.toObject = function(includeInstance, msg) {
   var f, obj = {
-    rate: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    time: jspb.Message.getFieldWithDefault(msg, 2, 0)
+rate: jspb.Message.getFieldWithDefault(msg, 1, 0),
+time: jspb.Message.getFieldWithDefault(msg, 2, 0)
   };
 
   if (includeInstance) {
@@ -9692,7 +11729,7 @@ proto.proto.TemperatureConfigure.prototype.toObject = function(opt_includeInstan
  */
 proto.proto.TemperatureConfigure.toObject = function(includeInstance, msg) {
   var f, obj = {
-    temperaturePointsList: jspb.Message.toObjectList(msg.getTemperaturePointsList(),
+temperaturePointsList: jspb.Message.toObjectList(msg.getTemperaturePointsList(),
     proto.proto.TemperatureConfigure.TemperaturePoint.toObject, includeInstance)
   };
 
@@ -9807,8 +11844,8 @@ proto.proto.TemperatureConfigure.TemperaturePoint.prototype.toObject = function(
  */
 proto.proto.TemperatureConfigure.TemperaturePoint.toObject = function(includeInstance, msg) {
   var f, obj = {
-    zone: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    temperatureInCelsius: jspb.Message.getFloatingPointFieldWithDefault(msg, 3, 0.0)
+zone: jspb.Message.getFieldWithDefault(msg, 1, 0),
+temperatureInCelsius: jspb.Message.getFloatingPointFieldWithDefault(msg, 3, 0.0)
   };
 
   if (includeInstance) {
@@ -10038,7 +12075,7 @@ proto.proto.WeekProfileConfigure.prototype.toObject = function(opt_includeInstan
  */
 proto.proto.WeekProfileConfigure.toObject = function(includeInstance, msg) {
   var f, obj = {
-    weeklySetHuList: jspb.Message.toObjectList(msg.getWeeklySetHuList(),
+weeklySetHuList: jspb.Message.toObjectList(msg.getWeeklySetHuList(),
     proto.proto.WeekProfileConfigure.WeeklySetHU.toObject, includeInstance)
   };
 
@@ -10153,8 +12190,8 @@ proto.proto.WeekProfileConfigure.WeeklySetHU.prototype.toObject = function(opt_i
  */
 proto.proto.WeekProfileConfigure.WeeklySetHU.toObject = function(includeInstance, msg) {
   var f, obj = {
-    day: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    time: jspb.Message.getFieldWithDefault(msg, 2, 0)
+day: jspb.Message.getFieldWithDefault(msg, 1, 0),
+time: jspb.Message.getFieldWithDefault(msg, 2, 0)
   };
 
   if (includeInstance) {
@@ -10371,7 +12408,7 @@ proto.proto.WeekProfileConfigureV2.prototype.toObject = function(opt_includeInst
  */
 proto.proto.WeekProfileConfigureV2.toObject = function(includeInstance, msg) {
   var f, obj = {
-    timeProfilesList: jspb.Message.toObjectList(msg.getTimeProfilesList(),
+timeProfilesList: jspb.Message.toObjectList(msg.getTimeProfilesList(),
     proto.proto.TimeProfile.toObject, includeInstance)
   };
 
@@ -10531,12 +12568,12 @@ proto.proto.TimeProfile.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.TimeProfile.toObject = function(includeInstance, msg) {
   var f, obj = {
-    identifier: (f = msg.getIdentifier()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
-    hour: (f = msg.getHour()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
-    minute: (f = msg.getMinute()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
-    daysList: (f = jspb.Message.getRepeatedField(msg, 4)) == null ? undefined : f,
-    active: (f = msg.getActive()) && google_protobuf_wrappers_pb.BoolValue.toObject(includeInstance, f),
-    applicationIdentifier: jspb.Message.getFieldWithDefault(msg, 6, 0)
+identifier: (f = msg.getIdentifier()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
+hour: (f = msg.getHour()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
+minute: (f = msg.getMinute()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
+daysList: (f = jspb.Message.getRepeatedField(msg, 4)) == null ? undefined : f,
+active: (f = msg.getActive()) && google_protobuf_wrappers_pb.BoolValue.toObject(includeInstance, f),
+applicationIdentifier: jspb.Message.getFieldWithDefault(msg, 6, 0)
   };
 
   if (includeInstance) {
@@ -10916,11 +12953,11 @@ proto.proto.SigPosStart.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.SigPosStart.toObject = function(includeInstance, msg) {
   var f, obj = {
-    hornRepeat: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    hornType: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    lightType: jspb.Message.getFieldWithDefault(msg, 3, 0),
-    sigposDuration: jspb.Message.getFieldWithDefault(msg, 4, 0),
-    sigposType: jspb.Message.getFieldWithDefault(msg, 5, 0)
+hornRepeat: jspb.Message.getFieldWithDefault(msg, 1, 0),
+hornType: jspb.Message.getFieldWithDefault(msg, 2, 0),
+lightType: jspb.Message.getFieldWithDefault(msg, 3, 0),
+sigposDuration: jspb.Message.getFieldWithDefault(msg, 4, 0),
+sigposType: jspb.Message.getFieldWithDefault(msg, 5, 0)
   };
 
   if (includeInstance) {
@@ -11901,7 +13938,7 @@ proto.proto.TheftalarmStart.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.TheftalarmStart.toObject = function(includeInstance, msg) {
   var f, obj = {
-    alarmDurationInSeconds: jspb.Message.getFieldWithDefault(msg, 1, 0)
+alarmDurationInSeconds: jspb.Message.getFieldWithDefault(msg, 1, 0)
   };
 
   if (includeInstance) {
@@ -12116,6 +14153,410 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     http://goto/soy-param-migration
  * @return {!Object}
  */
+proto.proto.TheftAlarmSelectPictureTaking.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.TheftAlarmSelectPictureTaking.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.TheftAlarmSelectPictureTaking} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.TheftAlarmSelectPictureTaking.toObject = function(includeInstance, msg) {
+  var f, obj = {
+
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.TheftAlarmSelectPictureTaking}
+ */
+proto.proto.TheftAlarmSelectPictureTaking.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.TheftAlarmSelectPictureTaking;
+  return proto.proto.TheftAlarmSelectPictureTaking.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.TheftAlarmSelectPictureTaking} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.TheftAlarmSelectPictureTaking}
+ */
+proto.proto.TheftAlarmSelectPictureTaking.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.TheftAlarmSelectPictureTaking.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.TheftAlarmSelectPictureTaking.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.TheftAlarmSelectPictureTaking} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.TheftAlarmSelectPictureTaking.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.TheftAlarmDeselectPictureTaking.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.TheftAlarmDeselectPictureTaking.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.TheftAlarmDeselectPictureTaking} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.TheftAlarmDeselectPictureTaking.toObject = function(includeInstance, msg) {
+  var f, obj = {
+
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.TheftAlarmDeselectPictureTaking}
+ */
+proto.proto.TheftAlarmDeselectPictureTaking.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.TheftAlarmDeselectPictureTaking;
+  return proto.proto.TheftAlarmDeselectPictureTaking.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.TheftAlarmDeselectPictureTaking} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.TheftAlarmDeselectPictureTaking}
+ */
+proto.proto.TheftAlarmDeselectPictureTaking.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.TheftAlarmDeselectPictureTaking.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.TheftAlarmDeselectPictureTaking.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.TheftAlarmDeselectPictureTaking} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.TheftAlarmDeselectPictureTaking.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.StagemodeStart.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.StagemodeStart.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.StagemodeStart} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.StagemodeStart.toObject = function(includeInstance, msg) {
+  var f, obj = {
+
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.StagemodeStart}
+ */
+proto.proto.StagemodeStart.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.StagemodeStart;
+  return proto.proto.StagemodeStart.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.StagemodeStart} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.StagemodeStart}
+ */
+proto.proto.StagemodeStart.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.StagemodeStart.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.StagemodeStart.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.StagemodeStart} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.StagemodeStart.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.StagemodeStop.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.StagemodeStop.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.StagemodeStop} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.StagemodeStop.toObject = function(includeInstance, msg) {
+  var f, obj = {
+
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.StagemodeStop}
+ */
+proto.proto.StagemodeStop.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.StagemodeStop;
+  return proto.proto.StagemodeStop.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.StagemodeStop} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.StagemodeStop}
+ */
+proto.proto.StagemodeStop.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.StagemodeStop.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.StagemodeStop.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.StagemodeStop} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.StagemodeStop.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
 proto.proto.AutomaticValetParkingActivate.prototype.toObject = function(opt_includeInstance) {
   return proto.proto.AutomaticValetParkingActivate.toObject(opt_includeInstance, this);
 };
@@ -12132,8 +14573,8 @@ proto.proto.AutomaticValetParkingActivate.prototype.toObject = function(opt_incl
  */
 proto.proto.AutomaticValetParkingActivate.toObject = function(includeInstance, msg) {
   var f, obj = {
-    bookingId: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    driveType: jspb.Message.getFieldWithDefault(msg, 2, 0)
+bookingId: jspb.Message.getFieldWithDefault(msg, 1, ""),
+driveType: jspb.Message.getFieldWithDefault(msg, 2, 0)
   };
 
   if (includeInstance) {
@@ -12276,6 +14717,208 @@ if (jspb.Message.GENERATE_TO_OBJECT) {
  *     http://goto/soy-param-migration
  * @return {!Object}
  */
+proto.proto.ChargeFlapUnlock.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.ChargeFlapUnlock.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.ChargeFlapUnlock} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargeFlapUnlock.toObject = function(includeInstance, msg) {
+  var f, obj = {
+
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.ChargeFlapUnlock}
+ */
+proto.proto.ChargeFlapUnlock.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.ChargeFlapUnlock;
+  return proto.proto.ChargeFlapUnlock.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.ChargeFlapUnlock} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.ChargeFlapUnlock}
+ */
+proto.proto.ChargeFlapUnlock.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.ChargeFlapUnlock.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.ChargeFlapUnlock.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.ChargeFlapUnlock} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargeFlapUnlock.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.ChargeFlapOpen.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.ChargeFlapOpen.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.ChargeFlapOpen} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargeFlapOpen.toObject = function(includeInstance, msg) {
+  var f, obj = {
+
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.ChargeFlapOpen}
+ */
+proto.proto.ChargeFlapOpen.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.ChargeFlapOpen;
+  return proto.proto.ChargeFlapOpen.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.ChargeFlapOpen} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.ChargeFlapOpen}
+ */
+proto.proto.ChargeFlapOpen.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.ChargeFlapOpen.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.ChargeFlapOpen.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.ChargeFlapOpen} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargeFlapOpen.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
 proto.proto.ChargeCouplerUnlock.prototype.toObject = function(opt_includeInstance) {
   return proto.proto.ChargeCouplerUnlock.toObject(opt_includeInstance, this);
 };
@@ -12362,6 +15005,107 @@ proto.proto.ChargeCouplerUnlock.serializeBinaryToWriter = function(message, writ
 
 
 
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.ChargeCouplerStop.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.ChargeCouplerStop.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.ChargeCouplerStop} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargeCouplerStop.toObject = function(includeInstance, msg) {
+  var f, obj = {
+
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.ChargeCouplerStop}
+ */
+proto.proto.ChargeCouplerStop.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.ChargeCouplerStop;
+  return proto.proto.ChargeCouplerStop.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.ChargeCouplerStop} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.ChargeCouplerStop}
+ */
+proto.proto.ChargeCouplerStop.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.ChargeCouplerStop.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.ChargeCouplerStop.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.ChargeCouplerStop} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargeCouplerStop.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+};
+
+
+
 /**
  * List of repeated fields within this message type.
  * @private {!Array<number>}
@@ -12400,7 +15144,7 @@ proto.proto.ChargingBreakClocktimerConfigure.prototype.toObject = function(opt_i
  */
 proto.proto.ChargingBreakClocktimerConfigure.toObject = function(includeInstance, msg) {
   var f, obj = {
-    chargingbreakClocktimerConfigureEntryList: jspb.Message.toObjectList(msg.getChargingbreakClocktimerConfigureEntryList(),
+chargingbreakClocktimerConfigureEntryList: jspb.Message.toObjectList(msg.getChargingbreakClocktimerConfigureEntryList(),
     proto.proto.ChargingBreakClockTimerConfigureEntry.toObject, includeInstance)
   };
 
@@ -12553,12 +15297,12 @@ proto.proto.ChargingBreakClockTimerConfigureEntry.prototype.toObject = function(
  */
 proto.proto.ChargingBreakClockTimerConfigureEntry.toObject = function(includeInstance, msg) {
   var f, obj = {
-    action: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    endtimehour: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    endtimeminute: jspb.Message.getFieldWithDefault(msg, 3, 0),
-    starttimehour: jspb.Message.getFieldWithDefault(msg, 4, 0),
-    starttimeminute: jspb.Message.getFieldWithDefault(msg, 5, 0),
-    timerid: jspb.Message.getFieldWithDefault(msg, 6, 0)
+action: jspb.Message.getFieldWithDefault(msg, 1, 0),
+endtimehour: jspb.Message.getFieldWithDefault(msg, 2, 0),
+endtimeminute: jspb.Message.getFieldWithDefault(msg, 3, 0),
+starttimehour: jspb.Message.getFieldWithDefault(msg, 4, 0),
+starttimeminute: jspb.Message.getFieldWithDefault(msg, 5, 0),
+timerid: jspb.Message.getFieldWithDefault(msg, 6, 0)
   };
 
   if (includeInstance) {
@@ -12899,6 +15643,2534 @@ proto.proto.WiperHealthReset.prototype.serializeBinary = function() {
  */
 proto.proto.WiperHealthReset.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+};
+
+
+
+/**
+ * List of repeated fields within this message type.
+ * @private {!Array<number>}
+ * @const
+ */
+proto.proto.ClockTimerConfigure.repeatedFields_ = [1];
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.ClockTimerConfigure.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.ClockTimerConfigure.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.ClockTimerConfigure} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ClockTimerConfigure.toObject = function(includeInstance, msg) {
+  var f, obj = {
+clockTimerConfigureEntryList: jspb.Message.toObjectList(msg.getClockTimerConfigureEntryList(),
+    proto.proto.ClockTimerConfigureEntry.toObject, includeInstance)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.ClockTimerConfigure}
+ */
+proto.proto.ClockTimerConfigure.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.ClockTimerConfigure;
+  return proto.proto.ClockTimerConfigure.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.ClockTimerConfigure} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.ClockTimerConfigure}
+ */
+proto.proto.ClockTimerConfigure.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = new proto.proto.ClockTimerConfigureEntry;
+      reader.readMessage(value,proto.proto.ClockTimerConfigureEntry.deserializeBinaryFromReader);
+      msg.addClockTimerConfigureEntry(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.ClockTimerConfigure.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.ClockTimerConfigure.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.ClockTimerConfigure} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ClockTimerConfigure.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getClockTimerConfigureEntryList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
+      1,
+      f,
+      proto.proto.ClockTimerConfigureEntry.serializeBinaryToWriter
+    );
+  }
+};
+
+
+/**
+ * repeated ClockTimerConfigureEntry clock_timer_configure_entry = 1;
+ * @return {!Array<!proto.proto.ClockTimerConfigureEntry>}
+ */
+proto.proto.ClockTimerConfigure.prototype.getClockTimerConfigureEntryList = function() {
+  return /** @type{!Array<!proto.proto.ClockTimerConfigureEntry>} */ (
+    jspb.Message.getRepeatedWrapperField(this, proto.proto.ClockTimerConfigureEntry, 1));
+};
+
+
+/**
+ * @param {!Array<!proto.proto.ClockTimerConfigureEntry>} value
+ * @return {!proto.proto.ClockTimerConfigure} returns this
+*/
+proto.proto.ClockTimerConfigure.prototype.setClockTimerConfigureEntryList = function(value) {
+  return jspb.Message.setRepeatedWrapperField(this, 1, value);
+};
+
+
+/**
+ * @param {!proto.proto.ClockTimerConfigureEntry=} opt_value
+ * @param {number=} opt_index
+ * @return {!proto.proto.ClockTimerConfigureEntry}
+ */
+proto.proto.ClockTimerConfigure.prototype.addClockTimerConfigureEntry = function(opt_value, opt_index) {
+  return jspb.Message.addToRepeatedWrapperField(this, 1, opt_value, proto.proto.ClockTimerConfigureEntry, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ * @return {!proto.proto.ClockTimerConfigure} returns this
+ */
+proto.proto.ClockTimerConfigure.prototype.clearClockTimerConfigureEntryList = function() {
+  return this.setClockTimerConfigureEntryList([]);
+};
+
+
+
+/**
+ * List of repeated fields within this message type.
+ * @private {!Array<number>}
+ * @const
+ */
+proto.proto.ClockTimerConfigureEntry.repeatedFields_ = [4];
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.ClockTimerConfigureEntry.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.ClockTimerConfigureEntry.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.ClockTimerConfigureEntry} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ClockTimerConfigureEntry.toObject = function(includeInstance, msg) {
+  var f, obj = {
+action: jspb.Message.getFieldWithDefault(msg, 1, 0),
+hour: jspb.Message.getFieldWithDefault(msg, 2, 0),
+minute: jspb.Message.getFieldWithDefault(msg, 3, 0),
+daysList: (f = jspb.Message.getRepeatedField(msg, 4)) == null ? undefined : f,
+id: jspb.Message.getFieldWithDefault(msg, 5, 0)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.ClockTimerConfigureEntry}
+ */
+proto.proto.ClockTimerConfigureEntry.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.ClockTimerConfigureEntry;
+  return proto.proto.ClockTimerConfigureEntry.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.ClockTimerConfigureEntry} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.ClockTimerConfigureEntry}
+ */
+proto.proto.ClockTimerConfigureEntry.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {!proto.proto.ChargingBreakClockTimerEntryStatus} */ (reader.readEnum());
+      msg.setAction(value);
+      break;
+    case 2:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setHour(value);
+      break;
+    case 3:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setMinute(value);
+      break;
+    case 4:
+      var values = /** @type {!Array<!proto.proto.TimeProfileDay>} */ (reader.isDelimited() ? reader.readPackedEnum() : [reader.readEnum()]);
+      for (var i = 0; i < values.length; i++) {
+        msg.addDays(values[i]);
+      }
+      break;
+    case 5:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setId(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.ClockTimerConfigureEntry.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.ClockTimerConfigureEntry.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.ClockTimerConfigureEntry} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ClockTimerConfigureEntry.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getAction();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      1,
+      f
+    );
+  }
+  f = message.getHour();
+  if (f !== 0) {
+    writer.writeInt32(
+      2,
+      f
+    );
+  }
+  f = message.getMinute();
+  if (f !== 0) {
+    writer.writeInt32(
+      3,
+      f
+    );
+  }
+  f = message.getDaysList();
+  if (f.length > 0) {
+    writer.writePackedEnum(
+      4,
+      f
+    );
+  }
+  f = message.getId();
+  if (f !== 0) {
+    writer.writeInt32(
+      5,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional ChargingBreakClockTimerEntryStatus action = 1;
+ * @return {!proto.proto.ChargingBreakClockTimerEntryStatus}
+ */
+proto.proto.ClockTimerConfigureEntry.prototype.getAction = function() {
+  return /** @type {!proto.proto.ChargingBreakClockTimerEntryStatus} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/**
+ * @param {!proto.proto.ChargingBreakClockTimerEntryStatus} value
+ * @return {!proto.proto.ClockTimerConfigureEntry} returns this
+ */
+proto.proto.ClockTimerConfigureEntry.prototype.setAction = function(value) {
+  return jspb.Message.setProto3EnumField(this, 1, value);
+};
+
+
+/**
+ * optional int32 hour = 2;
+ * @return {number}
+ */
+proto.proto.ClockTimerConfigureEntry.prototype.getHour = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ClockTimerConfigureEntry} returns this
+ */
+proto.proto.ClockTimerConfigureEntry.prototype.setHour = function(value) {
+  return jspb.Message.setProto3IntField(this, 2, value);
+};
+
+
+/**
+ * optional int32 minute = 3;
+ * @return {number}
+ */
+proto.proto.ClockTimerConfigureEntry.prototype.getMinute = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ClockTimerConfigureEntry} returns this
+ */
+proto.proto.ClockTimerConfigureEntry.prototype.setMinute = function(value) {
+  return jspb.Message.setProto3IntField(this, 3, value);
+};
+
+
+/**
+ * repeated TimeProfileDay days = 4;
+ * @return {!Array<!proto.proto.TimeProfileDay>}
+ */
+proto.proto.ClockTimerConfigureEntry.prototype.getDaysList = function() {
+  return /** @type {!Array<!proto.proto.TimeProfileDay>} */ (jspb.Message.getRepeatedField(this, 4));
+};
+
+
+/**
+ * @param {!Array<!proto.proto.TimeProfileDay>} value
+ * @return {!proto.proto.ClockTimerConfigureEntry} returns this
+ */
+proto.proto.ClockTimerConfigureEntry.prototype.setDaysList = function(value) {
+  return jspb.Message.setField(this, 4, value || []);
+};
+
+
+/**
+ * @param {!proto.proto.TimeProfileDay} value
+ * @param {number=} opt_index
+ * @return {!proto.proto.ClockTimerConfigureEntry} returns this
+ */
+proto.proto.ClockTimerConfigureEntry.prototype.addDays = function(value, opt_index) {
+  return jspb.Message.addToRepeatedField(this, 4, value, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ * @return {!proto.proto.ClockTimerConfigureEntry} returns this
+ */
+proto.proto.ClockTimerConfigureEntry.prototype.clearDaysList = function() {
+  return this.setDaysList([]);
+};
+
+
+/**
+ * optional int32 id = 5;
+ * @return {number}
+ */
+proto.proto.ClockTimerConfigureEntry.prototype.getId = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ClockTimerConfigureEntry} returns this
+ */
+proto.proto.ClockTimerConfigureEntry.prototype.setId = function(value) {
+  return jspb.Message.setProto3IntField(this, 5, value);
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.CarsharingProvision.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.CarsharingProvision.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.CarsharingProvision} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.CarsharingProvision.toObject = function(includeInstance, msg) {
+  var f, obj = {
+pin: jspb.Message.getFieldWithDefault(msg, 1, ""),
+enableDisable: jspb.Message.getFieldWithDefault(msg, 2, 0),
+expirationMilliseconds: jspb.Message.getFieldWithDefault(msg, 3, ""),
+expirationSeconds: jspb.Message.getFieldWithDefault(msg, 4, ""),
+keyline: jspb.Message.getFieldWithDefault(msg, 5, "")
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.CarsharingProvision}
+ */
+proto.proto.CarsharingProvision.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.CarsharingProvision;
+  return proto.proto.CarsharingProvision.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.CarsharingProvision} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.CarsharingProvision}
+ */
+proto.proto.CarsharingProvision.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setPin(value);
+      break;
+    case 2:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setEnableDisable(value);
+      break;
+    case 3:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setExpirationMilliseconds(value);
+      break;
+    case 4:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setExpirationSeconds(value);
+      break;
+    case 5:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setKeyline(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.CarsharingProvision.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.CarsharingProvision.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.CarsharingProvision} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.CarsharingProvision.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getPin();
+  if (f.length > 0) {
+    writer.writeString(
+      1,
+      f
+    );
+  }
+  f = message.getEnableDisable();
+  if (f !== 0) {
+    writer.writeInt32(
+      2,
+      f
+    );
+  }
+  f = message.getExpirationMilliseconds();
+  if (f.length > 0) {
+    writer.writeString(
+      3,
+      f
+    );
+  }
+  f = message.getExpirationSeconds();
+  if (f.length > 0) {
+    writer.writeString(
+      4,
+      f
+    );
+  }
+  f = message.getKeyline();
+  if (f.length > 0) {
+    writer.writeString(
+      5,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional string pin = 1;
+ * @return {string}
+ */
+proto.proto.CarsharingProvision.prototype.getPin = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.CarsharingProvision} returns this
+ */
+proto.proto.CarsharingProvision.prototype.setPin = function(value) {
+  return jspb.Message.setProto3StringField(this, 1, value);
+};
+
+
+/**
+ * optional int32 enable_disable = 2;
+ * @return {number}
+ */
+proto.proto.CarsharingProvision.prototype.getEnableDisable = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.CarsharingProvision} returns this
+ */
+proto.proto.CarsharingProvision.prototype.setEnableDisable = function(value) {
+  return jspb.Message.setProto3IntField(this, 2, value);
+};
+
+
+/**
+ * optional string expiration_milliseconds = 3;
+ * @return {string}
+ */
+proto.proto.CarsharingProvision.prototype.getExpirationMilliseconds = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 3, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.CarsharingProvision} returns this
+ */
+proto.proto.CarsharingProvision.prototype.setExpirationMilliseconds = function(value) {
+  return jspb.Message.setProto3StringField(this, 3, value);
+};
+
+
+/**
+ * optional string expiration_seconds = 4;
+ * @return {string}
+ */
+proto.proto.CarsharingProvision.prototype.getExpirationSeconds = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.CarsharingProvision} returns this
+ */
+proto.proto.CarsharingProvision.prototype.setExpirationSeconds = function(value) {
+  return jspb.Message.setProto3StringField(this, 4, value);
+};
+
+
+/**
+ * optional string keyline = 5;
+ * @return {string}
+ */
+proto.proto.CarsharingProvision.prototype.getKeyline = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 5, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.CarsharingProvision} returns this
+ */
+proto.proto.CarsharingProvision.prototype.setKeyline = function(value) {
+  return jspb.Message.setProto3StringField(this, 5, value);
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.CarsharingKeyLock.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.CarsharingKeyLock.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.CarsharingKeyLock} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.CarsharingKeyLock.toObject = function(includeInstance, msg) {
+  var f, obj = {
+pin: jspb.Message.getFieldWithDefault(msg, 1, "")
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.CarsharingKeyLock}
+ */
+proto.proto.CarsharingKeyLock.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.CarsharingKeyLock;
+  return proto.proto.CarsharingKeyLock.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.CarsharingKeyLock} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.CarsharingKeyLock}
+ */
+proto.proto.CarsharingKeyLock.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setPin(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.CarsharingKeyLock.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.CarsharingKeyLock.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.CarsharingKeyLock} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.CarsharingKeyLock.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getPin();
+  if (f.length > 0) {
+    writer.writeString(
+      1,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional string pin = 1;
+ * @return {string}
+ */
+proto.proto.CarsharingKeyLock.prototype.getPin = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.CarsharingKeyLock} returns this
+ */
+proto.proto.CarsharingKeyLock.prototype.setPin = function(value) {
+  return jspb.Message.setProto3StringField(this, 1, value);
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.CarsharingKeyRelease.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.CarsharingKeyRelease.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.CarsharingKeyRelease} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.CarsharingKeyRelease.toObject = function(includeInstance, msg) {
+  var f, obj = {
+pin: jspb.Message.getFieldWithDefault(msg, 1, "")
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.CarsharingKeyRelease}
+ */
+proto.proto.CarsharingKeyRelease.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.CarsharingKeyRelease;
+  return proto.proto.CarsharingKeyRelease.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.CarsharingKeyRelease} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.CarsharingKeyRelease}
+ */
+proto.proto.CarsharingKeyRelease.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setPin(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.CarsharingKeyRelease.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.CarsharingKeyRelease.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.CarsharingKeyRelease} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.CarsharingKeyRelease.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getPin();
+  if (f.length > 0) {
+    writer.writeString(
+      1,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional string pin = 1;
+ * @return {string}
+ */
+proto.proto.CarsharingKeyRelease.prototype.getPin = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.CarsharingKeyRelease} returns this
+ */
+proto.proto.CarsharingKeyRelease.prototype.setPin = function(value) {
+  return jspb.Message.setProto3StringField(this, 1, value);
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.CarsharingProvisionAndLock.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.CarsharingProvisionAndLock.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.CarsharingProvisionAndLock} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.CarsharingProvisionAndLock.toObject = function(includeInstance, msg) {
+  var f, obj = {
+pin: jspb.Message.getFieldWithDefault(msg, 1, ""),
+carsharingProvision: (f = msg.getCarsharingProvision()) && proto.proto.CarsharingProvision.toObject(includeInstance, f)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.CarsharingProvisionAndLock}
+ */
+proto.proto.CarsharingProvisionAndLock.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.CarsharingProvisionAndLock;
+  return proto.proto.CarsharingProvisionAndLock.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.CarsharingProvisionAndLock} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.CarsharingProvisionAndLock}
+ */
+proto.proto.CarsharingProvisionAndLock.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setPin(value);
+      break;
+    case 2:
+      var value = new proto.proto.CarsharingProvision;
+      reader.readMessage(value,proto.proto.CarsharingProvision.deserializeBinaryFromReader);
+      msg.setCarsharingProvision(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.CarsharingProvisionAndLock.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.CarsharingProvisionAndLock.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.CarsharingProvisionAndLock} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.CarsharingProvisionAndLock.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getPin();
+  if (f.length > 0) {
+    writer.writeString(
+      1,
+      f
+    );
+  }
+  f = message.getCarsharingProvision();
+  if (f != null) {
+    writer.writeMessage(
+      2,
+      f,
+      proto.proto.CarsharingProvision.serializeBinaryToWriter
+    );
+  }
+};
+
+
+/**
+ * optional string pin = 1;
+ * @return {string}
+ */
+proto.proto.CarsharingProvisionAndLock.prototype.getPin = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.CarsharingProvisionAndLock} returns this
+ */
+proto.proto.CarsharingProvisionAndLock.prototype.setPin = function(value) {
+  return jspb.Message.setProto3StringField(this, 1, value);
+};
+
+
+/**
+ * optional CarsharingProvision carsharing_provision = 2;
+ * @return {?proto.proto.CarsharingProvision}
+ */
+proto.proto.CarsharingProvisionAndLock.prototype.getCarsharingProvision = function() {
+  return /** @type{?proto.proto.CarsharingProvision} */ (
+    jspb.Message.getWrapperField(this, proto.proto.CarsharingProvision, 2));
+};
+
+
+/**
+ * @param {?proto.proto.CarsharingProvision|undefined} value
+ * @return {!proto.proto.CarsharingProvisionAndLock} returns this
+*/
+proto.proto.CarsharingProvisionAndLock.prototype.setCarsharingProvision = function(value) {
+  return jspb.Message.setWrapperField(this, 2, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.CarsharingProvisionAndLock} returns this
+ */
+proto.proto.CarsharingProvisionAndLock.prototype.clearCarsharingProvision = function() {
+  return this.setCarsharingProvision(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.CarsharingProvisionAndLock.prototype.hasCarsharingProvision = function() {
+  return jspb.Message.getField(this, 2) != null;
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.SelectiveKeyDeactivation.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.SelectiveKeyDeactivation.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.SelectiveKeyDeactivation} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.SelectiveKeyDeactivation.toObject = function(includeInstance, msg) {
+  var f, obj = {
+pin: jspb.Message.getFieldWithDefault(msg, 1, "")
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.SelectiveKeyDeactivation}
+ */
+proto.proto.SelectiveKeyDeactivation.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.SelectiveKeyDeactivation;
+  return proto.proto.SelectiveKeyDeactivation.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.SelectiveKeyDeactivation} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.SelectiveKeyDeactivation}
+ */
+proto.proto.SelectiveKeyDeactivation.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setPin(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.SelectiveKeyDeactivation.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.SelectiveKeyDeactivation.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.SelectiveKeyDeactivation} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.SelectiveKeyDeactivation.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getPin();
+  if (f.length > 0) {
+    writer.writeString(
+      1,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional string pin = 1;
+ * @return {string}
+ */
+proto.proto.SelectiveKeyDeactivation.prototype.getPin = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.SelectiveKeyDeactivation} returns this
+ */
+proto.proto.SelectiveKeyDeactivation.prototype.setPin = function(value) {
+  return jspb.Message.setProto3StringField(this, 1, value);
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.ChildPresenceDetectionDeactivateAlarm.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.ChildPresenceDetectionDeactivateAlarm.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.ChildPresenceDetectionDeactivateAlarm} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChildPresenceDetectionDeactivateAlarm.toObject = function(includeInstance, msg) {
+  var f, obj = {
+
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.ChildPresenceDetectionDeactivateAlarm}
+ */
+proto.proto.ChildPresenceDetectionDeactivateAlarm.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.ChildPresenceDetectionDeactivateAlarm;
+  return proto.proto.ChildPresenceDetectionDeactivateAlarm.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.ChildPresenceDetectionDeactivateAlarm} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.ChildPresenceDetectionDeactivateAlarm}
+ */
+proto.proto.ChildPresenceDetectionDeactivateAlarm.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.ChildPresenceDetectionDeactivateAlarm.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.ChildPresenceDetectionDeactivateAlarm.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.ChildPresenceDetectionDeactivateAlarm} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChildPresenceDetectionDeactivateAlarm.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.ChildPresenceDetectionTakePicture.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.ChildPresenceDetectionTakePicture.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.ChildPresenceDetectionTakePicture} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChildPresenceDetectionTakePicture.toObject = function(includeInstance, msg) {
+  var f, obj = {
+
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.ChildPresenceDetectionTakePicture}
+ */
+proto.proto.ChildPresenceDetectionTakePicture.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.ChildPresenceDetectionTakePicture;
+  return proto.proto.ChildPresenceDetectionTakePicture.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.ChildPresenceDetectionTakePicture} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.ChildPresenceDetectionTakePicture}
+ */
+proto.proto.ChildPresenceDetectionTakePicture.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.ChildPresenceDetectionTakePicture.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.ChildPresenceDetectionTakePicture.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.ChildPresenceDetectionTakePicture} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChildPresenceDetectionTakePicture.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.InteriorMonitoringTakePicture.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.InteriorMonitoringTakePicture.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.InteriorMonitoringTakePicture} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.InteriorMonitoringTakePicture.toObject = function(includeInstance, msg) {
+  var f, obj = {
+
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.InteriorMonitoringTakePicture}
+ */
+proto.proto.InteriorMonitoringTakePicture.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.InteriorMonitoringTakePicture;
+  return proto.proto.InteriorMonitoringTakePicture.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.InteriorMonitoringTakePicture} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.InteriorMonitoringTakePicture}
+ */
+proto.proto.InteriorMonitoringTakePicture.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.InteriorMonitoringTakePicture.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.InteriorMonitoringTakePicture.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.InteriorMonitoringTakePicture} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.InteriorMonitoringTakePicture.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.ExteriorMonitoringTakePicture.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.ExteriorMonitoringTakePicture.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.ExteriorMonitoringTakePicture} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ExteriorMonitoringTakePicture.toObject = function(includeInstance, msg) {
+  var f, obj = {
+
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.ExteriorMonitoringTakePicture}
+ */
+proto.proto.ExteriorMonitoringTakePicture.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.ExteriorMonitoringTakePicture;
+  return proto.proto.ExteriorMonitoringTakePicture.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.ExteriorMonitoringTakePicture} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.ExteriorMonitoringTakePicture}
+ */
+proto.proto.ExteriorMonitoringTakePicture.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.ExteriorMonitoringTakePicture.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.ExteriorMonitoringTakePicture.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.ExteriorMonitoringTakePicture} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ExteriorMonitoringTakePicture.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+};
+
+
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.RemoteUpdateStart.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.RemoteUpdateStart.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.RemoteUpdateStart} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.RemoteUpdateStart.toObject = function(includeInstance, msg) {
+  var f, obj = {
+pkgid: jspb.Message.getFieldWithDefault(msg, 1, ""),
+releasepkgid: jspb.Message.getFieldWithDefault(msg, 2, "")
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.RemoteUpdateStart}
+ */
+proto.proto.RemoteUpdateStart.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.RemoteUpdateStart;
+  return proto.proto.RemoteUpdateStart.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.RemoteUpdateStart} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.RemoteUpdateStart}
+ */
+proto.proto.RemoteUpdateStart.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setPkgid(value);
+      break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setReleasepkgid(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.RemoteUpdateStart.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.RemoteUpdateStart.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.RemoteUpdateStart} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.RemoteUpdateStart.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getPkgid();
+  if (f.length > 0) {
+    writer.writeString(
+      1,
+      f
+    );
+  }
+  f = message.getReleasepkgid();
+  if (f.length > 0) {
+    writer.writeString(
+      2,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional string pkgId = 1;
+ * @return {string}
+ */
+proto.proto.RemoteUpdateStart.prototype.getPkgid = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 1, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.RemoteUpdateStart} returns this
+ */
+proto.proto.RemoteUpdateStart.prototype.setPkgid = function(value) {
+  return jspb.Message.setProto3StringField(this, 1, value);
+};
+
+
+/**
+ * optional string releasePkgId = 2;
+ * @return {string}
+ */
+proto.proto.RemoteUpdateStart.prototype.getReleasepkgid = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.RemoteUpdateStart} returns this
+ */
+proto.proto.RemoteUpdateStart.prototype.setReleasepkgid = function(value) {
+  return jspb.Message.setProto3StringField(this, 2, value);
+};
+
+
+
+/**
+ * List of repeated fields within this message type.
+ * @private {!Array<number>}
+ * @const
+ */
+proto.proto.ChargingConfigure.repeatedFields_ = [4];
+
+
+
+if (jspb.Message.GENERATE_TO_OBJECT) {
+/**
+ * Creates an object representation of this proto.
+ * Field names that are reserved in JavaScript and will be renamed to pb_name.
+ * Optional fields that are not set will be set to undefined.
+ * To access a reserved field use, foo.pb_<name>, eg, foo.pb_default.
+ * For the list of reserved names please see:
+ *     net/proto2/compiler/js/internal/generator.cc#kKeyword.
+ * @param {boolean=} opt_includeInstance Deprecated. whether to include the
+ *     JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @return {!Object}
+ */
+proto.proto.ChargingConfigure.prototype.toObject = function(opt_includeInstance) {
+  return proto.proto.ChargingConfigure.toObject(opt_includeInstance, this);
+};
+
+
+/**
+ * Static version of the {@see toObject} method.
+ * @param {boolean|undefined} includeInstance Deprecated. Whether to include
+ *     the JSPB instance for transitional soy proto support:
+ *     http://goto/soy-param-migration
+ * @param {!proto.proto.ChargingConfigure} msg The msg instance to transform.
+ * @return {!Object}
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargingConfigure.toObject = function(includeInstance, msg) {
+  var f, obj = {
+action: jspb.Message.getFieldWithDefault(msg, 1, 0),
+dcChargingProfile: jspb.Message.getFieldWithDefault(msg, 2, 0),
+chargingProgram: (f = msg.getChargingProgram()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
+inletIdList: (f = jspb.Message.getRepeatedField(msg, 4)) == null ? undefined : f,
+maxSoc: (f = msg.getMaxSoc()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
+minSoc: (f = msg.getMinSoc()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
+targetSoc: (f = msg.getTargetSoc()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
+targetTime: (f = msg.getTargetTime()) && google_protobuf_wrappers_pb.Int64Value.toObject(includeInstance, f),
+sohCalibrationActivation: jspb.Message.getFieldWithDefault(msg, 11, 0),
+chargingLocationId: (f = msg.getChargingLocationId()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
+bptRequest: jspb.Message.getFieldWithDefault(msg, 15, 0),
+emergencyPowerSupply: jspb.Message.getFieldWithDefault(msg, 16, 0),
+actionEvsePairing: jspb.Message.getFieldWithDefault(msg, 17, 0)
+  };
+
+  if (includeInstance) {
+    obj.$jspbMessageInstance = msg;
+  }
+  return obj;
+};
+}
+
+
+/**
+ * Deserializes binary data (in protobuf wire format).
+ * @param {jspb.ByteSource} bytes The bytes to deserialize.
+ * @return {!proto.proto.ChargingConfigure}
+ */
+proto.proto.ChargingConfigure.deserializeBinary = function(bytes) {
+  var reader = new jspb.BinaryReader(bytes);
+  var msg = new proto.proto.ChargingConfigure;
+  return proto.proto.ChargingConfigure.deserializeBinaryFromReader(msg, reader);
+};
+
+
+/**
+ * Deserializes binary data (in protobuf wire format) from the
+ * given reader into the given message object.
+ * @param {!proto.proto.ChargingConfigure} msg The message object to deserialize into.
+ * @param {!jspb.BinaryReader} reader The BinaryReader to use.
+ * @return {!proto.proto.ChargingConfigure}
+ */
+proto.proto.ChargingConfigure.deserializeBinaryFromReader = function(msg, reader) {
+  while (reader.nextField()) {
+    if (reader.isEndGroup()) {
+      break;
+    }
+    var field = reader.getFieldNumber();
+    switch (field) {
+    case 1:
+      var value = /** @type {!proto.proto.ChargingConfigure.Action} */ (reader.readEnum());
+      msg.setAction(value);
+      break;
+    case 2:
+      var value = /** @type {!proto.proto.ChargingConfigure.DcChargingProfile} */ (reader.readEnum());
+      msg.setDcChargingProfile(value);
+      break;
+    case 3:
+      var value = new google_protobuf_wrappers_pb.Int32Value;
+      reader.readMessage(value,google_protobuf_wrappers_pb.Int32Value.deserializeBinaryFromReader);
+      msg.setChargingProgram(value);
+      break;
+    case 4:
+      var values = /** @type {!Array<number>} */ (reader.isDelimited() ? reader.readPackedInt32() : [reader.readInt32()]);
+      for (var i = 0; i < values.length; i++) {
+        msg.addInletId(values[i]);
+      }
+      break;
+    case 5:
+      var value = new google_protobuf_wrappers_pb.Int32Value;
+      reader.readMessage(value,google_protobuf_wrappers_pb.Int32Value.deserializeBinaryFromReader);
+      msg.setMaxSoc(value);
+      break;
+    case 6:
+      var value = new google_protobuf_wrappers_pb.Int32Value;
+      reader.readMessage(value,google_protobuf_wrappers_pb.Int32Value.deserializeBinaryFromReader);
+      msg.setMinSoc(value);
+      break;
+    case 9:
+      var value = new google_protobuf_wrappers_pb.Int32Value;
+      reader.readMessage(value,google_protobuf_wrappers_pb.Int32Value.deserializeBinaryFromReader);
+      msg.setTargetSoc(value);
+      break;
+    case 10:
+      var value = new google_protobuf_wrappers_pb.Int64Value;
+      reader.readMessage(value,google_protobuf_wrappers_pb.Int64Value.deserializeBinaryFromReader);
+      msg.setTargetTime(value);
+      break;
+    case 11:
+      var value = /** @type {!proto.proto.ChargingConfigure.SohCalibrationActivation} */ (reader.readEnum());
+      msg.setSohCalibrationActivation(value);
+      break;
+    case 14:
+      var value = new google_protobuf_wrappers_pb.Int32Value;
+      reader.readMessage(value,google_protobuf_wrappers_pb.Int32Value.deserializeBinaryFromReader);
+      msg.setChargingLocationId(value);
+      break;
+    case 15:
+      var value = /** @type {!proto.proto.ChargingConfigure.BptRequest} */ (reader.readEnum());
+      msg.setBptRequest(value);
+      break;
+    case 16:
+      var value = /** @type {!proto.proto.ChargingConfigure.EmergencyPowerSupply} */ (reader.readEnum());
+      msg.setEmergencyPowerSupply(value);
+      break;
+    case 17:
+      var value = /** @type {!proto.proto.ChargingConfigure.ActionEvsePairing} */ (reader.readEnum());
+      msg.setActionEvsePairing(value);
+      break;
+    default:
+      reader.skipField();
+      break;
+    }
+  }
+  return msg;
+};
+
+
+/**
+ * Serializes the message to binary data (in protobuf wire format).
+ * @return {!Uint8Array}
+ */
+proto.proto.ChargingConfigure.prototype.serializeBinary = function() {
+  var writer = new jspb.BinaryWriter();
+  proto.proto.ChargingConfigure.serializeBinaryToWriter(this, writer);
+  return writer.getResultBuffer();
+};
+
+
+/**
+ * Serializes the given message to binary data (in protobuf wire
+ * format), writing to the given BinaryWriter.
+ * @param {!proto.proto.ChargingConfigure} message
+ * @param {!jspb.BinaryWriter} writer
+ * @suppress {unusedLocalVariables} f is only used for nested messages
+ */
+proto.proto.ChargingConfigure.serializeBinaryToWriter = function(message, writer) {
+  var f = undefined;
+  f = message.getAction();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      1,
+      f
+    );
+  }
+  f = message.getDcChargingProfile();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      2,
+      f
+    );
+  }
+  f = message.getChargingProgram();
+  if (f != null) {
+    writer.writeMessage(
+      3,
+      f,
+      google_protobuf_wrappers_pb.Int32Value.serializeBinaryToWriter
+    );
+  }
+  f = message.getInletIdList();
+  if (f.length > 0) {
+    writer.writePackedInt32(
+      4,
+      f
+    );
+  }
+  f = message.getMaxSoc();
+  if (f != null) {
+    writer.writeMessage(
+      5,
+      f,
+      google_protobuf_wrappers_pb.Int32Value.serializeBinaryToWriter
+    );
+  }
+  f = message.getMinSoc();
+  if (f != null) {
+    writer.writeMessage(
+      6,
+      f,
+      google_protobuf_wrappers_pb.Int32Value.serializeBinaryToWriter
+    );
+  }
+  f = message.getTargetSoc();
+  if (f != null) {
+    writer.writeMessage(
+      9,
+      f,
+      google_protobuf_wrappers_pb.Int32Value.serializeBinaryToWriter
+    );
+  }
+  f = message.getTargetTime();
+  if (f != null) {
+    writer.writeMessage(
+      10,
+      f,
+      google_protobuf_wrappers_pb.Int64Value.serializeBinaryToWriter
+    );
+  }
+  f = message.getSohCalibrationActivation();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      11,
+      f
+    );
+  }
+  f = message.getChargingLocationId();
+  if (f != null) {
+    writer.writeMessage(
+      14,
+      f,
+      google_protobuf_wrappers_pb.Int32Value.serializeBinaryToWriter
+    );
+  }
+  f = message.getBptRequest();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      15,
+      f
+    );
+  }
+  f = message.getEmergencyPowerSupply();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      16,
+      f
+    );
+  }
+  f = message.getActionEvsePairing();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      17,
+      f
+    );
+  }
+};
+
+
+/**
+ * @enum {number}
+ */
+proto.proto.ChargingConfigure.Action = {
+  NO_ACTION_SELECTED: 0,
+  START: 1,
+  PAUSE: 2,
+  RESUME: 3,
+  STOP: 4
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.ChargingConfigure.DcChargingProfile = {
+  NO_DC_CHARGING_PROFILE_SELECTED: 0,
+  STANDARD: 1,
+  SILENT_ECO: 2,
+  ULTRAFAST: 3,
+  PITSTOP: 4,
+  FAST_ECO_1: 5,
+  FAST_ECO_2: 6
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.ChargingConfigure.SohCalibrationActivation = {
+  NO_SOH_CALIBRATION_ACTIVATION_SELECTED: 0,
+  SOH_ON: 1,
+  SOH_OFF: 2
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.ChargingConfigure.BptRequest = {
+  NO_BPT_REQUEST_SELECTED: 0,
+  BPT_REQUEST_V2X_DISABLED: 1,
+  BPT_REQUEST_V2X_EXTERNAL_CONTROL_ENABLED: 2,
+  BPT_REQUEST_V2X_VEHICLE_CONTROL_ENABLED: 3
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.ChargingConfigure.EmergencyPowerSupply = {
+  NO_EMERGENCY_POWER_SUPPLY_SELECTED: 0,
+  EMERGENCY_POWER_SUPPLY_OFF: 1,
+  EMERGENCY_POWER_SUPPLY_ON: 2
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.ChargingConfigure.ActionEvsePairing = {
+  NO_ACTION_EVSE_PAIRING_SELECTED: 0,
+  ACTION_EVSE_PAIRING_START: 1,
+  ACTION_EVSE_PAIRING_STOP: 2
+};
+
+/**
+ * optional Action action = 1;
+ * @return {!proto.proto.ChargingConfigure.Action}
+ */
+proto.proto.ChargingConfigure.prototype.getAction = function() {
+  return /** @type {!proto.proto.ChargingConfigure.Action} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/**
+ * @param {!proto.proto.ChargingConfigure.Action} value
+ * @return {!proto.proto.ChargingConfigure} returns this
+ */
+proto.proto.ChargingConfigure.prototype.setAction = function(value) {
+  return jspb.Message.setProto3EnumField(this, 1, value);
+};
+
+
+/**
+ * optional DcChargingProfile dc_charging_profile = 2;
+ * @return {!proto.proto.ChargingConfigure.DcChargingProfile}
+ */
+proto.proto.ChargingConfigure.prototype.getDcChargingProfile = function() {
+  return /** @type {!proto.proto.ChargingConfigure.DcChargingProfile} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/**
+ * @param {!proto.proto.ChargingConfigure.DcChargingProfile} value
+ * @return {!proto.proto.ChargingConfigure} returns this
+ */
+proto.proto.ChargingConfigure.prototype.setDcChargingProfile = function(value) {
+  return jspb.Message.setProto3EnumField(this, 2, value);
+};
+
+
+/**
+ * optional google.protobuf.Int32Value charging_program = 3;
+ * @return {?proto.google.protobuf.Int32Value}
+ */
+proto.proto.ChargingConfigure.prototype.getChargingProgram = function() {
+  return /** @type{?proto.google.protobuf.Int32Value} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.Int32Value, 3));
+};
+
+
+/**
+ * @param {?proto.google.protobuf.Int32Value|undefined} value
+ * @return {!proto.proto.ChargingConfigure} returns this
+*/
+proto.proto.ChargingConfigure.prototype.setChargingProgram = function(value) {
+  return jspb.Message.setWrapperField(this, 3, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.ChargingConfigure} returns this
+ */
+proto.proto.ChargingConfigure.prototype.clearChargingProgram = function() {
+  return this.setChargingProgram(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.ChargingConfigure.prototype.hasChargingProgram = function() {
+  return jspb.Message.getField(this, 3) != null;
+};
+
+
+/**
+ * repeated int32 inlet_id = 4;
+ * @return {!Array<number>}
+ */
+proto.proto.ChargingConfigure.prototype.getInletIdList = function() {
+  return /** @type {!Array<number>} */ (jspb.Message.getRepeatedField(this, 4));
+};
+
+
+/**
+ * @param {!Array<number>} value
+ * @return {!proto.proto.ChargingConfigure} returns this
+ */
+proto.proto.ChargingConfigure.prototype.setInletIdList = function(value) {
+  return jspb.Message.setField(this, 4, value || []);
+};
+
+
+/**
+ * @param {number} value
+ * @param {number=} opt_index
+ * @return {!proto.proto.ChargingConfigure} returns this
+ */
+proto.proto.ChargingConfigure.prototype.addInletId = function(value, opt_index) {
+  return jspb.Message.addToRepeatedField(this, 4, value, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ * @return {!proto.proto.ChargingConfigure} returns this
+ */
+proto.proto.ChargingConfigure.prototype.clearInletIdList = function() {
+  return this.setInletIdList([]);
+};
+
+
+/**
+ * optional google.protobuf.Int32Value max_soc = 5;
+ * @return {?proto.google.protobuf.Int32Value}
+ */
+proto.proto.ChargingConfigure.prototype.getMaxSoc = function() {
+  return /** @type{?proto.google.protobuf.Int32Value} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.Int32Value, 5));
+};
+
+
+/**
+ * @param {?proto.google.protobuf.Int32Value|undefined} value
+ * @return {!proto.proto.ChargingConfigure} returns this
+*/
+proto.proto.ChargingConfigure.prototype.setMaxSoc = function(value) {
+  return jspb.Message.setWrapperField(this, 5, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.ChargingConfigure} returns this
+ */
+proto.proto.ChargingConfigure.prototype.clearMaxSoc = function() {
+  return this.setMaxSoc(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.ChargingConfigure.prototype.hasMaxSoc = function() {
+  return jspb.Message.getField(this, 5) != null;
+};
+
+
+/**
+ * optional google.protobuf.Int32Value min_soc = 6;
+ * @return {?proto.google.protobuf.Int32Value}
+ */
+proto.proto.ChargingConfigure.prototype.getMinSoc = function() {
+  return /** @type{?proto.google.protobuf.Int32Value} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.Int32Value, 6));
+};
+
+
+/**
+ * @param {?proto.google.protobuf.Int32Value|undefined} value
+ * @return {!proto.proto.ChargingConfigure} returns this
+*/
+proto.proto.ChargingConfigure.prototype.setMinSoc = function(value) {
+  return jspb.Message.setWrapperField(this, 6, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.ChargingConfigure} returns this
+ */
+proto.proto.ChargingConfigure.prototype.clearMinSoc = function() {
+  return this.setMinSoc(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.ChargingConfigure.prototype.hasMinSoc = function() {
+  return jspb.Message.getField(this, 6) != null;
+};
+
+
+/**
+ * optional google.protobuf.Int32Value target_soc = 9;
+ * @return {?proto.google.protobuf.Int32Value}
+ */
+proto.proto.ChargingConfigure.prototype.getTargetSoc = function() {
+  return /** @type{?proto.google.protobuf.Int32Value} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.Int32Value, 9));
+};
+
+
+/**
+ * @param {?proto.google.protobuf.Int32Value|undefined} value
+ * @return {!proto.proto.ChargingConfigure} returns this
+*/
+proto.proto.ChargingConfigure.prototype.setTargetSoc = function(value) {
+  return jspb.Message.setWrapperField(this, 9, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.ChargingConfigure} returns this
+ */
+proto.proto.ChargingConfigure.prototype.clearTargetSoc = function() {
+  return this.setTargetSoc(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.ChargingConfigure.prototype.hasTargetSoc = function() {
+  return jspb.Message.getField(this, 9) != null;
+};
+
+
+/**
+ * optional google.protobuf.Int64Value target_time = 10;
+ * @return {?proto.google.protobuf.Int64Value}
+ */
+proto.proto.ChargingConfigure.prototype.getTargetTime = function() {
+  return /** @type{?proto.google.protobuf.Int64Value} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.Int64Value, 10));
+};
+
+
+/**
+ * @param {?proto.google.protobuf.Int64Value|undefined} value
+ * @return {!proto.proto.ChargingConfigure} returns this
+*/
+proto.proto.ChargingConfigure.prototype.setTargetTime = function(value) {
+  return jspb.Message.setWrapperField(this, 10, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.ChargingConfigure} returns this
+ */
+proto.proto.ChargingConfigure.prototype.clearTargetTime = function() {
+  return this.setTargetTime(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.ChargingConfigure.prototype.hasTargetTime = function() {
+  return jspb.Message.getField(this, 10) != null;
+};
+
+
+/**
+ * optional SohCalibrationActivation soh_calibration_activation = 11;
+ * @return {!proto.proto.ChargingConfigure.SohCalibrationActivation}
+ */
+proto.proto.ChargingConfigure.prototype.getSohCalibrationActivation = function() {
+  return /** @type {!proto.proto.ChargingConfigure.SohCalibrationActivation} */ (jspb.Message.getFieldWithDefault(this, 11, 0));
+};
+
+
+/**
+ * @param {!proto.proto.ChargingConfigure.SohCalibrationActivation} value
+ * @return {!proto.proto.ChargingConfigure} returns this
+ */
+proto.proto.ChargingConfigure.prototype.setSohCalibrationActivation = function(value) {
+  return jspb.Message.setProto3EnumField(this, 11, value);
+};
+
+
+/**
+ * optional google.protobuf.Int32Value charging_location_id = 14;
+ * @return {?proto.google.protobuf.Int32Value}
+ */
+proto.proto.ChargingConfigure.prototype.getChargingLocationId = function() {
+  return /** @type{?proto.google.protobuf.Int32Value} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.Int32Value, 14));
+};
+
+
+/**
+ * @param {?proto.google.protobuf.Int32Value|undefined} value
+ * @return {!proto.proto.ChargingConfigure} returns this
+*/
+proto.proto.ChargingConfigure.prototype.setChargingLocationId = function(value) {
+  return jspb.Message.setWrapperField(this, 14, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.ChargingConfigure} returns this
+ */
+proto.proto.ChargingConfigure.prototype.clearChargingLocationId = function() {
+  return this.setChargingLocationId(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.ChargingConfigure.prototype.hasChargingLocationId = function() {
+  return jspb.Message.getField(this, 14) != null;
+};
+
+
+/**
+ * optional BptRequest bpt_request = 15;
+ * @return {!proto.proto.ChargingConfigure.BptRequest}
+ */
+proto.proto.ChargingConfigure.prototype.getBptRequest = function() {
+  return /** @type {!proto.proto.ChargingConfigure.BptRequest} */ (jspb.Message.getFieldWithDefault(this, 15, 0));
+};
+
+
+/**
+ * @param {!proto.proto.ChargingConfigure.BptRequest} value
+ * @return {!proto.proto.ChargingConfigure} returns this
+ */
+proto.proto.ChargingConfigure.prototype.setBptRequest = function(value) {
+  return jspb.Message.setProto3EnumField(this, 15, value);
+};
+
+
+/**
+ * optional EmergencyPowerSupply emergency_power_supply = 16;
+ * @return {!proto.proto.ChargingConfigure.EmergencyPowerSupply}
+ */
+proto.proto.ChargingConfigure.prototype.getEmergencyPowerSupply = function() {
+  return /** @type {!proto.proto.ChargingConfigure.EmergencyPowerSupply} */ (jspb.Message.getFieldWithDefault(this, 16, 0));
+};
+
+
+/**
+ * @param {!proto.proto.ChargingConfigure.EmergencyPowerSupply} value
+ * @return {!proto.proto.ChargingConfigure} returns this
+ */
+proto.proto.ChargingConfigure.prototype.setEmergencyPowerSupply = function(value) {
+  return jspb.Message.setProto3EnumField(this, 16, value);
+};
+
+
+/**
+ * optional ActionEvsePairing action_evse_pairing = 17;
+ * @return {!proto.proto.ChargingConfigure.ActionEvsePairing}
+ */
+proto.proto.ChargingConfigure.prototype.getActionEvsePairing = function() {
+  return /** @type {!proto.proto.ChargingConfigure.ActionEvsePairing} */ (jspb.Message.getFieldWithDefault(this, 17, 0));
+};
+
+
+/**
+ * @param {!proto.proto.ChargingConfigure.ActionEvsePairing} value
+ * @return {!proto.proto.ChargingConfigure} returns this
+ */
+proto.proto.ChargingConfigure.prototype.setActionEvsePairing = function(value) {
+  return jspb.Message.setProto3EnumField(this, 17, value);
 };
 
 
