@@ -323,7 +323,7 @@ class Mercedesme extends utils.Adapter {
             const clientMessage = new Client.ClientMessage();
 
             clientMessage.setCommandrequest(command);
-            // clientMessage.setTrackingId(this.xTracking);
+            clientMessage.setTrackingId(uuidv4());
             this.log.debug(JSON.stringify(clientMessage.toObject()));
             this.ws.send(clientMessage.serializeBinary());
             return;
@@ -1975,7 +1975,53 @@ class Mercedesme extends utils.Adapter {
           this.ws.send(clientMessage.serializeBinary());
         }
         if (message.apptwinPendingCommandRequest) {
-          this.log.silly("apptwinPendingCommandRequest: " + JSON.stringify(message.apptwinPendingCommandRequest));
+          this.log.debug("apptwinPendingCommandRequest: " + JSON.stringify(message.apptwinPendingCommandRequest));
+          // ACK with proper Proto response (like APK does)
+          const ackResponse = new Client.AppTwinPendingCommandsResponse();
+          ackResponse.setPendingCommandsList([]);
+          const clientMessage = new Client.ClientMessage();
+          clientMessage.setApptwinPendingCommandsResponse(ackResponse);
+          this.ws.send(clientMessage.serializeBinary());
+        }
+        if (message.serviceStatusUpdates) {
+          this.log.debug("serviceStatusUpdates: " + JSON.stringify(message.serviceStatusUpdates));
+          const ackCommand = new Client.AcknowledgeServiceStatusUpdatesByVIN();
+          ackCommand.setSequenceNumber(message.serviceStatusUpdates.sequenceNumber);
+          const clientMessage = new Client.ClientMessage();
+          clientMessage.setAcknowledgeServiceStatusUpdatesByVin(ackCommand);
+          this.ws.send(clientMessage.serializeBinary());
+        }
+        if (message.serviceStatusUpdate) {
+          this.log.debug("serviceStatusUpdate: " + JSON.stringify(message.serviceStatusUpdate));
+          const ackCommand = new Client.AcknowledgeServiceStatusUpdate();
+          ackCommand.setSequenceNumber(message.serviceStatusUpdate.sequenceNumber);
+          const clientMessage = new Client.ClientMessage();
+          clientMessage.setAcknowledgeServiceStatusUpdate(ackCommand);
+          this.ws.send(clientMessage.serializeBinary());
+        }
+        if (message.userVehicleAuthChangedUpdate) {
+          this.log.debug("userVehicleAuthChangedUpdate: " + JSON.stringify(message.userVehicleAuthChangedUpdate));
+          const ackCommand = new Client.AcknowledgeUserVehicleAuthChangedUpdate();
+          ackCommand.setSequenceNumber(message.userVehicleAuthChangedUpdate.sequenceNumber);
+          const clientMessage = new Client.ClientMessage();
+          clientMessage.setAcknowledgeUserVehicleAuthChangedUpdate(ackCommand);
+          this.ws.send(clientMessage.serializeBinary());
+        }
+        if (message.vehicleUpdated) {
+          this.log.debug("vehicleUpdated: " + JSON.stringify(message.vehicleUpdated));
+          const ackCommand = new Client.AcknowledgeVehicleUpdated();
+          ackCommand.setSequenceNumber(message.vehicleUpdated.sequenceNumber);
+          const clientMessage = new Client.ClientMessage();
+          clientMessage.setAcknowledgeVehicleUpdated(ackCommand);
+          this.ws.send(clientMessage.serializeBinary());
+        }
+        if (message.dataChangeEvent) {
+          this.log.debug("dataChangeEvent: " + JSON.stringify(message.dataChangeEvent));
+          const ackCommand = new Client.AcknowledgeDataChangeEvent();
+          ackCommand.setSequenceNumber(message.dataChangeEvent.sequenceNumber);
+          const clientMessage = new Client.ClientMessage();
+          clientMessage.setAcknowledgeDataChangeEvent(ackCommand);
+          this.ws.send(clientMessage.serializeBinary());
         }
         if (message.vepupdates) {
           this.log.silly(JSON.stringify(message.vepupdates));
