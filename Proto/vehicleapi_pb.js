@@ -13,13 +13,13 @@
 
 var jspb = require('google-protobuf');
 var goog = jspb;
-var global = (function() {
-  if (this) { return this; }
-  if (typeof window !== 'undefined') { return window; }
-  if (typeof global !== 'undefined') { return global; }
-  if (typeof self !== 'undefined') { return self; }
-  return Function('return this')();
-}.call(null));
+var global =
+    (typeof globalThis !== 'undefined' && globalThis) ||
+    (typeof window !== 'undefined' && window) ||
+    (typeof global !== 'undefined' && global) ||
+    (typeof self !== 'undefined' && self) ||
+    (function () { return this; }).call(null) ||
+    Function('return this')();
 
 var acp_pb = require('./acp_pb.js');
 goog.object.extend(proto, acp_pb);
@@ -345,7 +345,7 @@ proto.proto.AcknowledgeAppTwinCommandStatusUpdatesByVIN.prototype.toObject = fun
  */
 proto.proto.AcknowledgeAppTwinCommandStatusUpdatesByVIN.toObject = function(includeInstance, msg) {
   var f, obj = {
-    sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0)
+sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0)
   };
 
   if (includeInstance) {
@@ -475,8 +475,8 @@ proto.proto.AppTwinCommandStatusUpdatesByVIN.prototype.toObject = function(opt_i
  */
 proto.proto.AppTwinCommandStatusUpdatesByVIN.toObject = function(includeInstance, msg) {
   var f, obj = {
-    sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    updatesByVinMap: (f = msg.getUpdatesByVinMap()) ? f.toObject(includeInstance, proto.proto.AppTwinCommandStatusUpdatesByPID.toObject) : []
+sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0),
+updatesByVinMap: (f = msg.getUpdatesByVinMap()) ? f.toObject(includeInstance, proto.proto.AppTwinCommandStatusUpdatesByPID.toObject) : []
   };
 
   if (includeInstance) {
@@ -603,7 +603,8 @@ proto.proto.AppTwinCommandStatusUpdatesByVIN.prototype.getUpdatesByVinMap = func
  */
 proto.proto.AppTwinCommandStatusUpdatesByVIN.prototype.clearUpdatesByVinMap = function() {
   this.getUpdatesByVinMap().clear();
-  return this;};
+  return this;
+};
 
 
 
@@ -638,8 +639,8 @@ proto.proto.AppTwinCommandStatusUpdatesByPID.prototype.toObject = function(opt_i
  */
 proto.proto.AppTwinCommandStatusUpdatesByPID.toObject = function(includeInstance, msg) {
   var f, obj = {
-    vin: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    updatesByPidMap: (f = msg.getUpdatesByPidMap()) ? f.toObject(includeInstance, proto.proto.AppTwinCommandStatus.toObject) : []
+vin: jspb.Message.getFieldWithDefault(msg, 1, ""),
+updatesByPidMap: (f = msg.getUpdatesByPidMap()) ? f.toObject(includeInstance, proto.proto.AppTwinCommandStatus.toObject) : []
   };
 
   if (includeInstance) {
@@ -766,7 +767,8 @@ proto.proto.AppTwinCommandStatusUpdatesByPID.prototype.getUpdatesByPidMap = func
  */
 proto.proto.AppTwinCommandStatusUpdatesByPID.prototype.clearUpdatesByPidMap = function() {
   this.getUpdatesByPidMap().clear();
-  return this;};
+  return this;
+};
 
 
 
@@ -808,15 +810,15 @@ proto.proto.AppTwinCommandStatus.prototype.toObject = function(opt_includeInstan
  */
 proto.proto.AppTwinCommandStatus.toObject = function(includeInstance, msg) {
   var f, obj = {
-    processId: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    requestId: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    timestampInMs: jspb.Message.getFieldWithDefault(msg, 3, 0),
-    errorsList: jspb.Message.toObjectList(msg.getErrorsList(),
+processId: jspb.Message.getFieldWithDefault(msg, 1, 0),
+requestId: jspb.Message.getFieldWithDefault(msg, 2, ""),
+timestampInMs: jspb.Message.getFieldWithDefault(msg, 3, 0),
+errorsList: jspb.Message.toObjectList(msg.getErrorsList(),
     proto.proto.VehicleAPIError.toObject, includeInstance),
-    blockingTimeSeconds: jspb.Message.getFieldWithDefault(msg, 5, 0),
-    pinAttempts: jspb.Message.getFieldWithDefault(msg, 6, 0),
-    type: jspb.Message.getFieldWithDefault(msg, 7, 0),
-    state: jspb.Message.getFieldWithDefault(msg, 8, 0)
+blockingTimeSeconds: jspb.Message.getFieldWithDefault(msg, 5, 0),
+pinAttempts: jspb.Message.getFieldWithDefault(msg, 6, 0),
+type: jspb.Message.getFieldWithDefault(msg, 7, 0),
+state: jspb.Message.getFieldWithDefault(msg, 8, 0)
   };
 
   if (includeInstance) {
@@ -1178,10 +1180,10 @@ proto.proto.VehicleAPICommandPostResult.prototype.toObject = function(opt_includ
  */
 proto.proto.VehicleAPICommandPostResult.toObject = function(includeInstance, msg) {
   var f, obj = {
-    processId: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    errorsList: jspb.Message.toObjectList(msg.getErrorsList(),
+processId: jspb.Message.getFieldWithDefault(msg, 1, 0),
+errorsList: jspb.Message.toObjectList(msg.getErrorsList(),
     proto.proto.VehicleAPIError.toObject, includeInstance),
-    state: jspb.Message.getFieldWithDefault(msg, 3, 0)
+state: jspb.Message.getFieldWithDefault(msg, 3, 0)
   };
 
   if (includeInstance) {
@@ -1398,10 +1400,10 @@ proto.proto.VehicleAPICommandGetResult.prototype.toObject = function(opt_include
  */
 proto.proto.VehicleAPICommandGetResult.toObject = function(includeInstance, msg) {
   var f, obj = {
-    processList: jspb.Message.toObjectList(msg.getProcessList(),
+processList: jspb.Message.toObjectList(msg.getProcessList(),
     proto.proto.VehicleAPICommandProcessStatus.toObject, includeInstance),
-    queueCount: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    queueType: jspb.Message.getFieldWithDefault(msg, 3, 0)
+queueCount: jspb.Message.getFieldWithDefault(msg, 2, 0),
+queueType: jspb.Message.getFieldWithDefault(msg, 3, 0)
   };
 
   if (includeInstance) {
@@ -1611,7 +1613,7 @@ proto.proto.VehicleAPIDataGetResult.prototype.toObject = function(opt_includeIns
  */
 proto.proto.VehicleAPIDataGetResult.toObject = function(includeInstance, msg) {
   var f, obj = {
-    dataMap: (f = msg.getDataMap()) ? f.toObject(includeInstance, proto.proto.VehicleAPIAttributeStatus.toObject) : []
+dataMap: (f = msg.getDataMap()) ? f.toObject(includeInstance, proto.proto.VehicleAPIAttributeStatus.toObject) : []
   };
 
   if (includeInstance) {
@@ -1709,7 +1711,8 @@ proto.proto.VehicleAPIDataGetResult.prototype.getDataMap = function(opt_noLazyCr
  */
 proto.proto.VehicleAPIDataGetResult.prototype.clearDataMap = function() {
   this.getDataMap().clear();
-  return this;};
+  return this;
+};
 
 
 
@@ -1744,9 +1747,9 @@ proto.proto.VehicleAPIAttributeStatus.prototype.toObject = function(opt_includeI
  */
 proto.proto.VehicleAPIAttributeStatus.toObject = function(includeInstance, msg) {
   var f, obj = {
-    value: (f = msg.getValue()) && google_protobuf_struct_pb.Value.toObject(includeInstance, f),
-    timestampInMs: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    status: jspb.Message.getFieldWithDefault(msg, 1, 0)
+value: (f = msg.getValue()) && google_protobuf_struct_pb.Value.toObject(includeInstance, f),
+timestampInMs: jspb.Message.getFieldWithDefault(msg, 2, 0),
+status: jspb.Message.getFieldWithDefault(msg, 1, 0)
   };
 
   if (includeInstance) {
@@ -1962,15 +1965,15 @@ proto.proto.VehicleAPICommandProcessStatus.prototype.toObject = function(opt_inc
  */
 proto.proto.VehicleAPICommandProcessStatus.toObject = function(includeInstance, msg) {
   var f, obj = {
-    errorsList: jspb.Message.toObjectList(msg.getErrorsList(),
+errorsList: jspb.Message.toObjectList(msg.getErrorsList(),
     proto.proto.VehicleAPIError.toObject, includeInstance),
-    instanceId: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    name: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    processId: jspb.Message.getFieldWithDefault(msg, 4, 0),
-    responseParameters: (f = msg.getResponseParameters()) && google_protobuf_struct_pb.Value.toObject(includeInstance, f),
-    state: jspb.Message.getFieldWithDefault(msg, 7, 0),
-    timestampInS: jspb.Message.getFieldWithDefault(msg, 8, 0),
-    trackingId: jspb.Message.getFieldWithDefault(msg, 9, "")
+instanceId: jspb.Message.getFieldWithDefault(msg, 2, ""),
+name: jspb.Message.getFieldWithDefault(msg, 3, ""),
+processId: jspb.Message.getFieldWithDefault(msg, 4, 0),
+responseParameters: (f = msg.getResponseParameters()) && google_protobuf_struct_pb.Value.toObject(includeInstance, f),
+state: jspb.Message.getFieldWithDefault(msg, 7, 0),
+timestampInS: jspb.Message.getFieldWithDefault(msg, 8, 0),
+trackingId: jspb.Message.getFieldWithDefault(msg, 9, "")
   };
 
   if (includeInstance) {
@@ -2353,10 +2356,10 @@ proto.proto.VehicleAPIError.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.VehicleAPIError.toObject = function(includeInstance, msg) {
   var f, obj = {
-    code: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    message: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    attributesMap: (f = msg.getAttributesMap()) ? f.toObject(includeInstance, proto.google.protobuf.Value.toObject) : [],
-    subErrorsList: jspb.Message.toObjectList(msg.getSubErrorsList(),
+code: jspb.Message.getFieldWithDefault(msg, 1, ""),
+message: jspb.Message.getFieldWithDefault(msg, 2, ""),
+attributesMap: (f = msg.getAttributesMap()) ? f.toObject(includeInstance, proto.google.protobuf.Value.toObject) : [],
+subErrorsList: jspb.Message.toObjectList(msg.getSubErrorsList(),
     proto.proto.VehicleAPIError.toObject, includeInstance)
   };
 
@@ -2526,7 +2529,8 @@ proto.proto.VehicleAPIError.prototype.getAttributesMap = function(opt_noLazyCrea
  */
 proto.proto.VehicleAPIError.prototype.clearAttributesMap = function() {
   this.getAttributesMap().clear();
-  return this;};
+  return this;
+};
 
 
 /**
@@ -2707,7 +2711,7 @@ proto.proto.AppTwinPendingCommandsResponse.prototype.toObject = function(opt_inc
  */
 proto.proto.AppTwinPendingCommandsResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-    pendingCommandsList: jspb.Message.toObjectList(msg.getPendingCommandsList(),
+pendingCommandsList: jspb.Message.toObjectList(msg.getPendingCommandsList(),
     proto.proto.PendingCommand.toObject, includeInstance)
   };
 
@@ -2860,10 +2864,10 @@ proto.proto.PendingCommand.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.PendingCommand.toObject = function(includeInstance, msg) {
   var f, obj = {
-    vin: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    processId: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    requestId: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    type: jspb.Message.getFieldWithDefault(msg, 4, 0)
+vin: jspb.Message.getFieldWithDefault(msg, 1, ""),
+processId: jspb.Message.getFieldWithDefault(msg, 2, 0),
+requestId: jspb.Message.getFieldWithDefault(msg, 3, ""),
+type: jspb.Message.getFieldWithDefault(msg, 4, 0)
   };
 
   if (includeInstance) {

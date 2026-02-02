@@ -13,13 +13,13 @@
 
 var jspb = require('google-protobuf');
 var goog = jspb;
-var global = (function() {
-  if (this) { return this; }
-  if (typeof window !== 'undefined') { return window; }
-  if (typeof global !== 'undefined') { return global; }
-  if (typeof self !== 'undefined') { return self; }
-  return Function('return this')();
-}.call(null));
+var global =
+    (typeof globalThis !== 'undefined' && globalThis) ||
+    (typeof window !== 'undefined' && window) ||
+    (typeof global !== 'undefined' && global) ||
+    (typeof self !== 'undefined' && self) ||
+    (function () { return this; }).call(null) ||
+    Function('return this')();
 
 var protos_pb = require('./protos_pb.js');
 goog.object.extend(proto, protos_pb);
@@ -155,28 +155,28 @@ proto.proto.ClientMessage.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.ClientMessage.toObject = function(includeInstance, msg) {
   var f, obj = {
-    trackingId: jspb.Message.getFieldWithDefault(msg, 5, ""),
-    unsubscriberequest: (f = msg.getUnsubscriberequest()) && protos_pb.UnsubscribeRequest.toObject(includeInstance, f),
-    commandrequest: (f = msg.getCommandrequest()) && vehicle$commands_pb.CommandRequest.toObject(includeInstance, f),
-    trackingEvent: (f = msg.getTrackingEvent()) && vehicle$events_pb.TrackingEvent.toObject(includeInstance, f),
-    pingInterval: (f = msg.getPingInterval()) && vehicle$events_pb.ConfigurePingInterval.toObject(includeInstance, f),
-    acknowledgeVepRequest: (f = msg.getAcknowledgeVepRequest()) && vehicle$events_pb.AcknowledgeVEPRequest.toObject(includeInstance, f),
-    acknowledgeServiceStatusUpdatesByVin: (f = msg.getAcknowledgeServiceStatusUpdatesByVin()) && service$activation_pb.AcknowledgeServiceStatusUpdatesByVIN.toObject(includeInstance, f),
-    acknowledgeServiceStatusUpdate: (f = msg.getAcknowledgeServiceStatusUpdate()) && service$activation_pb.AcknowledgeServiceStatusUpdate.toObject(includeInstance, f),
-    acknowledgeUserDataUpdate: (f = msg.getAcknowledgeUserDataUpdate()) && user$events_pb.AcknowledgeUserDataUpdate.toObject(includeInstance, f),
-    acknowledgeUserPictureUpdate: (f = msg.getAcknowledgeUserPictureUpdate()) && user$events_pb.AcknowledgeUserPictureUpdate.toObject(includeInstance, f),
-    acknowledgeUserPinUpdate: (f = msg.getAcknowledgeUserPinUpdate()) && user$events_pb.AcknowledgeUserPINUpdate.toObject(includeInstance, f),
-    updateUserJwtRequest: (f = msg.getUpdateUserJwtRequest()) && user$events_pb.UpdateUserJWTRequest.toObject(includeInstance, f),
-    acknowledgeUserVehicleAuthChangedUpdate: (f = msg.getAcknowledgeUserVehicleAuthChangedUpdate()) && user$events_pb.AcknowledgeUserVehicleAuthChangedUpdate.toObject(includeInstance, f),
-    acknowledgeAbilityToGetVehicleMasterDataFromRestApi: (f = msg.getAcknowledgeAbilityToGetVehicleMasterDataFromRestApi()) && user$events_pb.AcknowledgeAbilityToGetVehicleMasterDataFromRestAPI.toObject(includeInstance, f),
-    acknowledgeVehicleUpdated: (f = msg.getAcknowledgeVehicleUpdated()) && vehicle$events_pb.AcknowledgeVehicleUpdated.toObject(includeInstance, f),
-    acknowledgePreferredDealerChange: (f = msg.getAcknowledgePreferredDealerChange()) && vehicle$events_pb.AcknowledgePreferredDealerChange.toObject(includeInstance, f),
-    acknowledgeApptwinCommandStatusUpdateByVin: (f = msg.getAcknowledgeApptwinCommandStatusUpdateByVin()) && vehicleapi_pb.AcknowledgeAppTwinCommandStatusUpdatesByVIN.toObject(includeInstance, f),
-    logout: (f = msg.getLogout()) && proto.proto.Logout.toObject(includeInstance, f),
-    apptwinPendingCommandsResponse: (f = msg.getApptwinPendingCommandsResponse()) && vehicleapi_pb.AppTwinPendingCommandsResponse.toObject(includeInstance, f),
-    acknowledgeVepUpdatesByVin: (f = msg.getAcknowledgeVepUpdatesByVin()) && vehicle$events_pb.AcknowledgeVEPUpdatesByVIN.toObject(includeInstance, f),
-    acknowledgeAssignedVehicles: (f = msg.getAcknowledgeAssignedVehicles()) && protos_pb.AcknowledgeAssignedVehicles.toObject(includeInstance, f),
-    acknowledgeDataChangeEvent: (f = msg.getAcknowledgeDataChangeEvent()) && vehicle$events_pb.AcknowledgeDataChangeEvent.toObject(includeInstance, f)
+trackingId: jspb.Message.getFieldWithDefault(msg, 5, ""),
+unsubscriberequest: (f = msg.getUnsubscriberequest()) && protos_pb.UnsubscribeRequest.toObject(includeInstance, f),
+commandrequest: (f = msg.getCommandrequest()) && vehicle$commands_pb.CommandRequest.toObject(includeInstance, f),
+trackingEvent: (f = msg.getTrackingEvent()) && vehicle$events_pb.TrackingEvent.toObject(includeInstance, f),
+pingInterval: (f = msg.getPingInterval()) && vehicle$events_pb.ConfigurePingInterval.toObject(includeInstance, f),
+acknowledgeVepRequest: (f = msg.getAcknowledgeVepRequest()) && vehicle$events_pb.AcknowledgeVEPRequest.toObject(includeInstance, f),
+acknowledgeServiceStatusUpdatesByVin: (f = msg.getAcknowledgeServiceStatusUpdatesByVin()) && service$activation_pb.AcknowledgeServiceStatusUpdatesByVIN.toObject(includeInstance, f),
+acknowledgeServiceStatusUpdate: (f = msg.getAcknowledgeServiceStatusUpdate()) && service$activation_pb.AcknowledgeServiceStatusUpdate.toObject(includeInstance, f),
+acknowledgeUserDataUpdate: (f = msg.getAcknowledgeUserDataUpdate()) && user$events_pb.AcknowledgeUserDataUpdate.toObject(includeInstance, f),
+acknowledgeUserPictureUpdate: (f = msg.getAcknowledgeUserPictureUpdate()) && user$events_pb.AcknowledgeUserPictureUpdate.toObject(includeInstance, f),
+acknowledgeUserPinUpdate: (f = msg.getAcknowledgeUserPinUpdate()) && user$events_pb.AcknowledgeUserPINUpdate.toObject(includeInstance, f),
+updateUserJwtRequest: (f = msg.getUpdateUserJwtRequest()) && user$events_pb.UpdateUserJWTRequest.toObject(includeInstance, f),
+acknowledgeUserVehicleAuthChangedUpdate: (f = msg.getAcknowledgeUserVehicleAuthChangedUpdate()) && user$events_pb.AcknowledgeUserVehicleAuthChangedUpdate.toObject(includeInstance, f),
+acknowledgeAbilityToGetVehicleMasterDataFromRestApi: (f = msg.getAcknowledgeAbilityToGetVehicleMasterDataFromRestApi()) && user$events_pb.AcknowledgeAbilityToGetVehicleMasterDataFromRestAPI.toObject(includeInstance, f),
+acknowledgeVehicleUpdated: (f = msg.getAcknowledgeVehicleUpdated()) && vehicle$events_pb.AcknowledgeVehicleUpdated.toObject(includeInstance, f),
+acknowledgePreferredDealerChange: (f = msg.getAcknowledgePreferredDealerChange()) && vehicle$events_pb.AcknowledgePreferredDealerChange.toObject(includeInstance, f),
+acknowledgeApptwinCommandStatusUpdateByVin: (f = msg.getAcknowledgeApptwinCommandStatusUpdateByVin()) && vehicleapi_pb.AcknowledgeAppTwinCommandStatusUpdatesByVIN.toObject(includeInstance, f),
+logout: (f = msg.getLogout()) && proto.proto.Logout.toObject(includeInstance, f),
+apptwinPendingCommandsResponse: (f = msg.getApptwinPendingCommandsResponse()) && vehicleapi_pb.AppTwinPendingCommandsResponse.toObject(includeInstance, f),
+acknowledgeVepUpdatesByVin: (f = msg.getAcknowledgeVepUpdatesByVin()) && vehicle$events_pb.AcknowledgeVEPUpdatesByVIN.toObject(includeInstance, f),
+acknowledgeAssignedVehicles: (f = msg.getAcknowledgeAssignedVehicles()) && protos_pb.AcknowledgeAssignedVehicles.toObject(includeInstance, f),
+acknowledgeDataChangeEvent: (f = msg.getAcknowledgeDataChangeEvent()) && vehicle$events_pb.AcknowledgeDataChangeEvent.toObject(includeInstance, f)
   };
 
   if (includeInstance) {

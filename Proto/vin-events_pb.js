@@ -13,13 +13,13 @@
 
 var jspb = require('google-protobuf');
 var goog = jspb;
-var global = (function() {
-  if (this) { return this; }
-  if (typeof window !== 'undefined') { return window; }
-  if (typeof global !== 'undefined') { return global; }
-  if (typeof self !== 'undefined') { return self; }
-  return Function('return this')();
-}.call(null));
+var global =
+    (typeof globalThis !== 'undefined' && globalThis) ||
+    (typeof window !== 'undefined' && window) ||
+    (typeof global !== 'undefined' && global) ||
+    (typeof self !== 'undefined' && self) ||
+    (function () { return this; }).call(null) ||
+    Function('return this')();
 
 goog.exportSymbol('proto.proto.VINUpdate', null, global);
 /**
@@ -82,8 +82,8 @@ proto.proto.VINUpdate.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.VINUpdate.toObject = function(includeInstance, msg) {
   var f, obj = {
-    addedvinsList: (f = jspb.Message.getRepeatedField(msg, 1)) == null ? undefined : f,
-    deletedvinsList: (f = jspb.Message.getRepeatedField(msg, 2)) == null ? undefined : f
+addedvinsList: (f = jspb.Message.getRepeatedField(msg, 1)) == null ? undefined : f,
+deletedvinsList: (f = jspb.Message.getRepeatedField(msg, 2)) == null ? undefined : f
   };
 
   if (includeInstance) {

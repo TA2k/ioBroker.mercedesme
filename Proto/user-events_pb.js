@@ -13,13 +13,13 @@
 
 var jspb = require('google-protobuf');
 var goog = jspb;
-var global = (function() {
-  if (this) { return this; }
-  if (typeof window !== 'undefined') { return window; }
-  if (typeof global !== 'undefined') { return global; }
-  if (typeof self !== 'undefined') { return self; }
-  return Function('return this')();
-}.call(null));
+var global =
+    (typeof globalThis !== 'undefined' && globalThis) ||
+    (typeof window !== 'undefined' && window) ||
+    (typeof global !== 'undefined' && global) ||
+    (typeof self !== 'undefined' && self) ||
+    (function () { return this; }).call(null) ||
+    Function('return this')();
 
 goog.exportSymbol('proto.proto.AcknowledgeAbilityToGetVehicleMasterDataFromRestAPI', null, global);
 goog.exportSymbol('proto.proto.AcknowledgeUpdateUserJWTRequest', null, global);
@@ -361,7 +361,7 @@ proto.proto.AcknowledgeUserDataUpdate.prototype.toObject = function(opt_includeI
  */
 proto.proto.AcknowledgeUserDataUpdate.toObject = function(includeInstance, msg) {
   var f, obj = {
-    sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0)
+sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0)
   };
 
   if (includeInstance) {
@@ -491,12 +491,12 @@ proto.proto.UserDataUpdate.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.UserDataUpdate.toObject = function(includeInstance, msg) {
   var f, obj = {
-    sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    ciamId: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    emitTimestamp: jspb.Message.getFieldWithDefault(msg, 3, 0),
-    emitTimestampInMs: jspb.Message.getFieldWithDefault(msg, 8, 0),
-    oldData: (f = msg.getOldData()) && proto.proto.CPDUserData.toObject(includeInstance, f),
-    newData: (f = msg.getNewData()) && proto.proto.CPDUserData.toObject(includeInstance, f)
+sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0),
+ciamId: jspb.Message.getFieldWithDefault(msg, 2, ""),
+emitTimestamp: jspb.Message.getFieldWithDefault(msg, 3, 0),
+emitTimestampInMs: jspb.Message.getFieldWithDefault(msg, 8, 0),
+oldData: (f = msg.getOldData()) && proto.proto.CPDUserData.toObject(includeInstance, f),
+newData: (f = msg.getNewData()) && proto.proto.CPDUserData.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -813,7 +813,7 @@ proto.proto.AcknowledgeUserVehicleAuthChangedUpdate.prototype.toObject = functio
  */
 proto.proto.AcknowledgeUserVehicleAuthChangedUpdate.toObject = function(includeInstance, msg) {
   var f, obj = {
-    sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0)
+sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0)
   };
 
   if (includeInstance) {
@@ -943,7 +943,7 @@ proto.proto.AcknowledgeAbilityToGetVehicleMasterDataFromRestAPI.prototype.toObje
  */
 proto.proto.AcknowledgeAbilityToGetVehicleMasterDataFromRestAPI.toObject = function(includeInstance, msg) {
   var f, obj = {
-    sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0)
+sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0)
   };
 
   if (includeInstance) {
@@ -1073,10 +1073,10 @@ proto.proto.UserVehicleAuthChangedUpdate.prototype.toObject = function(opt_inclu
  */
 proto.proto.UserVehicleAuthChangedUpdate.toObject = function(includeInstance, msg) {
   var f, obj = {
-    sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    ciamId: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    emitTimestamp: jspb.Message.getFieldWithDefault(msg, 3, 0),
-    emitTimestampInMs: jspb.Message.getFieldWithDefault(msg, 8, 0)
+sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0),
+ciamId: jspb.Message.getFieldWithDefault(msg, 2, ""),
+emitTimestamp: jspb.Message.getFieldWithDefault(msg, 3, 0),
+emitTimestampInMs: jspb.Message.getFieldWithDefault(msg, 8, 0)
   };
 
   if (includeInstance) {
@@ -1293,28 +1293,28 @@ proto.proto.CPDUserData.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.CPDUserData.toObject = function(includeInstance, msg) {
   var f, obj = {
-    ciamId: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    userId: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    firstName: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    lastName1: jspb.Message.getFieldWithDefault(msg, 4, ""),
-    lastName2: jspb.Message.getFieldWithDefault(msg, 5, ""),
-    title: jspb.Message.getFieldWithDefault(msg, 6, ""),
-    namePrefix: jspb.Message.getFieldWithDefault(msg, 7, ""),
-    middleInitial: jspb.Message.getFieldWithDefault(msg, 8, ""),
-    salutationCode: jspb.Message.getFieldWithDefault(msg, 9, ""),
-    email: jspb.Message.getFieldWithDefault(msg, 10, ""),
-    landlinePhone: jspb.Message.getFieldWithDefault(msg, 11, ""),
-    mobilePhoneNumber: jspb.Message.getFieldWithDefault(msg, 12, ""),
-    createdAt: jspb.Message.getFieldWithDefault(msg, 13, ""),
-    createdBy: jspb.Message.getFieldWithDefault(msg, 14, ""),
-    updatedAt: jspb.Message.getFieldWithDefault(msg, 15, ""),
-    birthday: jspb.Message.getFieldWithDefault(msg, 28, ""),
-    preferredLanguageCode: jspb.Message.getFieldWithDefault(msg, 29, ""),
-    accountCountryCode: jspb.Message.getFieldWithDefault(msg, 30, ""),
-    ucId: jspb.Message.getFieldWithDefault(msg, 31, ""),
-    vip: jspb.Message.getBooleanFieldWithDefault(msg, 32, false),
-    address: (f = msg.getAddress()) && proto.proto.CPDUserAddress.toObject(includeInstance, f),
-    communicationPreference: (f = msg.getCommunicationPreference()) && proto.proto.CPDUserCommunicationPreference.toObject(includeInstance, f)
+ciamId: jspb.Message.getFieldWithDefault(msg, 1, ""),
+userId: jspb.Message.getFieldWithDefault(msg, 2, ""),
+firstName: jspb.Message.getFieldWithDefault(msg, 3, ""),
+lastName1: jspb.Message.getFieldWithDefault(msg, 4, ""),
+lastName2: jspb.Message.getFieldWithDefault(msg, 5, ""),
+title: jspb.Message.getFieldWithDefault(msg, 6, ""),
+namePrefix: jspb.Message.getFieldWithDefault(msg, 7, ""),
+middleInitial: jspb.Message.getFieldWithDefault(msg, 8, ""),
+salutationCode: jspb.Message.getFieldWithDefault(msg, 9, ""),
+email: jspb.Message.getFieldWithDefault(msg, 10, ""),
+landlinePhone: jspb.Message.getFieldWithDefault(msg, 11, ""),
+mobilePhoneNumber: jspb.Message.getFieldWithDefault(msg, 12, ""),
+createdAt: jspb.Message.getFieldWithDefault(msg, 13, ""),
+createdBy: jspb.Message.getFieldWithDefault(msg, 14, ""),
+updatedAt: jspb.Message.getFieldWithDefault(msg, 15, ""),
+birthday: jspb.Message.getFieldWithDefault(msg, 28, ""),
+preferredLanguageCode: jspb.Message.getFieldWithDefault(msg, 29, ""),
+accountCountryCode: jspb.Message.getFieldWithDefault(msg, 30, ""),
+ucId: jspb.Message.getFieldWithDefault(msg, 31, ""),
+vip: jspb.Message.getBooleanFieldWithDefault(msg, 32, false),
+address: (f = msg.getAddress()) && proto.proto.CPDUserAddress.toObject(includeInstance, f),
+communicationPreference: (f = msg.getCommunicationPreference()) && proto.proto.CPDUserCommunicationPreference.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -2095,21 +2095,21 @@ proto.proto.CPDUserAddress.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.CPDUserAddress.toObject = function(includeInstance, msg) {
   var f, obj = {
-    countryCode: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    state: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    province: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    street: jspb.Message.getFieldWithDefault(msg, 4, ""),
-    houseNo: jspb.Message.getFieldWithDefault(msg, 5, ""),
-    zipCode: jspb.Message.getFieldWithDefault(msg, 6, ""),
-    city: jspb.Message.getFieldWithDefault(msg, 7, ""),
-    streetType: jspb.Message.getFieldWithDefault(msg, 8, ""),
-    houseName: jspb.Message.getFieldWithDefault(msg, 9, ""),
-    floorNo: jspb.Message.getFieldWithDefault(msg, 10, ""),
-    doorNo: jspb.Message.getFieldWithDefault(msg, 11, ""),
-    addressLine1: jspb.Message.getFieldWithDefault(msg, 12, ""),
-    addressLine2: jspb.Message.getFieldWithDefault(msg, 13, ""),
-    addressLine3: jspb.Message.getFieldWithDefault(msg, 14, ""),
-    postOfficeBox: jspb.Message.getFieldWithDefault(msg, 15, "")
+countryCode: jspb.Message.getFieldWithDefault(msg, 1, ""),
+state: jspb.Message.getFieldWithDefault(msg, 2, ""),
+province: jspb.Message.getFieldWithDefault(msg, 3, ""),
+street: jspb.Message.getFieldWithDefault(msg, 4, ""),
+houseNo: jspb.Message.getFieldWithDefault(msg, 5, ""),
+zipCode: jspb.Message.getFieldWithDefault(msg, 6, ""),
+city: jspb.Message.getFieldWithDefault(msg, 7, ""),
+streetType: jspb.Message.getFieldWithDefault(msg, 8, ""),
+houseName: jspb.Message.getFieldWithDefault(msg, 9, ""),
+floorNo: jspb.Message.getFieldWithDefault(msg, 10, ""),
+doorNo: jspb.Message.getFieldWithDefault(msg, 11, ""),
+addressLine1: jspb.Message.getFieldWithDefault(msg, 12, ""),
+addressLine2: jspb.Message.getFieldWithDefault(msg, 13, ""),
+addressLine3: jspb.Message.getFieldWithDefault(msg, 14, ""),
+postOfficeBox: jspb.Message.getFieldWithDefault(msg, 15, "")
   };
 
   if (includeInstance) {
@@ -2645,10 +2645,10 @@ proto.proto.CPDUserCommunicationPreference.prototype.toObject = function(opt_inc
  */
 proto.proto.CPDUserCommunicationPreference.toObject = function(includeInstance, msg) {
   var f, obj = {
-    contactedByPhone: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
-    contactedByLetter: jspb.Message.getBooleanFieldWithDefault(msg, 2, false),
-    contactedByEmail: jspb.Message.getBooleanFieldWithDefault(msg, 3, false),
-    contactedBySms: jspb.Message.getBooleanFieldWithDefault(msg, 4, false)
+contactedByPhone: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
+contactedByLetter: jspb.Message.getBooleanFieldWithDefault(msg, 2, false),
+contactedByEmail: jspb.Message.getBooleanFieldWithDefault(msg, 3, false),
+contactedBySms: jspb.Message.getBooleanFieldWithDefault(msg, 4, false)
   };
 
   if (includeInstance) {
@@ -2865,7 +2865,7 @@ proto.proto.AcknowledgeUserPictureUpdate.prototype.toObject = function(opt_inclu
  */
 proto.proto.AcknowledgeUserPictureUpdate.toObject = function(includeInstance, msg) {
   var f, obj = {
-    sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0)
+sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0)
   };
 
   if (includeInstance) {
@@ -2995,12 +2995,12 @@ proto.proto.UserPictureUpdate.prototype.toObject = function(opt_includeInstance)
  */
 proto.proto.UserPictureUpdate.toObject = function(includeInstance, msg) {
   var f, obj = {
-    sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    ciamId: jspb.Message.getFieldWithDefault(msg, 5, ""),
-    emitTimestamp: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    emitTimestampInMs: jspb.Message.getFieldWithDefault(msg, 6, 0),
-    eventhubReceiveTimestamp: jspb.Message.getFieldWithDefault(msg, 3, 0),
-    apptwinReceiveTimestamp: jspb.Message.getFieldWithDefault(msg, 4, 0)
+sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0),
+ciamId: jspb.Message.getFieldWithDefault(msg, 5, ""),
+emitTimestamp: jspb.Message.getFieldWithDefault(msg, 2, 0),
+emitTimestampInMs: jspb.Message.getFieldWithDefault(msg, 6, 0),
+eventhubReceiveTimestamp: jspb.Message.getFieldWithDefault(msg, 3, 0),
+apptwinReceiveTimestamp: jspb.Message.getFieldWithDefault(msg, 4, 0)
   };
 
   if (includeInstance) {
@@ -3275,7 +3275,7 @@ proto.proto.AcknowledgeUserPINUpdate.prototype.toObject = function(opt_includeIn
  */
 proto.proto.AcknowledgeUserPINUpdate.toObject = function(includeInstance, msg) {
   var f, obj = {
-    sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0)
+sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0)
   };
 
   if (includeInstance) {
@@ -3405,12 +3405,12 @@ proto.proto.UserPINUpdate.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.UserPINUpdate.toObject = function(includeInstance, msg) {
   var f, obj = {
-    sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    ciamId: jspb.Message.getFieldWithDefault(msg, 5, ""),
-    emitTimestamp: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    emitTimestampInMs: jspb.Message.getFieldWithDefault(msg, 6, 0),
-    eventhubReceiveTimestamp: jspb.Message.getFieldWithDefault(msg, 3, 0),
-    apptwinReceiveTimestamp: jspb.Message.getFieldWithDefault(msg, 4, 0)
+sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0),
+ciamId: jspb.Message.getFieldWithDefault(msg, 5, ""),
+emitTimestamp: jspb.Message.getFieldWithDefault(msg, 2, 0),
+emitTimestampInMs: jspb.Message.getFieldWithDefault(msg, 6, 0),
+eventhubReceiveTimestamp: jspb.Message.getFieldWithDefault(msg, 3, 0),
+apptwinReceiveTimestamp: jspb.Message.getFieldWithDefault(msg, 4, 0)
   };
 
   if (includeInstance) {
@@ -3685,7 +3685,7 @@ proto.proto.UpdateUserJWTRequest.prototype.toObject = function(opt_includeInstan
  */
 proto.proto.UpdateUserJWTRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    jwt: jspb.Message.getFieldWithDefault(msg, 1, "")
+jwt: jspb.Message.getFieldWithDefault(msg, 1, "")
   };
 
   if (includeInstance) {

@@ -13,13 +13,13 @@
 
 var jspb = require('google-protobuf');
 var goog = jspb;
-var global = (function() {
-  if (this) { return this; }
-  if (typeof window !== 'undefined') { return window; }
-  if (typeof global !== 'undefined') { return global; }
-  if (typeof self !== 'undefined') { return self; }
-  return Function('return this')();
-}.call(null));
+var global =
+    (typeof globalThis !== 'undefined' && globalThis) ||
+    (typeof window !== 'undefined' && window) ||
+    (typeof global !== 'undefined' && global) ||
+    (typeof self !== 'undefined' && self) ||
+    (function () { return this; }).call(null) ||
+    Function('return this')();
 
 goog.exportSymbol('proto.proto.AppTwinMemberStatusValue', null, global);
 goog.exportSymbol('proto.proto.MemberStatus', null, global);
@@ -76,8 +76,8 @@ proto.proto.AppTwinMemberStatusValue.prototype.toObject = function(opt_includeIn
  */
 proto.proto.AppTwinMemberStatusValue.toObject = function(includeInstance, msg) {
   var f, obj = {
-    status: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    apptwinCount: jspb.Message.getFieldWithDefault(msg, 2, 0)
+status: jspb.Message.getFieldWithDefault(msg, 1, 0),
+apptwinCount: jspb.Message.getFieldWithDefault(msg, 2, 0)
   };
 
   if (includeInstance) {

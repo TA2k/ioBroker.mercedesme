@@ -61,6 +61,101 @@ class Mercedesme extends utils.Adapter {
     this.vinStates = {};
     const jar = new CookieJar();
 
+    // Safe WebSocket close helper
+    this.safeCloseWs = () => {
+      try {
+        if (this.ws && this.ws.readyState !== WebSocket.CLOSED && this.ws.readyState !== WebSocket.CLOSING) {
+          this.safeCloseWs();
+        }
+      } catch (err) {
+        this.log.debug(`WebSocket close error (ignored): ${err.message}`);
+      }
+    };
+
+    // Helper for raw protobuf decoding (like protoc --decode_raw)
+    this.decodeRawProtobuf = (buffer, depth = 0) => {
+      const results = [];
+      let offset = 0;
+      const maxDepth = 5;
+      while (offset < buffer.length) {
+        try {
+          // Read varint for field tag
+          let tag = 0;
+          let shift = 0;
+          let byte;
+          do {
+            if (offset >= buffer.length) break;
+            byte = buffer[offset++];
+            tag |= (byte & 0x7f) << shift;
+            shift += 7;
+          } while (byte & 0x80);
+
+          const fieldNumber = tag >> 3;
+          const wireType = tag & 0x7;
+
+          let value;
+          if (wireType === 0) {
+            // Varint
+            value = 0;
+            shift = 0;
+            do {
+              if (offset >= buffer.length) break;
+              byte = buffer[offset++];
+              value |= (byte & 0x7f) << shift;
+              shift += 7;
+            } while (byte & 0x80);
+            results.push({ field: fieldNumber, type: "varint", value });
+          } else if (wireType === 1) {
+            // 64-bit fixed
+            value = buffer.slice(offset, offset + 8).toString("hex");
+            offset += 8;
+            results.push({ field: fieldNumber, type: "fixed64", value });
+          } else if (wireType === 2) {
+            // Length-delimited
+            let length = 0;
+            shift = 0;
+            do {
+              if (offset >= buffer.length) break;
+              byte = buffer[offset++];
+              length |= (byte & 0x7f) << shift;
+              shift += 7;
+            } while (byte & 0x80);
+            const data = buffer.slice(offset, offset + length);
+            offset += length;
+            // Try to decode as nested message
+            if (depth < maxDepth && data.length > 0) {
+              try {
+                const nested = this.decodeRawProtobuf(data, depth + 1);
+                if (nested.length > 0) {
+                  results.push({ field: fieldNumber, type: "message", value: nested });
+                  continue;
+                }
+              } catch { /* not a nested message */ }
+            }
+            // Try as string
+            const str = data.toString("utf8");
+            if (/^[\x20-\x7E]*$/.test(str) && str.length > 0) {
+              results.push({ field: fieldNumber, type: "string", value: str });
+            } else {
+              results.push({ field: fieldNumber, type: "bytes", value: data.toString("hex") });
+            }
+          } else if (wireType === 5) {
+            // 32-bit fixed
+            value = buffer.slice(offset, offset + 4).toString("hex");
+            offset += 4;
+            results.push({ field: fieldNumber, type: "fixed32", value });
+          } else {
+            // Unknown wire type
+            results.push({ field: fieldNumber, type: `unknown(${wireType})`, offset });
+            break;
+          }
+        } catch {
+          break;
+        }
+      }
+      return results;
+    };
+
     this.requestClient = axios.create({
       httpsAgent: new HttpsCookieAgent({ cookies: { jar } }),
     });
@@ -1327,7 +1422,7 @@ class Mercedesme extends utils.Adapter {
       await this.loginNew();
       if (reconnect) {
         this.log.info("Reconnect after refresh token. Count: " + this.wsReconnectCounter);
-        this.ws.close();
+        this.safeCloseWs();
         setTimeout(() => {
           this.connectWS();
         }, 2000);
@@ -1360,7 +1455,7 @@ class Mercedesme extends utils.Adapter {
         }
         if (reconnect) {
           this.log.info("Reconnect after refresh token. Count: " + this.wsReconnectCounter);
-          this.ws.close();
+          this.safeCloseWs();
           setTimeout(() => {
             this.connectWS();
           }, 2000);
@@ -1851,7 +1946,7 @@ class Mercedesme extends utils.Adapter {
           " seconds. Lost WebSocket connection. Reconnect WebSocket. Reconnects Today: " +
           this.wsReconnectCounter,
       );
-      this.ws.close();
+      this.safeCloseWs();
       setTimeout(() => {
         this.connectWS();
       }, 2000);
@@ -1948,7 +2043,10 @@ class Mercedesme extends utils.Adapter {
       }
 
       try {
+        // Log raw data for debugging protobuf issues
+        this.log.debug(`WS raw data (${data.length} bytes): ${data.toString("hex").substring(0, 200)}${data.length > 100 ? "..." : ""}`);
         const message = VehicleEvents.PushMessage.deserializeBinary(data).toObject();
+        this.log.debug(`Parsed message keys: ${Object.keys(message).filter(k => message[k]).join(", ")}`);
         if (message.debugmessage) {
           this.log.debug(JSON.stringify(message.debugmessage));
         }
@@ -2106,11 +2204,21 @@ class Mercedesme extends utils.Adapter {
           }
         }
       } catch (error) {
-        this.log.error("Websocket parse error");
-        this.log.error(error);
-        // this.log.error(data);
+        this.log.error(`Websocket parse error: ${error.message || error}`);
+        if (error.stack) {
+          this.log.error(error.stack);
+        }
+        // Log the raw data that caused the parse error
+        this.log.error(`Failed data (${data.length} bytes): ${data.toString("hex")}`);
+        // Try to decode with protoc --decode_raw equivalent
+        try {
+          const rawFields = this.decodeRawProtobuf(data);
+          this.log.error(`Raw protobuf fields: ${JSON.stringify(rawFields)}`);
+        } catch (e) {
+          this.log.error(`Cannot decode raw protobuf: ${e.message}`);
+        }
         this.log.info("Reconnect WebSocket");
-        this.ws.close();
+        this.safeCloseWs();
         setTimeout(() => {
           this.connectWS();
         }, 5000);

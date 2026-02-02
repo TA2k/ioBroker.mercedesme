@@ -13,13 +13,13 @@
 
 var jspb = require('google-protobuf');
 var goog = jspb;
-var global = (function() {
-  if (this) { return this; }
-  if (typeof window !== 'undefined') { return window; }
-  if (typeof global !== 'undefined') { return global; }
-  if (typeof self !== 'undefined') { return self; }
-  return Function('return this')();
-}.call(null));
+var global =
+    (typeof globalThis !== 'undefined' && globalThis) ||
+    (typeof window !== 'undefined' && window) ||
+    (typeof global !== 'undefined' && global) ||
+    (typeof self !== 'undefined' && self) ||
+    (function () { return this; }).call(null) ||
+    Function('return this')();
 
 goog.exportSymbol('proto.proto.AcknowledgeServiceStatusUpdate', null, global);
 goog.exportSymbol('proto.proto.AcknowledgeServiceStatusUpdatesByVIN', null, global);
@@ -142,7 +142,7 @@ proto.proto.AcknowledgeServiceStatusUpdatesByVIN.prototype.toObject = function(o
  */
 proto.proto.AcknowledgeServiceStatusUpdatesByVIN.toObject = function(includeInstance, msg) {
   var f, obj = {
-    sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0)
+sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0)
   };
 
   if (includeInstance) {
@@ -272,7 +272,7 @@ proto.proto.AcknowledgeServiceStatusUpdate.prototype.toObject = function(opt_inc
  */
 proto.proto.AcknowledgeServiceStatusUpdate.toObject = function(includeInstance, msg) {
   var f, obj = {
-    sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0)
+sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0)
   };
 
   if (includeInstance) {
@@ -402,8 +402,8 @@ proto.proto.ServiceStatusUpdatesByVIN.prototype.toObject = function(opt_includeI
  */
 proto.proto.ServiceStatusUpdatesByVIN.toObject = function(includeInstance, msg) {
   var f, obj = {
-    sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    updatesMap: (f = msg.getUpdatesMap()) ? f.toObject(includeInstance, proto.proto.ServiceStatusUpdate.toObject) : []
+sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0),
+updatesMap: (f = msg.getUpdatesMap()) ? f.toObject(includeInstance, proto.proto.ServiceStatusUpdate.toObject) : []
   };
 
   if (includeInstance) {
@@ -530,7 +530,8 @@ proto.proto.ServiceStatusUpdatesByVIN.prototype.getUpdatesMap = function(opt_noL
  */
 proto.proto.ServiceStatusUpdatesByVIN.prototype.clearUpdatesMap = function() {
   this.getUpdatesMap().clear();
-  return this;};
+  return this;
+};
 
 
 
@@ -565,12 +566,12 @@ proto.proto.ServiceStatusUpdate.prototype.toObject = function(opt_includeInstanc
  */
 proto.proto.ServiceStatusUpdate.toObject = function(includeInstance, msg) {
   var f, obj = {
-    sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    ciamId: jspb.Message.getFieldWithDefault(msg, 7, ""),
-    vin: jspb.Message.getFieldWithDefault(msg, 5, ""),
-    emitTimestamp: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    emitTimestampInMs: jspb.Message.getFieldWithDefault(msg, 8, 0),
-    updatesMap: (f = msg.getUpdatesMap()) ? f.toObject(includeInstance, undefined) : []
+sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0),
+ciamId: jspb.Message.getFieldWithDefault(msg, 7, ""),
+vin: jspb.Message.getFieldWithDefault(msg, 5, ""),
+emitTimestamp: jspb.Message.getFieldWithDefault(msg, 2, 0),
+emitTimestampInMs: jspb.Message.getFieldWithDefault(msg, 8, 0),
+updatesMap: (f = msg.getUpdatesMap()) ? f.toObject(includeInstance, undefined) : []
   };
 
   if (includeInstance) {
@@ -813,7 +814,8 @@ proto.proto.ServiceStatusUpdate.prototype.getUpdatesMap = function(opt_noLazyCre
  */
 proto.proto.ServiceStatusUpdate.prototype.clearUpdatesMap = function() {
   this.getUpdatesMap().clear();
-  return this;};
+  return this;
+};
 
 
 /**

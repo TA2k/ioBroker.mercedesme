@@ -13,13 +13,13 @@
 
 var jspb = require('google-protobuf');
 var goog = jspb;
-var global = (function() {
-  if (this) { return this; }
-  if (typeof window !== 'undefined') { return window; }
-  if (typeof global !== 'undefined') { return global; }
-  if (typeof self !== 'undefined') { return self; }
-  return Function('return this')();
-}.call(null));
+var global =
+    (typeof globalThis !== 'undefined' && globalThis) ||
+    (typeof window !== 'undefined' && window) ||
+    (typeof global !== 'undefined' && global) ||
+    (typeof self !== 'undefined' && self) ||
+    (function () { return this; }).call(null) ||
+    Function('return this')();
 
 var acp_pb = require('./acp_pb.js');
 goog.object.extend(proto, acp_pb);
@@ -86,16 +86,16 @@ proto.proto.EventPushCommand.prototype.toObject = function(opt_includeInstance) 
  */
 proto.proto.EventPushCommand.toObject = function(includeInstance, msg) {
   var f, obj = {
-    vin: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    state: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    condition: jspb.Message.getFieldWithDefault(msg, 3, 0),
-    type: jspb.Message.getFieldWithDefault(msg, 4, 0),
-    processId: jspb.Message.getFieldWithDefault(msg, 5, 0),
-    trackingId: jspb.Message.getFieldWithDefault(msg, 6, ""),
-    correlationId: jspb.Message.getFieldWithDefault(msg, 7, ""),
-    errorCodesList: (f = jspb.Message.getRepeatedField(msg, 8)) == null ? undefined : f,
-    guid: jspb.Message.getFieldWithDefault(msg, 9, ""),
-    timestampInS: jspb.Message.getFieldWithDefault(msg, 10, 0)
+vin: jspb.Message.getFieldWithDefault(msg, 1, ""),
+state: jspb.Message.getFieldWithDefault(msg, 2, 0),
+condition: jspb.Message.getFieldWithDefault(msg, 3, 0),
+type: jspb.Message.getFieldWithDefault(msg, 4, 0),
+processId: jspb.Message.getFieldWithDefault(msg, 5, 0),
+trackingId: jspb.Message.getFieldWithDefault(msg, 6, ""),
+correlationId: jspb.Message.getFieldWithDefault(msg, 7, ""),
+errorCodesList: (f = jspb.Message.getRepeatedField(msg, 8)) == null ? undefined : f,
+guid: jspb.Message.getFieldWithDefault(msg, 9, ""),
+timestampInS: jspb.Message.getFieldWithDefault(msg, 10, 0)
   };
 
   if (includeInstance) {

@@ -13,13 +13,13 @@
 
 var jspb = require('google-protobuf');
 var goog = jspb;
-var global = (function() {
-  if (this) { return this; }
-  if (typeof window !== 'undefined') { return window; }
-  if (typeof global !== 'undefined') { return global; }
-  if (typeof self !== 'undefined') { return self; }
-  return Function('return this')();
-}.call(null));
+var global =
+    (typeof globalThis !== 'undefined' && globalThis) ||
+    (typeof window !== 'undefined' && window) ||
+    (typeof global !== 'undefined' && global) ||
+    (typeof self !== 'undefined' && self) ||
+    (function () { return this; }).call(null) ||
+    Function('return this')();
 
 goog.exportSymbol('proto.proto.AcknowledgeAssignedVehicles', null, global);
 goog.exportSymbol('proto.proto.AssignedVehicles', null, global);
@@ -371,8 +371,8 @@ proto.proto.SubscribeRequest.prototype.toObject = function(opt_includeInstance) 
  */
 proto.proto.SubscribeRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    topicsList: (f = jspb.Message.getRepeatedField(msg, 1)) == null ? undefined : f,
-    replace: jspb.Message.getBooleanFieldWithDefault(msg, 2, false)
+topicsList: (f = jspb.Message.getRepeatedField(msg, 1)) == null ? undefined : f,
+replace: jspb.Message.getBooleanFieldWithDefault(msg, 2, false)
   };
 
   if (includeInstance) {
@@ -557,9 +557,9 @@ proto.proto.SubscribeResponse.prototype.toObject = function(opt_includeInstance)
  */
 proto.proto.SubscribeResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-    success: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
-    errorsMap: (f = msg.getErrorsMap()) ? f.toObject(includeInstance, proto.proto.SubscriptionError.toObject) : [],
-    subscribedTopicsList: (f = jspb.Message.getRepeatedField(msg, 3)) == null ? undefined : f
+success: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
+errorsMap: (f = msg.getErrorsMap()) ? f.toObject(includeInstance, proto.proto.SubscriptionError.toObject) : [],
+subscribedTopicsList: (f = jspb.Message.getRepeatedField(msg, 3)) == null ? undefined : f
   };
 
   if (includeInstance) {
@@ -697,7 +697,8 @@ proto.proto.SubscribeResponse.prototype.getErrorsMap = function(opt_noLazyCreate
  */
 proto.proto.SubscribeResponse.prototype.clearErrorsMap = function() {
   this.getErrorsMap().clear();
-  return this;};
+  return this;
+};
 
 
 /**
@@ -776,8 +777,8 @@ proto.proto.UnsubscribeRequest.prototype.toObject = function(opt_includeInstance
  */
 proto.proto.UnsubscribeRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    topicsList: (f = jspb.Message.getRepeatedField(msg, 1)) == null ? undefined : f,
-    anticipateResponse: jspb.Message.getBooleanFieldWithDefault(msg, 2, false)
+topicsList: (f = jspb.Message.getRepeatedField(msg, 1)) == null ? undefined : f,
+anticipateResponse: jspb.Message.getBooleanFieldWithDefault(msg, 2, false)
   };
 
   if (includeInstance) {
@@ -962,9 +963,9 @@ proto.proto.UnsubscribeResponse.prototype.toObject = function(opt_includeInstanc
  */
 proto.proto.UnsubscribeResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-    success: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
-    errorsMap: (f = msg.getErrorsMap()) ? f.toObject(includeInstance, proto.proto.SubscriptionError.toObject) : [],
-    unsubscribedTopicsList: (f = jspb.Message.getRepeatedField(msg, 3)) == null ? undefined : f
+success: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
+errorsMap: (f = msg.getErrorsMap()) ? f.toObject(includeInstance, proto.proto.SubscriptionError.toObject) : [],
+unsubscribedTopicsList: (f = jspb.Message.getRepeatedField(msg, 3)) == null ? undefined : f
   };
 
   if (includeInstance) {
@@ -1102,7 +1103,8 @@ proto.proto.UnsubscribeResponse.prototype.getErrorsMap = function(opt_noLazyCrea
  */
 proto.proto.UnsubscribeResponse.prototype.clearErrorsMap = function() {
   this.getErrorsMap().clear();
-  return this;};
+  return this;
+};
 
 
 /**
@@ -1181,8 +1183,8 @@ proto.proto.SubscriptionError.prototype.toObject = function(opt_includeInstance)
  */
 proto.proto.SubscriptionError.toObject = function(includeInstance, msg) {
   var f, obj = {
-    codeList: (f = jspb.Message.getRepeatedField(msg, 1)) == null ? undefined : f,
-    messageList: (f = jspb.Message.getRepeatedField(msg, 2)) == null ? undefined : f
+codeList: (f = jspb.Message.getRepeatedField(msg, 1)) == null ? undefined : f,
+messageList: (f = jspb.Message.getRepeatedField(msg, 2)) == null ? undefined : f
   };
 
   if (includeInstance) {
@@ -1381,16 +1383,16 @@ proto.proto.SubscribeToAppTwinRequest.prototype.toObject = function(opt_includeI
  */
 proto.proto.SubscribeToAppTwinRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    sessionId: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    ciamId: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    deviceLocale: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    appId: jspb.Message.getFieldWithDefault(msg, 4, ""),
-    appVersion: jspb.Message.getFieldWithDefault(msg, 5, ""),
-    osName: jspb.Message.getFieldWithDefault(msg, 6, 0),
-    osVersion: jspb.Message.getFieldWithDefault(msg, 7, ""),
-    deviceModel: jspb.Message.getFieldWithDefault(msg, 8, ""),
-    networkCarrier: jspb.Message.getFieldWithDefault(msg, 9, ""),
-    sdkVersion: jspb.Message.getFieldWithDefault(msg, 10, "")
+sessionId: jspb.Message.getFieldWithDefault(msg, 1, ""),
+ciamId: jspb.Message.getFieldWithDefault(msg, 2, ""),
+deviceLocale: jspb.Message.getFieldWithDefault(msg, 3, ""),
+appId: jspb.Message.getFieldWithDefault(msg, 4, ""),
+appVersion: jspb.Message.getFieldWithDefault(msg, 5, ""),
+osName: jspb.Message.getFieldWithDefault(msg, 6, 0),
+osVersion: jspb.Message.getFieldWithDefault(msg, 7, ""),
+deviceModel: jspb.Message.getFieldWithDefault(msg, 8, ""),
+networkCarrier: jspb.Message.getFieldWithDefault(msg, 9, ""),
+sdkVersion: jspb.Message.getFieldWithDefault(msg, 10, "")
   };
 
   if (includeInstance) {
@@ -1781,8 +1783,8 @@ proto.proto.ResubscribeToAppTwinRequest.prototype.toObject = function(opt_includ
  */
 proto.proto.ResubscribeToAppTwinRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    sessionId: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    ciamId: jspb.Message.getFieldWithDefault(msg, 2, "")
+sessionId: jspb.Message.getFieldWithDefault(msg, 1, ""),
+ciamId: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
 
   if (includeInstance) {
@@ -1941,7 +1943,7 @@ proto.proto.ResubscribeToAppTwinResponse.prototype.toObject = function(opt_inclu
  */
 proto.proto.ResubscribeToAppTwinResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-    result: jspb.Message.getFieldWithDefault(msg, 1, 0)
+result: jspb.Message.getFieldWithDefault(msg, 1, 0)
   };
 
   if (includeInstance) {
@@ -2081,8 +2083,8 @@ proto.proto.SubscribeToAppTwinResponse.prototype.toObject = function(opt_include
  */
 proto.proto.SubscribeToAppTwinResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-    success: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
-    errorCode: jspb.Message.getFieldWithDefault(msg, 2, 0)
+success: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
+errorCode: jspb.Message.getFieldWithDefault(msg, 2, 0)
   };
 
   if (includeInstance) {
@@ -2241,7 +2243,7 @@ proto.proto.UnsubscribeFromAppTwinRequest.prototype.toObject = function(opt_incl
  */
 proto.proto.UnsubscribeFromAppTwinRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    sessionId: jspb.Message.getFieldWithDefault(msg, 1, "")
+sessionId: jspb.Message.getFieldWithDefault(msg, 1, "")
   };
 
   if (includeInstance) {
@@ -2371,8 +2373,8 @@ proto.proto.UnsubscribeFromAppTwinResponse.prototype.toObject = function(opt_inc
  */
 proto.proto.UnsubscribeFromAppTwinResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-    success: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
-    errorsMap: (f = msg.getErrorsMap()) ? f.toObject(includeInstance, proto.proto.SubscriptionError.toObject) : []
+success: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
+errorsMap: (f = msg.getErrorsMap()) ? f.toObject(includeInstance, proto.proto.SubscriptionError.toObject) : []
   };
 
   if (includeInstance) {
@@ -2499,7 +2501,8 @@ proto.proto.UnsubscribeFromAppTwinResponse.prototype.getErrorsMap = function(opt
  */
 proto.proto.UnsubscribeFromAppTwinResponse.prototype.clearErrorsMap = function() {
   this.getErrorsMap().clear();
-  return this;};
+  return this;
+};
 
 
 
@@ -2642,7 +2645,7 @@ proto.proto.AssignedVehicles.prototype.toObject = function(opt_includeInstance) 
  */
 proto.proto.AssignedVehicles.toObject = function(includeInstance, msg) {
   var f, obj = {
-    vinsList: (f = jspb.Message.getRepeatedField(msg, 1)) == null ? undefined : f
+vinsList: (f = jspb.Message.getRepeatedField(msg, 1)) == null ? undefined : f
   };
 
   if (includeInstance) {

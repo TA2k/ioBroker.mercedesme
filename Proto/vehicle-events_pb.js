@@ -13,13 +13,13 @@
 
 var jspb = require('google-protobuf');
 var goog = jspb;
-var global = (function() {
-  if (this) { return this; }
-  if (typeof window !== 'undefined') { return window; }
-  if (typeof global !== 'undefined') { return global; }
-  if (typeof self !== 'undefined') { return self; }
-  return Function('return this')();
-}.call(null));
+var global =
+    (typeof globalThis !== 'undefined' && globalThis) ||
+    (typeof window !== 'undefined' && window) ||
+    (typeof global !== 'undefined' && global) ||
+    (typeof self !== 'undefined' && self) ||
+    (function () { return this; }).call(null) ||
+    Function('return this')();
 
 var service$activation_pb = require('./service-activation_pb.js');
 goog.object.extend(proto, service$activation_pb);
@@ -1265,12 +1265,12 @@ proto.proto.VEPUpdate.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.VEPUpdate.toObject = function(includeInstance, msg) {
   var f, obj = {
-    sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    vin: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    fullUpdate: jspb.Message.getBooleanFieldWithDefault(msg, 15, false),
-    emitTimestamp: jspb.Message.getFieldWithDefault(msg, 10, 0),
-    emitTimestampInMs: jspb.Message.getFieldWithDefault(msg, 14, 0),
-    attributesMap: (f = msg.getAttributesMap()) ? f.toObject(includeInstance, proto.proto.VehicleAttributeStatus.toObject) : []
+sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0),
+vin: jspb.Message.getFieldWithDefault(msg, 2, ""),
+fullUpdate: jspb.Message.getBooleanFieldWithDefault(msg, 15, false),
+emitTimestamp: jspb.Message.getFieldWithDefault(msg, 10, 0),
+emitTimestampInMs: jspb.Message.getFieldWithDefault(msg, 14, 0),
+attributesMap: (f = msg.getAttributesMap()) ? f.toObject(includeInstance, proto.proto.VehicleAttributeStatus.toObject) : []
   };
 
   if (includeInstance) {
@@ -1513,7 +1513,8 @@ proto.proto.VEPUpdate.prototype.getAttributesMap = function(opt_noLazyCreate) {
  */
 proto.proto.VEPUpdate.prototype.clearAttributesMap = function() {
   this.getAttributesMap().clear();
-  return this;};
+  return this;
+};
 
 
 
@@ -1653,72 +1654,72 @@ proto.proto.VehicleAttributeStatus.prototype.toObject = function(opt_includeInst
  */
 proto.proto.VehicleAttributeStatus.toObject = function(includeInstance, msg) {
   var f, obj = {
-    timestamp: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    timestampInMs: jspb.Message.getFieldWithDefault(msg, 10, 0),
-    changed: jspb.Message.getBooleanFieldWithDefault(msg, 2, false),
-    status: jspb.Message.getFieldWithDefault(msg, 3, 0),
-    serviceIdsList: (f = jspb.Message.getRepeatedField(msg, 30)) == null ? undefined : f,
-    displayValue: jspb.Message.getFieldWithDefault(msg, 11, ""),
-    combustionConsumptionUnit: jspb.Message.getFieldWithDefault(msg, 12, 0),
-    gasConsumptionUnit: jspb.Message.getFieldWithDefault(msg, 13, 0),
-    electricityConsumptionUnit: jspb.Message.getFieldWithDefault(msg, 14, 0),
-    speedDistanceUnit: jspb.Message.getFieldWithDefault(msg, 15, 0),
-    speedUnit: jspb.Message.getFieldWithDefault(msg, 25, 0),
-    distanceUnit: jspb.Message.getFieldWithDefault(msg, 26, 0),
-    temperatureUnit: jspb.Message.getFieldWithDefault(msg, 16, 0),
-    pressureUnit: jspb.Message.getFieldWithDefault(msg, 17, 0),
-    ratioUnit: jspb.Message.getFieldWithDefault(msg, 18, 0),
-    clockHourUnit: jspb.Message.getFieldWithDefault(msg, 19, 0),
-    intValue: jspb.Message.getFieldWithDefault(msg, 4, 0),
-    boolValue: jspb.Message.getBooleanFieldWithDefault(msg, 5, false),
-    stringValue: jspb.Message.getFieldWithDefault(msg, 6, ""),
-    doubleValue: jspb.Message.getFloatingPointFieldWithDefault(msg, 7, 0.0),
-    nilValue: jspb.Message.getBooleanFieldWithDefault(msg, 8, false),
-    unsupportedValue: jspb.Message.getFieldWithDefault(msg, 9, ""),
-    temperaturePointsValue: (f = msg.getTemperaturePointsValue()) && proto.proto.TemperaturePointsValue.toObject(includeInstance, f),
-    weekdayTariffValue: (f = msg.getWeekdayTariffValue()) && proto.proto.WeekdayTariffValue.toObject(includeInstance, f),
-    weekendTariffValue: (f = msg.getWeekendTariffValue()) && proto.proto.WeekendTariffValue.toObject(includeInstance, f),
-    stateOfChargeProfileValue: (f = msg.getStateOfChargeProfileValue()) && proto.proto.StateOfChargeProfileValue.toObject(includeInstance, f),
-    weeklySettingsHeadUnitValue: (f = msg.getWeeklySettingsHeadUnitValue()) && proto.proto.WeeklySettingsHeadUnitValue.toObject(includeInstance, f),
-    speedAlertConfigurationValue: (f = msg.getSpeedAlertConfigurationValue()) && proto.proto.SpeedAlertConfigurationValue.toObject(includeInstance, f),
-    ecoHistogramValue: (f = msg.getEcoHistogramValue()) && proto.proto.EcoHistogramValue.toObject(includeInstance, f),
-    weeklyProfileValue: (f = msg.getWeeklyProfileValue()) && proto.proto.WeeklyProfileValue.toObject(includeInstance, f),
-    chargeProgramsValue: (f = msg.getChargeProgramsValue()) && proto.proto.ChargeProgramsValue.toObject(includeInstance, f),
-    chargingbreakClocktimerValue: (f = msg.getChargingbreakClocktimerValue()) && proto.proto.ChargingBreakClockTimerValue.toObject(includeInstance, f),
-    chargingPowerControl: (f = msg.getChargingPowerControl()) && proto.proto.ChargingPowerControl.toObject(includeInstance, f),
-    tcuConnectionStateLowChannel: jspb.Message.getFieldWithDefault(msg, 38, 0),
-    precondState: (f = msg.getPrecondState()) && proto.proto.PrecondState.toObject(includeInstance, f),
-    chargingPowerRestrictions: (f = msg.getChargingPowerRestrictions()) && proto.proto.ChargingPowerRestrictions.toObject(includeInstance, f),
-    chargingCouplerErrorDetails: jspb.Message.getFieldWithDefault(msg, 56, 0),
-    chargingErrorVehicleNoSupport400v: jspb.Message.getFieldWithDefault(msg, 58, 0),
-    chargingErrorImpossibleChangeTo400v: jspb.Message.getFieldWithDefault(msg, 59, 0),
-    chargingErrorImpossibleChangeTo800v: jspb.Message.getFieldWithDefault(msg, 60, 0),
-    precondOperabilityState: (f = msg.getPrecondOperabilityState()) && proto.proto.PrecondOperabilityState.toObject(includeInstance, f),
-    pictureRecordingStatus: jspb.Message.getFieldWithDefault(msg, 62, 0),
-    parkEventPictureSelectionStatus: jspb.Message.getFieldWithDefault(msg, 63, 0),
-    panicAlarmActive: jspb.Message.getFieldWithDefault(msg, 64, 0),
-    interiorProtectionSelectionStatus: jspb.Message.getFieldWithDefault(msg, 65, 0),
-    interiorProtectionActivationStatus: jspb.Message.getFieldWithDefault(msg, 66, 0),
-    towProtectionSelectionStatus: jspb.Message.getFieldWithDefault(msg, 67, 0),
-    towProtectionActivationStatus: jspb.Message.getFieldWithDefault(msg, 68, 0),
-    vehicleTheftAlarmInactiveReason: jspb.Message.getFieldWithDefault(msg, 69, 0),
-    parkCollisionSelectionStatus: jspb.Message.getFieldWithDefault(msg, 70, 0),
-    parkCollisionActivationStatus: jspb.Message.getFieldWithDefault(msg, 71, 0),
-    parkCollisionInactiveReason: jspb.Message.getFieldWithDefault(msg, 72, 0),
-    parkCollisionPictureTransferStatus: jspb.Message.getFieldWithDefault(msg, 73, 0),
-    emergencyPowerSupply: jspb.Message.getFieldWithDefault(msg, 78, 0),
-    evsePairingState: jspb.Message.getFieldWithDefault(msg, 79, 0),
-    chargingPredictionSoc: (f = msg.getChargingPredictionSoc()) && proto.proto.ChargingPredictionSoc.toObject(includeInstance, f),
-    chargingPredictionDepartureTime: (f = msg.getChargingPredictionDepartureTime()) && proto.proto.ChargingPredictionDepartureTime.toObject(includeInstance, f),
-    chargeFlaps: (f = msg.getChargeFlaps()) && proto.proto.ChargeFlaps.toObject(includeInstance, f),
-    chargeInlets: (f = msg.getChargeInlets()) && proto.proto.ChargeInlets.toObject(includeInstance, f),
-    chargingTimer: (f = msg.getChargingTimer()) && proto.proto.ChargingTimer.toObject(includeInstance, f),
-    chargingScheduleRequested: (f = msg.getChargingScheduleRequested()) && proto.proto.ChargingScheduleRequested.toObject(includeInstance, f),
-    chargingFlapErrorDetails: jspb.Message.getFieldWithDefault(msg, 89, 0),
-    chargingCompatibilityError: jspb.Message.getFieldWithDefault(msg, 90, 0),
-    hvBatteryPrecondAvailability: jspb.Message.getFieldWithDefault(msg, 91, 0),
-    hvBatteryPrecondRequestState: (f = msg.getHvBatteryPrecondRequestState()) && proto.proto.HvBatteryPrecondRequestState.toObject(includeInstance, f),
-    hvBatteryPrecondState: (f = msg.getHvBatteryPrecondState()) && proto.proto.HvBatteryPrecondState.toObject(includeInstance, f)
+timestamp: jspb.Message.getFieldWithDefault(msg, 1, 0),
+timestampInMs: jspb.Message.getFieldWithDefault(msg, 10, 0),
+changed: jspb.Message.getBooleanFieldWithDefault(msg, 2, false),
+status: jspb.Message.getFieldWithDefault(msg, 3, 0),
+serviceIdsList: (f = jspb.Message.getRepeatedField(msg, 30)) == null ? undefined : f,
+displayValue: jspb.Message.getFieldWithDefault(msg, 11, ""),
+combustionConsumptionUnit: (f = jspb.Message.getField(msg, 12)) == null ? undefined : f,
+gasConsumptionUnit: (f = jspb.Message.getField(msg, 13)) == null ? undefined : f,
+electricityConsumptionUnit: (f = jspb.Message.getField(msg, 14)) == null ? undefined : f,
+speedDistanceUnit: (f = jspb.Message.getField(msg, 15)) == null ? undefined : f,
+speedUnit: (f = jspb.Message.getField(msg, 25)) == null ? undefined : f,
+distanceUnit: (f = jspb.Message.getField(msg, 26)) == null ? undefined : f,
+temperatureUnit: (f = jspb.Message.getField(msg, 16)) == null ? undefined : f,
+pressureUnit: (f = jspb.Message.getField(msg, 17)) == null ? undefined : f,
+ratioUnit: (f = jspb.Message.getField(msg, 18)) == null ? undefined : f,
+clockHourUnit: (f = jspb.Message.getField(msg, 19)) == null ? undefined : f,
+intValue: (f = jspb.Message.getField(msg, 4)) == null ? undefined : f,
+boolValue: (f = jspb.Message.getBooleanField(msg, 5)) == null ? undefined : f,
+stringValue: (f = jspb.Message.getField(msg, 6)) == null ? undefined : f,
+doubleValue: (f = jspb.Message.getOptionalFloatingPointField(msg, 7)) == null ? undefined : f,
+nilValue: (f = jspb.Message.getBooleanField(msg, 8)) == null ? undefined : f,
+unsupportedValue: (f = jspb.Message.getField(msg, 9)) == null ? undefined : f,
+temperaturePointsValue: (f = msg.getTemperaturePointsValue()) && proto.proto.TemperaturePointsValue.toObject(includeInstance, f),
+weekdayTariffValue: (f = msg.getWeekdayTariffValue()) && proto.proto.WeekdayTariffValue.toObject(includeInstance, f),
+weekendTariffValue: (f = msg.getWeekendTariffValue()) && proto.proto.WeekendTariffValue.toObject(includeInstance, f),
+stateOfChargeProfileValue: (f = msg.getStateOfChargeProfileValue()) && proto.proto.StateOfChargeProfileValue.toObject(includeInstance, f),
+weeklySettingsHeadUnitValue: (f = msg.getWeeklySettingsHeadUnitValue()) && proto.proto.WeeklySettingsHeadUnitValue.toObject(includeInstance, f),
+speedAlertConfigurationValue: (f = msg.getSpeedAlertConfigurationValue()) && proto.proto.SpeedAlertConfigurationValue.toObject(includeInstance, f),
+ecoHistogramValue: (f = msg.getEcoHistogramValue()) && proto.proto.EcoHistogramValue.toObject(includeInstance, f),
+weeklyProfileValue: (f = msg.getWeeklyProfileValue()) && proto.proto.WeeklyProfileValue.toObject(includeInstance, f),
+chargeProgramsValue: (f = msg.getChargeProgramsValue()) && proto.proto.ChargeProgramsValue.toObject(includeInstance, f),
+chargingbreakClocktimerValue: (f = msg.getChargingbreakClocktimerValue()) && proto.proto.ChargingBreakClockTimerValue.toObject(includeInstance, f),
+chargingPowerControl: (f = msg.getChargingPowerControl()) && proto.proto.ChargingPowerControl.toObject(includeInstance, f),
+tcuConnectionStateLowChannel: (f = jspb.Message.getField(msg, 38)) == null ? undefined : f,
+precondState: (f = msg.getPrecondState()) && proto.proto.PrecondState.toObject(includeInstance, f),
+chargingPowerRestrictions: (f = msg.getChargingPowerRestrictions()) && proto.proto.ChargingPowerRestrictions.toObject(includeInstance, f),
+chargingCouplerErrorDetails: (f = jspb.Message.getField(msg, 56)) == null ? undefined : f,
+chargingErrorVehicleNoSupport400v: (f = jspb.Message.getField(msg, 58)) == null ? undefined : f,
+chargingErrorImpossibleChangeTo400v: (f = jspb.Message.getField(msg, 59)) == null ? undefined : f,
+chargingErrorImpossibleChangeTo800v: (f = jspb.Message.getField(msg, 60)) == null ? undefined : f,
+precondOperabilityState: (f = msg.getPrecondOperabilityState()) && proto.proto.PrecondOperabilityState.toObject(includeInstance, f),
+pictureRecordingStatus: (f = jspb.Message.getField(msg, 62)) == null ? undefined : f,
+parkEventPictureSelectionStatus: (f = jspb.Message.getField(msg, 63)) == null ? undefined : f,
+panicAlarmActive: (f = jspb.Message.getField(msg, 64)) == null ? undefined : f,
+interiorProtectionSelectionStatus: (f = jspb.Message.getField(msg, 65)) == null ? undefined : f,
+interiorProtectionActivationStatus: (f = jspb.Message.getField(msg, 66)) == null ? undefined : f,
+towProtectionSelectionStatus: (f = jspb.Message.getField(msg, 67)) == null ? undefined : f,
+towProtectionActivationStatus: (f = jspb.Message.getField(msg, 68)) == null ? undefined : f,
+vehicleTheftAlarmInactiveReason: (f = jspb.Message.getField(msg, 69)) == null ? undefined : f,
+parkCollisionSelectionStatus: (f = jspb.Message.getField(msg, 70)) == null ? undefined : f,
+parkCollisionActivationStatus: (f = jspb.Message.getField(msg, 71)) == null ? undefined : f,
+parkCollisionInactiveReason: (f = jspb.Message.getField(msg, 72)) == null ? undefined : f,
+parkCollisionPictureTransferStatus: (f = jspb.Message.getField(msg, 73)) == null ? undefined : f,
+emergencyPowerSupply: (f = jspb.Message.getField(msg, 78)) == null ? undefined : f,
+evsePairingState: (f = jspb.Message.getField(msg, 79)) == null ? undefined : f,
+chargingPredictionSoc: (f = msg.getChargingPredictionSoc()) && proto.proto.ChargingPredictionSoc.toObject(includeInstance, f),
+chargingPredictionDepartureTime: (f = msg.getChargingPredictionDepartureTime()) && proto.proto.ChargingPredictionDepartureTime.toObject(includeInstance, f),
+chargeFlaps: (f = msg.getChargeFlaps()) && proto.proto.ChargeFlaps.toObject(includeInstance, f),
+chargeInlets: (f = msg.getChargeInlets()) && proto.proto.ChargeInlets.toObject(includeInstance, f),
+chargingTimer: (f = msg.getChargingTimer()) && proto.proto.ChargingTimer.toObject(includeInstance, f),
+chargingScheduleRequested: (f = msg.getChargingScheduleRequested()) && proto.proto.ChargingScheduleRequested.toObject(includeInstance, f),
+chargingFlapErrorDetails: (f = jspb.Message.getField(msg, 89)) == null ? undefined : f,
+chargingCompatibilityError: (f = jspb.Message.getField(msg, 90)) == null ? undefined : f,
+hvBatteryPrecondAvailability: (f = jspb.Message.getField(msg, 91)) == null ? undefined : f,
+hvBatteryPrecondRequestState: (f = msg.getHvBatteryPrecondRequestState()) && proto.proto.HvBatteryPrecondRequestState.toObject(includeInstance, f),
+hvBatteryPrecondState: (f = msg.getHvBatteryPrecondState()) && proto.proto.HvBatteryPrecondState.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -5042,8 +5043,8 @@ proto.proto.HvBatteryPrecondState.prototype.toObject = function(opt_includeInsta
  */
 proto.proto.HvBatteryPrecondState.toObject = function(includeInstance, msg) {
   var f, obj = {
-    charging: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    discharging: jspb.Message.getFieldWithDefault(msg, 2, 0)
+charging: jspb.Message.getFieldWithDefault(msg, 1, 0),
+discharging: jspb.Message.getFieldWithDefault(msg, 2, 0)
   };
 
   if (includeInstance) {
@@ -5202,11 +5203,11 @@ proto.proto.HvBatteryPrecondRequestState.prototype.toObject = function(opt_inclu
  */
 proto.proto.HvBatteryPrecondRequestState.toObject = function(includeInstance, msg) {
   var f, obj = {
-    mainCategory: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    subCategory: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    specificCategory: jspb.Message.getFieldWithDefault(msg, 3, 0),
-    method: jspb.Message.getFieldWithDefault(msg, 4, 0),
-    status: jspb.Message.getFieldWithDefault(msg, 5, 0)
+mainCategory: jspb.Message.getFieldWithDefault(msg, 1, 0),
+subCategory: jspb.Message.getFieldWithDefault(msg, 2, 0),
+specificCategory: jspb.Message.getFieldWithDefault(msg, 3, 0),
+method: jspb.Message.getFieldWithDefault(msg, 4, 0),
+status: jspb.Message.getFieldWithDefault(msg, 5, 0)
   };
 
   if (includeInstance) {
@@ -5452,8 +5453,8 @@ proto.proto.PrecondOperabilityState.prototype.toObject = function(opt_includeIns
  */
 proto.proto.PrecondOperabilityState.toObject = function(includeInstance, msg) {
   var f, obj = {
-    precondAvailable: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
-    precondErrorState: jspb.Message.getFieldWithDefault(msg, 2, 0)
+precondAvailable: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
+precondErrorState: jspb.Message.getFieldWithDefault(msg, 2, 0)
   };
 
   if (includeInstance) {
@@ -5625,8 +5626,8 @@ proto.proto.ChargingScheduleRequested.prototype.toObject = function(opt_includeI
  */
 proto.proto.ChargingScheduleRequested.toObject = function(includeInstance, msg) {
   var f, obj = {
-    scheduleIdStatus: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    useCaseId: jspb.Message.getFieldWithDefault(msg, 2, 0)
+scheduleIdStatus: jspb.Message.getFieldWithDefault(msg, 1, 0),
+useCaseId: jspb.Message.getFieldWithDefault(msg, 2, 0)
   };
 
   if (includeInstance) {
@@ -5839,7 +5840,7 @@ proto.proto.ChargingTimer.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.ChargingTimer.toObject = function(includeInstance, msg) {
   var f, obj = {
-    entriesList: jspb.Message.toObjectList(msg.getEntriesList(),
+entriesList: jspb.Message.toObjectList(msg.getEntriesList(),
     proto.proto.ChargingTimerEntry.toObject, includeInstance)
   };
 
@@ -5999,13 +6000,13 @@ proto.proto.ChargingTimerEntry.prototype.toObject = function(opt_includeInstance
  */
 proto.proto.ChargingTimerEntry.toObject = function(includeInstance, msg) {
   var f, obj = {
-    timerid: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    action: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    startTimeHour: jspb.Message.getFieldWithDefault(msg, 3, 0),
-    startTimeMin: jspb.Message.getFieldWithDefault(msg, 4, 0),
-    endTimeHour: jspb.Message.getFieldWithDefault(msg, 5, 0),
-    endTimeMin: jspb.Message.getFieldWithDefault(msg, 6, 0),
-    dayList: (f = jspb.Message.getRepeatedField(msg, 7)) == null ? undefined : f
+timerid: jspb.Message.getFieldWithDefault(msg, 1, 0),
+action: jspb.Message.getFieldWithDefault(msg, 2, 0),
+startTimeHour: jspb.Message.getFieldWithDefault(msg, 3, 0),
+startTimeMin: jspb.Message.getFieldWithDefault(msg, 4, 0),
+endTimeHour: jspb.Message.getFieldWithDefault(msg, 5, 0),
+endTimeMin: jspb.Message.getFieldWithDefault(msg, 6, 0),
+dayList: (f = jspb.Message.getRepeatedField(msg, 7)) == null ? undefined : f
   };
 
   if (includeInstance) {
@@ -6340,8 +6341,8 @@ proto.proto.ChargingPredictionSoc.prototype.toObject = function(opt_includeInsta
  */
 proto.proto.ChargingPredictionSoc.toObject = function(includeInstance, msg) {
   var f, obj = {
-    predictedEndTime: (f = msg.getPredictedEndTime()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f),
-    predictedElectricalEnergyRange: jspb.Message.getFieldWithDefault(msg, 2, 0)
+predictedEndTime: (f = msg.getPredictedEndTime()) && google_protobuf_timestamp_pb.Timestamp.toObject(includeInstance, f),
+predictedElectricalEnergyRange: jspb.Message.getFieldWithDefault(msg, 2, 0)
   };
 
   if (includeInstance) {
@@ -6521,8 +6522,8 @@ proto.proto.ChargingPredictionDepartureTime.prototype.toObject = function(opt_in
  */
 proto.proto.ChargingPredictionDepartureTime.toObject = function(includeInstance, msg) {
   var f, obj = {
-    predictedSoc: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    predictedElectricalEnergyRange: jspb.Message.getFieldWithDefault(msg, 2, 0)
+predictedSoc: jspb.Message.getFieldWithDefault(msg, 1, 0),
+predictedElectricalEnergyRange: jspb.Message.getFieldWithDefault(msg, 2, 0)
   };
 
   if (includeInstance) {
@@ -6681,9 +6682,9 @@ proto.proto.ChargeInletsEntry.prototype.toObject = function(opt_includeInstance)
  */
 proto.proto.ChargeInletsEntry.toObject = function(includeInstance, msg) {
   var f, obj = {
-    id: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    couplerState: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    lockState: jspb.Message.getFieldWithDefault(msg, 3, 0)
+id: jspb.Message.getFieldWithDefault(msg, 1, 0),
+couplerState: jspb.Message.getFieldWithDefault(msg, 2, 0),
+lockState: jspb.Message.getFieldWithDefault(msg, 3, 0)
   };
 
   if (includeInstance) {
@@ -6900,7 +6901,7 @@ proto.proto.ChargeInlets.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.ChargeInlets.toObject = function(includeInstance, msg) {
   var f, obj = {
-    entriesList: jspb.Message.toObjectList(msg.getEntriesList(),
+entriesList: jspb.Message.toObjectList(msg.getEntriesList(),
     proto.proto.ChargeInletsEntry.toObject, includeInstance)
   };
 
@@ -7053,8 +7054,8 @@ proto.proto.ChargeFlapsEntry.prototype.toObject = function(opt_includeInstance) 
  */
 proto.proto.ChargeFlapsEntry.toObject = function(includeInstance, msg) {
   var f, obj = {
-    id: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    positionState: jspb.Message.getFieldWithDefault(msg, 2, 0)
+id: jspb.Message.getFieldWithDefault(msg, 1, 0),
+positionState: jspb.Message.getFieldWithDefault(msg, 2, 0)
   };
 
   if (includeInstance) {
@@ -7220,7 +7221,7 @@ proto.proto.ChargeFlaps.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.ChargeFlaps.toObject = function(includeInstance, msg) {
   var f, obj = {
-    entriesList: jspb.Message.toObjectList(msg.getEntriesList(),
+entriesList: jspb.Message.toObjectList(msg.getEntriesList(),
     proto.proto.ChargeFlapsEntry.toObject, includeInstance)
   };
 
@@ -7380,7 +7381,7 @@ proto.proto.ChargingPowerRestrictions.prototype.toObject = function(opt_includeI
  */
 proto.proto.ChargingPowerRestrictions.toObject = function(includeInstance, msg) {
   var f, obj = {
-    chargingPowerRestrictionList: (f = jspb.Message.getRepeatedField(msg, 1)) == null ? undefined : f
+chargingPowerRestrictionList: (f = jspb.Message.getRepeatedField(msg, 1)) == null ? undefined : f
   };
 
   if (includeInstance) {
@@ -7538,7 +7539,7 @@ proto.proto.ChargingBreakClockTimerValue.prototype.toObject = function(opt_inclu
  */
 proto.proto.ChargingBreakClockTimerValue.toObject = function(includeInstance, msg) {
   var f, obj = {
-    chargingbreakClocktimerEntryList: jspb.Message.toObjectList(msg.getChargingbreakClocktimerEntryList(),
+chargingbreakClocktimerEntryList: jspb.Message.toObjectList(msg.getChargingbreakClocktimerEntryList(),
     proto.proto.ChargingBreakClockTimerEntry.toObject, includeInstance)
   };
 
@@ -7698,9 +7699,9 @@ proto.proto.PrecondState.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.PrecondState.toObject = function(includeInstance, msg) {
   var f, obj = {
-    activationState: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
-    precondImmediateSupport: jspb.Message.getBooleanFieldWithDefault(msg, 2, false),
-    precondStateTypesList: (f = jspb.Message.getRepeatedField(msg, 3)) == null ? undefined : f
+activationState: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
+precondImmediateSupport: jspb.Message.getBooleanFieldWithDefault(msg, 2, false),
+precondStateTypesList: (f = jspb.Message.getRepeatedField(msg, 3)) == null ? undefined : f
   };
 
   if (includeInstance) {
@@ -7909,13 +7910,13 @@ proto.proto.ChargingPowerControl.prototype.toObject = function(opt_includeInstan
  */
 proto.proto.ChargingPowerControl.toObject = function(includeInstance, msg) {
   var f, obj = {
-    chargeStatus: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    ctrlDuration: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    ctrlInfo: jspb.Message.getFieldWithDefault(msg, 3, 0),
-    chargePower: jspb.Message.getFieldWithDefault(msg, 4, 0),
-    servStat: jspb.Message.getFieldWithDefault(msg, 5, 0),
-    servAvail: jspb.Message.getFieldWithDefault(msg, 6, 0),
-    useCase: jspb.Message.getFieldWithDefault(msg, 7, 0)
+chargeStatus: jspb.Message.getFieldWithDefault(msg, 1, 0),
+ctrlDuration: jspb.Message.getFieldWithDefault(msg, 2, 0),
+ctrlInfo: jspb.Message.getFieldWithDefault(msg, 3, 0),
+chargePower: jspb.Message.getFieldWithDefault(msg, 4, 0),
+servStat: jspb.Message.getFieldWithDefault(msg, 5, 0),
+servAvail: jspb.Message.getFieldWithDefault(msg, 6, 0),
+useCase: jspb.Message.getFieldWithDefault(msg, 7, 0)
   };
 
   if (includeInstance) {
@@ -8228,12 +8229,12 @@ proto.proto.ChargingBreakClockTimerEntry.prototype.toObject = function(opt_inclu
  */
 proto.proto.ChargingBreakClockTimerEntry.toObject = function(includeInstance, msg) {
   var f, obj = {
-    status: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    endtimehour: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    endtimeminute: jspb.Message.getFieldWithDefault(msg, 3, 0),
-    starttimehour: jspb.Message.getFieldWithDefault(msg, 4, 0),
-    starttimeminute: jspb.Message.getFieldWithDefault(msg, 5, 0),
-    timerid: jspb.Message.getFieldWithDefault(msg, 6, 0)
+status: jspb.Message.getFieldWithDefault(msg, 1, 0),
+endtimehour: jspb.Message.getFieldWithDefault(msg, 2, 0),
+endtimeminute: jspb.Message.getFieldWithDefault(msg, 3, 0),
+starttimehour: jspb.Message.getFieldWithDefault(msg, 4, 0),
+starttimeminute: jspb.Message.getFieldWithDefault(msg, 5, 0),
+timerid: jspb.Message.getFieldWithDefault(msg, 6, 0)
   };
 
   if (includeInstance) {
@@ -8515,7 +8516,7 @@ proto.proto.ChargeProgramsValue.prototype.toObject = function(opt_includeInstanc
  */
 proto.proto.ChargeProgramsValue.toObject = function(includeInstance, msg) {
   var f, obj = {
-    chargeProgramParametersList: jspb.Message.toObjectList(msg.getChargeProgramParametersList(),
+chargeProgramParametersList: jspb.Message.toObjectList(msg.getChargeProgramParametersList(),
     proto.proto.ChargeProgramParameters.toObject, includeInstance)
   };
 
@@ -8668,14 +8669,14 @@ proto.proto.ChargeProgramParameters.prototype.toObject = function(opt_includeIns
  */
 proto.proto.ChargeProgramParameters.toObject = function(includeInstance, msg) {
   var f, obj = {
-    chargeProgram: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    maxSoc: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    autoUnlock: jspb.Message.getBooleanFieldWithDefault(msg, 3, false),
-    locationBasedCharging: jspb.Message.getBooleanFieldWithDefault(msg, 4, false),
-    weeklyProfile: jspb.Message.getBooleanFieldWithDefault(msg, 5, false),
-    clocktimer: jspb.Message.getBooleanFieldWithDefault(msg, 6, false),
-    maxChargingCurrent: jspb.Message.getFieldWithDefault(msg, 7, 0),
-    ecoCharging: jspb.Message.getBooleanFieldWithDefault(msg, 8, false)
+chargeProgram: jspb.Message.getFieldWithDefault(msg, 1, 0),
+maxSoc: jspb.Message.getFieldWithDefault(msg, 2, 0),
+autoUnlock: jspb.Message.getBooleanFieldWithDefault(msg, 3, false),
+locationBasedCharging: jspb.Message.getBooleanFieldWithDefault(msg, 4, false),
+weeklyProfile: jspb.Message.getBooleanFieldWithDefault(msg, 5, false),
+clocktimer: jspb.Message.getBooleanFieldWithDefault(msg, 6, false),
+maxChargingCurrent: jspb.Message.getFieldWithDefault(msg, 7, 0),
+ecoCharging: jspb.Message.getBooleanFieldWithDefault(msg, 8, false)
   };
 
   if (includeInstance) {
@@ -9015,12 +9016,12 @@ proto.proto.WeeklyProfileValue.prototype.toObject = function(opt_includeInstance
  */
 proto.proto.WeeklyProfileValue.toObject = function(includeInstance, msg) {
   var f, obj = {
-    singleTimeProfileEntriesActivatable: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
-    maxNumberOfWeeklyTimeProfileSlots: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    maxNumberOfTimeProfiles: jspb.Message.getFieldWithDefault(msg, 3, 0),
-    currentNumberOfTimeProfileSlots: jspb.Message.getFieldWithDefault(msg, 4, 0),
-    currentNumberOfTimeProfiles: jspb.Message.getFieldWithDefault(msg, 5, 0),
-    timeProfilesList: jspb.Message.toObjectList(msg.getTimeProfilesList(),
+singleTimeProfileEntriesActivatable: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
+maxNumberOfWeeklyTimeProfileSlots: jspb.Message.getFieldWithDefault(msg, 2, 0),
+maxNumberOfTimeProfiles: jspb.Message.getFieldWithDefault(msg, 3, 0),
+currentNumberOfTimeProfileSlots: jspb.Message.getFieldWithDefault(msg, 4, 0),
+currentNumberOfTimeProfiles: jspb.Message.getFieldWithDefault(msg, 5, 0),
+timeProfilesList: jspb.Message.toObjectList(msg.getTimeProfilesList(),
     proto.proto.VVRTimeProfile.toObject, includeInstance)
   };
 
@@ -9325,12 +9326,12 @@ proto.proto.VVRTimeProfile.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.VVRTimeProfile.toObject = function(includeInstance, msg) {
   var f, obj = {
-    identifier: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    hour: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    minute: jspb.Message.getFieldWithDefault(msg, 3, 0),
-    daysList: (f = jspb.Message.getRepeatedField(msg, 4)) == null ? undefined : f,
-    active: jspb.Message.getBooleanFieldWithDefault(msg, 5, false),
-    applicationIdentifier: jspb.Message.getFieldWithDefault(msg, 6, 0)
+identifier: jspb.Message.getFieldWithDefault(msg, 1, 0),
+hour: jspb.Message.getFieldWithDefault(msg, 2, 0),
+minute: jspb.Message.getFieldWithDefault(msg, 3, 0),
+daysList: (f = jspb.Message.getRepeatedField(msg, 4)) == null ? undefined : f,
+active: jspb.Message.getBooleanFieldWithDefault(msg, 5, false),
+applicationIdentifier: jspb.Message.getFieldWithDefault(msg, 6, 0)
   };
 
   if (includeInstance) {
@@ -9633,7 +9634,7 @@ proto.proto.EcoHistogramValue.prototype.toObject = function(opt_includeInstance)
  */
 proto.proto.EcoHistogramValue.toObject = function(includeInstance, msg) {
   var f, obj = {
-    ecoHistogramBinsList: jspb.Message.toObjectList(msg.getEcoHistogramBinsList(),
+ecoHistogramBinsList: jspb.Message.toObjectList(msg.getEcoHistogramBinsList(),
     proto.proto.EcoHistogramBin.toObject, includeInstance)
   };
 
@@ -9786,8 +9787,8 @@ proto.proto.EcoHistogramBin.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.EcoHistogramBin.toObject = function(includeInstance, msg) {
   var f, obj = {
-    interval: jspb.Message.getFloatingPointFieldWithDefault(msg, 1, 0.0),
-    value: jspb.Message.getFloatingPointFieldWithDefault(msg, 2, 0.0)
+interval: jspb.Message.getFloatingPointFieldWithDefault(msg, 1, 0.0),
+value: jspb.Message.getFloatingPointFieldWithDefault(msg, 2, 0.0)
   };
 
   if (includeInstance) {
@@ -9953,7 +9954,7 @@ proto.proto.SpeedAlertConfigurationValue.prototype.toObject = function(opt_inclu
  */
 proto.proto.SpeedAlertConfigurationValue.toObject = function(includeInstance, msg) {
   var f, obj = {
-    speedAlertConfigurationsList: jspb.Message.toObjectList(msg.getSpeedAlertConfigurationsList(),
+speedAlertConfigurationsList: jspb.Message.toObjectList(msg.getSpeedAlertConfigurationsList(),
     proto.proto.SpeedAlertConfiguration.toObject, includeInstance)
   };
 
@@ -10106,9 +10107,9 @@ proto.proto.SpeedAlertConfiguration.prototype.toObject = function(opt_includeIns
  */
 proto.proto.SpeedAlertConfiguration.toObject = function(includeInstance, msg) {
   var f, obj = {
-    endTimestampInS: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    thresholdInKph: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    thresholdDisplayValue: jspb.Message.getFieldWithDefault(msg, 3, "")
+endTimestampInS: jspb.Message.getFieldWithDefault(msg, 1, 0),
+thresholdInKph: jspb.Message.getFieldWithDefault(msg, 2, 0),
+thresholdDisplayValue: jspb.Message.getFieldWithDefault(msg, 3, "")
   };
 
   if (includeInstance) {
@@ -10303,7 +10304,7 @@ proto.proto.WeeklySettingsHeadUnitValue.prototype.toObject = function(opt_includ
  */
 proto.proto.WeeklySettingsHeadUnitValue.toObject = function(includeInstance, msg) {
   var f, obj = {
-    weeklySettingsList: jspb.Message.toObjectList(msg.getWeeklySettingsList(),
+weeklySettingsList: jspb.Message.toObjectList(msg.getWeeklySettingsList(),
     proto.proto.WeeklySetting.toObject, includeInstance)
   };
 
@@ -10456,8 +10457,8 @@ proto.proto.WeeklySetting.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.WeeklySetting.toObject = function(includeInstance, msg) {
   var f, obj = {
-    day: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    minutesSinceMidnight: jspb.Message.getFieldWithDefault(msg, 2, 0)
+day: jspb.Message.getFieldWithDefault(msg, 1, 0),
+minutesSinceMidnight: jspb.Message.getFieldWithDefault(msg, 2, 0)
   };
 
   if (includeInstance) {
@@ -10623,7 +10624,7 @@ proto.proto.TemperaturePointsValue.prototype.toObject = function(opt_includeInst
  */
 proto.proto.TemperaturePointsValue.toObject = function(includeInstance, msg) {
   var f, obj = {
-    temperaturePointsList: jspb.Message.toObjectList(msg.getTemperaturePointsList(),
+temperaturePointsList: jspb.Message.toObjectList(msg.getTemperaturePointsList(),
     proto.proto.TemperaturePoint.toObject, includeInstance)
   };
 
@@ -10776,9 +10777,9 @@ proto.proto.TemperaturePoint.prototype.toObject = function(opt_includeInstance) 
  */
 proto.proto.TemperaturePoint.toObject = function(includeInstance, msg) {
   var f, obj = {
-    zone: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    temperature: jspb.Message.getFloatingPointFieldWithDefault(msg, 2, 0.0),
-    temperatureDisplayValue: jspb.Message.getFieldWithDefault(msg, 3, "")
+zone: jspb.Message.getFieldWithDefault(msg, 1, ""),
+temperature: jspb.Message.getFloatingPointFieldWithDefault(msg, 2, 0.0),
+temperatureDisplayValue: jspb.Message.getFieldWithDefault(msg, 3, "")
   };
 
   if (includeInstance) {
@@ -10973,7 +10974,7 @@ proto.proto.WeekdayTariffValue.prototype.toObject = function(opt_includeInstance
  */
 proto.proto.WeekdayTariffValue.toObject = function(includeInstance, msg) {
   var f, obj = {
-    tariffsList: jspb.Message.toObjectList(msg.getTariffsList(),
+tariffsList: jspb.Message.toObjectList(msg.getTariffsList(),
     proto.proto.Tariff.toObject, includeInstance)
   };
 
@@ -11133,7 +11134,7 @@ proto.proto.WeekendTariffValue.prototype.toObject = function(opt_includeInstance
  */
 proto.proto.WeekendTariffValue.toObject = function(includeInstance, msg) {
   var f, obj = {
-    tariffsList: jspb.Message.toObjectList(msg.getTariffsList(),
+tariffsList: jspb.Message.toObjectList(msg.getTariffsList(),
     proto.proto.Tariff.toObject, includeInstance)
   };
 
@@ -11286,8 +11287,8 @@ proto.proto.Tariff.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.Tariff.toObject = function(includeInstance, msg) {
   var f, obj = {
-    rate: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    time: jspb.Message.getFieldWithDefault(msg, 2, 0)
+rate: jspb.Message.getFieldWithDefault(msg, 1, 0),
+time: jspb.Message.getFieldWithDefault(msg, 2, 0)
   };
 
   if (includeInstance) {
@@ -11453,7 +11454,7 @@ proto.proto.StateOfChargeProfileValue.prototype.toObject = function(opt_includeI
  */
 proto.proto.StateOfChargeProfileValue.toObject = function(includeInstance, msg) {
   var f, obj = {
-    statesOfChargeList: jspb.Message.toObjectList(msg.getStatesOfChargeList(),
+statesOfChargeList: jspb.Message.toObjectList(msg.getStatesOfChargeList(),
     proto.proto.StateOfCharge.toObject, includeInstance)
   };
 
@@ -11606,8 +11607,8 @@ proto.proto.StateOfCharge.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.StateOfCharge.toObject = function(includeInstance, msg) {
   var f, obj = {
-    timestampInS: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    stateOfCharge: jspb.Message.getFieldWithDefault(msg, 2, 0)
+timestampInS: jspb.Message.getFieldWithDefault(msg, 1, 0),
+stateOfCharge: jspb.Message.getFieldWithDefault(msg, 2, 0)
   };
 
   if (includeInstance) {
@@ -11766,8 +11767,8 @@ proto.proto.VEPUpdatesByVIN.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.VEPUpdatesByVIN.toObject = function(includeInstance, msg) {
   var f, obj = {
-    sequenceNumber: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    updatesMap: (f = msg.getUpdatesMap()) ? f.toObject(includeInstance, proto.proto.VEPUpdate.toObject) : []
+sequenceNumber: jspb.Message.getFieldWithDefault(msg, 2, 0),
+updatesMap: (f = msg.getUpdatesMap()) ? f.toObject(includeInstance, proto.proto.VEPUpdate.toObject) : []
   };
 
   if (includeInstance) {
@@ -11894,7 +11895,8 @@ proto.proto.VEPUpdatesByVIN.prototype.getUpdatesMap = function(opt_noLazyCreate)
  */
 proto.proto.VEPUpdatesByVIN.prototype.clearUpdatesMap = function() {
   this.getUpdatesMap().clear();
-  return this;};
+  return this;
+};
 
 
 
@@ -11929,7 +11931,7 @@ proto.proto.DebugMessage.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.DebugMessage.toObject = function(includeInstance, msg) {
   var f, obj = {
-    message: jspb.Message.getFieldWithDefault(msg, 1, "")
+message: jspb.Message.getFieldWithDefault(msg, 1, "")
   };
 
   if (includeInstance) {
@@ -12059,8 +12061,8 @@ proto.proto.VehicleStatus.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.VehicleStatus.toObject = function(includeInstance, msg) {
   var f, obj = {
-    vin: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    attributesMap: (f = msg.getAttributesMap()) ? f.toObject(includeInstance, proto.proto.VehicleAttributeStatus.toObject) : []
+vin: jspb.Message.getFieldWithDefault(msg, 1, ""),
+attributesMap: (f = msg.getAttributesMap()) ? f.toObject(includeInstance, proto.proto.VehicleAttributeStatus.toObject) : []
   };
 
   if (includeInstance) {
@@ -12187,7 +12189,8 @@ proto.proto.VehicleStatus.prototype.getAttributesMap = function(opt_noLazyCreate
  */
 proto.proto.VehicleStatus.prototype.clearAttributesMap = function() {
   this.getAttributesMap().clear();
-  return this;};
+  return this;
+};
 
 
 
@@ -12261,22 +12264,22 @@ proto.proto.PushMessage.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.PushMessage.toObject = function(includeInstance, msg) {
   var f, obj = {
-    trackingId: jspb.Message.getFieldWithDefault(msg, 5, ""),
-    vepupdate: (f = msg.getVepupdate()) && proto.proto.VEPUpdate.toObject(includeInstance, f),
-    vepupdates: (f = msg.getVepupdates()) && proto.proto.VEPUpdatesByVIN.toObject(includeInstance, f),
-    debugmessage: (f = msg.getDebugmessage()) && proto.proto.DebugMessage.toObject(includeInstance, f),
-    serviceStatusUpdates: (f = msg.getServiceStatusUpdates()) && service$activation_pb.ServiceStatusUpdatesByVIN.toObject(includeInstance, f),
-    serviceStatusUpdate: (f = msg.getServiceStatusUpdate()) && service$activation_pb.ServiceStatusUpdate.toObject(includeInstance, f),
-    userDataUpdate: (f = msg.getUserDataUpdate()) && user$events_pb.UserDataUpdate.toObject(includeInstance, f),
-    userVehicleAuthChangedUpdate: (f = msg.getUserVehicleAuthChangedUpdate()) && user$events_pb.UserVehicleAuthChangedUpdate.toObject(includeInstance, f),
-    userPictureUpdate: (f = msg.getUserPictureUpdate()) && user$events_pb.UserPictureUpdate.toObject(includeInstance, f),
-    userPinUpdate: (f = msg.getUserPinUpdate()) && user$events_pb.UserPINUpdate.toObject(includeInstance, f),
-    vehicleUpdated: (f = msg.getVehicleUpdated()) && proto.proto.VehicleUpdated.toObject(includeInstance, f),
-    preferredDealerChange: (f = msg.getPreferredDealerChange()) && proto.proto.PreferredDealerChange.toObject(includeInstance, f),
-    apptwinCommandStatusUpdatesByVin: (f = msg.getApptwinCommandStatusUpdatesByVin()) && vehicleapi_pb.AppTwinCommandStatusUpdatesByVIN.toObject(includeInstance, f),
-    apptwinPendingCommandRequest: (f = msg.getApptwinPendingCommandRequest()) && vehicleapi_pb.AppTwinPendingCommandsRequest.toObject(includeInstance, f),
-    assignedVehicles: (f = msg.getAssignedVehicles()) && protos_pb.AssignedVehicles.toObject(includeInstance, f),
-    dataChangeEvent: (f = msg.getDataChangeEvent()) && proto.proto.DataChangeEvent.toObject(includeInstance, f)
+trackingId: jspb.Message.getFieldWithDefault(msg, 5, ""),
+vepupdate: (f = msg.getVepupdate()) && proto.proto.VEPUpdate.toObject(includeInstance, f),
+vepupdates: (f = msg.getVepupdates()) && proto.proto.VEPUpdatesByVIN.toObject(includeInstance, f),
+debugmessage: (f = msg.getDebugmessage()) && proto.proto.DebugMessage.toObject(includeInstance, f),
+serviceStatusUpdates: (f = msg.getServiceStatusUpdates()) && service$activation_pb.ServiceStatusUpdatesByVIN.toObject(includeInstance, f),
+serviceStatusUpdate: (f = msg.getServiceStatusUpdate()) && service$activation_pb.ServiceStatusUpdate.toObject(includeInstance, f),
+userDataUpdate: (f = msg.getUserDataUpdate()) && user$events_pb.UserDataUpdate.toObject(includeInstance, f),
+userVehicleAuthChangedUpdate: (f = msg.getUserVehicleAuthChangedUpdate()) && user$events_pb.UserVehicleAuthChangedUpdate.toObject(includeInstance, f),
+userPictureUpdate: (f = msg.getUserPictureUpdate()) && user$events_pb.UserPictureUpdate.toObject(includeInstance, f),
+userPinUpdate: (f = msg.getUserPinUpdate()) && user$events_pb.UserPINUpdate.toObject(includeInstance, f),
+vehicleUpdated: (f = msg.getVehicleUpdated()) && proto.proto.VehicleUpdated.toObject(includeInstance, f),
+preferredDealerChange: (f = msg.getPreferredDealerChange()) && proto.proto.PreferredDealerChange.toObject(includeInstance, f),
+apptwinCommandStatusUpdatesByVin: (f = msg.getApptwinCommandStatusUpdatesByVin()) && vehicleapi_pb.AppTwinCommandStatusUpdatesByVIN.toObject(includeInstance, f),
+apptwinPendingCommandRequest: (f = msg.getApptwinPendingCommandRequest()) && vehicleapi_pb.AppTwinPendingCommandsRequest.toObject(includeInstance, f),
+assignedVehicles: (f = msg.getAssignedVehicles()) && protos_pb.AssignedVehicles.toObject(includeInstance, f),
+dataChangeEvent: (f = msg.getDataChangeEvent()) && proto.proto.DataChangeEvent.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -13156,10 +13159,10 @@ proto.proto.TrackingEvent.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.TrackingEvent.toObject = function(includeInstance, msg) {
   var f, obj = {
-    trackingId: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    timestamp: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    eventType: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    payloadMap: (f = msg.getPayloadMap()) ? f.toObject(includeInstance, proto.proto.PayloadValue.toObject) : []
+trackingId: jspb.Message.getFieldWithDefault(msg, 1, ""),
+timestamp: jspb.Message.getFieldWithDefault(msg, 2, 0),
+eventType: jspb.Message.getFieldWithDefault(msg, 3, ""),
+payloadMap: (f = msg.getPayloadMap()) ? f.toObject(includeInstance, proto.proto.PayloadValue.toObject) : []
   };
 
   if (includeInstance) {
@@ -13344,7 +13347,8 @@ proto.proto.TrackingEvent.prototype.getPayloadMap = function(opt_noLazyCreate) {
  */
 proto.proto.TrackingEvent.prototype.clearPayloadMap = function() {
   this.getPayloadMap().clear();
-  return this;};
+  return this;
+};
 
 
 
@@ -13407,10 +13411,10 @@ proto.proto.PayloadValue.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.PayloadValue.toObject = function(includeInstance, msg) {
   var f, obj = {
-    stringValue: jspb.Message.getFieldWithDefault(msg, 1, ""),
-    intValue: jspb.Message.getFieldWithDefault(msg, 2, 0),
-    boolValue: jspb.Message.getBooleanFieldWithDefault(msg, 3, false),
-    doubleValue: jspb.Message.getFloatingPointFieldWithDefault(msg, 4, 0.0)
+stringValue: (f = jspb.Message.getField(msg, 1)) == null ? undefined : f,
+intValue: (f = jspb.Message.getField(msg, 2)) == null ? undefined : f,
+boolValue: (f = jspb.Message.getBooleanField(msg, 3)) == null ? undefined : f,
+doubleValue: (f = jspb.Message.getOptionalFloatingPointField(msg, 4)) == null ? undefined : f
   };
 
   if (includeInstance) {
@@ -13699,7 +13703,7 @@ proto.proto.AcknowledgeVEPRequest.prototype.toObject = function(opt_includeInsta
  */
 proto.proto.AcknowledgeVEPRequest.toObject = function(includeInstance, msg) {
   var f, obj = {
-    sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0)
+sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0)
   };
 
   if (includeInstance) {
@@ -13829,7 +13833,7 @@ proto.proto.AcknowledgeVEPUpdatesByVIN.prototype.toObject = function(opt_include
  */
 proto.proto.AcknowledgeVEPUpdatesByVIN.toObject = function(includeInstance, msg) {
   var f, obj = {
-    sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0)
+sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0)
   };
 
   if (includeInstance) {
@@ -13959,7 +13963,7 @@ proto.proto.ConfigurePingInterval.prototype.toObject = function(opt_includeInsta
  */
 proto.proto.ConfigurePingInterval.toObject = function(includeInstance, msg) {
   var f, obj = {
-    pingTimeMillis: jspb.Message.getFieldWithDefault(msg, 1, 0)
+pingTimeMillis: jspb.Message.getFieldWithDefault(msg, 1, 0)
   };
 
   if (includeInstance) {
@@ -14089,7 +14093,7 @@ proto.proto.AcknowledgeVehicleUpdated.prototype.toObject = function(opt_includeI
  */
 proto.proto.AcknowledgeVehicleUpdated.toObject = function(includeInstance, msg) {
   var f, obj = {
-    sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0)
+sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0)
   };
 
   if (includeInstance) {
@@ -14219,7 +14223,7 @@ proto.proto.AcknowledgePreferredDealerChange.prototype.toObject = function(opt_i
  */
 proto.proto.AcknowledgePreferredDealerChange.toObject = function(includeInstance, msg) {
   var f, obj = {
-    sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0)
+sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0)
   };
 
   if (includeInstance) {
@@ -14349,10 +14353,10 @@ proto.proto.VehicleUpdated.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.VehicleUpdated.toObject = function(includeInstance, msg) {
   var f, obj = {
-    sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    ciamId: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    vin: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    emitTimestampInMs: jspb.Message.getFieldWithDefault(msg, 10, 0)
+sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0),
+ciamId: jspb.Message.getFieldWithDefault(msg, 2, ""),
+vin: jspb.Message.getFieldWithDefault(msg, 3, ""),
+emitTimestampInMs: jspb.Message.getFieldWithDefault(msg, 10, 0)
   };
 
   if (includeInstance) {
@@ -14569,10 +14573,10 @@ proto.proto.PreferredDealerChange.prototype.toObject = function(opt_includeInsta
  */
 proto.proto.PreferredDealerChange.toObject = function(includeInstance, msg) {
   var f, obj = {
-    sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    ciamId: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    vin: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    emitTimestampInMs: jspb.Message.getFieldWithDefault(msg, 10, 0)
+sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0),
+ciamId: jspb.Message.getFieldWithDefault(msg, 2, ""),
+vin: jspb.Message.getFieldWithDefault(msg, 3, ""),
+emitTimestampInMs: jspb.Message.getFieldWithDefault(msg, 10, 0)
   };
 
   if (includeInstance) {
@@ -14789,7 +14793,7 @@ proto.proto.AcknowledgeDataChangeEvent.prototype.toObject = function(opt_include
  */
 proto.proto.AcknowledgeDataChangeEvent.toObject = function(includeInstance, msg) {
   var f, obj = {
-    sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0)
+sequenceNumber: jspb.Message.getFieldWithDefault(msg, 1, 0)
   };
 
   if (includeInstance) {
@@ -14919,12 +14923,12 @@ proto.proto.Scopes.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.Scopes.toObject = function(includeInstance, msg) {
   var f, obj = {
-    scope: jspb.Message.getFieldWithDefault(msg, 1, 0),
-    ciamid: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    vin: jspb.Message.getFieldWithDefault(msg, 3, ""),
-    additionalResourcesMap: (f = msg.getAdditionalResourcesMap()) ? f.toObject(includeInstance, undefined) : [],
-    resourceCiamId: jspb.Message.getFieldWithDefault(msg, 5, ""),
-    resourceVin: jspb.Message.getFieldWithDefault(msg, 6, "")
+scope: jspb.Message.getFieldWithDefault(msg, 1, 0),
+ciamid: jspb.Message.getFieldWithDefault(msg, 2, ""),
+vin: jspb.Message.getFieldWithDefault(msg, 3, ""),
+additionalResourcesMap: (f = msg.getAdditionalResourcesMap()) ? f.toObject(includeInstance, undefined) : [],
+resourceCiamId: jspb.Message.getFieldWithDefault(msg, 5, ""),
+resourceVin: jspb.Message.getFieldWithDefault(msg, 6, "")
   };
 
   if (includeInstance) {
@@ -15131,7 +15135,8 @@ proto.proto.Scopes.prototype.getAdditionalResourcesMap = function(opt_noLazyCrea
  */
 proto.proto.Scopes.prototype.clearAdditionalResourcesMap = function() {
   this.getAdditionalResourcesMap().clear();
-  return this;};
+  return this;
+};
 
 
 /**
@@ -15209,10 +15214,10 @@ proto.proto.DataChangeEvent.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.DataChangeEvent.toObject = function(includeInstance, msg) {
   var f, obj = {
-    scopesList: jspb.Message.toObjectList(msg.getScopesList(),
+scopesList: jspb.Message.toObjectList(msg.getScopesList(),
     proto.proto.Scopes.toObject, includeInstance),
-    trackingId: jspb.Message.getFieldWithDefault(msg, 2, ""),
-    sequenceNumber: jspb.Message.getFieldWithDefault(msg, 3, 0)
+trackingId: jspb.Message.getFieldWithDefault(msg, 2, ""),
+sequenceNumber: jspb.Message.getFieldWithDefault(msg, 3, 0)
   };
 
   if (includeInstance) {
