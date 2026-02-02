@@ -8,7 +8,7 @@
 const utils = require("@iobroker/adapter-core");
 const { v4: uuidv4 } = require("uuid");
 const axios = require("axios").default;
-const WebSocket = require("ws");
+const { WebSocket } = require("undici");
 const Json2iob = require("json2iob");
 const qs = require("qs");
 const { CookieJar } = require("tough-cookie");
@@ -1840,6 +1840,24 @@ class Mercedesme extends utils.Adapter {
       }
     });
   }
+  resetHeartbeatTimeout() {
+    if (this.wsHeartbeatTimeout) {
+      clearTimeout(this.wsHeartbeatTimeout);
+    }
+    this.wsHeartbeatTimeout = setTimeout(() => {
+      this.log.info(
+        "No Data since " +
+          this.config.reconnectDelay +
+          " seconds. Lost WebSocket connection. Reconnect WebSocket. Reconnects Today: " +
+          this.wsReconnectCounter,
+      );
+      this.ws.close();
+      setTimeout(() => {
+        this.connectWS();
+      }, 2000);
+    }, this.config.reconnectDelay * 1000);
+  }
+
   connectWS() {
     this.wsReconnectCounter++;
     // WebSocket headers (APK style - new X-TrackingId per connect)
@@ -1857,18 +1875,10 @@ class Mercedesme extends utils.Adapter {
       "X-ApplicationName": this.appName,
       "ris-application-version": this.appVersion,
     };
-    this.log.debug("Connect to WebSocket");
+    this.log.debug("Connect to WebSocket (using undici)");
     try {
+      // undici WebSocket doesn't support ping(), use message-based heartbeat
       clearInterval(this.wsPingInterval);
-      this.wsPingInterval = setInterval(() => {
-        try {
-          this.log.debug("Ping");
-          this.ws.ping();
-        } catch (error) {
-          this.log.error(error);
-          this.log.error("Ping failed");
-        }
-      }, 30 * 1000); //30s
       clearInterval(this.reconnectInterval);
       this.reconnectInterval = setInterval(() => {
         this.log.info("Try to reconnect");
@@ -1883,61 +1893,56 @@ class Mercedesme extends utils.Adapter {
       this.log.error("No WebSocketConnection possible");
     }
 
-    this.ws.on("open", () => {
+    this.ws.addEventListener("open", () => {
       this.log.debug("WebSocket connected");
       this.setState("info.connection", true, true);
       clearInterval(this.reconnectInterval);
+
+      // Start heartbeat timeout (reset on each message)
+      this.resetHeartbeatTimeout();
     });
-    this.ws.on("error", (data) => {
+    this.ws.addEventListener("error", (event) => {
       this.setState("info.connection", false, true);
       try {
-        if (data.message.indexOf("428") !== -1) {
+        const errorMsg = event.message || event.error?.message || String(event);
+        if (errorMsg.indexOf("428") !== -1) {
           this.log.warn("Too many requests. Your IP is maybe blocked");
-        } else if (data.message.indexOf("429") !== -1) {
+        } else if (errorMsg.indexOf("429") !== -1) {
           this.log.info(
             "429 Too many requests. The account is blocked until 0:00. Reconnects Today: " + this.wsReconnectCounter,
           );
-        } else if (data.message.indexOf("403") !== -1) {
+        } else if (errorMsg.indexOf("403") !== -1) {
           this.refreshToken(true).catch(() => {
             this.log.error("Refresh Token Failed ");
           });
         } else {
-          this.log.error("WS error:" + data);
+          this.log.error("WS error:" + errorMsg);
         }
       } catch (error) {
         this.log.error(error);
       }
     });
-    this.ws.on("pong", () => {
-      this.log.debug("Pong");
-      if (this.wsHeartbeatTimeout) {
-        clearTimeout(this.wsHeartbeatTimeout);
-      }
-      this.wsHeartbeatTimeout = setTimeout(() => {
-        this.log.info(
-          "No Data since " +
-            this.config.reconnectDelay +
-            " seconds. Lost WebSocket connection. Reconnect WebSocket. Reconnects Today: " +
-            this.wsReconnectCounter,
-        );
-        this.ws.close();
-        setTimeout(() => {
-          this.connectWS();
-        }, 2000);
-      }, this.config.reconnectDelay * 1000);
-    });
-    this.ws.on("close", (data) => {
-      this.log.debug(data);
+    this.ws.addEventListener("close", (event) => {
+      this.log.debug("Close code: " + event.code);
       this.setState("info.connection", false, true);
       this.log.debug("Websocket closed");
     });
-    this.ws.on("message", async (data, isBinary) => {
-      data = isBinary ? data : data.toString();
+    this.ws.addEventListener("message", async (event) => {
+      // undici returns Blob, convert to Buffer
+      let data;
+      if (event.data instanceof Blob) {
+        data = Buffer.from(await event.data.arrayBuffer());
+      } else if (event.data instanceof ArrayBuffer) {
+        data = Buffer.from(event.data);
+      } else {
+        data = Buffer.from(event.data);
+      }
       // const hexString = ""
       // let parsed = new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
       // const foo =Client.ClientMessage.deserializeBinary(parsed).toObject()
       this.log.silly("WS Message Length: " + data.length);
-      this.ws.ping();
+      // Reset heartbeat on every message (instead of ping/pong)
+      this.resetHeartbeatTimeout();
       if (this.reconnectInterval) {
         clearInterval(this.reconnectInterval);
       }
