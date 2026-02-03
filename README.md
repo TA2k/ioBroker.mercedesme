@@ -18,6 +18,9 @@ Unter commands das commando auf klappen und den button neben start drücken wenn
 Remote sind vorgefertige Remote Befehle
 
 ## Changelog
+### 0.4.0 (2026-02-03)
+- fix remote command sending
+
 ### 0.3.9 (2025-11-12)
 - fix login flow
 

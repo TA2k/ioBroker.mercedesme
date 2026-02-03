@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.3.9",
+    "version": "0.4.0",
     "news": {
+      "0.4.0": {
+        "en": "fix remote command sending",
+        "de": "remote-befehl senden gefixt",
+        "ru": "отправить удаленную команду",
+        "pt": "corrigir o envio do comando remoto",
+        "nl": "fix remote commando verzenden",
+        "fr": "correction de l'envoi de commande distante",
+        "it": "correggere l'invio di comando remoto",
+        "es": "fijar comando remoto enviar",
+        "pl": "naprawić wysyłanie zdalnego polecenia",
+        "uk": "фіксувати надсилання віддалених команд",
+        "zh-cn": "修复远程命令发送"
+      },
       "0.3.9": {
         "en": "fix login flow",
         "de": "fehlerbehebung",
@@ -80,19 +93,6 @@
         "pl": "naprawić relogowanie po ponownym uruchomieniu adaptera\ndodaj logi do ponownego połączenia",
         "uk": "фіксувати перелогін після перезавантаження адаптера\nдодати журнали для підключення",
         "zh-cn": "调整适配器重新启动后的重新登录\n添加重新连接日志"
-      },
-      "0.3.6": {
-        "en": "Fix for Login and WS connection",
-        "de": "Fix für Login und WS-Verbindung",
-        "ru": "Fix для подключения входа и WS",
-        "pt": "Correção para login e conexão WS",
-        "nl": "Fix voor Login en WS-verbinding",
-        "fr": "Correction pour connexion Login et WS",
-        "it": "Fissare per connessione Login e WS",
-        "es": "Fijación para el acceso y conexión WS",
-        "pl": "Napraw dla połączenia Login i WS",
-        "uk": "Виправлення для входу та підключення WS",
-        "zh-cn": "登录和WS连接的固定"
       }
     },
     "titleLang": {
