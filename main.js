@@ -50,10 +50,10 @@ class Mercedesme extends utils.Adapter {
 
     // APK version info - update these when APK updates
     this.appName = "mycar-store-ece";
-    this.appVersion = "1.63.1";
+    this.appVersion = "1.93.1"; //original 1.63.1 but higher versions prevent version check
     this.osName = "android";
     this.osVersion = "14";
-    this.sdkVersion = "3.26.1";
+    this.sdkVersion = "3.96.1"; //orginal 3.26.1 but higher versions prevent version check
     // Built like APK: {appName} v{appVersion}, {osName} {osVersion}, SDK {sdkVersion}
     this.userAgent = `${this.appName} v${this.appVersion}, ${this.osName} ${this.osVersion}, SDK ${this.sdkVersion}`;
 
