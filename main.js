@@ -1999,7 +1999,17 @@ class Mercedesme extends utils.Adapter {
     this.ws.addEventListener("error", (event) => {
       this.setState("info.connection", false, true);
       try {
-        const errorMsg = event.message || event.error?.message || String(event);
+        // undici ErrorEvent: extract error from event.error (may be Error object or string)
+        let errorMsg = "";
+        if (event.error instanceof Error) {
+          errorMsg = event.error.message;
+        } else if (typeof event.error === "string") {
+          errorMsg = event.error;
+        } else if (event.message) {
+          errorMsg = event.message;
+        } else {
+          errorMsg = JSON.stringify(event) || "Unknown WebSocket error";
+        }
         if (errorMsg.indexOf("428") !== -1) {
           this.log.warn("Too many requests. Your IP is maybe blocked");
         } else if (errorMsg.indexOf("429") !== -1) {
