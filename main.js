@@ -9,6 +9,7 @@ const utils = require("@iobroker/adapter-core");
 const { v4: uuidv4 } = require("uuid");
 const axios = require("axios").default;
 const { WebSocket } = require("undici");
+const diagnosticsChannel = require("node:diagnostics_channel");
 const Json2iob = require("json2iob");
 const qs = require("qs");
 const { CookieJar } = require("tough-cookie");
@@ -47,6 +48,34 @@ class Mercedesme extends utils.Adapter {
     this.xSession = uuidv4();
     this.xTracking = uuidv4();
     this.deviceuuid = uuidv4();
+
+    // Subscribe to undici diagnostics channels for real errors
+    diagnosticsChannel.subscribe("undici:websocket:socket_error", (err) => {
+      this.log.error(`WS socket error: ${err.message} (code: ${err.code || "none"})`);
+    });
+    diagnosticsChannel.subscribe("undici:websocket:close", ({ code, reason }) => {
+      this.log.debug(`WS close (diag): code=${code}, reason=${reason || "(none)"}`);
+    });
+    diagnosticsChannel.subscribe("undici:client:connectError", ({ error, connectParams }) => {
+      this.log.error(`Connect error: ${error?.message} (code: ${error?.code || "none"}) to ${connectParams?.hostname}`);
+    });
+    diagnosticsChannel.subscribe("undici:request:error", ({ request, error }) => {
+      this.log.error(`Request error: ${error?.message} (code: ${error?.code || "none"}) for ${request?.origin}${request?.path}`);
+    });
+    diagnosticsChannel.subscribe("undici:request:headers", ({ request, response }) => {
+      if (response.statusCode >= 400) {
+        if (response.statusCode === 428) {
+          this.log.warn(`HTTP 428: Too many requests. Your IP may be blocked. ${request.origin}${request.path}`);
+        } else if (response.statusCode === 429) {
+          this.log.warn(`HTTP 429: Too many requests. Account blocked until 0:00. Reconnects today: ${this.wsReconnectCounter}`);
+        } else if (response.statusCode === 403) {
+          this.log.warn(`HTTP 403: Forbidden. Refreshing token...`);
+          this.refreshToken(true).catch(() => this.log.error("Refresh Token Failed"));
+        } else {
+          this.log.error(`HTTP error: ${response.statusCode} for ${request.origin}${request.path}`);
+        }
+      }
+    });
 
     // APK version info - update these when APK updates
     this.appName = "mycar-store-ece";
@@ -1996,28 +2025,10 @@ class Mercedesme extends utils.Adapter {
       // Start heartbeat timeout (reset on each message)
       this.resetHeartbeatTimeout();
     });
-    this.ws.addEventListener("error", (event) => {
+    this.ws.addEventListener("error", () => {
+      // Real errors are logged via diagnostics channels above
       this.setState("info.connection", false, true);
-      try {
-        // undici fires ErrorEvent with error: TypeError(reason) - reason can be empty
-        const err = event.error;
-        const errorMsg = JSON.stringify(err) || "WebSocket connection failed";
-        if (errorMsg.indexOf("428") !== -1) {
-          this.log.warn("Too many requests. Your IP is maybe blocked");
-        } else if (errorMsg.indexOf("429") !== -1) {
-          this.log.info(
-            "429 Too many requests. The account is blocked until 0:00. Reconnects Today: " + this.wsReconnectCounter,
-          );
-        } else if (errorMsg.indexOf("403") !== -1) {
-          this.refreshToken(true).catch(() => {
-            this.log.error("Refresh Token Failed ");
-          });
-        } else {
-          this.log.error("WS error:" + errorMsg);
-        }
-      } catch (error) {
-        this.log.error(error);
-      }
+      this.log.debug("WebSocket error occurred, connection closed");
     });
     this.ws.addEventListener("close", (event) => {
       this.setState("info.connection", false, true);
