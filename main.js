@@ -1999,17 +1999,9 @@ class Mercedesme extends utils.Adapter {
     this.ws.addEventListener("error", (event) => {
       this.setState("info.connection", false, true);
       try {
-        // undici ErrorEvent: extract error from event.error (may be Error object or string)
-        let errorMsg = "";
-        if (event.error instanceof Error) {
-          errorMsg = event.error.message;
-        } else if (typeof event.error === "string") {
-          errorMsg = event.error;
-        } else if (event.message) {
-          errorMsg = event.message;
-        } else {
-          errorMsg = JSON.stringify(event) || "Unknown WebSocket error";
-        }
+        // undici fires ErrorEvent with error: TypeError(reason) - reason can be empty
+        const err = event.error;
+        const errorMsg = JSON.stringify(err) || "WebSocket connection failed";
         if (errorMsg.indexOf("428") !== -1) {
           this.log.warn("Too many requests. Your IP is maybe blocked");
         } else if (errorMsg.indexOf("429") !== -1) {
@@ -2028,9 +2020,9 @@ class Mercedesme extends utils.Adapter {
       }
     });
     this.ws.addEventListener("close", (event) => {
-      this.log.debug("Close code: " + event.code);
       this.setState("info.connection", false, true);
-      this.log.debug("Websocket closed");
+      // Close codes: 1000=normal, 1001=going away, 1002=protocol error, 1006=abnormal (no close frame)
+      this.log.info(`WebSocket closed - code: ${event.code}, reason: ${event.reason || "(none)"}, wasClean: ${event.wasClean}`);
     });
     this.ws.addEventListener("message", async (event) => {
       // undici returns Blob, convert to Buffer
