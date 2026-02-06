@@ -198,10 +198,28 @@ message VehicleAttributeStatus {
     ChargeProgramsValue charge_programs_value = 31;
     ChargingBreakClockTimerValue chargingbreak_clocktimer_value = 32;
     ChargingPowerControl charging_power_control = 33;
+    KeylineActivationStateValue keyline_activation_state_value = 36;
+    NextDepartureTimeValue next_departure_time_value = 37;
     TcuConnectionStateLowChannelStatus tcu_connection_state_low_channel = 38;
+    TurnOffEnginePreWarning turn_off_engine_pre_warning = 39;
+    ChildPresenceDetectionWarningLastEvent child_presence_detection_warning_last_event = 40;
+    ChildPresenceDetectionWarningLevel child_presence_detection_warning_level = 41;
+    PerformanceLimitationModeStatus performance_limitation_mode_status = 42;
+    BatteryHealth battery_health = 43;
     PrecondState precond_state = 44;
+    ExteriorMonitoringStatus exterior_monitoring_status = 45;
+    InteriorMonitoringStatus interior_monitoring_status = 46;
+    RemoteUpdateStartStatus remote_update_start_status = 47;
+    SohCalibrationRequired soh_calibration_required = 48;
+    SocCalibrationRequest soc_calibration_request = 49;
+    SohCalibrationRequest soh_calibration_request = 50;
+    SohCalibrationState soh_calibration_state = 51;
+    SohCalibrationPlanned soh_calibration_planned = 52;
+    SohFavorableConditions soh_favorable_conditions = 53;
+    SohCalibrationNotifications soh_calibration_notifications = 54;
     ChargingPowerRestrictions charging_power_restrictions = 55;
     ChargingCouplerErrorDetails charging_coupler_error_details = 56;
+    ChargingStopErrorDetails charging_stop_error_details = 57;
     ChargingErrorVehicleNoSupport400V charging_error_vehicle_no_support_400v = 58;
     ChargingErrorImpossibleChangeTo400V charging_error_impossible_change_to_400v = 59;
     ChargingErrorImpossibleChangeTo800V charging_error_impossible_change_to_800v = 60;
@@ -222,19 +240,97 @@ message VehicleAttributeStatus {
     EvsePairingState evse_pairing_state = 79;
     ChargingPredictionSoc charging_prediction_soc = 80;
     ChargingPredictionDepartureTime charging_prediction_departure_time = 81;
-    // ChargingScheduleActive charging_schedule_active = 82;
+    ChargingScheduleActive charging_schedule_active = 82;
+    DcChargingProfile dc_charging_profile = 83;
     ChargeFlaps charge_flaps = 84;
     ChargeInlets charge_inlets = 85;
     ChargingTimer charging_timer = 86;
-    // ParkEventPictureTransmissionStatus park_event_picture_transmission_status = 87;
+    ParkEventPictureTransmissionStatus park_event_picture_transmission_status = 87;
     ChargingScheduleRequested charging_schedule_requested = 88;
     ChargingFlapErrorDetails charging_flap_error_details = 89;
     ChargingCompatibilityError charging_compatibility_error = 90;
     HvBatteryPrecondAvailability hv_battery_precond_availability = 91;
     HvBatteryPrecondRequestState hv_battery_precond_request_state = 92;
     HvBatteryPrecondState hv_battery_precond_state = 93;
-
+    AmgStageModeState amg_stage_mode_state = 94;
+    AmgStageModeError amg_stage_mode_error = 95;
   }
+}
+
+message AmgStageModeError {
+  bool rear_spoiler = 1;
+  bool bow_wave = 2;
+  bool diffuser = 3;
+  bool light = 4;
+  bool mirror = 5;
+  bool sound = 6;
+  bool air_control_system = 7;
+  bool venturi = 8;
+}
+
+enum AmgStageModeState {
+  AMG_STAGE_MODE_STATE_STAGING_NOT_ACTIVE = 0;
+  AMG_STAGE_MODE_STATE_REVERTING_IN_PROGRESS = 1;
+  AMG_STAGE_MODE_STATE_TRANSFORMING_FINISHED_TRANSFORMED_POS = 2;
+  AMG_STAGE_MODE_STATE_TRANSFORMING_FINISHED_DEFAULT_POS = 3;
+  AMG_STAGE_MODE_STATE_TRANSFORMATION_ABORTED = 4;
+}
+
+enum SocCalibrationRequest {
+  SOC_CALIBRATION_REQUEST_NO_REQUEST = 0;
+  SOC_CALIBRATION_REQUEST_LOW_REQUEST = 1;
+  SOC_CALIBRATION_REQUEST_HIGH_REQUEST = 2;
+}
+
+enum SohFavorableConditions {
+  SOH_FAVORABLE_CONDITIONS_NOT_FAVORABLE = 0;
+  SOH_FAVORABLE_CONDITIONS_FAVOURABLE_LEVEL_1 = 1;
+  SOH_FAVORABLE_CONDITIONS_FAVOURABLE_LEVEL_2 = 2;
+}
+
+enum ChargingStopErrorDetails {
+  CHARGING_STOP_ERROR_DETAILS_NO_INFO_OR_ERROR_MESSAGE = 0;
+  CHARGING_STOP_ERROR_DETAILS_CHARGE_STOP_BUTTON_DEFECT = 1;
+}
+
+enum SohCalibrationState {
+  SOH_CALIBRATION_STATE_NOT_ACTIVE = 0;
+  SOH_CALIBRATION_STATE_ACTIVE = 1;
+  SOH_CALIBRATION_STATE_SUCCESSFUL = 2;
+  SOH_CALIBRATION_STATE_BMS_UNDEFINED_ERROR = 3;
+  SOH_CALIBRATION_STATE_BMS_TEMPERATURE_ERROR = 4;
+  SOH_CALIBRATION_STATE_NO_CUSTOMER_PERMISSION_ERROR = 5;
+  SOH_CALIBRATION_STATE_NOT_ENOUGH_TIME_UNTIL_DEPARTURE_ERROR = 6;
+  SOH_CALIBRATION_STATE_USER_CANCELLED_ERROR = 7;
+  SOH_CALIBRATION_STATE_CHARGING_PROCESS_CANCELLED_ERROR = 8;
+  SOH_CALIBRATION_STATE_CHARGING_INFRASTRUCTURE_PROTOCOL_ERROR = 9;
+  SOH_CALIBRATION_STATE_CHARGING_INFRASTRUCTURE_POWER_REDUCTION_ERROR = 10;
+  SOH_CALIBRATION_STATE_UNDEFINED_ERROR = 11;
+}
+
+enum SohCalibrationRequired {
+  SOH_CALIBRATION_NOT_REQUIRED = 0;
+  SOH_CALIBRATION_REQUIRED = 1;
+}
+
+enum SohCalibrationRequest {
+  SOH_CALIBRATION_REQUEST_NO_REQUEST = 0;
+  SOH_CALIBRATION_REQUEST_LOW_REQUEST = 1;
+  SOH_CALIBRATION_REQUEST_HIGH_REQUEST = 2;
+}
+
+enum TurnOffEnginePreWarning {
+  NO_MESSAGE_ACTIVE = 0;
+  VEHICLE_READY_AUTOMATIC_SHUTDOWN_ON_LOCK = 1;
+  VEHICLE_READY_AUTOMATIC_SHUTDOWN_ON_TIMEOUT = 2;
+}
+
+enum SohCalibrationNotifications {
+  SOH_CALIBRATION_NOTIFICATIONS_NO_SOH_CALIBRATION_NECESSARY = 0;
+  SOH_CALIBRATION_NOTIFICATIONS_SEND_NOTIFICATION_LEVEL_1 = 1;
+  SOH_CALIBRATION_NOTIFICATIONS_SEND_NOTIFICATION_LEVEL_2 = 2;
+  SOH_CALIBRATION_NOTIFICATIONS_SEND_NOTIFICATION_LEVEL_3 = 3;
+  SOH_CALIBRATION_NOTIFICATIONS_SEND_NOTIFICATION_LEVEL_4 = 4;
 }
 
 enum HvBatteryPrecondStatesDischarging {
@@ -593,6 +689,20 @@ message ChargingBreakClockTimerValue {
   repeated ChargingBreakClockTimerEntry chargingbreak_clocktimer_entry = 1;
 }
 
+enum BatteryHealth {
+  BATTERY_GREEN_STATE = 0;
+  BATTERY_YELLOW_STATE = 1;
+  BATTERY_RED_STATE = 2;
+  ISSUE_WITH_DATA_EVALUATION = 3;
+  NO_EVALUATION_POSSIBLE = 4;
+  BATTERY_CHANGED = 5;
+  BATTERY_HEALTH_CANNOT_BE_CALCULATED = 6;
+  NO_MB_ORIGINAL_BATTERY = 7;
+  TECHNICAL_LIMITATION_FROM_VEHICLE = 8;
+  GENERAL_TECHNICAL_ERROR = 9;
+  GENERAL_PROCESS_ERROR = 10;
+}
+
 enum PrecondStateType {
   PRECOND_STATE_TYPE_ON_UNLOCK = 0;
   PRECOND_STATE_TYPE_AT_DEPARTURE_TIME = 1;
@@ -944,6 +1054,88 @@ message Scopes {
 
 message DataChangeEvent {
   repeated Scopes scopes = 1;
-  string tracking_id = 2;  
+  string tracking_id = 2;
   int32 sequence_number = 3;
+}
+
+// New messages from APK analysis (2026-02-06)
+
+message KeylineActivationStateValue {
+  // Placeholder - fields to be extracted from smali
+}
+
+message NextDepartureTimeValue {
+  // Placeholder - fields to be extracted from smali
+}
+
+message ChildPresenceDetectionWarningLastEvent {
+  // Placeholder - fields to be extracted from smali
+}
+
+message ChildPresenceDetectionWarningLevel {
+  // Placeholder - fields to be extracted from smali
+}
+
+message PerformanceLimitationModeStatus {
+  // Placeholder - fields to be extracted from smali
+}
+
+message ExteriorMonitoringStatus {
+  // Placeholder - fields to be extracted from smali
+}
+
+message InteriorMonitoringStatus {
+  // Placeholder - fields to be extracted from smali
+}
+
+message RemoteUpdateStartStatus {
+  // Placeholder - fields to be extracted from smali
+}
+
+message SohCalibrationPlanned {
+  // Placeholder - fields to be extracted from smali
+}
+
+enum DcChargingProfile {
+  DC_CHARGING_PROFILE_UNKNOWN = 0;
+  DC_CHARGING_PROFILE_STANDARD = 1;
+  DC_CHARGING_PROFILE_SILENT_OR_ECO = 2;
+  DC_CHARGING_PROFILE_ULTRAFAST = 3;
+  DC_CHARGING_PROFILE_PITSTOP = 4;
+  DC_CHARGING_PROFILE_FAST_ECO_1 = 5;
+  DC_CHARGING_PROFILE_FAST_ECO_2 = 6;
+}
+
+message ChargingScheduleActive {
+  int64 schedule_id_deprecated = 1 [deprecated = true];
+  ChargingScheduleActiveUseCaseId use_case_id_deprecated = 2 [deprecated = true];
+  google.protobuf.Timestamp start_time = 3;
+  ChargingScheduleActiveOfflineMode offline_mode = 4;
+  repeated ChargingScheduleActiveSchedule schedule = 5;
+  ChargingScheduleUseCaseId use_case_id = 6;
+  ScheduleIdStatus schedule_id_status = 7;
+
+  enum ChargingScheduleActiveUseCaseId {
+    CHARGING_SCHEDULE_ACTIVE_USE_CASE_ID_UNKNOWN = 0;
+  }
+
+  enum ChargingScheduleActiveOfflineMode {
+    CHARGING_SCHEDULE_ACTIVE_OFFLINE_MODE_UNKNOWN = 0;
+  }
+
+  message ChargingScheduleActiveSchedule {
+    // Placeholder - fields to be extracted from smali
+  }
+}
+
+enum ChargingScheduleUseCaseId {
+  CHARGING_SCHEDULE_USE_CASE_ID_UNKNOWN = 0;
+}
+
+message ScheduleIdStatus {
+  // Placeholder - fields to be extracted from smali
+}
+
+message ParkEventPictureTransmissionStatus {
+  // Placeholder - fields to be extracted from smali
 }

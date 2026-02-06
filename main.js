@@ -2217,24 +2217,18 @@ class Mercedesme extends utils.Adapter {
           }
         }
       } catch (error) {
-        this.log.error(`Websocket parse error: ${error.message || error}`);
-        if (error.stack) {
-          this.log.error(error.stack);
-        }
-        // Log the raw data that caused the parse error
-        this.log.error(`Failed data (${data.length} bytes): ${data.toString("hex")}`);
+        // Proto parsing errors are expected when APK has newer proto definitions than this adapter
+        this.log.info(`Cannot parse event update completely - proto file may be outdated: ${error.message || error}`);
+        // Log details at debug level for troubleshooting
+        this.log.debug(`Parse error stack: ${error.stack || "none"}`);
+        this.log.debug(`Failed data (${data.length} bytes): ${data.toString("hex")}`);
         // Try to decode with protoc --decode_raw equivalent
         try {
           const rawFields = this.decodeRawProtobuf(data);
-          this.log.error(`Raw protobuf fields: ${JSON.stringify(rawFields)}`);
+          this.log.debug(`Raw protobuf fields: ${JSON.stringify(rawFields)}`);
         } catch (e) {
-          this.log.error(`Cannot decode raw protobuf: ${e.message}`);
+          this.log.debug(`Cannot decode raw protobuf: ${e.message}`);
         }
-        this.log.info("Reconnect WebSocket");
-        this.safeCloseWs();
-        setTimeout(() => {
-          this.connectWS();
-        }, 5000);
       }
     });
   }
