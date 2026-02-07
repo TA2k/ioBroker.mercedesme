@@ -2174,6 +2174,11 @@ class Mercedesme extends utils.Adapter {
               }
               this.log.debug("write " + Object.keys(element[1]).length + " states to " + element[0]);
               for (const state of Object.keys(element[1])) {
+                const value = element[1][state];
+                // Skip undefined/null values (happens with oneof fields)
+                if (value === undefined || value === null) {
+                  continue;
+                }
                 if (
                   state === "displayValue" ||
                   state === "status" ||
@@ -2184,7 +2189,7 @@ class Mercedesme extends utils.Adapter {
                   state === "nilValue" ||
                   state === "stringValue" ||
                   state === "unsupportedValue" ||
-                  element[1][state]
+                  value
                 ) {
                   if (!this.vinStates[vin] || !this.vinStates[vin].includes(element[0] + state)) {
                     await adapter.extendObjectAsync(vin + ".state." + element[0] + "." + state, {
