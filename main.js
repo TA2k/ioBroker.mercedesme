@@ -85,6 +85,8 @@ class Mercedesme extends utils.Adapter {
     this.sdkVersion = "3.96.1"; //orginal 3.26.1 but higher versions prevent version check
     // Built like APK: {appName} v{appVersion}, {osName} {osVersion}, SDK {sdkVersion}
     this.userAgent = `${this.appName} v${this.appVersion}, ${this.osName} ${this.osVersion}, SDK ${this.sdkVersion}`;
+    // Browser user-agent for login flow (parsed by UAParser on Mercedes side)
+    this.browserUserAgent = "Mozilla/5.0 (Linux; Android 14; SM-S921B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.7632.26 Mobile Safari/537.36";
 
     this.Json2iob = new Json2iob(this);
     this.vinStates = {};
@@ -1557,7 +1559,7 @@ class Mercedesme extends utils.Adapter {
         scope: "email profile ciam-uid phone openid offline_access",
       },
       headers: {
-        "user-agent": this.userAgent,
+        "user-agent": this.browserUserAgent,
         accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
         "accept-language": "de-DE,de;q=0.9",
       },
@@ -1625,12 +1627,12 @@ class Mercedesme extends utils.Adapter {
         "content-type": "application/json",
         origin: "https://id.mercedes-benz.com",
         "accept-language": "de-DE,de;q=0.9",
-        "user-agent": this.userAgent,
+        "user-agent": this.browserUserAgent,
       },
       data: {
-        browserName: "Mobile Safari",
-        browserVersion: "15.6.6",
-        osName: "iOS",
+        browserName: "Chrome",
+        browserVersion: "145.0.7632.26",
+        osName: "Android",
       },
     }).catch((error) => {
       this.log.error("Not able to get ua page");
@@ -1645,7 +1647,7 @@ class Mercedesme extends utils.Adapter {
         "content-type": "application/json",
         origin: "https://id.mercedes-benz.com",
         "accept-language": "de-DE,de;q=0.9",
-        "user-agent": this.userAgent,
+        "user-agent": this.browserUserAgent,
         referer: "https://id.mercedes-benz.com/ciam/auth/login",
       },
       data: {
@@ -1670,7 +1672,7 @@ class Mercedesme extends utils.Adapter {
         "content-type": "application/json",
         origin: "https://id.mercedes-benz.com",
         "accept-language": "de-DE,de;q=0.9",
-        "user-agent": this.userAgent,
+        "user-agent": this.browserUserAgent,
         referer: "https://id.mercedes-benz.com/ciam/auth/login",
       },
       data: {
@@ -1712,7 +1714,7 @@ class Mercedesme extends utils.Adapter {
         origin: "https://id.mercedes-benz.com",
 
         "accept-language": "de-DE,de;q=0.9",
-        "user-agent": this.userAgent,
+        "user-agent": this.browserUserAgent,
         referer: "https://id.mercedes-benz.com/ciam/auth/login",
       },
       data: { token: preLoginData.token },
@@ -1801,7 +1803,7 @@ class Mercedesme extends utils.Adapter {
         "content-type": "application/json",
         origin: "https://id.mercedes-benz.com",
         "accept-language": "de-DE,de;q=0.9",
-        "user-agent": this.userAgent,
+        "user-agent": this.browserUserAgent,
         referer: "https://id.mercedes-benz.com/ciam/auth/login",
       },
       data: {
