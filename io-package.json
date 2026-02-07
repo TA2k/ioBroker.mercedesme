@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.4.1",
+    "version": "0.4.2",
     "news": {
+      "0.4.2": {
+        "en": "improve event parsing",
+        "de": "verbessern sie die eventparsing",
+        "ru": "улучшение парсинга событий",
+        "pt": "melhorar a análise de eventos",
+        "nl": "evenement parsing verbeteren",
+        "fr": "améliorer l'analyse des événements",
+        "it": "migliorare la parificazione degli eventi",
+        "es": "mejorar la preparación de eventos",
+        "pl": "poprawić parsowanie zdarzeń",
+        "uk": "поліпшення проведення заходів",
+        "zh-cn": "改进事件分析"
+      },
       "0.4.1": {
         "en": "fix remote command sending",
         "de": "remote-befehl senden gefixt",
@@ -80,19 +93,6 @@
         "pl": "zmienić mechanizm odświeżania symboli",
         "uk": "зміна механізму освіження токени",
         "zh-cn": "更改令牌刷新机制"
-      },
-      "0.3.7": {
-        "en": "fix relogin after adapter restart\nadd logs for reconnect",
-        "de": "relogin nach adapterneustart\nprotokolle für die wiederverschaltung hinzufügen",
-        "ru": "исправить relogin после перезагрузки адаптера\nдобавить журналы для повторного подключения",
-        "pt": "corrigir o relogin após o reinício do adaptador\nadicionar logs para reconectar",
-        "nl": "relogin repareren na herstart van de adapter\nlogs toevoegen voor opnieuw verbinden",
-        "fr": "correction du relogin après redémarrage de l'adaptateur\najouter des journaux pour reconnecter",
-        "it": "correzione relogin dopo riavvio dell'adattatore\naggiungere i log per riconnettere",
-        "es": "fijar relogin después del reinicio del adaptador\nañadir registros para la reconexión",
-        "pl": "naprawić relogowanie po ponownym uruchomieniu adaptera\ndodaj logi do ponownego połączenia",
-        "uk": "фіксувати перелогін після перезавантаження адаптера\nдодати журнали для підключення",
-        "zh-cn": "调整适配器重新启动后的重新登录\n添加重新连接日志"
       }
     },
     "titleLang": {

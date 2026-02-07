@@ -18,6 +18,9 @@ Unter commands das commando auf klappen und den button neben start drücken wenn
 Remote sind vorgefertige Remote Befehle
 
 ## Changelog
+### 0.4.2 (2026-02-07)
+- improve event parsing
+
 ### 0.4.0 (2026-02-03)
 - fix remote command sending
 
