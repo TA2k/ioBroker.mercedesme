@@ -2172,7 +2172,8 @@ class Mercedesme extends utils.Adapter {
                   this.vinStates[vin] = [element[0]];
                 }
               }
-              this.log.debug("write " + Object.keys(element[1]).length + " states to " + element[0]);
+              const definedFields = Object.keys(element[1]).filter(k => element[1][k] !== undefined && element[1][k] !== null);
+              this.log.debug(`write ${definedFields.length} fields to ${element[0]}: ${definedFields.join(", ")}`);
               for (const state of Object.keys(element[1])) {
                 const value = element[1][state];
                 // Skip undefined/null values (happens with oneof fields)
