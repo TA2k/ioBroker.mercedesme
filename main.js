@@ -2161,7 +2161,7 @@ class Mercedesme extends utils.Adapter {
 
     req.on("response", (res) => {
       if (res.statusCode === 429) {
-        this.log.warn("HTTP 429: Too many requests. Account blocked until 0:00.");
+        this.log.warn("HTTP 429: Too many requests for today. Account blocked until 0:00.");
       } else if (res.statusCode === 403) {
         this.log.warn("HTTP 403: Forbidden. Refreshing token...");
         this.refreshToken(true).catch(() => this.log.error("Refresh Token Failed"));
