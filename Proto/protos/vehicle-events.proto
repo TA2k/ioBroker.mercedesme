@@ -712,8 +712,10 @@ enum PrecondStateType {
 
 message PrecondState {
   bool activation_state = 1;
-  bool precond_immediate_support = 2;
-  repeated PrecondStateType precond_state_types = 3;
+  // Field order from Mercedes APK (com.daimler.mbmobilesdk.generated.PrecondState):
+  // tag=1: activation_state, tag=2: precond_state_types, tag=3: precond_immediate_support
+  repeated PrecondStateType precond_state_types = 2;
+  bool precond_immediate_support = 3;
 }
 
 message ChargingPowerControl {
@@ -810,27 +812,45 @@ message WeeklyProfileValue {
   repeated VVRTimeProfile time_profiles = 6 [ json_name = "timeProfiles" ];
 }
 
-// VVRTimeProfile is almost identical to the "TimeProfile" message with the exception that the identifier is not optional.
+// VVRTimeProfile - field tags from Mercedes APK (Feb 2026)
 message VVRTimeProfile {
   // unique id of this time profile entry
   int32 identifier = 1 [ json_name = "id" ];
 
-  // Hour after midnight range [0, 23]
-  int32 hour = 2 [json_name = "hour" ];
-
-  // Minute after full hour range [0, 59]
-  int32 minute = 3 [json_name = "min" ];
-
   // Days for which the above time should be applied
   repeated TimeProfileDay days = 4 [json_name = "day" ];
-
-  // Whether this profile entry is active or not
-  bool active = 5 [json_name = "active" ];
 
   // If a timeProfile is changed or added the respective applicationId must be provided by SDK
   //   11 = Internal Apps
   //   12 = External Apps
   int32 application_identifier = 6 [ json_name = "applicationId" ];
+
+  // Hour after midnight range [0, 23]
+  int32 hour = 7 [json_name = "hour" ];
+
+  // Minute after full hour range [0, 59]
+  int32 minute = 8 [json_name = "min" ];
+
+  // Whether this profile entry is active or not
+  bool active = 9 [json_name = "active" ];
+
+  // Additional fields from APK
+  bool is_learned_time = 10;
+  repeated ActionList action_list = 11;
+  WeeklyProfileScheduleType schedule_type = 12;
+}
+
+// ActionList for VVRTimeProfile
+message ActionList {
+  bool charging = 1;
+  bool precond = 2;
+  bool battery_precond = 3;
+}
+
+enum WeeklyProfileScheduleType {
+  WEEKLY_PROFILE_SCHEDULE_TYPE_NON_RECURRING = 0;
+  WEEKLY_PROFILE_SCHEDULE_TYPE_RECURRING = 1;
+  WEEKLY_PROFILE_SCHEDULE_TYPE_NON_RECURRING_AUTO_DELETE = 2;
 }
 
 message EcoHistogramValue {
