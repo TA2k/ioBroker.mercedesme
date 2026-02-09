@@ -8,8 +8,8 @@
 const utils = require("@iobroker/adapter-core");
 const { v4: uuidv4 } = require("uuid");
 const axios = require("axios").default;
-const { WebSocket } = require("undici");
-const diagnosticsChannel = require("node:diagnostics_channel");
+const https = require("https");
+const crypto = require("crypto");
 const Json2iob = require("json2iob");
 const qs = require("qs");
 const { CookieJar } = require("tough-cookie");
@@ -49,33 +49,16 @@ class Mercedesme extends utils.Adapter {
     this.xTracking = uuidv4();
     this.deviceuuid = uuidv4();
 
-    // Subscribe to undici diagnostics channels for real errors
-    diagnosticsChannel.subscribe("undici:websocket:socket_error", (err) => {
-      this.log.error(`WS socket error: ${err.message} (code: ${err.code || "none"})`);
-    });
-    diagnosticsChannel.subscribe("undici:websocket:close", ({ code, reason }) => {
-      this.log.debug(`WS close (diag): code=${code}, reason=${reason || "(none)"}`);
-    });
-    diagnosticsChannel.subscribe("undici:client:connectError", ({ error, connectParams }) => {
-      this.log.error(`Connect error: ${error?.message} (code: ${error?.code || "none"}) to ${connectParams?.hostname}`);
-    });
-    diagnosticsChannel.subscribe("undici:request:error", ({ request, error }) => {
-      this.log.error(`Request error: ${error?.message} (code: ${error?.code || "none"}) for ${request?.origin}${request?.path}`);
-    });
-    diagnosticsChannel.subscribe("undici:request:headers", ({ request, response }) => {
-      if (response.statusCode >= 400) {
-        if (response.statusCode === 428) {
-          this.log.warn(`HTTP 428: Too many requests. Your IP may be blocked. ${request.origin}${request.path}`);
-        } else if (response.statusCode === 429) {
-          this.log.warn(`HTTP 429: Too many requests. Account blocked until 0:00. Reconnects today: ${this.wsReconnectCounter}`);
-        } else if (response.statusCode === 403) {
-          this.log.warn(`HTTP 403: Forbidden. Refreshing token...`);
-          this.refreshToken(true).catch(() => this.log.error("Refresh Token Failed"));
-        } else {
-          this.log.error(`HTTP error: ${response.statusCode} for ${request.origin}${request.path}`);
-        }
-      }
-    });
+    // Python-compatible TLS cipher suite (required for Mercedes WebSocket)
+    this.pythonCiphers = [
+      "TLS_AES_256_GCM_SHA384",
+      "TLS_CHACHA20_POLY1305_SHA256",
+      "TLS_AES_128_GCM_SHA256",
+      "ECDHE-ECDSA-AES256-GCM-SHA384",
+      "ECDHE-RSA-AES256-GCM-SHA384",
+      "ECDHE-ECDSA-AES128-GCM-SHA256",
+      "ECDHE-RSA-AES128-GCM-SHA256",
+    ].join(":");
 
     // APK version info - update these when APK updates
     this.appName = "mycar-store-ece";
@@ -86,7 +69,8 @@ class Mercedesme extends utils.Adapter {
     // Built like APK: {appName} v{appVersion}, {osName} {osVersion}, SDK {sdkVersion}
     this.userAgent = `${this.appName} v${this.appVersion}, ${this.osName} ${this.osVersion}, SDK ${this.sdkVersion}`;
     // Browser user-agent for login flow (parsed by UAParser on Mercedes side)
-    this.browserUserAgent = "Mozilla/5.0 (Linux; Android 14; SM-S921B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.7632.26 Mobile Safari/537.36";
+    this.browserUserAgent =
+      "Mozilla/5.0 (Linux; Android 14; SM-S921B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.7632.26 Mobile Safari/537.36";
 
     this.Json2iob = new Json2iob(this);
     this.vinStates = {};
@@ -161,7 +145,9 @@ class Mercedesme extends utils.Adapter {
                   results.push({ field: fieldNumber, type: "message", value: nested });
                   continue;
                 }
-              } catch { /* not a nested message */ }
+              } catch {
+                /* not a nested message */
+              }
             }
             // Try as string
             const str = data.toString("utf8");
@@ -451,7 +437,7 @@ class Mercedesme extends utils.Adapter {
             clientMessage.setCommandrequest(command);
             clientMessage.setTrackingId(uuidv4());
             this.log.debug(JSON.stringify(clientMessage.toObject()));
-            this.ws.send(clientMessage.serializeBinary());
+            this.sendWsFrame(clientMessage.serializeBinary());
             return;
           } catch (error) {
             this.log.error("Cannot start " + commandId);
@@ -1531,10 +1517,13 @@ class Mercedesme extends utils.Adapter {
         .catch((error) => {
           if (error) {
             this.log.error("Connection error no login possible. Relogin in 5min");
-            this.reLoginTimeout = setTimeout(() => {
-              this.log.info("Start initial loading");
-              this.initLoading();
-            }, 5 * 60 * 1000);
+            this.reLoginTimeout = setTimeout(
+              () => {
+                this.log.info("Start initial loading");
+                this.initLoading();
+              },
+              5 * 60 * 1000,
+            );
           } else {
             this.log.error("No Login possible. Deleting auth tokens. Please enter new email code.");
             this.atoken = "";
@@ -1851,10 +1840,13 @@ class Mercedesme extends utils.Adapter {
           .catch((error) => {
             if (error) {
               this.log.error("Connection error no login possible. Relogin in 5min");
-              this.reLoginTimeout = setTimeout(() => {
-                this.log.info("Start initial loading");
-                this.initLoading();
-              }, 5 * 60 * 1000);
+              this.reLoginTimeout = setTimeout(
+                () => {
+                  this.log.info("Start initial loading");
+                  this.initLoading();
+                },
+                5 * 60 * 1000,
+              );
               reject();
             } else {
               reject();
@@ -1984,261 +1976,408 @@ class Mercedesme extends utils.Adapter {
     }, this.config.reconnectDelay * 1000);
   }
 
+  // WebSocket frame sending (masked as per RFC 6455)
+  sendWsFrame(data) {
+    if (!this.wsSocket) {
+      this.log.warn("Cannot send: WebSocket not connected");
+      return;
+    }
+    const payload = Buffer.from(data);
+    const payloadLen = payload.length;
+
+    let header;
+    if (payloadLen < 126) {
+      header = Buffer.alloc(2);
+      header[0] = 0x82; // FIN + binary opcode
+      header[1] = 0x80 | payloadLen; // Masked + length
+    } else if (payloadLen < 65536) {
+      header = Buffer.alloc(4);
+      header[0] = 0x82;
+      header[1] = 0x80 | 126;
+      header.writeUInt16BE(payloadLen, 2);
+    } else {
+      header = Buffer.alloc(10);
+      header[0] = 0x82;
+      header[1] = 0x80 | 127;
+      header.writeBigUInt64BE(BigInt(payloadLen), 2);
+    }
+
+    const mask = crypto.randomBytes(4);
+    const masked = Buffer.alloc(payloadLen);
+    for (let i = 0; i < payloadLen; i++) {
+      masked[i] = payload[i] ^ mask[i % 4];
+    }
+
+    this.wsSocket.write(Buffer.concat([header, mask, masked]));
+  }
+
+  // Parse incoming WebSocket frames
+  parseWsFrame(buffer) {
+    if (buffer.length < 2) return null;
+
+    const firstByte = buffer[0];
+    const secondByte = buffer[1];
+    const opcode = firstByte & 0x0f;
+    const masked = (secondByte & 0x80) !== 0;
+    let payloadLen = secondByte & 0x7f;
+    let offset = 2;
+
+    if (payloadLen === 126) {
+      if (buffer.length < 4) return null;
+      payloadLen = buffer.readUInt16BE(2);
+      offset = 4;
+    } else if (payloadLen === 127) {
+      if (buffer.length < 10) return null;
+      payloadLen = Number(buffer.readBigUInt64BE(2));
+      offset = 10;
+    }
+
+    if (masked) offset += 4;
+    if (buffer.length < offset + payloadLen) return null;
+
+    let payload = buffer.slice(offset, offset + payloadLen);
+    if (masked) {
+      const mask = buffer.slice(offset - 4, offset);
+      payload = Buffer.alloc(payloadLen);
+      for (let i = 0; i < payloadLen; i++) {
+        payload[i] = buffer[offset + i] ^ mask[i % 4];
+      }
+    }
+
+    return { opcode, payload, totalLen: offset + payloadLen };
+  }
+
   connectWS() {
     this.wsReconnectCounter++;
-    // WebSocket headers (APK style - new X-TrackingId per connect)
-    const wsHeaders = {
+    clearInterval(this.wsPingInterval);
+    clearInterval(this.reconnectInterval);
+
+    this.reconnectInterval = setInterval(
+      () => {
+        this.log.info("Try to reconnect");
+        this.connectWS();
+      },
+      5 * 60 * 1000,
+    ); // 5min
+
+    // Generate WebSocket key
+    const wsKey = crypto.randomBytes(16).toString("base64");
+    const sessionId = uuidv4();
+
+    // Headers in correct order (Host first, like Python/aiohttp)
+    const headers = {
+      Host: "websocket.emea-prod.mobilesdk.mercedes-benz.com",
       Authorization: this.atoken,
-      "APP-SESSION-ID": this.xSession,
-      "OUTPUT-FORMAT": "PROTO",
       "X-SessionId": this.xSession,
       "X-TrackingId": uuidv4(),
+      "X-ApplicationName": this.appName,
+      "ris-application-version": this.appVersion,
       "ris-os-name": this.osName,
       "ris-os-version": this.osVersion,
       "ris-sdk-version": this.sdkVersion,
       "X-Locale": this.config.acceptLanguage,
       "User-Agent": this.userAgent,
-      "X-ApplicationName": this.appName,
-      "ris-application-version": this.appVersion,
+      "APP-SESSION-ID": sessionId,
+      "OUTPUT-FORMAT": "PROTO",
+      Upgrade: "websocket",
+      Connection: "Upgrade",
+      "Sec-WebSocket-Version": "13",
+      "Sec-WebSocket-Key": wsKey,
+      Accept: "*/*",
+      "Accept-Encoding": "gzip, deflate",
     };
-    this.log.debug("Connect to WebSocket (using undici)");
-    try {
-      // undici WebSocket doesn't support ping(), use message-based heartbeat
-      clearInterval(this.wsPingInterval);
-      clearInterval(this.reconnectInterval);
-      this.reconnectInterval = setInterval(() => {
-        this.log.info("Try to reconnect");
-        this.connectWS();
-      }, 5 * 60 * 1000); // 5min
 
-      this.ws = new WebSocket("wss://websocket.emea-prod.mobilesdk.mercedes-benz.com/v2/ws", {
-        headers: wsHeaders,
-      });
-    } catch (error) {
-      this.log.error(error);
-      this.log.error("No WebSocketConnection possible");
-    }
+    this.log.debug("Connect to WebSocket (using native HTTPS with Python-compatible TLS)");
 
-    this.ws.addEventListener("open", () => {
+    const options = {
+      hostname: "websocket.emea-prod.mobilesdk.mercedes-benz.com",
+      port: 443,
+      path: "/v2/ws",
+      method: "GET",
+      headers: headers,
+      // Python-compatible TLS settings (required for Mercedes)
+      ciphers: this.pythonCiphers,
+      minVersion: "TLSv1.2",
+      maxVersion: "TLSv1.3",
+      ALPNProtocols: [], // No ALPN like Python
+      ecdhCurve: "prime256v1:secp384r1:secp521r1:X25519",
+    };
+
+    const req = https.request(options);
+
+    req.on("upgrade", (res, socket, head) => {
       this.log.debug("WebSocket connected");
+      this.wsSocket = socket;
       this.setState("info.connection", true, true);
       clearInterval(this.reconnectInterval);
-
-      // Start heartbeat timeout (reset on each message)
       this.resetHeartbeatTimeout();
+
+      let buffer = Buffer.alloc(0);
+
+      socket.on("data", (data) => {
+        buffer = Buffer.concat([buffer, data]);
+
+        while (true) {
+          const frame = this.parseWsFrame(buffer);
+          if (!frame) break;
+
+          if (frame.opcode === 2) {
+            // Binary frame
+            this.handleWsMessage(frame.payload);
+          } else if (frame.opcode === 8) {
+            // Close frame
+            const code = frame.payload.length >= 2 ? frame.payload.readUInt16BE(0) : 1000;
+            this.log.info(`WebSocket closed by server - code: ${code}`);
+            this.setState("info.connection", false, true);
+            socket.end();
+          } else if (frame.opcode === 9) {
+            // Ping - send pong
+            socket.write(Buffer.from([0x8a, 0x00]));
+          }
+
+          buffer = buffer.slice(frame.totalLen);
+        }
+      });
+
+      socket.on("end", () => {
+        this.log.info("WebSocket connection ended");
+        this.setState("info.connection", false, true);
+        this.wsSocket = null;
+      });
+
+      socket.on("error", (err) => {
+        this.log.error(`WebSocket socket error: ${err.message}`);
+        this.setState("info.connection", false, true);
+        this.wsSocket = null;
+      });
+
+      socket.on("close", () => {
+        this.log.debug("WebSocket socket closed");
+        this.setState("info.connection", false, true);
+        this.wsSocket = null;
+      });
     });
-    this.ws.addEventListener("error", () => {
-      // Real errors are logged via diagnostics channels above
-      this.setState("info.connection", false, true);
-      this.log.debug("WebSocket error occurred, connection closed");
-    });
-    this.ws.addEventListener("close", (event) => {
-      this.setState("info.connection", false, true);
-      // Close codes: 1000=normal, 1001=going away, 1002=protocol error, 1006=abnormal (no close frame)
-      this.log.info(`WebSocket closed - code: ${event.code}, reason: ${event.reason || "(none)"}, wasClean: ${event.wasClean}`);
-    });
-    this.ws.addEventListener("message", async (event) => {
-      // undici returns Blob, convert to Buffer
-      let data;
-      if (event.data instanceof Blob) {
-        data = Buffer.from(await event.data.arrayBuffer());
-      } else if (event.data instanceof ArrayBuffer) {
-        data = Buffer.from(event.data);
+
+    req.on("response", (res) => {
+      if (res.statusCode === 429) {
+        this.log.warn("HTTP 429: Too many requests. Account blocked until 0:00.");
+      } else if (res.statusCode === 403) {
+        this.log.warn("HTTP 403: Forbidden. Refreshing token...");
+        this.refreshToken(true).catch(() => this.log.error("Refresh Token Failed"));
       } else {
-        data = Buffer.from(event.data);
+        this.log.error(`WebSocket upgrade failed: HTTP ${res.statusCode}`);
       }
-      // const hexString = ""
-      // let parsed = new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
-      // const foo =Client.ClientMessage.deserializeBinary(parsed).toObject()
-      this.log.silly("WS Message Length: " + data.length);
-      // Reset heartbeat on every message (instead of ping/pong)
-      this.resetHeartbeatTimeout();
-      if (this.reconnectInterval) {
-        clearInterval(this.reconnectInterval);
-      }
-
-      try {
-        // Log raw data for debugging protobuf issues
-        this.log.debug(`WS raw data (${data.length} bytes): ${data.toString("hex").substring(0, 200)}${data.length > 100 ? "..." : ""}`);
-        const message = VehicleEvents.PushMessage.deserializeBinary(data).toObject();
-        this.log.debug(`Parsed message keys: ${Object.keys(message).filter(k => message[k]).join(", ")}`);
-        if (message.debugmessage) {
-          this.log.debug(JSON.stringify(message.debugmessage));
-        }
-        if (message.apptwinCommandStatusUpdatesByVin) {
-          this.log.debug(JSON.stringify(message.apptwinCommandStatusUpdatesByVin));
-
-          const ackCommand = new Client.AcknowledgeAppTwinCommandStatusUpdatesByVIN();
-          ackCommand.setSequenceNumber(message.apptwinCommandStatusUpdatesByVin.sequenceNumber);
-          const clientMessage = new Client.ClientMessage();
-          clientMessage.setAcknowledgeApptwinCommandStatusUpdateByVin(ackCommand);
-          this.ws.send(clientMessage.serializeBinary());
-          try {
-            if (message.apptwinCommandStatusUpdatesByVin.updatesByVinMap[0][1].updatesByPidMap[0][1].errorsList.length)
-              this.log.error(
-                JSON.stringify(
-                  message.apptwinCommandStatusUpdatesByVin.updatesByVinMap[0][1].updatesByPidMap[0][1].errorsList,
-                ),
-              );
-          } catch (error) {
-            this.log.error(error);
-          }
-        }
-        if (message.assignedVehicles) {
-          this.log.debug(JSON.stringify(message.assignedVehicles));
-          this.vinArray = message.assignedVehicles.vinsList;
-          const ackCommand = new Client.AcknowledgeAssignedVehicles();
-          const clientMessage = new Client.ClientMessage();
-          clientMessage.setAcknowledgeAssignedVehicles(ackCommand);
-          this.ws.send(clientMessage.serializeBinary());
-        }
-        if (message.apptwinPendingCommandRequest) {
-          this.log.debug("apptwinPendingCommandRequest: " + JSON.stringify(message.apptwinPendingCommandRequest));
-          // ACK with proper Proto response (like APK does)
-          const ackResponse = new Client.AppTwinPendingCommandsResponse();
-          ackResponse.setPendingCommandsList([]);
-          const clientMessage = new Client.ClientMessage();
-          clientMessage.setApptwinPendingCommandsResponse(ackResponse);
-          this.ws.send(clientMessage.serializeBinary());
-        }
-        if (message.serviceStatusUpdates) {
-          this.log.debug("serviceStatusUpdates: " + JSON.stringify(message.serviceStatusUpdates));
-          const ackCommand = new Client.AcknowledgeServiceStatusUpdatesByVIN();
-          ackCommand.setSequenceNumber(message.serviceStatusUpdates.sequenceNumber);
-          const clientMessage = new Client.ClientMessage();
-          clientMessage.setAcknowledgeServiceStatusUpdatesByVin(ackCommand);
-          this.ws.send(clientMessage.serializeBinary());
-        }
-        if (message.serviceStatusUpdate) {
-          this.log.debug("serviceStatusUpdate: " + JSON.stringify(message.serviceStatusUpdate));
-          const ackCommand = new Client.AcknowledgeServiceStatusUpdate();
-          ackCommand.setSequenceNumber(message.serviceStatusUpdate.sequenceNumber);
-          const clientMessage = new Client.ClientMessage();
-          clientMessage.setAcknowledgeServiceStatusUpdate(ackCommand);
-          this.ws.send(clientMessage.serializeBinary());
-        }
-        if (message.userVehicleAuthChangedUpdate) {
-          this.log.debug("userVehicleAuthChangedUpdate: " + JSON.stringify(message.userVehicleAuthChangedUpdate));
-          const ackCommand = new Client.AcknowledgeUserVehicleAuthChangedUpdate();
-          ackCommand.setSequenceNumber(message.userVehicleAuthChangedUpdate.sequenceNumber);
-          const clientMessage = new Client.ClientMessage();
-          clientMessage.setAcknowledgeUserVehicleAuthChangedUpdate(ackCommand);
-          this.ws.send(clientMessage.serializeBinary());
-        }
-        if (message.vehicleUpdated) {
-          this.log.debug("vehicleUpdated: " + JSON.stringify(message.vehicleUpdated));
-          const ackCommand = new Client.AcknowledgeVehicleUpdated();
-          ackCommand.setSequenceNumber(message.vehicleUpdated.sequenceNumber);
-          const clientMessage = new Client.ClientMessage();
-          clientMessage.setAcknowledgeVehicleUpdated(ackCommand);
-          this.ws.send(clientMessage.serializeBinary());
-        }
-        if (message.dataChangeEvent) {
-          this.log.debug("dataChangeEvent: " + JSON.stringify(message.dataChangeEvent));
-          const ackCommand = new Client.AcknowledgeDataChangeEvent();
-          ackCommand.setSequenceNumber(message.dataChangeEvent.sequenceNumber);
-          const clientMessage = new Client.ClientMessage();
-          clientMessage.setAcknowledgeDataChangeEvent(ackCommand);
-          this.ws.send(clientMessage.serializeBinary());
-        }
-        if (message.vepupdates) {
-          this.log.silly(JSON.stringify(message.vepupdates));
-          this.log.debug("Received State Updated");
-          this.currentSequenceNumber = message.vepupdates.sequenceNumber;
-          const ackCommand = new Client.AcknowledgeVEPUpdatesByVIN();
-          ackCommand.setSequenceNumber(message.vepupdates.sequenceNumber);
-          const clientMessage = new Client.ClientMessage();
-          clientMessage.setAcknowledgeVepUpdatesByVin(ackCommand);
-          this.ws.send(clientMessage.serializeBinary());
-
-          for (const update of message.vepupdates.updatesMap) {
-            const vin = update[0];
-
-            this.log.debug("update for " + vin + ": " + message.vepupdates.sequenceNumber);
-            const adapter = this;
-
-            for (const element of update[1].attributesMap) {
-              if (!this.vinStates[vin] || !this.vinStates[vin].includes(element[0])) {
-                await adapter.extendObjectAsync(vin + ".state." + element[0], {
-                  type: "channel",
-                  common: {
-                    name: element[0],
-                    write: false,
-                    read: true,
-                  },
-                  native: {},
-                });
-                if (this.vinStates[vin]) {
-                  this.vinStates[vin].push(element[0]);
-                } else {
-                  this.vinStates[vin] = [element[0]];
-                }
-              }
-              const definedFields = Object.keys(element[1]).filter(k => element[1][k] !== undefined && element[1][k] !== null);
-              this.log.debug(`write ${definedFields.length} fields to ${element[0]}: ${definedFields.join(", ")}`);
-              for (const state of Object.keys(element[1])) {
-                const value = element[1][state];
-                // Skip undefined/null values (happens with oneof fields)
-                if (value === undefined || value === null) {
-                  continue;
-                }
-                if (
-                  state === "displayValue" ||
-                  state === "status" ||
-                  state === "changed" ||
-                  state === "boolValue" ||
-                  state === "doubleValue" ||
-                  state === "intValue" ||
-                  state === "nilValue" ||
-                  state === "stringValue" ||
-                  state === "unsupportedValue" ||
-                  value
-                ) {
-                  if (!this.vinStates[vin] || !this.vinStates[vin].includes(element[0] + state)) {
-                    await adapter.extendObjectAsync(vin + ".state." + element[0] + "." + state, {
-                      type: "state",
-                      common: {
-                        name: state,
-                        role: this.getRole(element[1][state], false),
-                        type: typeof element[1][state],
-                        write: false,
-                        read: true,
-                      },
-                      native: {},
-                    });
-                    if (this.vinStates[vin]) {
-                      this.vinStates[vin].push(element[0] + state);
-                    } else {
-                      this.vinStates[vin] = [element[0] + state];
-                    }
-                  }
-                  let value = element[1][state];
-                  if (typeof value === "object") {
-                    value = JSON.stringify(value);
-                  }
-
-                  await adapter.setStateAsync(vin + ".state." + element[0] + "." + state, value, true);
-                }
-              }
-              this.log.debug("write done");
-            }
-          }
-        }
-      } catch (error) {
-        // Proto parsing errors are expected when APK has newer proto definitions than this adapter
-        this.log.info(`Cannot parse event update completely - proto file may be outdated: ${error.message || error}`);
-        // Log details at debug level for troubleshooting
-        this.log.debug(`Parse error stack: ${error.stack || "none"}`);
-        this.log.debug(`Failed data (${data.length} bytes): ${data.toString("hex")}`);
-        // Try to decode with protoc --decode_raw equivalent
-        try {
-          const rawFields = this.decodeRawProtobuf(data);
-          this.log.debug(`Raw protobuf fields: ${JSON.stringify(rawFields)}`);
-        } catch (e) {
-          this.log.debug(`Cannot decode raw protobuf: ${e.message}`);
-        }
-      }
+      this.setState("info.connection", false, true);
     });
+
+    req.on("error", (err) => {
+      this.log.error(`WebSocket connection error: ${err.message}`);
+      this.setState("info.connection", false, true);
+    });
+
+    req.end();
+  }
+
+  async handleWsMessage(data) {
+    // const hexString = ""
+    // let parsed = new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+    // const foo =Client.ClientMessage.deserializeBinary(parsed).toObject()
+    this.log.silly("WS Message Length: " + data.length);
+    // Reset heartbeat on every message (instead of ping/pong)
+    this.resetHeartbeatTimeout();
+    if (this.reconnectInterval) {
+      clearInterval(this.reconnectInterval);
+    }
+
+    try {
+      // Log raw data for debugging protobuf issues
+      this.log.debug(
+        `WS raw data (${data.length} bytes): ${data.toString("hex").substring(0, 200)}${data.length > 100 ? "..." : ""}`,
+      );
+      const message = VehicleEvents.PushMessage.deserializeBinary(data).toObject();
+      this.log.debug(
+        `Parsed message keys: ${Object.keys(message)
+          .filter((k) => message[k])
+          .join(", ")}`,
+      );
+      if (message.debugmessage) {
+        this.log.debug(JSON.stringify(message.debugmessage));
+      }
+      if (message.apptwinCommandStatusUpdatesByVin) {
+        this.log.debug(JSON.stringify(message.apptwinCommandStatusUpdatesByVin));
+
+        const ackCommand = new Client.AcknowledgeAppTwinCommandStatusUpdatesByVIN();
+        ackCommand.setSequenceNumber(message.apptwinCommandStatusUpdatesByVin.sequenceNumber);
+        const clientMessage = new Client.ClientMessage();
+        clientMessage.setAcknowledgeApptwinCommandStatusUpdateByVin(ackCommand);
+        this.sendWsFrame(clientMessage.serializeBinary());
+        try {
+          if (message.apptwinCommandStatusUpdatesByVin.updatesByVinMap[0][1].updatesByPidMap[0][1].errorsList.length)
+            this.log.error(
+              JSON.stringify(
+                message.apptwinCommandStatusUpdatesByVin.updatesByVinMap[0][1].updatesByPidMap[0][1].errorsList,
+              ),
+            );
+        } catch (error) {
+          this.log.error(error);
+        }
+      }
+      if (message.assignedVehicles) {
+        this.log.debug(JSON.stringify(message.assignedVehicles));
+        this.vinArray = message.assignedVehicles.vinsList;
+        const ackCommand = new Client.AcknowledgeAssignedVehicles();
+        const clientMessage = new Client.ClientMessage();
+        clientMessage.setAcknowledgeAssignedVehicles(ackCommand);
+        this.sendWsFrame(clientMessage.serializeBinary());
+      }
+      if (message.apptwinPendingCommandRequest) {
+        this.log.debug("apptwinPendingCommandRequest: " + JSON.stringify(message.apptwinPendingCommandRequest));
+        // ACK with proper Proto response (like APK does)
+        const ackResponse = new Client.AppTwinPendingCommandsResponse();
+        ackResponse.setPendingCommandsList([]);
+        const clientMessage = new Client.ClientMessage();
+        clientMessage.setApptwinPendingCommandsResponse(ackResponse);
+        this.sendWsFrame(clientMessage.serializeBinary());
+      }
+      if (message.serviceStatusUpdates) {
+        this.log.debug("serviceStatusUpdates: " + JSON.stringify(message.serviceStatusUpdates));
+        const ackCommand = new Client.AcknowledgeServiceStatusUpdatesByVIN();
+        ackCommand.setSequenceNumber(message.serviceStatusUpdates.sequenceNumber);
+        const clientMessage = new Client.ClientMessage();
+        clientMessage.setAcknowledgeServiceStatusUpdatesByVin(ackCommand);
+        this.sendWsFrame(clientMessage.serializeBinary());
+      }
+      if (message.serviceStatusUpdate) {
+        this.log.debug("serviceStatusUpdate: " + JSON.stringify(message.serviceStatusUpdate));
+        const ackCommand = new Client.AcknowledgeServiceStatusUpdate();
+        ackCommand.setSequenceNumber(message.serviceStatusUpdate.sequenceNumber);
+        const clientMessage = new Client.ClientMessage();
+        clientMessage.setAcknowledgeServiceStatusUpdate(ackCommand);
+        this.sendWsFrame(clientMessage.serializeBinary());
+      }
+      if (message.userVehicleAuthChangedUpdate) {
+        this.log.debug("userVehicleAuthChangedUpdate: " + JSON.stringify(message.userVehicleAuthChangedUpdate));
+        const ackCommand = new Client.AcknowledgeUserVehicleAuthChangedUpdate();
+        ackCommand.setSequenceNumber(message.userVehicleAuthChangedUpdate.sequenceNumber);
+        const clientMessage = new Client.ClientMessage();
+        clientMessage.setAcknowledgeUserVehicleAuthChangedUpdate(ackCommand);
+        this.sendWsFrame(clientMessage.serializeBinary());
+      }
+      if (message.vehicleUpdated) {
+        this.log.debug("vehicleUpdated: " + JSON.stringify(message.vehicleUpdated));
+        const ackCommand = new Client.AcknowledgeVehicleUpdated();
+        ackCommand.setSequenceNumber(message.vehicleUpdated.sequenceNumber);
+        const clientMessage = new Client.ClientMessage();
+        clientMessage.setAcknowledgeVehicleUpdated(ackCommand);
+        this.sendWsFrame(clientMessage.serializeBinary());
+      }
+      if (message.dataChangeEvent) {
+        this.log.debug("dataChangeEvent: " + JSON.stringify(message.dataChangeEvent));
+        const ackCommand = new Client.AcknowledgeDataChangeEvent();
+        ackCommand.setSequenceNumber(message.dataChangeEvent.sequenceNumber);
+        const clientMessage = new Client.ClientMessage();
+        clientMessage.setAcknowledgeDataChangeEvent(ackCommand);
+        this.sendWsFrame(clientMessage.serializeBinary());
+      }
+      if (message.vepupdates) {
+        this.log.silly(JSON.stringify(message.vepupdates));
+        this.log.debug("Received State Updated");
+        this.currentSequenceNumber = message.vepupdates.sequenceNumber;
+        const ackCommand = new Client.AcknowledgeVEPUpdatesByVIN();
+        ackCommand.setSequenceNumber(message.vepupdates.sequenceNumber);
+        const clientMessage = new Client.ClientMessage();
+        clientMessage.setAcknowledgeVepUpdatesByVin(ackCommand);
+        this.sendWsFrame(clientMessage.serializeBinary());
+
+        for (const update of message.vepupdates.updatesMap) {
+          const vin = update[0];
+
+          this.log.debug("update for " + vin + ": " + message.vepupdates.sequenceNumber);
+          const adapter = this;
+
+          for (const element of update[1].attributesMap) {
+            if (!this.vinStates[vin] || !this.vinStates[vin].includes(element[0])) {
+              await adapter.extendObjectAsync(vin + ".state." + element[0], {
+                type: "channel",
+                common: {
+                  name: element[0],
+                  write: false,
+                  read: true,
+                },
+                native: {},
+              });
+              if (this.vinStates[vin]) {
+                this.vinStates[vin].push(element[0]);
+              } else {
+                this.vinStates[vin] = [element[0]];
+              }
+            }
+            const definedFields = Object.keys(element[1]).filter(
+              (k) => element[1][k] !== undefined && element[1][k] !== null,
+            );
+            this.log.debug(`write ${definedFields.length} fields to ${element[0]}: ${definedFields.join(", ")}`);
+            for (const state of Object.keys(element[1])) {
+              const value = element[1][state];
+              // Skip undefined/null values (happens with oneof fields)
+              if (value === undefined || value === null) {
+                continue;
+              }
+              if (
+                state === "displayValue" ||
+                state === "status" ||
+                state === "changed" ||
+                state === "boolValue" ||
+                state === "doubleValue" ||
+                state === "intValue" ||
+                state === "nilValue" ||
+                state === "stringValue" ||
+                state === "unsupportedValue" ||
+                value
+              ) {
+                if (!this.vinStates[vin] || !this.vinStates[vin].includes(element[0] + state)) {
+                  await adapter.extendObjectAsync(vin + ".state." + element[0] + "." + state, {
+                    type: "state",
+                    common: {
+                      name: state,
+                      role: this.getRole(element[1][state], false),
+                      type: typeof element[1][state],
+                      write: false,
+                      read: true,
+                    },
+                    native: {},
+                  });
+                  if (this.vinStates[vin]) {
+                    this.vinStates[vin].push(element[0] + state);
+                  } else {
+                    this.vinStates[vin] = [element[0] + state];
+                  }
+                }
+                let value = element[1][state];
+                if (typeof value === "object") {
+                  value = JSON.stringify(value);
+                }
+
+                await adapter.setStateAsync(vin + ".state." + element[0] + "." + state, value, true);
+              }
+            }
+            this.log.debug("write done");
+          }
+        }
+      }
+    } catch (error) {
+      // Proto parsing errors are expected when APK has newer proto definitions than this adapter
+      this.log.info(`Cannot parse event update completely - proto file may be outdated: ${error.message || error}`);
+      // Log details at debug level for troubleshooting
+      this.log.debug(`Parse error stack: ${error.stack || "none"}`);
+      this.log.debug(`Failed data (${data.length} bytes): ${data.toString("hex")}`);
+      // Try to decode with protoc --decode_raw equivalent
+      try {
+        const rawFields = this.decodeRawProtobuf(data);
+        this.log.debug(`Raw protobuf fields: ${JSON.stringify(rawFields)}`);
+      } catch (e) {
+        this.log.debug(`Cannot decode raw protobuf: ${e.message}`);
+      }
+    }
   }
 }
 
