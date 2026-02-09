@@ -1937,16 +1937,32 @@ class Mercedesme extends utils.Adapter {
       clearTimeout(this.wsHeartbeatTimeout);
     }
     this.wsHeartbeatTimeout = setTimeout(() => {
-      this.log.info(
-        "No Data since " +
-          this.config.reconnectDelay +
-          " seconds. Lost WebSocket connection. Reconnect WebSocket. Reconnects Today: " +
-          this.wsReconnectCounter,
-      );
-      this.safeCloseWs();
-      setTimeout(() => {
-        this.connectWS();
-      }, 2000);
+      this.log.info("No Data since " + this.config.reconnectDelay + " seconds. Lost WebSocket connection.");
+      this.scheduleReconnect();
+    }, this.config.reconnectDelay * 1000);
+  }
+
+  // Cleanup WebSocket connection state
+  cleanupWsConnection() {
+    this.setState("info.connection", false, true);
+    this.wsSocket = null;
+    if (this.wsPingInterval) {
+      clearInterval(this.wsPingInterval);
+      this.wsPingInterval = null;
+    }
+    if (this.wsHeartbeatTimeout) {
+      clearTimeout(this.wsHeartbeatTimeout);
+      this.wsHeartbeatTimeout = null;
+    }
+  }
+
+  // Schedule reconnect after disconnect
+  scheduleReconnect() {
+    this.wsReconnectCounter++;
+    this.log.info("Reconnect WebSocket. Reconnects Today: " + this.wsReconnectCounter);
+    this.safeCloseWs();
+    setTimeout(() => {
+      this.connectWS();
     }, this.config.reconnectDelay * 1000);
   }
 
@@ -2136,32 +2152,20 @@ class Mercedesme extends utils.Adapter {
 
       socket.on("end", () => {
         this.log.info("WebSocket connection ended");
-        this.setState("info.connection", false, true);
-        this.wsSocket = null;
-        if (this.wsPingInterval) {
-          clearInterval(this.wsPingInterval);
-          this.wsPingInterval = null;
-        }
+        this.cleanupWsConnection();
+        this.scheduleReconnect();
       });
 
       socket.on("error", (err) => {
         this.log.error(`WebSocket socket error: ${err.message}`);
-        this.setState("info.connection", false, true);
-        this.wsSocket = null;
-        if (this.wsPingInterval) {
-          clearInterval(this.wsPingInterval);
-          this.wsPingInterval = null;
-        }
+        this.cleanupWsConnection();
+        this.scheduleReconnect();
       });
 
       socket.on("close", () => {
         this.log.debug("WebSocket socket closed");
-        this.setState("info.connection", false, true);
-        this.wsSocket = null;
-        if (this.wsPingInterval) {
-          clearInterval(this.wsPingInterval);
-          this.wsPingInterval = null;
-        }
+        this.cleanupWsConnection();
+        // Reconnect is handled by "end" event
       });
     });
 
