@@ -2112,6 +2112,19 @@ class Mercedesme extends utils.Adapter {
       clearInterval(this.reconnectInterval);
       this.resetHeartbeatTimeout();
 
+      // Start client-side ping interval to keep connection alive (every 25 seconds)
+      if (this.wsPingInterval) {
+        clearInterval(this.wsPingInterval);
+      }
+      this.wsPingInterval = setInterval(() => {
+        if (this.wsSocket) {
+          this.log.debug("Sending ping to server");
+          const mask = crypto.randomBytes(4);
+          // Masked ping frame: opcode 9, mask bit set, 0 payload
+          this.wsSocket.write(Buffer.concat([Buffer.from([0x89, 0x80]), mask]));
+        }
+      }, 25000);
+
       let buffer = Buffer.alloc(0);
 
       socket.on("data", (data) => {
@@ -2132,8 +2145,12 @@ class Mercedesme extends utils.Adapter {
             socket.end();
           } else if (frame.opcode === 9) {
             // Ping - send masked pong (RFC 6455 requires client frames to be masked)
+            this.log.debug("Received ping from server, sending pong");
             const mask = crypto.randomBytes(4);
             socket.write(Buffer.concat([Buffer.from([0x8a, 0x80]), mask]));
+          } else if (frame.opcode === 10) {
+            // Pong response
+            this.log.debug("Received pong from server");
           }
 
           buffer = buffer.slice(frame.totalLen);
@@ -2144,18 +2161,30 @@ class Mercedesme extends utils.Adapter {
         this.log.info("WebSocket connection ended");
         this.setState("info.connection", false, true);
         this.wsSocket = null;
+        if (this.wsPingInterval) {
+          clearInterval(this.wsPingInterval);
+          this.wsPingInterval = null;
+        }
       });
 
       socket.on("error", (err) => {
         this.log.error(`WebSocket socket error: ${err.message}`);
         this.setState("info.connection", false, true);
         this.wsSocket = null;
+        if (this.wsPingInterval) {
+          clearInterval(this.wsPingInterval);
+          this.wsPingInterval = null;
+        }
       });
 
       socket.on("close", () => {
         this.log.debug("WebSocket socket closed");
         this.setState("info.connection", false, true);
         this.wsSocket = null;
+        if (this.wsPingInterval) {
+          clearInterval(this.wsPingInterval);
+          this.wsPingInterval = null;
+        }
       });
     });
 
@@ -2361,7 +2390,7 @@ class Mercedesme extends utils.Adapter {
                 await adapter.setStateAsync(vin + ".state." + element[0] + "." + state, value, true);
               }
             }
-            this.log.debug("write done");
+            this.log.silly("write done");
           }
         }
       }
