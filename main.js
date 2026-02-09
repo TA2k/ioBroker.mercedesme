@@ -44,7 +44,6 @@ class Mercedesme extends utils.Adapter {
     this.wsReconnectCounter = 0;
 
     this.reconnectInterval = null;
-    this.lastHardRelogin = 0;
     this.xSession = uuidv4();
     this.xTracking = uuidv4();
     this.deviceuuid = uuidv4();
@@ -1429,69 +1428,66 @@ class Mercedesme extends utils.Adapter {
   async refreshToken(reconnect) {
     this.log.debug("refreshToken");
 
-    // Check if 6 hours (21600000 ms) have passed since last hard relogin
-    const now = Date.now();
-    const sixHours = 6 * 60 * 60 * 1000; // 6 hours in milliseconds
+    const headers = this.getBaseHeader();
+    try {
+      const response = await this.requestClient({
+        method: "post",
+        url: "https://id.mercedes-benz.com/as/token.oauth2",
+        headers: headers,
+        data: qs.stringify({
+          grant_type: "refresh_token",
+          refresh_token: this.rtoken,
+        }),
+      });
 
-    if (now - this.lastHardRelogin >= sixHours) {
-      this.log.debug("6 hours passed, doing hard relogin");
-      this.lastHardRelogin = now;
-      await this.loginNew();
+      const token = response.data;
+      this.session = token;
+      this.log.debug(JSON.stringify(token));
+      this.atoken = token.access_token;
+      this.setState("auth.access_token", token.access_token, true);
+      if (token.refresh_token) {
+        this.rtoken = token.refresh_token;
+        this.log.debug("setRefreshToken: " + token.refresh_token);
+        this.setState("auth.refresh_token", token.refresh_token, true);
+      }
       if (reconnect) {
-        this.log.info("Reconnect after refresh token. Count: " + this.wsReconnectCounter);
+        this.log.debug("Reconnect after refresh token. Count: " + this.wsReconnectCounter);
         this.safeCloseWs();
         setTimeout(() => {
           this.connectWS();
         }, 2000);
-        return;
       }
-    } else {
-      this.log.debug("Less than 6 hours since last hard relogin, using refresh token");
-    }
-
-    const headers = this.getBaseHeader();
-    await this.requestClient({
-      method: "post",
-      url: "https://id.mercedes-benz.com/as/token.oauth2",
-      headers: headers,
-      data: qs.stringify({
-        grant_type: "refresh_token",
-        refresh_token: this.rtoken,
-      }),
-    })
-      .then((response) => {
-        const token = response.data;
-        this.session = token;
-        this.log.debug(JSON.stringify(token));
-        this.atoken = token.access_token;
-        this.setState("auth.access_token", token.access_token, true);
-        if (token.refresh_token) {
-          this.rtoken = token.refresh_token;
-          this.log.debug("setRefreshToken: " + token.refresh_token);
-          this.setState("auth.refresh_token", token.refresh_token, true);
-        }
-        if (reconnect) {
-          this.log.info("Reconnect after refresh token. Count: " + this.wsReconnectCounter);
-          this.safeCloseWs();
-          setTimeout(() => {
-            this.connectWS();
-          }, 2000);
-        }
-      })
-      .catch((error) => {
-        this.log.error("Error refresh token");
-        this.log.error(error);
-        this.log.error("Please delete object folder mercedesme.0.auth and restart adapter");
-        if (error.response) {
-          this.log.error(JSON.stringify(error.response.data));
-          if (error.response.status >= 400 && error.response.status < 500) {
-            this.log.error("RefreshToken: " + this.rtoken);
-
-            return;
+    } catch (error) {
+      // Check for 400/401 - means refresh token is invalid, need full relogin (like Mercedes APK)
+      if (error.response && (error.response.status === 400 || error.response.status === 401)) {
+        this.log.debug("Refresh token expired (HTTP " + error.response.status + "), doing full relogin");
+        // Clear tokens so loginNew() does fresh login instead of trying refresh again
+        this.atoken = "";
+        this.rtoken = "";
+        await this.setState("auth.access_token", "", true);
+        await this.setState("auth.refresh_token", "", true);
+        try {
+          await this.loginNew();
+          if (reconnect) {
+            this.log.debug("Reconnect after full relogin. Count: " + this.wsReconnectCounter);
+            this.safeCloseWs();
+            setTimeout(() => {
+              this.connectWS();
+            }, 2000);
           }
+          return;
+        } catch (loginError) {
+          this.log.error("Full relogin failed: " + loginError.message);
+          throw loginError;
         }
-        throw error;
-      });
+      }
+      // Other errors
+      this.log.error("Error refresh token: " + error.message);
+      if (error.response) {
+        this.log.error(JSON.stringify(error.response.data));
+      }
+      throw error;
+    }
   }
   // Returns headers with fresh X-TrackingId per request (like APK/HA)
   getBaseHeader() {
@@ -1506,33 +1502,22 @@ class Mercedesme extends utils.Adapter {
     this.log.debug("Login");
 
     if (this.atoken) {
-
-      // if (false) {
       this.log.info("Found old session. Try to refresh token");
-      await this.refreshToken()
-        .then(() => {
-          this.log.info("Refresh token successfull");
-          return;
-        })
-        .catch((error) => {
-          if (error) {
-            this.log.error("Connection error no login possible. Relogin in 5min");
-            this.reLoginTimeout = setTimeout(
-              () => {
-                this.log.info("Start initial loading");
-                this.initLoading();
-              },
-              5 * 60 * 1000,
-            );
-          } else {
-            this.log.error("No Login possible. Deleting auth tokens. Please enter new email code.");
-            this.atoken = "";
-            this.rtoken = "";
-            this.setState("auth.access_token", "", true);
-            this.setState("auth.refresh_token", "", true);
-          }
-        });
-      return;
+      try {
+        await this.refreshToken();
+        this.log.info("Refresh token successful");
+        return;
+      } catch {
+        this.log.error("Connection error no login possible. Relogin in 5min");
+        this.reLoginTimeout = setTimeout(
+          () => {
+            this.log.info("Start initial loading");
+            this.initLoading();
+          },
+          5 * 60 * 1000,
+        );
+        return;
+      }
     }
     this.log.info("Start Login");
     const resumeUrl = await this.requestClient({
@@ -1588,7 +1573,6 @@ class Mercedesme extends utils.Adapter {
               this.session = response.data;
               this.atoken = response.data.access_token;
               this.rtoken = response.data.refresh_token;
-              this.lastHardRelogin = Date.now();
               this.setState("auth.access_token", response.data.access_token, true);
               this.setState("auth.refresh_token", response.data.refresh_token, true);
               this.setState("auth.loginNonce", "", true);
@@ -1763,7 +1747,6 @@ class Mercedesme extends utils.Adapter {
         this.session = response.data;
         this.atoken = response.data.access_token;
         this.rtoken = response.data.refresh_token;
-        this.lastHardRelogin = Date.now();
         this.setState("auth.access_token", response.data.access_token, true);
         this.setState("auth.refresh_token", response.data.refresh_token, true);
         this.setState("auth.loginNonce", "", true);
@@ -1831,32 +1814,22 @@ class Mercedesme extends utils.Adapter {
       this.log.debug("Login");
 
       if (this.atoken) {
-        await this.refreshToken()
-          .then(() => {
-            resolve();
-
-            return;
-          })
-          .catch((error) => {
-            if (error) {
-              this.log.error("Connection error no login possible. Relogin in 5min");
-              this.reLoginTimeout = setTimeout(
-                () => {
-                  this.log.info("Start initial loading");
-                  this.initLoading();
-                },
-                5 * 60 * 1000,
-              );
-              reject();
-            } else {
-              reject();
-              this.log.error("No Login possible. Deleting auth tokens. Please enter new email code.");
-              this.atoken = "";
-              this.rtoken = "";
-              this.setState("auth.access_token", "", true);
-              this.setState("auth.refresh_token", "", true);
-            }
-          });
+        try {
+          await this.refreshToken();
+          resolve();
+          return;
+        } catch {
+          this.log.error("Connection error no login possible. Relogin in 5min");
+          this.reLoginTimeout = setTimeout(
+            () => {
+              this.log.info("Start initial loading");
+              this.initLoading();
+            },
+            5 * 60 * 1000,
+          );
+          reject();
+          return;
+        }
       }
 
       const loginNonceState = await this.getStateAsync("auth.loginNonce");
@@ -1883,7 +1856,6 @@ class Mercedesme extends utils.Adapter {
 
             this.atoken = response.data.access_token;
             this.rtoken = response.data.refresh_token;
-            this.lastHardRelogin = Date.now();
             this.setState("auth.access_token", response.data.access_token, true);
             this.setState("auth.refresh_token", response.data.refresh_token, true);
             this.setState("auth.loginNonce", "", true);
