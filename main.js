@@ -1506,8 +1506,8 @@ class Mercedesme extends utils.Adapter {
     this.log.debug("Login");
 
     if (this.atoken) {
-    //eslint-disable-next-line
-    // if (false) {
+
+      // if (false) {
       this.log.info("Found old session. Try to refresh token");
       await this.refreshToken()
         .then(() => {
@@ -2107,6 +2107,7 @@ class Mercedesme extends utils.Adapter {
 
     req.on("upgrade", (res, socket, head) => {
       this.log.debug("WebSocket connected");
+      this.log.silly(head.toString("hex"));
       this.wsSocket = socket;
       this.setState("info.connection", true, true);
       clearInterval(this.reconnectInterval);
@@ -2342,9 +2343,9 @@ class Mercedesme extends utils.Adapter {
                 this.vinStates[vin] = [element[0]];
               }
             }
-            const definedFields = Object.keys(element[1]).filter(
-              (k) => element[1][k] !== undefined && element[1][k] !== null,
-            );
+            // const definedFields = Object.keys(element[1]).filter(
+            //   (k) => element[1][k] !== undefined && element[1][k] !== null,
+            // );
             // this.log.debug(`write ${definedFields.length} fields to ${element[0]}: ${definedFields.join(", ")}`);
             for (const state of Object.keys(element[1])) {
               const value = element[1][state];
