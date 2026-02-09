@@ -1505,9 +1505,9 @@ class Mercedesme extends utils.Adapter {
   async loginNew() {
     this.log.debug("Login");
 
-    // if (this.atoken) {
+    if (this.atoken) {
     //eslint-disable-next-line
-    if (false) {
+    // if (false) {
       this.log.info("Found old session. Try to refresh token");
       await this.refreshToken()
         .then(() => {
