@@ -2131,8 +2131,9 @@ class Mercedesme extends utils.Adapter {
             this.setState("info.connection", false, true);
             socket.end();
           } else if (frame.opcode === 9) {
-            // Ping - send pong
-            socket.write(Buffer.from([0x8a, 0x00]));
+            // Ping - send masked pong (RFC 6455 requires client frames to be masked)
+            const mask = crypto.randomBytes(4);
+            socket.write(Buffer.concat([Buffer.from([0x8a, 0x80]), mask]));
           }
 
           buffer = buffer.slice(frame.totalLen);
@@ -2315,7 +2316,7 @@ class Mercedesme extends utils.Adapter {
             const definedFields = Object.keys(element[1]).filter(
               (k) => element[1][k] !== undefined && element[1][k] !== null,
             );
-            this.log.debug(`write ${definedFields.length} fields to ${element[0]}: ${definedFields.join(", ")}`);
+            // this.log.debug(`write ${definedFields.length} fields to ${element[0]}: ${definedFields.join(", ")}`);
             for (const state of Object.keys(element[1])) {
               const value = element[1][state];
               // Skip undefined/null values (happens with oneof fields)
