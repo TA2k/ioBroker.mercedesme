@@ -2147,11 +2147,13 @@ class Mercedesme extends utils.Adapter {
           } else if (frame.opcode === 9) {
             // Ping - send masked pong (RFC 6455 requires client frames to be masked)
             this.log.debug("Received ping from server, sending pong");
+            this.resetHeartbeatTimeout();
             const mask = crypto.randomBytes(4);
             socket.write(Buffer.concat([Buffer.from([0x8a, 0x80]), mask]));
           } else if (frame.opcode === 10) {
-            // Pong response
+            // Pong response - also reset heartbeat as this is valid activity
             this.log.debug("Received pong from server");
+            this.resetHeartbeatTimeout();
           }
 
           buffer = buffer.slice(frame.totalLen);
