@@ -1932,7 +1932,7 @@ class Mercedesme extends utils.Adapter {
     const wsKey = crypto.randomBytes(16).toString("base64");
     const sessionId = uuidv4();
 
-    // Headers in correct order (Host first, like Python/aiohttp because ws and undici is blocked by mercedes)
+    // Headers in correct order (Host first, like Python/aiohttp - Mercedes checks TLS fingerprint)
     const headers = {
       Host: "websocket.emea-prod.mobilesdk.mercedes-benz.com",
       Authorization: this.atoken,
