@@ -78,8 +78,13 @@ class Mercedesme extends utils.Adapter {
     // Safe WebSocket close helper
     this.safeCloseWs = () => {
       try {
-        if (this.ws && this.ws.readyState !== WebSocket.CLOSED && this.ws.readyState !== WebSocket.CLOSING) {
-          this.safeCloseWs();
+        if (this.wsSocket) {
+          this.wsSocket.end();
+          this.wsSocket = null;
+        }
+        if (this.wsPingInterval) {
+          clearInterval(this.wsPingInterval);
+          this.wsPingInterval = null;
         }
       } catch (err) {
         this.log.debug(`WebSocket close error (ignored): ${err.message}`);
@@ -637,11 +642,8 @@ class Mercedesme extends utils.Adapter {
           if (state.ts !== state.lc) {
             return;
           }
-
-          if (id.indexOf(".state.doorLockStatusOverall.intValue") !== -1) {
-            this.setState(vin + ".remote.DoorLock", state.val ? 0 : 1, true);
-            this.setState(vin + ".remote.DoorOpen", state.val, true);
-          }
+          this.setState(vin + ".remote.DoorLock", state.val ? 0 : 1, true);
+          this.setState(vin + ".remote.DoorOpen", state.val, true);
         }
         if (id.indexOf(".state.windowStatusOverall.intValue") !== -1) {
           if (state.ts !== state.lc) {
@@ -1868,8 +1870,8 @@ class Mercedesme extends utils.Adapter {
             this.log.error(error);
             error.response && this.log.error(JSON.stringify(error.response.data));
             const adapterConfig = "system.adapter." + this.name + "." + this.instance;
-            this.getForeignObject(adapterConfig, (error, obj) => {
-              if (obj.native && obj.native.loginCode) {
+            this.getForeignObject(adapterConfig, (err, obj) => {
+              if (!err && obj?.native?.loginCode) {
                 obj.native.loginCode = "";
                 this.setForeignObject(adapterConfig, obj);
               }
@@ -2216,15 +2218,9 @@ class Mercedesme extends utils.Adapter {
         const clientMessage = new Client.ClientMessage();
         clientMessage.setAcknowledgeApptwinCommandStatusUpdateByVin(ackCommand);
         this.sendWsFrame(clientMessage.serializeBinary());
-        try {
-          if (message.apptwinCommandStatusUpdatesByVin.updatesByVinMap[0][1].updatesByPidMap[0][1].errorsList.length)
-            this.log.error(
-              JSON.stringify(
-                message.apptwinCommandStatusUpdatesByVin.updatesByVinMap[0][1].updatesByPidMap[0][1].errorsList,
-              ),
-            );
-        } catch (error) {
-          this.log.error(error);
+        const errorsList = message.apptwinCommandStatusUpdatesByVin.updatesByVinMap?.[0]?.[1]?.updatesByPidMap?.[0]?.[1]?.errorsList;
+        if (errorsList?.length) {
+          this.log.error(JSON.stringify(errorsList));
         }
       }
       if (message.assignedVehicles) {
