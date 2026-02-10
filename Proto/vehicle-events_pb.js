@@ -33,6 +33,8 @@ var vehicleapi_pb = require('./vehicleapi_pb.js');
 goog.object.extend(proto, vehicleapi_pb);
 var google_protobuf_timestamp_pb = require('google-protobuf/google/protobuf/timestamp_pb.js');
 goog.object.extend(proto, google_protobuf_timestamp_pb);
+var google_protobuf_wrappers_pb = require('google-protobuf/google/protobuf/wrappers_pb.js');
+goog.object.extend(proto, google_protobuf_wrappers_pb);
 goog.exportSymbol('proto.proto.AcknowledgeDataChangeEvent', null, global);
 goog.exportSymbol('proto.proto.AcknowledgePreferredDealerChange', null, global);
 goog.exportSymbol('proto.proto.AcknowledgeVEPRequest', null, global);
@@ -53,6 +55,7 @@ goog.exportSymbol('proto.proto.ChargeInletsEntry.ChargeInletsLockState', null, g
 goog.exportSymbol('proto.proto.ChargeProgram', null, global);
 goog.exportSymbol('proto.proto.ChargeProgramParameters', null, global);
 goog.exportSymbol('proto.proto.ChargeProgramsValue', null, global);
+goog.exportSymbol('proto.proto.ChargingBreakClockTimerActivationState', null, global);
 goog.exportSymbol('proto.proto.ChargingBreakClockTimerEntry', null, global);
 goog.exportSymbol('proto.proto.ChargingBreakClockTimerValue', null, global);
 goog.exportSymbol('proto.proto.ChargingCompatibilityError', null, global);
@@ -8370,8 +8373,9 @@ proto.proto.ChargingPredictionDepartureTime.prototype.toObject = function(opt_in
  */
 proto.proto.ChargingPredictionDepartureTime.toObject = function(includeInstance, msg) {
   var f, obj = {
-predictedSoc: jspb.Message.getFieldWithDefault(msg, 1, 0),
-predictedElectricalEnergyRange: jspb.Message.getFieldWithDefault(msg, 2, 0)
+deprecatedPredictedSoc: jspb.Message.getFieldWithDefault(msg, 1, 0),
+predictedElectricalEnergyRange: jspb.Message.getFieldWithDefault(msg, 2, 0),
+predictedSoc: (f = msg.getPredictedSoc()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -8410,11 +8414,16 @@ proto.proto.ChargingPredictionDepartureTime.deserializeBinaryFromReader = functi
     switch (field) {
     case 1:
       var value = /** @type {number} */ (reader.readInt32());
-      msg.setPredictedSoc(value);
+      msg.setDeprecatedPredictedSoc(value);
       break;
     case 2:
       var value = /** @type {number} */ (reader.readInt64());
       msg.setPredictedElectricalEnergyRange(value);
+      break;
+    case 3:
+      var value = new google_protobuf_wrappers_pb.Int32Value;
+      reader.readMessage(value,google_protobuf_wrappers_pb.Int32Value.deserializeBinaryFromReader);
+      msg.setPredictedSoc(value);
       break;
     default:
       reader.skipField();
@@ -8445,7 +8454,7 @@ proto.proto.ChargingPredictionDepartureTime.prototype.serializeBinary = function
  */
 proto.proto.ChargingPredictionDepartureTime.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getPredictedSoc();
+  f = message.getDeprecatedPredictedSoc();
   if (f !== 0) {
     writer.writeInt32(
       1,
@@ -8459,14 +8468,22 @@ proto.proto.ChargingPredictionDepartureTime.serializeBinaryToWriter = function(m
       f
     );
   }
+  f = message.getPredictedSoc();
+  if (f != null) {
+    writer.writeMessage(
+      3,
+      f,
+      google_protobuf_wrappers_pb.Int32Value.serializeBinaryToWriter
+    );
+  }
 };
 
 
 /**
- * optional int32 predicted_soc = 1;
+ * optional int32 deprecated_predicted_soc = 1;
  * @return {number}
  */
-proto.proto.ChargingPredictionDepartureTime.prototype.getPredictedSoc = function() {
+proto.proto.ChargingPredictionDepartureTime.prototype.getDeprecatedPredictedSoc = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
 };
 
@@ -8475,7 +8492,7 @@ proto.proto.ChargingPredictionDepartureTime.prototype.getPredictedSoc = function
  * @param {number} value
  * @return {!proto.proto.ChargingPredictionDepartureTime} returns this
  */
-proto.proto.ChargingPredictionDepartureTime.prototype.setPredictedSoc = function(value) {
+proto.proto.ChargingPredictionDepartureTime.prototype.setDeprecatedPredictedSoc = function(value) {
   return jspb.Message.setProto3IntField(this, 1, value);
 };
 
@@ -8495,6 +8512,43 @@ proto.proto.ChargingPredictionDepartureTime.prototype.getPredictedElectricalEner
  */
 proto.proto.ChargingPredictionDepartureTime.prototype.setPredictedElectricalEnergyRange = function(value) {
   return jspb.Message.setProto3IntField(this, 2, value);
+};
+
+
+/**
+ * optional google.protobuf.Int32Value predicted_soc = 3;
+ * @return {?proto.google.protobuf.Int32Value}
+ */
+proto.proto.ChargingPredictionDepartureTime.prototype.getPredictedSoc = function() {
+  return /** @type{?proto.google.protobuf.Int32Value} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.Int32Value, 3));
+};
+
+
+/**
+ * @param {?proto.google.protobuf.Int32Value|undefined} value
+ * @return {!proto.proto.ChargingPredictionDepartureTime} returns this
+*/
+proto.proto.ChargingPredictionDepartureTime.prototype.setPredictedSoc = function(value) {
+  return jspb.Message.setWrapperField(this, 3, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.ChargingPredictionDepartureTime} returns this
+ */
+proto.proto.ChargingPredictionDepartureTime.prototype.clearPredictedSoc = function() {
+  return this.setPredictedSoc(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.ChargingPredictionDepartureTime.prototype.hasPredictedSoc = function() {
+  return jspb.Message.getField(this, 3) != null;
 };
 
 
@@ -10077,12 +10131,12 @@ proto.proto.ChargingBreakClockTimerEntry.prototype.toObject = function(opt_inclu
  */
 proto.proto.ChargingBreakClockTimerEntry.toObject = function(includeInstance, msg) {
   var f, obj = {
-status: jspb.Message.getFieldWithDefault(msg, 1, 0),
-endtimehour: jspb.Message.getFieldWithDefault(msg, 2, 0),
-endtimeminute: jspb.Message.getFieldWithDefault(msg, 3, 0),
-starttimehour: jspb.Message.getFieldWithDefault(msg, 4, 0),
-starttimeminute: jspb.Message.getFieldWithDefault(msg, 5, 0),
-timerid: jspb.Message.getFieldWithDefault(msg, 6, 0)
+activationState: jspb.Message.getFieldWithDefault(msg, 1, 0),
+endTimeHour: jspb.Message.getFieldWithDefault(msg, 2, 0),
+endTimeMin: jspb.Message.getFieldWithDefault(msg, 3, 0),
+startTimeHour: jspb.Message.getFieldWithDefault(msg, 4, 0),
+startTimeMin: jspb.Message.getFieldWithDefault(msg, 5, 0),
+timerId: jspb.Message.getFieldWithDefault(msg, 6, 0)
   };
 
   if (includeInstance) {
@@ -10120,28 +10174,28 @@ proto.proto.ChargingBreakClockTimerEntry.deserializeBinaryFromReader = function(
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {!proto.proto.ChargingBreakClockTimerEntryStatus} */ (reader.readEnum());
-      msg.setStatus(value);
+      var value = /** @type {!proto.proto.ChargingBreakClockTimerActivationState} */ (reader.readEnum());
+      msg.setActivationState(value);
       break;
     case 2:
       var value = /** @type {number} */ (reader.readInt32());
-      msg.setEndtimehour(value);
+      msg.setEndTimeHour(value);
       break;
     case 3:
       var value = /** @type {number} */ (reader.readInt32());
-      msg.setEndtimeminute(value);
+      msg.setEndTimeMin(value);
       break;
     case 4:
       var value = /** @type {number} */ (reader.readInt32());
-      msg.setStarttimehour(value);
+      msg.setStartTimeHour(value);
       break;
     case 5:
       var value = /** @type {number} */ (reader.readInt32());
-      msg.setStarttimeminute(value);
+      msg.setStartTimeMin(value);
       break;
     case 6:
-      var value = /** @type {number} */ (reader.readInt32());
-      msg.setTimerid(value);
+      var value = /** @type {number} */ (reader.readInt64());
+      msg.setTimerId(value);
       break;
     default:
       reader.skipField();
@@ -10172,44 +10226,44 @@ proto.proto.ChargingBreakClockTimerEntry.prototype.serializeBinary = function() 
  */
 proto.proto.ChargingBreakClockTimerEntry.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getStatus();
+  f = message.getActivationState();
   if (f !== 0.0) {
     writer.writeEnum(
       1,
       f
     );
   }
-  f = message.getEndtimehour();
+  f = message.getEndTimeHour();
   if (f !== 0) {
     writer.writeInt32(
       2,
       f
     );
   }
-  f = message.getEndtimeminute();
+  f = message.getEndTimeMin();
   if (f !== 0) {
     writer.writeInt32(
       3,
       f
     );
   }
-  f = message.getStarttimehour();
+  f = message.getStartTimeHour();
   if (f !== 0) {
     writer.writeInt32(
       4,
       f
     );
   }
-  f = message.getStarttimeminute();
+  f = message.getStartTimeMin();
   if (f !== 0) {
     writer.writeInt32(
       5,
       f
     );
   }
-  f = message.getTimerid();
+  f = message.getTimerId();
   if (f !== 0) {
-    writer.writeInt32(
+    writer.writeInt64(
       6,
       f
     );
@@ -10218,28 +10272,28 @@ proto.proto.ChargingBreakClockTimerEntry.serializeBinaryToWriter = function(mess
 
 
 /**
- * optional ChargingBreakClockTimerEntryStatus status = 1;
- * @return {!proto.proto.ChargingBreakClockTimerEntryStatus}
+ * optional ChargingBreakClockTimerActivationState activation_state = 1;
+ * @return {!proto.proto.ChargingBreakClockTimerActivationState}
  */
-proto.proto.ChargingBreakClockTimerEntry.prototype.getStatus = function() {
-  return /** @type {!proto.proto.ChargingBreakClockTimerEntryStatus} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+proto.proto.ChargingBreakClockTimerEntry.prototype.getActivationState = function() {
+  return /** @type {!proto.proto.ChargingBreakClockTimerActivationState} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
 };
 
 
 /**
- * @param {!proto.proto.ChargingBreakClockTimerEntryStatus} value
+ * @param {!proto.proto.ChargingBreakClockTimerActivationState} value
  * @return {!proto.proto.ChargingBreakClockTimerEntry} returns this
  */
-proto.proto.ChargingBreakClockTimerEntry.prototype.setStatus = function(value) {
+proto.proto.ChargingBreakClockTimerEntry.prototype.setActivationState = function(value) {
   return jspb.Message.setProto3EnumField(this, 1, value);
 };
 
 
 /**
- * optional int32 endTimeHour = 2;
+ * optional int32 end_time_hour = 2;
  * @return {number}
  */
-proto.proto.ChargingBreakClockTimerEntry.prototype.getEndtimehour = function() {
+proto.proto.ChargingBreakClockTimerEntry.prototype.getEndTimeHour = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
 };
 
@@ -10248,16 +10302,16 @@ proto.proto.ChargingBreakClockTimerEntry.prototype.getEndtimehour = function() {
  * @param {number} value
  * @return {!proto.proto.ChargingBreakClockTimerEntry} returns this
  */
-proto.proto.ChargingBreakClockTimerEntry.prototype.setEndtimehour = function(value) {
+proto.proto.ChargingBreakClockTimerEntry.prototype.setEndTimeHour = function(value) {
   return jspb.Message.setProto3IntField(this, 2, value);
 };
 
 
 /**
- * optional int32 endTimeMinute = 3;
+ * optional int32 end_time_min = 3;
  * @return {number}
  */
-proto.proto.ChargingBreakClockTimerEntry.prototype.getEndtimeminute = function() {
+proto.proto.ChargingBreakClockTimerEntry.prototype.getEndTimeMin = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
 };
 
@@ -10266,16 +10320,16 @@ proto.proto.ChargingBreakClockTimerEntry.prototype.getEndtimeminute = function()
  * @param {number} value
  * @return {!proto.proto.ChargingBreakClockTimerEntry} returns this
  */
-proto.proto.ChargingBreakClockTimerEntry.prototype.setEndtimeminute = function(value) {
+proto.proto.ChargingBreakClockTimerEntry.prototype.setEndTimeMin = function(value) {
   return jspb.Message.setProto3IntField(this, 3, value);
 };
 
 
 /**
- * optional int32 startTimeHour = 4;
+ * optional int32 start_time_hour = 4;
  * @return {number}
  */
-proto.proto.ChargingBreakClockTimerEntry.prototype.getStarttimehour = function() {
+proto.proto.ChargingBreakClockTimerEntry.prototype.getStartTimeHour = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
 };
 
@@ -10284,16 +10338,16 @@ proto.proto.ChargingBreakClockTimerEntry.prototype.getStarttimehour = function()
  * @param {number} value
  * @return {!proto.proto.ChargingBreakClockTimerEntry} returns this
  */
-proto.proto.ChargingBreakClockTimerEntry.prototype.setStarttimehour = function(value) {
+proto.proto.ChargingBreakClockTimerEntry.prototype.setStartTimeHour = function(value) {
   return jspb.Message.setProto3IntField(this, 4, value);
 };
 
 
 /**
- * optional int32 startTimeMinute = 5;
+ * optional int32 start_time_min = 5;
  * @return {number}
  */
-proto.proto.ChargingBreakClockTimerEntry.prototype.getStarttimeminute = function() {
+proto.proto.ChargingBreakClockTimerEntry.prototype.getStartTimeMin = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
 };
 
@@ -10302,16 +10356,16 @@ proto.proto.ChargingBreakClockTimerEntry.prototype.getStarttimeminute = function
  * @param {number} value
  * @return {!proto.proto.ChargingBreakClockTimerEntry} returns this
  */
-proto.proto.ChargingBreakClockTimerEntry.prototype.setStarttimeminute = function(value) {
+proto.proto.ChargingBreakClockTimerEntry.prototype.setStartTimeMin = function(value) {
   return jspb.Message.setProto3IntField(this, 5, value);
 };
 
 
 /**
- * optional int32 timerId = 6;
+ * optional int64 timer_id = 6;
  * @return {number}
  */
-proto.proto.ChargingBreakClockTimerEntry.prototype.getTimerid = function() {
+proto.proto.ChargingBreakClockTimerEntry.prototype.getTimerId = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 6, 0));
 };
 
@@ -10320,7 +10374,7 @@ proto.proto.ChargingBreakClockTimerEntry.prototype.getTimerid = function() {
  * @param {number} value
  * @return {!proto.proto.ChargingBreakClockTimerEntry} returns this
  */
-proto.proto.ChargingBreakClockTimerEntry.prototype.setTimerid = function(value) {
+proto.proto.ChargingBreakClockTimerEntry.prototype.setTimerId = function(value) {
   return jspb.Message.setProto3IntField(this, 6, value);
 };
 
@@ -10524,7 +10578,7 @@ locationBasedCharging: jspb.Message.getBooleanFieldWithDefault(msg, 4, false),
 weeklyProfile: jspb.Message.getBooleanFieldWithDefault(msg, 5, false),
 clocktimer: jspb.Message.getBooleanFieldWithDefault(msg, 6, false),
 maxChargingCurrent: jspb.Message.getFieldWithDefault(msg, 7, 0),
-ecoCharging: jspb.Message.getBooleanFieldWithDefault(msg, 8, false)
+ecoCharging: jspb.Message.getBooleanFieldWithDefault(msg, 9, false)
   };
 
   if (includeInstance) {
@@ -10589,7 +10643,7 @@ proto.proto.ChargeProgramParameters.deserializeBinaryFromReader = function(msg, 
       var value = /** @type {number} */ (reader.readInt32());
       msg.setMaxChargingCurrent(value);
       break;
-    case 8:
+    case 9:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setEcoCharging(value);
       break;
@@ -10674,7 +10728,7 @@ proto.proto.ChargeProgramParameters.serializeBinaryToWriter = function(message, 
   f = message.getEcoCharging();
   if (f) {
     writer.writeBool(
-      8,
+      9,
       f
     );
   }
@@ -10808,11 +10862,11 @@ proto.proto.ChargeProgramParameters.prototype.setMaxChargingCurrent = function(v
 
 
 /**
- * optional bool eco_charging = 8;
+ * optional bool eco_charging = 9;
  * @return {boolean}
  */
 proto.proto.ChargeProgramParameters.prototype.getEcoCharging = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 8, false));
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 9, false));
 };
 
 
@@ -10821,7 +10875,7 @@ proto.proto.ChargeProgramParameters.prototype.getEcoCharging = function() {
  * @return {!proto.proto.ChargeProgramParameters} returns this
  */
 proto.proto.ChargeProgramParameters.prototype.setEcoCharging = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 8, value);
+  return jspb.Message.setProto3BooleanField(this, 9, value);
 };
 
 
@@ -10831,7 +10885,7 @@ proto.proto.ChargeProgramParameters.prototype.setEcoCharging = function(value) {
  * @private {!Array<number>}
  * @const
  */
-proto.proto.WeeklyProfileValue.repeatedFields_ = [6];
+proto.proto.WeeklyProfileValue.repeatedFields_ = [1];
 
 
 
@@ -10864,13 +10918,13 @@ proto.proto.WeeklyProfileValue.prototype.toObject = function(opt_includeInstance
  */
 proto.proto.WeeklyProfileValue.toObject = function(includeInstance, msg) {
   var f, obj = {
-singleTimeProfileEntriesActivatable: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
-maxNumberOfWeeklyTimeProfileSlots: jspb.Message.getFieldWithDefault(msg, 2, 0),
+timeProfilesList: jspb.Message.toObjectList(msg.getTimeProfilesList(),
+    proto.proto.VVRTimeProfile.toObject, includeInstance),
+singleTimeProfileEntriesActivatable: jspb.Message.getBooleanFieldWithDefault(msg, 2, false),
 maxNumberOfTimeProfiles: jspb.Message.getFieldWithDefault(msg, 3, 0),
 currentNumberOfTimeProfileSlots: jspb.Message.getFieldWithDefault(msg, 4, 0),
 currentNumberOfTimeProfiles: jspb.Message.getFieldWithDefault(msg, 5, 0),
-timeProfilesList: jspb.Message.toObjectList(msg.getTimeProfilesList(),
-    proto.proto.VVRTimeProfile.toObject, includeInstance)
+maxNumberOfWeeklyTimeProfileSlots: jspb.Message.getFieldWithDefault(msg, 8, 0)
   };
 
   if (includeInstance) {
@@ -10908,12 +10962,13 @@ proto.proto.WeeklyProfileValue.deserializeBinaryFromReader = function(msg, reade
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {boolean} */ (reader.readBool());
-      msg.setSingleTimeProfileEntriesActivatable(value);
+      var value = new proto.proto.VVRTimeProfile;
+      reader.readMessage(value,proto.proto.VVRTimeProfile.deserializeBinaryFromReader);
+      msg.addTimeProfiles(value);
       break;
     case 2:
-      var value = /** @type {number} */ (reader.readInt32());
-      msg.setMaxNumberOfWeeklyTimeProfileSlots(value);
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setSingleTimeProfileEntriesActivatable(value);
       break;
     case 3:
       var value = /** @type {number} */ (reader.readInt32());
@@ -10927,10 +10982,9 @@ proto.proto.WeeklyProfileValue.deserializeBinaryFromReader = function(msg, reade
       var value = /** @type {number} */ (reader.readInt32());
       msg.setCurrentNumberOfTimeProfiles(value);
       break;
-    case 6:
-      var value = new proto.proto.VVRTimeProfile;
-      reader.readMessage(value,proto.proto.VVRTimeProfile.deserializeBinaryFromReader);
-      msg.addTimeProfiles(value);
+    case 8:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setMaxNumberOfWeeklyTimeProfileSlots(value);
       break;
     default:
       reader.skipField();
@@ -10961,16 +11015,17 @@ proto.proto.WeeklyProfileValue.prototype.serializeBinary = function() {
  */
 proto.proto.WeeklyProfileValue.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = message.getTimeProfilesList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
+      1,
+      f,
+      proto.proto.VVRTimeProfile.serializeBinaryToWriter
+    );
+  }
   f = message.getSingleTimeProfileEntriesActivatable();
   if (f) {
     writer.writeBool(
-      1,
-      f
-    );
-  }
-  f = message.getMaxNumberOfWeeklyTimeProfileSlots();
-  if (f !== 0) {
-    writer.writeInt32(
       2,
       f
     );
@@ -10996,23 +11051,60 @@ proto.proto.WeeklyProfileValue.serializeBinaryToWriter = function(message, write
       f
     );
   }
-  f = message.getTimeProfilesList();
-  if (f.length > 0) {
-    writer.writeRepeatedMessage(
-      6,
-      f,
-      proto.proto.VVRTimeProfile.serializeBinaryToWriter
+  f = message.getMaxNumberOfWeeklyTimeProfileSlots();
+  if (f !== 0) {
+    writer.writeInt32(
+      8,
+      f
     );
   }
 };
 
 
 /**
- * optional bool single_time_profile_entries_activatable = 1;
+ * repeated VVRTimeProfile time_profiles = 1;
+ * @return {!Array<!proto.proto.VVRTimeProfile>}
+ */
+proto.proto.WeeklyProfileValue.prototype.getTimeProfilesList = function() {
+  return /** @type{!Array<!proto.proto.VVRTimeProfile>} */ (
+    jspb.Message.getRepeatedWrapperField(this, proto.proto.VVRTimeProfile, 1));
+};
+
+
+/**
+ * @param {!Array<!proto.proto.VVRTimeProfile>} value
+ * @return {!proto.proto.WeeklyProfileValue} returns this
+*/
+proto.proto.WeeklyProfileValue.prototype.setTimeProfilesList = function(value) {
+  return jspb.Message.setRepeatedWrapperField(this, 1, value);
+};
+
+
+/**
+ * @param {!proto.proto.VVRTimeProfile=} opt_value
+ * @param {number=} opt_index
+ * @return {!proto.proto.VVRTimeProfile}
+ */
+proto.proto.WeeklyProfileValue.prototype.addTimeProfiles = function(opt_value, opt_index) {
+  return jspb.Message.addToRepeatedWrapperField(this, 1, opt_value, proto.proto.VVRTimeProfile, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ * @return {!proto.proto.WeeklyProfileValue} returns this
+ */
+proto.proto.WeeklyProfileValue.prototype.clearTimeProfilesList = function() {
+  return this.setTimeProfilesList([]);
+};
+
+
+/**
+ * optional bool single_time_profile_entries_activatable = 2;
  * @return {boolean}
  */
 proto.proto.WeeklyProfileValue.prototype.getSingleTimeProfileEntriesActivatable = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 1, false));
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 2, false));
 };
 
 
@@ -11021,25 +11113,7 @@ proto.proto.WeeklyProfileValue.prototype.getSingleTimeProfileEntriesActivatable 
  * @return {!proto.proto.WeeklyProfileValue} returns this
  */
 proto.proto.WeeklyProfileValue.prototype.setSingleTimeProfileEntriesActivatable = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 1, value);
-};
-
-
-/**
- * optional int32 max_number_of_weekly_time_profile_slots = 2;
- * @return {number}
- */
-proto.proto.WeeklyProfileValue.prototype.getMaxNumberOfWeeklyTimeProfileSlots = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
-};
-
-
-/**
- * @param {number} value
- * @return {!proto.proto.WeeklyProfileValue} returns this
- */
-proto.proto.WeeklyProfileValue.prototype.setMaxNumberOfWeeklyTimeProfileSlots = function(value) {
-  return jspb.Message.setProto3IntField(this, 2, value);
+  return jspb.Message.setProto3BooleanField(this, 2, value);
 };
 
 
@@ -11098,40 +11172,20 @@ proto.proto.WeeklyProfileValue.prototype.setCurrentNumberOfTimeProfiles = functi
 
 
 /**
- * repeated VVRTimeProfile time_profiles = 6;
- * @return {!Array<!proto.proto.VVRTimeProfile>}
+ * optional int32 max_number_of_weekly_time_profile_slots = 8;
+ * @return {number}
  */
-proto.proto.WeeklyProfileValue.prototype.getTimeProfilesList = function() {
-  return /** @type{!Array<!proto.proto.VVRTimeProfile>} */ (
-    jspb.Message.getRepeatedWrapperField(this, proto.proto.VVRTimeProfile, 6));
+proto.proto.WeeklyProfileValue.prototype.getMaxNumberOfWeeklyTimeProfileSlots = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 8, 0));
 };
 
 
 /**
- * @param {!Array<!proto.proto.VVRTimeProfile>} value
- * @return {!proto.proto.WeeklyProfileValue} returns this
-*/
-proto.proto.WeeklyProfileValue.prototype.setTimeProfilesList = function(value) {
-  return jspb.Message.setRepeatedWrapperField(this, 6, value);
-};
-
-
-/**
- * @param {!proto.proto.VVRTimeProfile=} opt_value
- * @param {number=} opt_index
- * @return {!proto.proto.VVRTimeProfile}
- */
-proto.proto.WeeklyProfileValue.prototype.addTimeProfiles = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 6, opt_value, proto.proto.VVRTimeProfile, opt_index);
-};
-
-
-/**
- * Clears the list making it empty but non-null.
+ * @param {number} value
  * @return {!proto.proto.WeeklyProfileValue} returns this
  */
-proto.proto.WeeklyProfileValue.prototype.clearTimeProfilesList = function() {
-  return this.setTimeProfilesList([]);
+proto.proto.WeeklyProfileValue.prototype.setMaxNumberOfWeeklyTimeProfileSlots = function(value) {
+  return jspb.Message.setProto3IntField(this, 8, value);
 };
 
 
@@ -19550,6 +19604,15 @@ proto.proto.PrecondStateType = {
   PRECOND_STATE_TYPE_AT_DEPARTURE_TIME: 1,
   PRECOND_STATE_TYPE_IMMEDIATE: 2,
   PRECOND_STATE_TYPE_CHILD_PRESENCE_DETECTION: 3
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.ChargingBreakClockTimerActivationState = {
+  CHARGING_BREAK_CLOCK_TIMER_ACTIVATION_STATE_UNKNOWN: 0,
+  CHARGING_BREAK_CLOCK_TIMER_ACTIVATION_STATE_INACTIVE: 1,
+  CHARGING_BREAK_CLOCK_TIMER_ACTIVATION_STATE_ACTIVE: 2
 };
 
 /**

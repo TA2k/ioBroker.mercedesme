@@ -6,6 +6,7 @@ import "vehicle-commands.proto";
 import "protos.proto";
 import "vehicleapi.proto";
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
 
 option java_package = "com.daimler.mbcarkit.proto";
 
@@ -619,8 +620,10 @@ message ChargingPredictionSoc {
 }
 
 message ChargingPredictionDepartureTime {
-  int32 predicted_soc = 1;
+  // APK field tags: 1=deprecated_predicted_soc, 2=predicted_electrical_energy_range, 3=predicted_soc
+  int32 deprecated_predicted_soc = 1 [deprecated = true];
   int64 predicted_electrical_energy_range = 2;
+  google.protobuf.Int32Value predicted_soc = 3;
 }
 
 
@@ -735,12 +738,20 @@ message ChargingPowerControl {
 }
 
 message ChargingBreakClockTimerEntry {
-  ChargingBreakClockTimerEntryStatus status = 1;
-  int32 endTimeHour = 2;
-  int32 endTimeMinute = 3;
-  int32 startTimeHour = 4;
-  int32 startTimeMinute = 5;
-  int32 timerId = 6;
+  // APK: field 1 = activation_state (ChargingBreakClockTimerActivationState enum)
+  ChargingBreakClockTimerActivationState activation_state = 1;
+  int32 end_time_hour = 2;
+  int32 end_time_min = 3;
+  int32 start_time_hour = 4;
+  int32 start_time_min = 5;
+  // APK: timer_id is int64
+  int64 timer_id = 6;
+}
+
+enum ChargingBreakClockTimerActivationState {
+  CHARGING_BREAK_CLOCK_TIMER_ACTIVATION_STATE_UNKNOWN = 0;
+  CHARGING_BREAK_CLOCK_TIMER_ACTIVATION_STATE_INACTIVE = 1;
+  CHARGING_BREAK_CLOCK_TIMER_ACTIVATION_STATE_ACTIVE = 2;
 }
 
 message ChargeProgramsValue {
@@ -781,7 +792,8 @@ message ChargeProgramParameters {
   bool weekly_profile = 5 [ json_name = "weeklyprofile" ];
   bool clockTimer = 6 [ json_name = "clockTimer" ];
   int32 max_charging_current = 7 [ json_name = "MaxChargingCurrent" ];
-  bool eco_charging = 8 [ json_name = "EcoCharging" ];
+  // APK: eco_charging = field 9 (not 8)
+  bool eco_charging = 9 [ json_name = "EcoCharging" ];
 }
 
 // Same as VehicleAPI.AttributeStatus but with slightly different names. The VehicleAPI.AttributeStatus enum values
@@ -799,9 +811,12 @@ enum AttributeStatus {
 }
 
 message WeeklyProfileValue {
-  bool single_time_profile_entries_activatable = 1 [ json_name = "singleTimeProfileEntriesActivatable" ];
+  // APK field tags: 1=time_profiles, 2=single_time_profile_entries_activatable,
+  // 3=max_number_of_time_profiles, 4=current_number_of_time_profile_slots,
+  // 5=current_number_of_time_profiles, 8=max_number_of_weekly_time_profile_slots
+  repeated VVRTimeProfile time_profiles = 1 [ json_name = "timeProfiles" ];
 
-  int32 max_number_of_weekly_time_profile_slots = 2 [ json_name = "maxNumberOfWeeklyTimeProfileSlots" ];
+  bool single_time_profile_entries_activatable = 2 [ json_name = "singleTimeProfileEntriesActivatable" ];
 
   int32 max_number_of_time_profiles = 3 [ json_name = "maxNumberOfTimeProfiles" ];
 
@@ -809,7 +824,7 @@ message WeeklyProfileValue {
 
   int32 current_number_of_time_profiles = 5 [ json_name = "currentNumberOfTimeProfiles" ];
 
-  repeated VVRTimeProfile time_profiles = 6 [ json_name = "timeProfiles" ];
+  int32 max_number_of_weekly_time_profile_slots = 8 [ json_name = "maxNumberOfWeeklyTimeProfileSlots" ];
 }
 
 // VVRTimeProfile - field tags from Mercedes APK (Feb 2026)
