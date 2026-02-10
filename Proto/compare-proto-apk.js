@@ -99,7 +99,8 @@ function extractFields(messageBody) {
         }
 
         // Try to match a field definition: [repeated] type name = number
-        const fieldMatch = line.match(/^(?:repeated\s+)?(?:[\w.]+)\s+(\w+)\s*=\s*(\d+)/);
+        // Also handles map<key, value> fields
+        const fieldMatch = line.match(/^(?:repeated\s+)?(?:map<[^>]+>|[\w.]+)\s+(\w+)\s*=\s*(\d+)/);
         if (fieldMatch) {
             fields[fieldMatch[1]] = parseInt(fieldMatch[2]);
         }

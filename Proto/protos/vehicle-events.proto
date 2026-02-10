@@ -197,7 +197,7 @@ message VehicleAttributeStatus {
     EcoHistogramValue eco_histogram_value = 28;
     WeeklyProfileValue weekly_profile_value = 29;
     ChargeProgramsValue charge_programs_value = 31;
-    ChargingBreakClockTimerValue chargingbreak_clocktimer_value = 32;
+    ChargingBreakClockTimerValue charging_break_clock_timer = 32;
     ChargingPowerControl charging_power_control = 33;
     KeylineActivationStateValue keyline_activation_state_value = 36;
     NextDepartureTimeValue next_departure_time_value = 37;
@@ -689,7 +689,7 @@ message ChargingPowerRestrictions {
 }
 
 message ChargingBreakClockTimerValue {
-  repeated ChargingBreakClockTimerEntry chargingbreak_clocktimer_entry = 1;
+  repeated ChargingBreakClockTimerEntry clock_timer = 1;
 }
 
 enum BatteryHealth {
@@ -913,6 +913,7 @@ message TemperaturePoint {
   string zone = 1;
   double temperature = 2;
   string temperature_display_value = 3;
+  bool active = 4;  // APK Feb 2026
 }
 
 message WeekdayTariffValue {
@@ -1099,11 +1100,19 @@ message DataChangeEvent {
 // New messages from APK analysis (2026-02-06)
 
 message KeylineActivationStateValue {
-  // Placeholder - fields to be extracted from smali
+  KeylineActivationStates state = 1;
+  repeated int32 active_keylines = 2;
+}
+
+enum KeylineActivationStates {
+  KEYLINE_ACTIVATION_STATE_UNKNOWN = 0;
+  KEYLINE_ACTIVATION_STATE_ACTIVE = 1;
+  KEYLINE_ACTIVATION_STATE_INACTIVE = 2;
 }
 
 message NextDepartureTimeValue {
-  // Placeholder - fields to be extracted from smali
+  int64 hour = 1;
+  int64 minute = 2;
 }
 
 message ChildPresenceDetectionWarningLastEvent {
@@ -1127,7 +1136,18 @@ message InteriorMonitoringStatus {
 }
 
 message RemoteUpdateStartStatus {
-  // Placeholder - fields to be extracted from smali
+  int32 duration_after_runtime = 1;
+  string package_id = 2;
+  UpdateStatus update_status = 3;
+  string release_id = 4;
+}
+
+enum UpdateStatus {
+  UPDATE_STATUS_UNKNOWN = 0;
+  UPDATE_STATUS_PENDING = 1;
+  UPDATE_STATUS_IN_PROGRESS = 2;
+  UPDATE_STATUS_COMPLETED = 3;
+  UPDATE_STATUS_FAILED = 4;
 }
 
 message SohCalibrationPlanned {

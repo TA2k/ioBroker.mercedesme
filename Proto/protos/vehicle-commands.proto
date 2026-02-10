@@ -499,6 +499,8 @@ message TemperatureConfigure {
   }
 
   repeated TemperaturePoint temperature_points = 1 [ json_name = "temperaturePoints" ];
+  string user_profile = 2 [ json_name = "userProfile" ];
+  bool sync_zones_to_driver = 3 [ json_name = "syncZonesToDriver" ];
 }
 
 // Set the weekprofile for the weekly departure time settings
@@ -704,23 +706,23 @@ message AutomaticValetParkingActivate {
 
 // Unlock charge flap (re-added in APK 1.63.1)
 message ChargeFlapUnlock {
-  // empty
+  string pin = 1;
 }
 
 // Open charge flap (from APK 1.63.1)
 message ChargeFlapOpen {
-  // empty
+  string pin = 1;
 }
 
 message ChargeCouplerUnlock {}
 
 // Stop charge coupler (from APK 1.63.1)
 message ChargeCouplerStop {
-  // empty
+  string pin = 1;
 }
 
 message ChargingBreakClocktimerConfigure {
-  repeated ChargingBreakClockTimerConfigureEntry chargingbreak_clocktimer_configure_entry = 1;
+  repeated ChargingBreakClockTimerConfigureEntry charging_break_clocktimers = 1;
 }
 
 
@@ -746,14 +748,14 @@ message ClockTimerConfigure {
   repeated ClockTimerConfigureEntry clock_timer_configure_entry = 1 [ json_name = "clockTimerConfigureEntry" ];
 }
 
-// APK structure has start/end times, not single hour/minute
+// APK structure has start/end times (int64), not single hour/minute
 message ClockTimerConfigureEntry {
   ChargingBreakClockTimerEntryStatus action = 1;
-  int32 end_time_hour = 2;
-  int32 end_time_min = 3;
-  int32 start_time_hour = 4;
-  int32 start_time_min = 5;
-  int32 id = 6;
+  int64 end_time_hour = 2;
+  int64 end_time_min = 3;
+  int64 start_time_hour = 4;
+  int64 start_time_min = 5;
+  int64 timer_id = 6;
   repeated TimeProfileDay days = 7;
 }
 
@@ -789,7 +791,7 @@ message SelectiveKeyDeactivation {
 
 // Child presence detection - deactivate alarm (from APK 1.63.1)
 message ChildPresenceDetectionDeactivateAlarm {
-  // empty
+  string pin = 1;
 }
 
 // Child presence detection - take picture (from APK 1.63.1)
@@ -867,8 +869,29 @@ message ChargingConfigure {
   google.protobuf.Int32Value target_soc = 9 [ json_name = "targetSoc" ];
   google.protobuf.Int64Value target_time = 10 [ json_name = "targetTime" ];
   SohCalibrationActivation soh_calibration_activation = 11 [ json_name = "sohCalibrationActivation" ];
-  // ChargeSchedule charge_schedule = 13; // complex nested type - omitted for simplicity
+  ChargeSchedule chargeSchedule = 13 [ json_name = "chargeSchedule" ];
   google.protobuf.Int32Value charging_location_id = 14 [ json_name = "chargingLocationId" ];
+
+  // Nested message for charge scheduling
+  message ChargeSchedule {
+    repeated ChargeScheduleEntry schedule = 1;
+    int64 start_time = 2;
+    int32 schedule_id = 3;
+    UseCaseId use_case_id = 4;
+    OfflineMode offline_mode = 5;
+
+    message ChargeScheduleEntry {
+      // Fields to be determined from APK if needed
+    }
+
+    enum UseCaseId {
+      USE_CASE_ID_UNKNOWN = 0;
+    }
+
+    enum OfflineMode {
+      OFFLINE_MODE_UNKNOWN = 0;
+    }
+  }
   BptRequest bpt_request = 15 [ json_name = "bptRequest" ];
   EmergencyPowerSupply emergency_power_supply = 16 [ json_name = "emergencyPowerSupply" ];
   ActionEvsePairing action_evse_pairing = 17 [ json_name = "actionEvsePairing" ];

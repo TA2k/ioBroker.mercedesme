@@ -98,6 +98,7 @@ goog.exportSymbol('proto.proto.InteriorMonitoringStatus', null, global);
 goog.exportSymbol('proto.proto.InteriorProtectionActivationStatus', null, global);
 goog.exportSymbol('proto.proto.InteriorProtectionSelectionStatus', null, global);
 goog.exportSymbol('proto.proto.KeylineActivationStateValue', null, global);
+goog.exportSymbol('proto.proto.KeylineActivationStates', null, global);
 goog.exportSymbol('proto.proto.MainCategory', null, global);
 goog.exportSymbol('proto.proto.Method', null, global);
 goog.exportSymbol('proto.proto.NextDepartureTimeValue', null, global);
@@ -144,6 +145,7 @@ goog.exportSymbol('proto.proto.TowProtectionActivationStatus', null, global);
 goog.exportSymbol('proto.proto.TowProtectionSelectionStatus', null, global);
 goog.exportSymbol('proto.proto.TrackingEvent', null, global);
 goog.exportSymbol('proto.proto.TurnOffEnginePreWarning', null, global);
+goog.exportSymbol('proto.proto.UpdateStatus', null, global);
 goog.exportSymbol('proto.proto.VEPUpdate', null, global);
 goog.exportSymbol('proto.proto.VEPUpdatesByVIN', null, global);
 goog.exportSymbol('proto.proto.VVRTimeProfile', null, global);
@@ -1319,7 +1321,7 @@ if (goog.DEBUG && !COMPILED) {
  * @constructor
  */
 proto.proto.KeylineActivationStateValue = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
+  jspb.Message.initialize(this, opt_data, 0, -1, proto.proto.KeylineActivationStateValue.repeatedFields_, null);
 };
 goog.inherits(proto.proto.KeylineActivationStateValue, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
@@ -1927,7 +1929,7 @@ proto.proto.VehicleAttributeStatus.AttributeTypeCase = {
   ECO_HISTOGRAM_VALUE: 28,
   WEEKLY_PROFILE_VALUE: 29,
   CHARGE_PROGRAMS_VALUE: 31,
-  CHARGINGBREAK_CLOCKTIMER_VALUE: 32,
+  CHARGING_BREAK_CLOCK_TIMER: 32,
   CHARGING_POWER_CONTROL: 33,
   KEYLINE_ACTIVATION_STATE_VALUE: 36,
   NEXT_DEPARTURE_TIME_VALUE: 37,
@@ -2056,7 +2058,7 @@ speedAlertConfigurationValue: (f = msg.getSpeedAlertConfigurationValue()) && pro
 ecoHistogramValue: (f = msg.getEcoHistogramValue()) && proto.proto.EcoHistogramValue.toObject(includeInstance, f),
 weeklyProfileValue: (f = msg.getWeeklyProfileValue()) && proto.proto.WeeklyProfileValue.toObject(includeInstance, f),
 chargeProgramsValue: (f = msg.getChargeProgramsValue()) && proto.proto.ChargeProgramsValue.toObject(includeInstance, f),
-chargingbreakClocktimerValue: (f = msg.getChargingbreakClocktimerValue()) && proto.proto.ChargingBreakClockTimerValue.toObject(includeInstance, f),
+chargingBreakClockTimer: (f = msg.getChargingBreakClockTimer()) && proto.proto.ChargingBreakClockTimerValue.toObject(includeInstance, f),
 chargingPowerControl: (f = msg.getChargingPowerControl()) && proto.proto.ChargingPowerControl.toObject(includeInstance, f),
 keylineActivationStateValue: (f = msg.getKeylineActivationStateValue()) && proto.proto.KeylineActivationStateValue.toObject(includeInstance, f),
 nextDepartureTimeValue: (f = msg.getNextDepartureTimeValue()) && proto.proto.NextDepartureTimeValue.toObject(includeInstance, f),
@@ -2288,7 +2290,7 @@ proto.proto.VehicleAttributeStatus.deserializeBinaryFromReader = function(msg, r
     case 32:
       var value = new proto.proto.ChargingBreakClockTimerValue;
       reader.readMessage(value,proto.proto.ChargingBreakClockTimerValue.deserializeBinaryFromReader);
-      msg.setChargingbreakClocktimerValue(value);
+      msg.setChargingBreakClockTimer(value);
       break;
     case 33:
       var value = new proto.proto.ChargingPowerControl;
@@ -2797,7 +2799,7 @@ proto.proto.VehicleAttributeStatus.serializeBinaryToWriter = function(message, w
       proto.proto.ChargeProgramsValue.serializeBinaryToWriter
     );
   }
-  f = message.getChargingbreakClocktimerValue();
+  f = message.getChargingBreakClockTimer();
   if (f != null) {
     writer.writeMessage(
       32,
@@ -4410,10 +4412,10 @@ proto.proto.VehicleAttributeStatus.prototype.hasChargeProgramsValue = function()
 
 
 /**
- * optional ChargingBreakClockTimerValue chargingbreak_clocktimer_value = 32;
+ * optional ChargingBreakClockTimerValue charging_break_clock_timer = 32;
  * @return {?proto.proto.ChargingBreakClockTimerValue}
  */
-proto.proto.VehicleAttributeStatus.prototype.getChargingbreakClocktimerValue = function() {
+proto.proto.VehicleAttributeStatus.prototype.getChargingBreakClockTimer = function() {
   return /** @type{?proto.proto.ChargingBreakClockTimerValue} */ (
     jspb.Message.getWrapperField(this, proto.proto.ChargingBreakClockTimerValue, 32));
 };
@@ -4423,7 +4425,7 @@ proto.proto.VehicleAttributeStatus.prototype.getChargingbreakClocktimerValue = f
  * @param {?proto.proto.ChargingBreakClockTimerValue|undefined} value
  * @return {!proto.proto.VehicleAttributeStatus} returns this
 */
-proto.proto.VehicleAttributeStatus.prototype.setChargingbreakClocktimerValue = function(value) {
+proto.proto.VehicleAttributeStatus.prototype.setChargingBreakClockTimer = function(value) {
   return jspb.Message.setOneofWrapperField(this, 32, proto.proto.VehicleAttributeStatus.oneofGroups_[1], value);
 };
 
@@ -4432,8 +4434,8 @@ proto.proto.VehicleAttributeStatus.prototype.setChargingbreakClocktimerValue = f
  * Clears the message field making it undefined.
  * @return {!proto.proto.VehicleAttributeStatus} returns this
  */
-proto.proto.VehicleAttributeStatus.prototype.clearChargingbreakClocktimerValue = function() {
-  return this.setChargingbreakClocktimerValue(undefined);
+proto.proto.VehicleAttributeStatus.prototype.clearChargingBreakClockTimer = function() {
+  return this.setChargingBreakClockTimer(undefined);
 };
 
 
@@ -4441,7 +4443,7 @@ proto.proto.VehicleAttributeStatus.prototype.clearChargingbreakClocktimerValue =
  * Returns whether this field is set.
  * @return {boolean}
  */
-proto.proto.VehicleAttributeStatus.prototype.hasChargingbreakClocktimerValue = function() {
+proto.proto.VehicleAttributeStatus.prototype.hasChargingBreakClockTimer = function() {
   return jspb.Message.getField(this, 32) != null;
 };
 
@@ -9441,7 +9443,7 @@ proto.proto.ChargingBreakClockTimerValue.prototype.toObject = function(opt_inclu
  */
 proto.proto.ChargingBreakClockTimerValue.toObject = function(includeInstance, msg) {
   var f, obj = {
-chargingbreakClocktimerEntryList: jspb.Message.toObjectList(msg.getChargingbreakClocktimerEntryList(),
+clockTimerList: jspb.Message.toObjectList(msg.getClockTimerList(),
     proto.proto.ChargingBreakClockTimerEntry.toObject, includeInstance)
   };
 
@@ -9482,7 +9484,7 @@ proto.proto.ChargingBreakClockTimerValue.deserializeBinaryFromReader = function(
     case 1:
       var value = new proto.proto.ChargingBreakClockTimerEntry;
       reader.readMessage(value,proto.proto.ChargingBreakClockTimerEntry.deserializeBinaryFromReader);
-      msg.addChargingbreakClocktimerEntry(value);
+      msg.addClockTimer(value);
       break;
     default:
       reader.skipField();
@@ -9513,7 +9515,7 @@ proto.proto.ChargingBreakClockTimerValue.prototype.serializeBinary = function() 
  */
 proto.proto.ChargingBreakClockTimerValue.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getChargingbreakClocktimerEntryList();
+  f = message.getClockTimerList();
   if (f.length > 0) {
     writer.writeRepeatedMessage(
       1,
@@ -9525,10 +9527,10 @@ proto.proto.ChargingBreakClockTimerValue.serializeBinaryToWriter = function(mess
 
 
 /**
- * repeated ChargingBreakClockTimerEntry chargingbreak_clocktimer_entry = 1;
+ * repeated ChargingBreakClockTimerEntry clock_timer = 1;
  * @return {!Array<!proto.proto.ChargingBreakClockTimerEntry>}
  */
-proto.proto.ChargingBreakClockTimerValue.prototype.getChargingbreakClocktimerEntryList = function() {
+proto.proto.ChargingBreakClockTimerValue.prototype.getClockTimerList = function() {
   return /** @type{!Array<!proto.proto.ChargingBreakClockTimerEntry>} */ (
     jspb.Message.getRepeatedWrapperField(this, proto.proto.ChargingBreakClockTimerEntry, 1));
 };
@@ -9538,7 +9540,7 @@ proto.proto.ChargingBreakClockTimerValue.prototype.getChargingbreakClocktimerEnt
  * @param {!Array<!proto.proto.ChargingBreakClockTimerEntry>} value
  * @return {!proto.proto.ChargingBreakClockTimerValue} returns this
 */
-proto.proto.ChargingBreakClockTimerValue.prototype.setChargingbreakClocktimerEntryList = function(value) {
+proto.proto.ChargingBreakClockTimerValue.prototype.setClockTimerList = function(value) {
   return jspb.Message.setRepeatedWrapperField(this, 1, value);
 };
 
@@ -9548,7 +9550,7 @@ proto.proto.ChargingBreakClockTimerValue.prototype.setChargingbreakClocktimerEnt
  * @param {number=} opt_index
  * @return {!proto.proto.ChargingBreakClockTimerEntry}
  */
-proto.proto.ChargingBreakClockTimerValue.prototype.addChargingbreakClocktimerEntry = function(opt_value, opt_index) {
+proto.proto.ChargingBreakClockTimerValue.prototype.addClockTimer = function(opt_value, opt_index) {
   return jspb.Message.addToRepeatedWrapperField(this, 1, opt_value, proto.proto.ChargingBreakClockTimerEntry, opt_index);
 };
 
@@ -9557,8 +9559,8 @@ proto.proto.ChargingBreakClockTimerValue.prototype.addChargingbreakClocktimerEnt
  * Clears the list making it empty but non-null.
  * @return {!proto.proto.ChargingBreakClockTimerValue} returns this
  */
-proto.proto.ChargingBreakClockTimerValue.prototype.clearChargingbreakClocktimerEntryList = function() {
-  return this.setChargingbreakClocktimerEntryList([]);
+proto.proto.ChargingBreakClockTimerValue.prototype.clearClockTimerList = function() {
+  return this.setClockTimerList([]);
 };
 
 
@@ -13014,7 +13016,8 @@ proto.proto.TemperaturePoint.toObject = function(includeInstance, msg) {
   var f, obj = {
 zone: jspb.Message.getFieldWithDefault(msg, 1, ""),
 temperature: jspb.Message.getFloatingPointFieldWithDefault(msg, 2, 0.0),
-temperatureDisplayValue: jspb.Message.getFieldWithDefault(msg, 3, "")
+temperatureDisplayValue: jspb.Message.getFieldWithDefault(msg, 3, ""),
+active: jspb.Message.getBooleanFieldWithDefault(msg, 4, false)
   };
 
   if (includeInstance) {
@@ -13063,6 +13066,10 @@ proto.proto.TemperaturePoint.deserializeBinaryFromReader = function(msg, reader)
       var value = /** @type {string} */ (reader.readString());
       msg.setTemperatureDisplayValue(value);
       break;
+    case 4:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setActive(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -13110,6 +13117,13 @@ proto.proto.TemperaturePoint.serializeBinaryToWriter = function(message, writer)
   if (f.length > 0) {
     writer.writeString(
       3,
+      f
+    );
+  }
+  f = message.getActive();
+  if (f) {
+    writer.writeBool(
+      4,
       f
     );
   }
@@ -13167,6 +13181,24 @@ proto.proto.TemperaturePoint.prototype.getTemperatureDisplayValue = function() {
  */
 proto.proto.TemperaturePoint.prototype.setTemperatureDisplayValue = function(value) {
   return jspb.Message.setProto3StringField(this, 3, value);
+};
+
+
+/**
+ * optional bool active = 4;
+ * @return {boolean}
+ */
+proto.proto.TemperaturePoint.prototype.getActive = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 4, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.proto.TemperaturePoint} returns this
+ */
+proto.proto.TemperaturePoint.prototype.setActive = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 4, value);
 };
 
 
@@ -17631,6 +17663,13 @@ proto.proto.DataChangeEvent.prototype.setSequenceNumber = function(value) {
 
 
 
+/**
+ * List of repeated fields within this message type.
+ * @private {!Array<number>}
+ * @const
+ */
+proto.proto.KeylineActivationStateValue.repeatedFields_ = [2];
+
 
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
@@ -17662,7 +17701,8 @@ proto.proto.KeylineActivationStateValue.prototype.toObject = function(opt_includ
  */
 proto.proto.KeylineActivationStateValue.toObject = function(includeInstance, msg) {
   var f, obj = {
-
+state: jspb.Message.getFieldWithDefault(msg, 1, 0),
+activeKeylinesList: (f = jspb.Message.getRepeatedField(msg, 2)) == null ? undefined : f
   };
 
   if (includeInstance) {
@@ -17699,6 +17739,16 @@ proto.proto.KeylineActivationStateValue.deserializeBinaryFromReader = function(m
     }
     var field = reader.getFieldNumber();
     switch (field) {
+    case 1:
+      var value = /** @type {!proto.proto.KeylineActivationStates} */ (reader.readEnum());
+      msg.setState(value);
+      break;
+    case 2:
+      var values = /** @type {!Array<number>} */ (reader.isDelimited() ? reader.readPackedInt32() : [reader.readInt32()]);
+      for (var i = 0; i < values.length; i++) {
+        msg.addActiveKeylines(values[i]);
+      }
+      break;
     default:
       reader.skipField();
       break;
@@ -17728,6 +17778,75 @@ proto.proto.KeylineActivationStateValue.prototype.serializeBinary = function() {
  */
 proto.proto.KeylineActivationStateValue.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = message.getState();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      1,
+      f
+    );
+  }
+  f = message.getActiveKeylinesList();
+  if (f.length > 0) {
+    writer.writePackedInt32(
+      2,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional KeylineActivationStates state = 1;
+ * @return {!proto.proto.KeylineActivationStates}
+ */
+proto.proto.KeylineActivationStateValue.prototype.getState = function() {
+  return /** @type {!proto.proto.KeylineActivationStates} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/**
+ * @param {!proto.proto.KeylineActivationStates} value
+ * @return {!proto.proto.KeylineActivationStateValue} returns this
+ */
+proto.proto.KeylineActivationStateValue.prototype.setState = function(value) {
+  return jspb.Message.setProto3EnumField(this, 1, value);
+};
+
+
+/**
+ * repeated int32 active_keylines = 2;
+ * @return {!Array<number>}
+ */
+proto.proto.KeylineActivationStateValue.prototype.getActiveKeylinesList = function() {
+  return /** @type {!Array<number>} */ (jspb.Message.getRepeatedField(this, 2));
+};
+
+
+/**
+ * @param {!Array<number>} value
+ * @return {!proto.proto.KeylineActivationStateValue} returns this
+ */
+proto.proto.KeylineActivationStateValue.prototype.setActiveKeylinesList = function(value) {
+  return jspb.Message.setField(this, 2, value || []);
+};
+
+
+/**
+ * @param {number} value
+ * @param {number=} opt_index
+ * @return {!proto.proto.KeylineActivationStateValue} returns this
+ */
+proto.proto.KeylineActivationStateValue.prototype.addActiveKeylines = function(value, opt_index) {
+  return jspb.Message.addToRepeatedField(this, 2, value, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ * @return {!proto.proto.KeylineActivationStateValue} returns this
+ */
+proto.proto.KeylineActivationStateValue.prototype.clearActiveKeylinesList = function() {
+  return this.setActiveKeylinesList([]);
 };
 
 
@@ -17763,7 +17882,8 @@ proto.proto.NextDepartureTimeValue.prototype.toObject = function(opt_includeInst
  */
 proto.proto.NextDepartureTimeValue.toObject = function(includeInstance, msg) {
   var f, obj = {
-
+hour: jspb.Message.getFieldWithDefault(msg, 1, 0),
+minute: jspb.Message.getFieldWithDefault(msg, 2, 0)
   };
 
   if (includeInstance) {
@@ -17800,6 +17920,14 @@ proto.proto.NextDepartureTimeValue.deserializeBinaryFromReader = function(msg, r
     }
     var field = reader.getFieldNumber();
     switch (field) {
+    case 1:
+      var value = /** @type {number} */ (reader.readInt64());
+      msg.setHour(value);
+      break;
+    case 2:
+      var value = /** @type {number} */ (reader.readInt64());
+      msg.setMinute(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -17829,6 +17957,56 @@ proto.proto.NextDepartureTimeValue.prototype.serializeBinary = function() {
  */
 proto.proto.NextDepartureTimeValue.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = message.getHour();
+  if (f !== 0) {
+    writer.writeInt64(
+      1,
+      f
+    );
+  }
+  f = message.getMinute();
+  if (f !== 0) {
+    writer.writeInt64(
+      2,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional int64 hour = 1;
+ * @return {number}
+ */
+proto.proto.NextDepartureTimeValue.prototype.getHour = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.NextDepartureTimeValue} returns this
+ */
+proto.proto.NextDepartureTimeValue.prototype.setHour = function(value) {
+  return jspb.Message.setProto3IntField(this, 1, value);
+};
+
+
+/**
+ * optional int64 minute = 2;
+ * @return {number}
+ */
+proto.proto.NextDepartureTimeValue.prototype.getMinute = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.NextDepartureTimeValue} returns this
+ */
+proto.proto.NextDepartureTimeValue.prototype.setMinute = function(value) {
+  return jspb.Message.setProto3IntField(this, 2, value);
 };
 
 
@@ -18369,7 +18547,10 @@ proto.proto.RemoteUpdateStartStatus.prototype.toObject = function(opt_includeIns
  */
 proto.proto.RemoteUpdateStartStatus.toObject = function(includeInstance, msg) {
   var f, obj = {
-
+durationAfterRuntime: jspb.Message.getFieldWithDefault(msg, 1, 0),
+packageId: jspb.Message.getFieldWithDefault(msg, 2, ""),
+updateStatus: jspb.Message.getFieldWithDefault(msg, 3, 0),
+releaseId: jspb.Message.getFieldWithDefault(msg, 4, "")
   };
 
   if (includeInstance) {
@@ -18406,6 +18587,22 @@ proto.proto.RemoteUpdateStartStatus.deserializeBinaryFromReader = function(msg, 
     }
     var field = reader.getFieldNumber();
     switch (field) {
+    case 1:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setDurationAfterRuntime(value);
+      break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setPackageId(value);
+      break;
+    case 3:
+      var value = /** @type {!proto.proto.UpdateStatus} */ (reader.readEnum());
+      msg.setUpdateStatus(value);
+      break;
+    case 4:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setReleaseId(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -18435,6 +18632,106 @@ proto.proto.RemoteUpdateStartStatus.prototype.serializeBinary = function() {
  */
 proto.proto.RemoteUpdateStartStatus.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = message.getDurationAfterRuntime();
+  if (f !== 0) {
+    writer.writeInt32(
+      1,
+      f
+    );
+  }
+  f = message.getPackageId();
+  if (f.length > 0) {
+    writer.writeString(
+      2,
+      f
+    );
+  }
+  f = message.getUpdateStatus();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      3,
+      f
+    );
+  }
+  f = message.getReleaseId();
+  if (f.length > 0) {
+    writer.writeString(
+      4,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional int32 duration_after_runtime = 1;
+ * @return {number}
+ */
+proto.proto.RemoteUpdateStartStatus.prototype.getDurationAfterRuntime = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.RemoteUpdateStartStatus} returns this
+ */
+proto.proto.RemoteUpdateStartStatus.prototype.setDurationAfterRuntime = function(value) {
+  return jspb.Message.setProto3IntField(this, 1, value);
+};
+
+
+/**
+ * optional string package_id = 2;
+ * @return {string}
+ */
+proto.proto.RemoteUpdateStartStatus.prototype.getPackageId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.RemoteUpdateStartStatus} returns this
+ */
+proto.proto.RemoteUpdateStartStatus.prototype.setPackageId = function(value) {
+  return jspb.Message.setProto3StringField(this, 2, value);
+};
+
+
+/**
+ * optional UpdateStatus update_status = 3;
+ * @return {!proto.proto.UpdateStatus}
+ */
+proto.proto.RemoteUpdateStartStatus.prototype.getUpdateStatus = function() {
+  return /** @type {!proto.proto.UpdateStatus} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+};
+
+
+/**
+ * @param {!proto.proto.UpdateStatus} value
+ * @return {!proto.proto.RemoteUpdateStartStatus} returns this
+ */
+proto.proto.RemoteUpdateStartStatus.prototype.setUpdateStatus = function(value) {
+  return jspb.Message.setProto3EnumField(this, 3, value);
+};
+
+
+/**
+ * optional string release_id = 4;
+ * @return {string}
+ */
+proto.proto.RemoteUpdateStartStatus.prototype.getReleaseId = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 4, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.RemoteUpdateStartStatus} returns this
+ */
+proto.proto.RemoteUpdateStartStatus.prototype.setReleaseId = function(value) {
+  return jspb.Message.setProto3StringField(this, 4, value);
 };
 
 
@@ -19683,6 +19980,26 @@ proto.proto.Scope = {
   USER_PIN: 3,
   SERVICE_PREREQUISITE: 4,
   USER_PROFILE_PICTURE: 5
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.KeylineActivationStates = {
+  KEYLINE_ACTIVATION_STATE_UNKNOWN: 0,
+  KEYLINE_ACTIVATION_STATE_ACTIVE: 1,
+  KEYLINE_ACTIVATION_STATE_INACTIVE: 2
+};
+
+/**
+ * @enum {number}
+ */
+proto.proto.UpdateStatus = {
+  UPDATE_STATUS_UNKNOWN: 0,
+  UPDATE_STATUS_PENDING: 1,
+  UPDATE_STATUS_IN_PROGRESS: 2,
+  UPDATE_STATUS_COMPLETED: 3,
+  UPDATE_STATUS_FAILED: 4
 };
 
 /**
