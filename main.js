@@ -14,11 +14,21 @@ const Json2iob = require("json2iob");
 const qs = require("qs");
 const { CookieJar } = require("tough-cookie");
 const { HttpsCookieAgent } = require("http-cookie-agent/http");
+
+// Apply protobuf patch BEFORE loading _pb.js files
+const protobufPatch = require("./Proto/protobuf-patch");
+protobufPatch.apply();
+
 // const Eventpush = require("./Proto/eventpush_pb");
 // const UserEvents = require("./Proto/user-events_pb");
 const VehicleCommands = require("./Proto/vehicle-commands_pb");
 const VehicleEvents = require("./Proto/vehicle-events_pb");
 const Client = require("./Proto/client_pb");
+
+// Wrap message classes for additional error recovery
+protobufPatch.wrapDeserialize(VehicleEvents.PushMessage);
+protobufPatch.wrapDeserialize(VehicleEvents.VEPUpdates);
+protobufPatch.wrapDeserialize(VehicleEvents.VEPUpdate);
 class Mercedesme extends utils.Adapter {
   /**
    * @param {Partial<ioBroker.AdapterOptions>} [options={}]
@@ -186,6 +196,9 @@ class Mercedesme extends utils.Adapter {
    * Is called when databases are connected and adapter received configuration.
    */
   async onReady() {
+    // Set up protobuf patch to use adapter logger
+    protobufPatch.setWarningCallback((msg) => this.log.warn(msg));
+
     // Initialize your adapter here
     //Delete old states
     const pre = this.name + "." + this.instance;
