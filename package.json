@@ -59,7 +59,7 @@
     "test:unit": "mocha test/unit --exit",
     "release": "release-script --all"
   },
-  "version": "0.5.2",
+  "version": "0.5.3",
   "files": [
     "admin{,/!(src)/**}/!(tsconfig|tsconfig.*|.eslintrc).{json,json5}",
     "admin{,/!(src)/**}/*.{html,css,png,svg,jpg,js}",

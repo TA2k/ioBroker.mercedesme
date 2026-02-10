@@ -5,21 +5,26 @@
 
 let applied = false;
 let warningCallback = null;
-let lastError = null; // Deduplicate repeated errors
+let lastErrorKey = null;
+
+const WIRE_TYPES = ['VARINT', 'FIXED64', 'LENGTH_DELIMITED', 'START_GROUP', 'END_GROUP', 'FIXED32'];
 
 function setWarningCallback(fn) {
   warningCallback = fn;
 }
 
-function logWarning(msg) {
-  if (msg === lastError) return; // Skip duplicate
-  lastError = msg;
+function logWarning(msg, key) {
+  if (key && key === lastErrorKey) return;
+  lastErrorKey = key;
   if (warningCallback) {
     warningCallback(msg);
   } else {
     console.warn(msg);
   }
 }
+
+// Store last error context for the final log
+let errorContext = null;
 
 function apply() {
   if (applied) return;
@@ -33,13 +38,22 @@ function apply() {
   const originalSkipField = BinaryReader.prototype.skipField;
   const originalReadMessage = BinaryReader.prototype.readMessage;
 
-  // Patch nextField - silent recovery
   BinaryReader.prototype.nextField = function() {
     try {
       return originalNextField.call(this);
     } catch (e) {
       const msg = e.message || '';
       if (msg.includes('Invalid wire') || msg.includes('Assertion')) {
+        // Capture context for later
+        try {
+          const fieldNum = this.getFieldNumber();
+          const wireType = this.getWireType();
+          const pos = this.getCursor();
+          const buf = this.getBuffer();
+          const hex = Buffer.from(buf.slice(Math.max(0, pos - 4), Math.min(buf.length, pos + 8))).toString('hex');
+          errorContext = { fieldNum, wireType, pos, hex, error: msg };
+        } catch (_) {}
+
         try {
           const cursor = this.getCursor();
           if (cursor < this.getEnd()) {
@@ -53,7 +67,6 @@ function apply() {
     }
   };
 
-  // Patch skipField - silent recovery
   BinaryReader.prototype.skipField = function() {
     try {
       return originalSkipField.call(this);
@@ -62,12 +75,18 @@ function apply() {
     }
   };
 
-  // Patch readMessage - silent recovery
   if (originalReadMessage) {
     BinaryReader.prototype.readMessage = function(msg, reader) {
       try {
         return originalReadMessage.call(this, msg, reader);
-      } catch (_) {
+      } catch (e) {
+        // Capture nested message context
+        try {
+          const fieldNum = this.getFieldNumber();
+          const pos = this.getCursor();
+          const msgName = msg?.constructor?.name || '?';
+          errorContext = { fieldNum, pos, msgName, error: e.message };
+        } catch (_) {}
         return;
       }
     };
@@ -83,12 +102,24 @@ function wrapDeserialize(MessageClass) {
   MessageClass._originalDeserializeBinary = original;
 
   MessageClass.deserializeBinary = function(bytes) {
+    errorContext = null; // Reset
+
     try {
       return original.call(this, bytes);
     } catch (e) {
-      // Single line log with essential info
-      const field = e.message?.match(/field (\d+)/)?.[1] || '?';
-      logWarning(`[protobuf] Parse failed at field ${field}, ${bytes.length} bytes - proto may be outdated`);
+      const name = MessageClass.displayName || MessageClass.name || 'PushMessage';
+      const ctx = errorContext || {};
+
+      // Build informative single-line message
+      let info = `[protobuf] ${name} parse failed`;
+      if (ctx.fieldNum) info += ` at field ${ctx.fieldNum}`;
+      if (ctx.wireType !== undefined) info += ` (wireType=${WIRE_TYPES[ctx.wireType] || ctx.wireType})`;
+      if (ctx.msgName) info += ` in ${ctx.msgName}`;
+      if (ctx.pos) info += ` pos=${ctx.pos}`;
+      if (ctx.hex) info += ` hex=[${ctx.hex}]`;
+
+
+      logWarning(info, `${ctx.fieldNum}-${ctx.pos}`);
 
       try {
         return new MessageClass();
