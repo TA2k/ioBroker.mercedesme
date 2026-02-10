@@ -2248,18 +2248,10 @@ class Mercedesme extends utils.Adapter {
         }
       }
     } catch (error) {
-      // Proto parsing errors are expected when APK has newer proto definitions than this adapter
-      this.log.info(`Cannot parse event update completely - proto file may be outdated: ${error.message || error}`);
-      // Log details at debug level for troubleshooting
-      this.log.debug(`Parse error stack: ${error.stack || "none"}`);
-      this.log.debug(`Failed data (${data.length} bytes): ${data.toString("hex")}`);
-      // Try to decode with protoc --decode_raw equivalent
-      try {
-        const rawFields = this.decodeRawProtobuf(data);
-        this.log.debug(`Raw protobuf fields: ${JSON.stringify(rawFields)}`);
-      } catch (e) {
-        this.log.debug(`Cannot decode raw protobuf: ${e.message}`);
-      }
+      // Proto parsing errors - include all info to fix the problem
+      this.log.warn(`Proto parse error: ${error.message || error}`);
+      this.log.warn(`Stack: ${error.stack || "none"}`);
+      this.log.warn(`Failed data (${data.length} bytes): ${data.toString("hex")}`);
     }
   }
 }
