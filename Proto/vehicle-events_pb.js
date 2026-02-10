@@ -10885,7 +10885,7 @@ proto.proto.ChargeProgramParameters.prototype.setEcoCharging = function(value) {
  * @private {!Array<number>}
  * @const
  */
-proto.proto.WeeklyProfileValue.repeatedFields_ = [1];
+proto.proto.WeeklyProfileValue.repeatedFields_ = [6];
 
 
 
@@ -10918,13 +10918,14 @@ proto.proto.WeeklyProfileValue.prototype.toObject = function(opt_includeInstance
  */
 proto.proto.WeeklyProfileValue.toObject = function(includeInstance, msg) {
   var f, obj = {
-timeProfilesList: jspb.Message.toObjectList(msg.getTimeProfilesList(),
-    proto.proto.VVRTimeProfile.toObject, includeInstance),
-singleTimeProfileEntriesActivatable: jspb.Message.getBooleanFieldWithDefault(msg, 2, false),
+singleTimeProfileEntriesActivatable: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
+maxNumberOfWeeklyTimeProfileSlots: jspb.Message.getFieldWithDefault(msg, 2, 0),
 maxNumberOfTimeProfiles: jspb.Message.getFieldWithDefault(msg, 3, 0),
 currentNumberOfTimeProfileSlots: jspb.Message.getFieldWithDefault(msg, 4, 0),
 currentNumberOfTimeProfiles: jspb.Message.getFieldWithDefault(msg, 5, 0),
-maxNumberOfWeeklyTimeProfileSlots: jspb.Message.getFieldWithDefault(msg, 8, 0)
+timeProfilesList: jspb.Message.toObjectList(msg.getTimeProfilesList(),
+    proto.proto.VVRTimeProfile.toObject, includeInstance),
+maxNumberOfTimeProfilesUser: jspb.Message.getFieldWithDefault(msg, 8, 0)
   };
 
   if (includeInstance) {
@@ -10962,13 +10963,12 @@ proto.proto.WeeklyProfileValue.deserializeBinaryFromReader = function(msg, reade
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = new proto.proto.VVRTimeProfile;
-      reader.readMessage(value,proto.proto.VVRTimeProfile.deserializeBinaryFromReader);
-      msg.addTimeProfiles(value);
-      break;
-    case 2:
       var value = /** @type {boolean} */ (reader.readBool());
       msg.setSingleTimeProfileEntriesActivatable(value);
+      break;
+    case 2:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setMaxNumberOfWeeklyTimeProfileSlots(value);
       break;
     case 3:
       var value = /** @type {number} */ (reader.readInt32());
@@ -10982,9 +10982,14 @@ proto.proto.WeeklyProfileValue.deserializeBinaryFromReader = function(msg, reade
       var value = /** @type {number} */ (reader.readInt32());
       msg.setCurrentNumberOfTimeProfiles(value);
       break;
+    case 6:
+      var value = new proto.proto.VVRTimeProfile;
+      reader.readMessage(value,proto.proto.VVRTimeProfile.deserializeBinaryFromReader);
+      msg.addTimeProfiles(value);
+      break;
     case 8:
       var value = /** @type {number} */ (reader.readInt32());
-      msg.setMaxNumberOfWeeklyTimeProfileSlots(value);
+      msg.setMaxNumberOfTimeProfilesUser(value);
       break;
     default:
       reader.skipField();
@@ -11015,17 +11020,16 @@ proto.proto.WeeklyProfileValue.prototype.serializeBinary = function() {
  */
 proto.proto.WeeklyProfileValue.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getTimeProfilesList();
-  if (f.length > 0) {
-    writer.writeRepeatedMessage(
-      1,
-      f,
-      proto.proto.VVRTimeProfile.serializeBinaryToWriter
-    );
-  }
   f = message.getSingleTimeProfileEntriesActivatable();
   if (f) {
     writer.writeBool(
+      1,
+      f
+    );
+  }
+  f = message.getMaxNumberOfWeeklyTimeProfileSlots();
+  if (f !== 0) {
+    writer.writeInt32(
       2,
       f
     );
@@ -11051,7 +11055,15 @@ proto.proto.WeeklyProfileValue.serializeBinaryToWriter = function(message, write
       f
     );
   }
-  f = message.getMaxNumberOfWeeklyTimeProfileSlots();
+  f = message.getTimeProfilesList();
+  if (f.length > 0) {
+    writer.writeRepeatedMessage(
+      6,
+      f,
+      proto.proto.VVRTimeProfile.serializeBinaryToWriter
+    );
+  }
+  f = message.getMaxNumberOfTimeProfilesUser();
   if (f !== 0) {
     writer.writeInt32(
       8,
@@ -11062,49 +11074,11 @@ proto.proto.WeeklyProfileValue.serializeBinaryToWriter = function(message, write
 
 
 /**
- * repeated VVRTimeProfile time_profiles = 1;
- * @return {!Array<!proto.proto.VVRTimeProfile>}
- */
-proto.proto.WeeklyProfileValue.prototype.getTimeProfilesList = function() {
-  return /** @type{!Array<!proto.proto.VVRTimeProfile>} */ (
-    jspb.Message.getRepeatedWrapperField(this, proto.proto.VVRTimeProfile, 1));
-};
-
-
-/**
- * @param {!Array<!proto.proto.VVRTimeProfile>} value
- * @return {!proto.proto.WeeklyProfileValue} returns this
-*/
-proto.proto.WeeklyProfileValue.prototype.setTimeProfilesList = function(value) {
-  return jspb.Message.setRepeatedWrapperField(this, 1, value);
-};
-
-
-/**
- * @param {!proto.proto.VVRTimeProfile=} opt_value
- * @param {number=} opt_index
- * @return {!proto.proto.VVRTimeProfile}
- */
-proto.proto.WeeklyProfileValue.prototype.addTimeProfiles = function(opt_value, opt_index) {
-  return jspb.Message.addToRepeatedWrapperField(this, 1, opt_value, proto.proto.VVRTimeProfile, opt_index);
-};
-
-
-/**
- * Clears the list making it empty but non-null.
- * @return {!proto.proto.WeeklyProfileValue} returns this
- */
-proto.proto.WeeklyProfileValue.prototype.clearTimeProfilesList = function() {
-  return this.setTimeProfilesList([]);
-};
-
-
-/**
- * optional bool single_time_profile_entries_activatable = 2;
+ * optional bool single_time_profile_entries_activatable = 1;
  * @return {boolean}
  */
 proto.proto.WeeklyProfileValue.prototype.getSingleTimeProfileEntriesActivatable = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 2, false));
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 1, false));
 };
 
 
@@ -11113,7 +11087,25 @@ proto.proto.WeeklyProfileValue.prototype.getSingleTimeProfileEntriesActivatable 
  * @return {!proto.proto.WeeklyProfileValue} returns this
  */
 proto.proto.WeeklyProfileValue.prototype.setSingleTimeProfileEntriesActivatable = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 2, value);
+  return jspb.Message.setProto3BooleanField(this, 1, value);
+};
+
+
+/**
+ * optional int32 max_number_of_weekly_time_profile_slots = 2;
+ * @return {number}
+ */
+proto.proto.WeeklyProfileValue.prototype.getMaxNumberOfWeeklyTimeProfileSlots = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.WeeklyProfileValue} returns this
+ */
+proto.proto.WeeklyProfileValue.prototype.setMaxNumberOfWeeklyTimeProfileSlots = function(value) {
+  return jspb.Message.setProto3IntField(this, 2, value);
 };
 
 
@@ -11172,10 +11164,48 @@ proto.proto.WeeklyProfileValue.prototype.setCurrentNumberOfTimeProfiles = functi
 
 
 /**
- * optional int32 max_number_of_weekly_time_profile_slots = 8;
+ * repeated VVRTimeProfile time_profiles = 6;
+ * @return {!Array<!proto.proto.VVRTimeProfile>}
+ */
+proto.proto.WeeklyProfileValue.prototype.getTimeProfilesList = function() {
+  return /** @type{!Array<!proto.proto.VVRTimeProfile>} */ (
+    jspb.Message.getRepeatedWrapperField(this, proto.proto.VVRTimeProfile, 6));
+};
+
+
+/**
+ * @param {!Array<!proto.proto.VVRTimeProfile>} value
+ * @return {!proto.proto.WeeklyProfileValue} returns this
+*/
+proto.proto.WeeklyProfileValue.prototype.setTimeProfilesList = function(value) {
+  return jspb.Message.setRepeatedWrapperField(this, 6, value);
+};
+
+
+/**
+ * @param {!proto.proto.VVRTimeProfile=} opt_value
+ * @param {number=} opt_index
+ * @return {!proto.proto.VVRTimeProfile}
+ */
+proto.proto.WeeklyProfileValue.prototype.addTimeProfiles = function(opt_value, opt_index) {
+  return jspb.Message.addToRepeatedWrapperField(this, 6, opt_value, proto.proto.VVRTimeProfile, opt_index);
+};
+
+
+/**
+ * Clears the list making it empty but non-null.
+ * @return {!proto.proto.WeeklyProfileValue} returns this
+ */
+proto.proto.WeeklyProfileValue.prototype.clearTimeProfilesList = function() {
+  return this.setTimeProfilesList([]);
+};
+
+
+/**
+ * optional int32 max_number_of_time_profiles_user = 8;
  * @return {number}
  */
-proto.proto.WeeklyProfileValue.prototype.getMaxNumberOfWeeklyTimeProfileSlots = function() {
+proto.proto.WeeklyProfileValue.prototype.getMaxNumberOfTimeProfilesUser = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 8, 0));
 };
 
@@ -11184,7 +11214,7 @@ proto.proto.WeeklyProfileValue.prototype.getMaxNumberOfWeeklyTimeProfileSlots = 
  * @param {number} value
  * @return {!proto.proto.WeeklyProfileValue} returns this
  */
-proto.proto.WeeklyProfileValue.prototype.setMaxNumberOfWeeklyTimeProfileSlots = function(value) {
+proto.proto.WeeklyProfileValue.prototype.setMaxNumberOfTimeProfilesUser = function(value) {
   return jspb.Message.setProto3IntField(this, 8, value);
 };
 

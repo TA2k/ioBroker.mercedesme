@@ -811,12 +811,13 @@ enum AttributeStatus {
 }
 
 message WeeklyProfileValue {
-  // APK field tags: 1=time_profiles, 2=single_time_profile_entries_activatable,
+  // APK field tags (from WeeklyProfileValue.smali):
+  // 1=single_time_profile_entries_activatable, 2=max_number_of_weekly_time_profile_slots,
   // 3=max_number_of_time_profiles, 4=current_number_of_time_profile_slots,
-  // 5=current_number_of_time_profiles, 8=max_number_of_weekly_time_profile_slots
-  repeated VVRTimeProfile time_profiles = 1 [ json_name = "timeProfiles" ];
+  // 5=current_number_of_time_profiles, 6=time_profiles, 8=max_number_of_time_profiles_user
+  bool single_time_profile_entries_activatable = 1 [ json_name = "singleTimeProfileEntriesActivatable" ];
 
-  bool single_time_profile_entries_activatable = 2 [ json_name = "singleTimeProfileEntriesActivatable" ];
+  int32 max_number_of_weekly_time_profile_slots = 2 [ json_name = "maxNumberOfWeeklyTimeProfileSlots" ];
 
   int32 max_number_of_time_profiles = 3 [ json_name = "maxNumberOfTimeProfiles" ];
 
@@ -824,7 +825,9 @@ message WeeklyProfileValue {
 
   int32 current_number_of_time_profiles = 5 [ json_name = "currentNumberOfTimeProfiles" ];
 
-  int32 max_number_of_weekly_time_profile_slots = 8 [ json_name = "maxNumberOfWeeklyTimeProfileSlots" ];
+  repeated VVRTimeProfile time_profiles = 6 [ json_name = "timeProfiles" ];
+
+  int32 max_number_of_time_profiles_user = 8 [ json_name = "maxNumberOfTimeProfilesUser" ];
 }
 
 // VVRTimeProfile - field tags from Mercedes APK (Feb 2026)

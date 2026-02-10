@@ -334,12 +334,19 @@ message ZEVPreconditioningConfigure {
 }
 
 // Configure which seats should be preconditioned.
-// Currently, the only available options are to precondition all seats or only the front-left seat
+// Old API used fields 1-4, new APK uses fields 5-8 + user_profile=9
 message ZEVPreconditioningConfigureSeats {
-  bool front_left = 1 [ json_name = "precondSeatFrontLeft" ];
-  bool front_right = 2 [ json_name = "precondSeatFrontRight" ];
-  bool rear_left = 3 [ json_name = "precondSeatRearLeft" ];
-  bool rear_right = 4 [ json_name = "precondSeatRearRight" ];
+  // Old fields (deprecated, kept for compatibility)
+  bool precond_seat_front_left = 1 [deprecated = true, json_name = "precondSeatFrontLeft"];
+  bool precond_seat_front_right = 2 [deprecated = true, json_name = "precondSeatFrontRight"];
+  bool precond_seat_rear_left = 3 [deprecated = true, json_name = "precondSeatRearLeft"];
+  bool precond_seat_rear_right = 4 [deprecated = true, json_name = "precondSeatRearRight"];
+  // New APK fields (Feb 2026)
+  bool front_left = 5 [ json_name = "frontLeft" ];
+  bool front_right = 6 [ json_name = "frontRight" ];
+  bool rear_left = 7 [ json_name = "rearLeft" ];
+  bool rear_right = 8 [ json_name = "rearRight" ];
+  string user_profile = 9 [ json_name = "userProfile" ];
 }
 
 // Configure the charge program
@@ -739,12 +746,15 @@ message ClockTimerConfigure {
   repeated ClockTimerConfigureEntry clock_timer_configure_entry = 1 [ json_name = "clockTimerConfigureEntry" ];
 }
 
+// APK structure has start/end times, not single hour/minute
 message ClockTimerConfigureEntry {
   ChargingBreakClockTimerEntryStatus action = 1;
-  int32 hour = 2;
-  int32 minute = 3;
-  repeated TimeProfileDay days = 4;
-  int32 id = 5;
+  int32 end_time_hour = 2;
+  int32 end_time_min = 3;
+  int32 start_time_hour = 4;
+  int32 start_time_min = 5;
+  int32 id = 6;
+  repeated TimeProfileDay days = 7;
 }
 
 // Carsharing provision (from APK 1.63.1)

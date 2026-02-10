@@ -10025,10 +10025,15 @@ proto.proto.ZEVPreconditioningConfigureSeats.prototype.toObject = function(opt_i
  */
 proto.proto.ZEVPreconditioningConfigureSeats.toObject = function(includeInstance, msg) {
   var f, obj = {
-frontLeft: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
-frontRight: jspb.Message.getBooleanFieldWithDefault(msg, 2, false),
-rearLeft: jspb.Message.getBooleanFieldWithDefault(msg, 3, false),
-rearRight: jspb.Message.getBooleanFieldWithDefault(msg, 4, false)
+precondSeatFrontLeft: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
+precondSeatFrontRight: jspb.Message.getBooleanFieldWithDefault(msg, 2, false),
+precondSeatRearLeft: jspb.Message.getBooleanFieldWithDefault(msg, 3, false),
+precondSeatRearRight: jspb.Message.getBooleanFieldWithDefault(msg, 4, false),
+frontLeft: jspb.Message.getBooleanFieldWithDefault(msg, 5, false),
+frontRight: jspb.Message.getBooleanFieldWithDefault(msg, 6, false),
+rearLeft: jspb.Message.getBooleanFieldWithDefault(msg, 7, false),
+rearRight: jspb.Message.getBooleanFieldWithDefault(msg, 8, false),
+userProfile: jspb.Message.getFieldWithDefault(msg, 9, "")
   };
 
   if (includeInstance) {
@@ -10067,19 +10072,39 @@ proto.proto.ZEVPreconditioningConfigureSeats.deserializeBinaryFromReader = funct
     switch (field) {
     case 1:
       var value = /** @type {boolean} */ (reader.readBool());
-      msg.setFrontLeft(value);
+      msg.setPrecondSeatFrontLeft(value);
       break;
     case 2:
       var value = /** @type {boolean} */ (reader.readBool());
-      msg.setFrontRight(value);
+      msg.setPrecondSeatFrontRight(value);
       break;
     case 3:
       var value = /** @type {boolean} */ (reader.readBool());
-      msg.setRearLeft(value);
+      msg.setPrecondSeatRearLeft(value);
       break;
     case 4:
       var value = /** @type {boolean} */ (reader.readBool());
+      msg.setPrecondSeatRearRight(value);
+      break;
+    case 5:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setFrontLeft(value);
+      break;
+    case 6:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setFrontRight(value);
+      break;
+    case 7:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setRearLeft(value);
+      break;
+    case 8:
+      var value = /** @type {boolean} */ (reader.readBool());
       msg.setRearRight(value);
+      break;
+    case 9:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setUserProfile(value);
       break;
     default:
       reader.skipField();
@@ -10110,31 +10135,66 @@ proto.proto.ZEVPreconditioningConfigureSeats.prototype.serializeBinary = functio
  */
 proto.proto.ZEVPreconditioningConfigureSeats.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
-  f = message.getFrontLeft();
+  f = message.getPrecondSeatFrontLeft();
   if (f) {
     writer.writeBool(
       1,
       f
     );
   }
-  f = message.getFrontRight();
+  f = message.getPrecondSeatFrontRight();
   if (f) {
     writer.writeBool(
       2,
       f
     );
   }
-  f = message.getRearLeft();
+  f = message.getPrecondSeatRearLeft();
   if (f) {
     writer.writeBool(
       3,
       f
     );
   }
-  f = message.getRearRight();
+  f = message.getPrecondSeatRearRight();
   if (f) {
     writer.writeBool(
       4,
+      f
+    );
+  }
+  f = message.getFrontLeft();
+  if (f) {
+    writer.writeBool(
+      5,
+      f
+    );
+  }
+  f = message.getFrontRight();
+  if (f) {
+    writer.writeBool(
+      6,
+      f
+    );
+  }
+  f = message.getRearLeft();
+  if (f) {
+    writer.writeBool(
+      7,
+      f
+    );
+  }
+  f = message.getRearRight();
+  if (f) {
+    writer.writeBool(
+      8,
+      f
+    );
+  }
+  f = message.getUserProfile();
+  if (f.length > 0) {
+    writer.writeString(
+      9,
       f
     );
   }
@@ -10142,10 +10202,10 @@ proto.proto.ZEVPreconditioningConfigureSeats.serializeBinaryToWriter = function(
 
 
 /**
- * optional bool front_left = 1;
+ * optional bool precond_seat_front_left = 1;
  * @return {boolean}
  */
-proto.proto.ZEVPreconditioningConfigureSeats.prototype.getFrontLeft = function() {
+proto.proto.ZEVPreconditioningConfigureSeats.prototype.getPrecondSeatFrontLeft = function() {
   return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 1, false));
 };
 
@@ -10154,16 +10214,16 @@ proto.proto.ZEVPreconditioningConfigureSeats.prototype.getFrontLeft = function()
  * @param {boolean} value
  * @return {!proto.proto.ZEVPreconditioningConfigureSeats} returns this
  */
-proto.proto.ZEVPreconditioningConfigureSeats.prototype.setFrontLeft = function(value) {
+proto.proto.ZEVPreconditioningConfigureSeats.prototype.setPrecondSeatFrontLeft = function(value) {
   return jspb.Message.setProto3BooleanField(this, 1, value);
 };
 
 
 /**
- * optional bool front_right = 2;
+ * optional bool precond_seat_front_right = 2;
  * @return {boolean}
  */
-proto.proto.ZEVPreconditioningConfigureSeats.prototype.getFrontRight = function() {
+proto.proto.ZEVPreconditioningConfigureSeats.prototype.getPrecondSeatFrontRight = function() {
   return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 2, false));
 };
 
@@ -10172,16 +10232,16 @@ proto.proto.ZEVPreconditioningConfigureSeats.prototype.getFrontRight = function(
  * @param {boolean} value
  * @return {!proto.proto.ZEVPreconditioningConfigureSeats} returns this
  */
-proto.proto.ZEVPreconditioningConfigureSeats.prototype.setFrontRight = function(value) {
+proto.proto.ZEVPreconditioningConfigureSeats.prototype.setPrecondSeatFrontRight = function(value) {
   return jspb.Message.setProto3BooleanField(this, 2, value);
 };
 
 
 /**
- * optional bool rear_left = 3;
+ * optional bool precond_seat_rear_left = 3;
  * @return {boolean}
  */
-proto.proto.ZEVPreconditioningConfigureSeats.prototype.getRearLeft = function() {
+proto.proto.ZEVPreconditioningConfigureSeats.prototype.getPrecondSeatRearLeft = function() {
   return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 3, false));
 };
 
@@ -10190,16 +10250,16 @@ proto.proto.ZEVPreconditioningConfigureSeats.prototype.getRearLeft = function() 
  * @param {boolean} value
  * @return {!proto.proto.ZEVPreconditioningConfigureSeats} returns this
  */
-proto.proto.ZEVPreconditioningConfigureSeats.prototype.setRearLeft = function(value) {
+proto.proto.ZEVPreconditioningConfigureSeats.prototype.setPrecondSeatRearLeft = function(value) {
   return jspb.Message.setProto3BooleanField(this, 3, value);
 };
 
 
 /**
- * optional bool rear_right = 4;
+ * optional bool precond_seat_rear_right = 4;
  * @return {boolean}
  */
-proto.proto.ZEVPreconditioningConfigureSeats.prototype.getRearRight = function() {
+proto.proto.ZEVPreconditioningConfigureSeats.prototype.getPrecondSeatRearRight = function() {
   return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 4, false));
 };
 
@@ -10208,8 +10268,98 @@ proto.proto.ZEVPreconditioningConfigureSeats.prototype.getRearRight = function()
  * @param {boolean} value
  * @return {!proto.proto.ZEVPreconditioningConfigureSeats} returns this
  */
-proto.proto.ZEVPreconditioningConfigureSeats.prototype.setRearRight = function(value) {
+proto.proto.ZEVPreconditioningConfigureSeats.prototype.setPrecondSeatRearRight = function(value) {
   return jspb.Message.setProto3BooleanField(this, 4, value);
+};
+
+
+/**
+ * optional bool front_left = 5;
+ * @return {boolean}
+ */
+proto.proto.ZEVPreconditioningConfigureSeats.prototype.getFrontLeft = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 5, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.proto.ZEVPreconditioningConfigureSeats} returns this
+ */
+proto.proto.ZEVPreconditioningConfigureSeats.prototype.setFrontLeft = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 5, value);
+};
+
+
+/**
+ * optional bool front_right = 6;
+ * @return {boolean}
+ */
+proto.proto.ZEVPreconditioningConfigureSeats.prototype.getFrontRight = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 6, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.proto.ZEVPreconditioningConfigureSeats} returns this
+ */
+proto.proto.ZEVPreconditioningConfigureSeats.prototype.setFrontRight = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 6, value);
+};
+
+
+/**
+ * optional bool rear_left = 7;
+ * @return {boolean}
+ */
+proto.proto.ZEVPreconditioningConfigureSeats.prototype.getRearLeft = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 7, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.proto.ZEVPreconditioningConfigureSeats} returns this
+ */
+proto.proto.ZEVPreconditioningConfigureSeats.prototype.setRearLeft = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 7, value);
+};
+
+
+/**
+ * optional bool rear_right = 8;
+ * @return {boolean}
+ */
+proto.proto.ZEVPreconditioningConfigureSeats.prototype.getRearRight = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 8, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.proto.ZEVPreconditioningConfigureSeats} returns this
+ */
+proto.proto.ZEVPreconditioningConfigureSeats.prototype.setRearRight = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 8, value);
+};
+
+
+/**
+ * optional string user_profile = 9;
+ * @return {string}
+ */
+proto.proto.ZEVPreconditioningConfigureSeats.prototype.getUserProfile = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 9, ""));
+};
+
+
+/**
+ * @param {string} value
+ * @return {!proto.proto.ZEVPreconditioningConfigureSeats} returns this
+ */
+proto.proto.ZEVPreconditioningConfigureSeats.prototype.setUserProfile = function(value) {
+  return jspb.Message.setProto3StringField(this, 9, value);
 };
 
 
@@ -16138,7 +16288,7 @@ proto.proto.ClockTimerConfigure.prototype.clearClockTimerConfigureEntryList = fu
  * @private {!Array<number>}
  * @const
  */
-proto.proto.ClockTimerConfigureEntry.repeatedFields_ = [4];
+proto.proto.ClockTimerConfigureEntry.repeatedFields_ = [7];
 
 
 
@@ -16172,10 +16322,12 @@ proto.proto.ClockTimerConfigureEntry.prototype.toObject = function(opt_includeIn
 proto.proto.ClockTimerConfigureEntry.toObject = function(includeInstance, msg) {
   var f, obj = {
 action: jspb.Message.getFieldWithDefault(msg, 1, 0),
-hour: jspb.Message.getFieldWithDefault(msg, 2, 0),
-minute: jspb.Message.getFieldWithDefault(msg, 3, 0),
-daysList: (f = jspb.Message.getRepeatedField(msg, 4)) == null ? undefined : f,
-id: jspb.Message.getFieldWithDefault(msg, 5, 0)
+endTimeHour: jspb.Message.getFieldWithDefault(msg, 2, 0),
+endTimeMin: jspb.Message.getFieldWithDefault(msg, 3, 0),
+startTimeHour: jspb.Message.getFieldWithDefault(msg, 4, 0),
+startTimeMin: jspb.Message.getFieldWithDefault(msg, 5, 0),
+id: jspb.Message.getFieldWithDefault(msg, 6, 0),
+daysList: (f = jspb.Message.getRepeatedField(msg, 7)) == null ? undefined : f
   };
 
   if (includeInstance) {
@@ -16218,21 +16370,29 @@ proto.proto.ClockTimerConfigureEntry.deserializeBinaryFromReader = function(msg,
       break;
     case 2:
       var value = /** @type {number} */ (reader.readInt32());
-      msg.setHour(value);
+      msg.setEndTimeHour(value);
       break;
     case 3:
       var value = /** @type {number} */ (reader.readInt32());
-      msg.setMinute(value);
+      msg.setEndTimeMin(value);
       break;
     case 4:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setStartTimeHour(value);
+      break;
+    case 5:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setStartTimeMin(value);
+      break;
+    case 6:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setId(value);
+      break;
+    case 7:
       var values = /** @type {!Array<!proto.proto.TimeProfileDay>} */ (reader.isDelimited() ? reader.readPackedEnum() : [reader.readEnum()]);
       for (var i = 0; i < values.length; i++) {
         msg.addDays(values[i]);
       }
-      break;
-    case 5:
-      var value = /** @type {number} */ (reader.readInt32());
-      msg.setId(value);
       break;
     default:
       reader.skipField();
@@ -16270,31 +16430,45 @@ proto.proto.ClockTimerConfigureEntry.serializeBinaryToWriter = function(message,
       f
     );
   }
-  f = message.getHour();
+  f = message.getEndTimeHour();
   if (f !== 0) {
     writer.writeInt32(
       2,
       f
     );
   }
-  f = message.getMinute();
+  f = message.getEndTimeMin();
   if (f !== 0) {
     writer.writeInt32(
       3,
       f
     );
   }
-  f = message.getDaysList();
-  if (f.length > 0) {
-    writer.writePackedEnum(
+  f = message.getStartTimeHour();
+  if (f !== 0) {
+    writer.writeInt32(
       4,
+      f
+    );
+  }
+  f = message.getStartTimeMin();
+  if (f !== 0) {
+    writer.writeInt32(
+      5,
       f
     );
   }
   f = message.getId();
   if (f !== 0) {
     writer.writeInt32(
-      5,
+      6,
+      f
+    );
+  }
+  f = message.getDaysList();
+  if (f.length > 0) {
+    writer.writePackedEnum(
+      7,
       f
     );
   }
@@ -16320,10 +16494,10 @@ proto.proto.ClockTimerConfigureEntry.prototype.setAction = function(value) {
 
 
 /**
- * optional int32 hour = 2;
+ * optional int32 end_time_hour = 2;
  * @return {number}
  */
-proto.proto.ClockTimerConfigureEntry.prototype.getHour = function() {
+proto.proto.ClockTimerConfigureEntry.prototype.getEndTimeHour = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
 };
 
@@ -16332,16 +16506,16 @@ proto.proto.ClockTimerConfigureEntry.prototype.getHour = function() {
  * @param {number} value
  * @return {!proto.proto.ClockTimerConfigureEntry} returns this
  */
-proto.proto.ClockTimerConfigureEntry.prototype.setHour = function(value) {
+proto.proto.ClockTimerConfigureEntry.prototype.setEndTimeHour = function(value) {
   return jspb.Message.setProto3IntField(this, 2, value);
 };
 
 
 /**
- * optional int32 minute = 3;
+ * optional int32 end_time_min = 3;
  * @return {number}
  */
-proto.proto.ClockTimerConfigureEntry.prototype.getMinute = function() {
+proto.proto.ClockTimerConfigureEntry.prototype.getEndTimeMin = function() {
   return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
 };
 
@@ -16350,17 +16524,71 @@ proto.proto.ClockTimerConfigureEntry.prototype.getMinute = function() {
  * @param {number} value
  * @return {!proto.proto.ClockTimerConfigureEntry} returns this
  */
-proto.proto.ClockTimerConfigureEntry.prototype.setMinute = function(value) {
+proto.proto.ClockTimerConfigureEntry.prototype.setEndTimeMin = function(value) {
   return jspb.Message.setProto3IntField(this, 3, value);
 };
 
 
 /**
- * repeated TimeProfileDay days = 4;
+ * optional int32 start_time_hour = 4;
+ * @return {number}
+ */
+proto.proto.ClockTimerConfigureEntry.prototype.getStartTimeHour = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 4, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ClockTimerConfigureEntry} returns this
+ */
+proto.proto.ClockTimerConfigureEntry.prototype.setStartTimeHour = function(value) {
+  return jspb.Message.setProto3IntField(this, 4, value);
+};
+
+
+/**
+ * optional int32 start_time_min = 5;
+ * @return {number}
+ */
+proto.proto.ClockTimerConfigureEntry.prototype.getStartTimeMin = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ClockTimerConfigureEntry} returns this
+ */
+proto.proto.ClockTimerConfigureEntry.prototype.setStartTimeMin = function(value) {
+  return jspb.Message.setProto3IntField(this, 5, value);
+};
+
+
+/**
+ * optional int32 id = 6;
+ * @return {number}
+ */
+proto.proto.ClockTimerConfigureEntry.prototype.getId = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 6, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ClockTimerConfigureEntry} returns this
+ */
+proto.proto.ClockTimerConfigureEntry.prototype.setId = function(value) {
+  return jspb.Message.setProto3IntField(this, 6, value);
+};
+
+
+/**
+ * repeated TimeProfileDay days = 7;
  * @return {!Array<!proto.proto.TimeProfileDay>}
  */
 proto.proto.ClockTimerConfigureEntry.prototype.getDaysList = function() {
-  return /** @type {!Array<!proto.proto.TimeProfileDay>} */ (jspb.Message.getRepeatedField(this, 4));
+  return /** @type {!Array<!proto.proto.TimeProfileDay>} */ (jspb.Message.getRepeatedField(this, 7));
 };
 
 
@@ -16369,7 +16597,7 @@ proto.proto.ClockTimerConfigureEntry.prototype.getDaysList = function() {
  * @return {!proto.proto.ClockTimerConfigureEntry} returns this
  */
 proto.proto.ClockTimerConfigureEntry.prototype.setDaysList = function(value) {
-  return jspb.Message.setField(this, 4, value || []);
+  return jspb.Message.setField(this, 7, value || []);
 };
 
 
@@ -16379,7 +16607,7 @@ proto.proto.ClockTimerConfigureEntry.prototype.setDaysList = function(value) {
  * @return {!proto.proto.ClockTimerConfigureEntry} returns this
  */
 proto.proto.ClockTimerConfigureEntry.prototype.addDays = function(value, opt_index) {
-  return jspb.Message.addToRepeatedField(this, 4, value, opt_index);
+  return jspb.Message.addToRepeatedField(this, 7, value, opt_index);
 };
 
 
@@ -16389,24 +16617,6 @@ proto.proto.ClockTimerConfigureEntry.prototype.addDays = function(value, opt_ind
  */
 proto.proto.ClockTimerConfigureEntry.prototype.clearDaysList = function() {
   return this.setDaysList([]);
-};
-
-
-/**
- * optional int32 id = 5;
- * @return {number}
- */
-proto.proto.ClockTimerConfigureEntry.prototype.getId = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 5, 0));
-};
-
-
-/**
- * @param {number} value
- * @return {!proto.proto.ClockTimerConfigureEntry} returns this
- */
-proto.proto.ClockTimerConfigureEntry.prototype.setId = function(value) {
-  return jspb.Message.setProto3IntField(this, 5, value);
 };
 
 
