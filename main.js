@@ -1860,8 +1860,7 @@ class Mercedesme extends utils.Adapter {
   // WebSocket frame sending (masked as per RFC 6455)
   sendWsFrame(data) {
     if (!this.wsSocket) {
-      this.log.warn("Cannot send: WebSocket not connected");
-      return;
+      return; // Silently ignore - connection state is logged elsewhere
     }
     const payload = Buffer.from(data);
     const payloadLen = payload.length;
@@ -2081,9 +2080,6 @@ class Mercedesme extends utils.Adapter {
   }
 
   async handleWsMessage(data) {
-    // const hexString = ""
-    // let parsed = new Uint8Array(hexString.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
-    // const foo =Client.ClientMessage.deserializeBinary(parsed).toObject()
     this.log.silly("WS Message Length: " + data.length);
     // Reset heartbeat on every message (instead of ping/pong)
     this.resetHeartbeatTimeout();
