@@ -80,12 +80,15 @@ function apply() {
       try {
         return originalReadMessage.call(this, msg, reader);
       } catch (e) {
-        // Capture nested message context
+        // Capture nested message context with more details
         try {
           const fieldNum = this.getFieldNumber();
+          const wireType = this.getWireType();
           const pos = this.getCursor();
+          const buf = this.getBuffer();
+          const hex = Buffer.from(buf.slice(Math.max(0, pos - 8), Math.min(buf.length, pos + 20))).toString('hex');
           const msgName = msg?.constructor?.name || '?';
-          errorContext = { fieldNum, pos, msgName, error: e.message };
+          errorContext = { fieldNum, wireType, pos, bufLen: buf.length, hex, msgName, error: e.message };
         } catch (_) {}
         return;
       }
@@ -110,16 +113,18 @@ function wrapDeserialize(MessageClass) {
       const name = MessageClass.displayName || MessageClass.name || 'PushMessage';
       const ctx = errorContext || {};
 
-      // Build informative single-line message
-      let info = `[protobuf] ${name} parse failed`;
-      if (ctx.fieldNum) info += ` at field ${ctx.fieldNum}`;
-      if (ctx.wireType !== undefined) info += ` (wireType=${WIRE_TYPES[ctx.wireType] || ctx.wireType})`;
-      if (ctx.msgName) info += ` in ${ctx.msgName}`;
-      if (ctx.pos) info += ` pos=${ctx.pos}`;
-      if (ctx.hex) info += ` hex=[${ctx.hex}]`;
+      // Detailed warning with all available info
+      const parts = [`[protobuf] ${name} parse failed:`];
+      parts.push(`field=${ctx.fieldNum || '?'}`);
+      parts.push(`wire=${WIRE_TYPES[ctx.wireType] || ctx.wireType || '?'}`);
+      if (ctx.msgName && ctx.msgName !== '?') parts.push(`msg=${ctx.msgName}`);
+      parts.push(`pos=${ctx.pos || '?'}/${ctx.bufLen || bytes.length}`);
+      parts.push(`err="${ctx.error || e.message}"`);
 
-
-      logWarning(info, `${ctx.fieldNum}-${ctx.pos}`);
+      logWarning(parts.join(' '), `${ctx.pos}`);
+      if (ctx.hex) {
+        logWarning(`[protobuf] hex@${ctx.pos}: ${ctx.hex}`, `hex-${ctx.pos}`);
+      }
 
       try {
         return new MessageClass();

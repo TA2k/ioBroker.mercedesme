@@ -2019,9 +2019,10 @@ class Mercedesme extends utils.Adapter {
             // Binary frame
             this.handleWsMessage(frame.payload);
           } else if (frame.opcode === 8) {
-            // Close frame
+            // Close frame - immediately clear wsSocket to prevent writes
             const code = frame.payload.length >= 2 ? frame.payload.readUInt16BE(0) : 1000;
             this.log.info(`WebSocket closed by server - code: ${code}`);
+            this.wsSocket = null;
             this.setState("info.connection", false, true);
             socket.end();
           } else if (frame.opcode === 9) {
