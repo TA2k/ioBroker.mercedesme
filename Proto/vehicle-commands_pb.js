@@ -12088,7 +12088,8 @@ proto.proto.TemperatureConfigure.TemperaturePoint.prototype.toObject = function(
 proto.proto.TemperatureConfigure.TemperaturePoint.toObject = function(includeInstance, msg) {
   var f, obj = {
 zone: jspb.Message.getFieldWithDefault(msg, 1, 0),
-temperatureInCelsius: jspb.Message.getFloatingPointFieldWithDefault(msg, 3, 0.0)
+temperatureInCelsius: jspb.Message.getFloatingPointFieldWithDefault(msg, 3, 0.0),
+active: jspb.Message.getBooleanFieldWithDefault(msg, 4, false)
   };
 
   if (includeInstance) {
@@ -12133,6 +12134,10 @@ proto.proto.TemperatureConfigure.TemperaturePoint.deserializeBinaryFromReader = 
       var value = /** @type {number} */ (reader.readDouble());
       msg.setTemperatureInCelsius(value);
       break;
+    case 4:
+      var value = /** @type {boolean} */ (reader.readBool());
+      msg.setActive(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -12173,6 +12178,13 @@ proto.proto.TemperatureConfigure.TemperaturePoint.serializeBinaryToWriter = func
   if (f !== 0.0) {
     writer.writeDouble(
       3,
+      f
+    );
+  }
+  f = message.getActive();
+  if (f) {
+    writer.writeBool(
+      4,
       f
     );
   }
@@ -12238,6 +12250,24 @@ proto.proto.TemperatureConfigure.TemperaturePoint.prototype.getTemperatureInCels
  */
 proto.proto.TemperatureConfigure.TemperaturePoint.prototype.setTemperatureInCelsius = function(value) {
   return jspb.Message.setProto3FloatField(this, 3, value);
+};
+
+
+/**
+ * optional bool active = 4;
+ * @return {boolean}
+ */
+proto.proto.TemperatureConfigure.TemperaturePoint.prototype.getActive = function() {
+  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 4, false));
+};
+
+
+/**
+ * @param {boolean} value
+ * @return {!proto.proto.TemperatureConfigure.TemperaturePoint} returns this
+ */
+proto.proto.TemperatureConfigure.TemperaturePoint.prototype.setActive = function(value) {
+  return jspb.Message.setProto3BooleanField(this, 4, value);
 };
 
 

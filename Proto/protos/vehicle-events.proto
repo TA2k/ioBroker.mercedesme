@@ -1116,23 +1116,28 @@ message NextDepartureTimeValue {
 }
 
 message ChildPresenceDetectionWarningLastEvent {
-  // Placeholder - fields to be extracted from smali
+  // Wire enum wrapper - see smali for enum values
+  int32 value = 1;
 }
 
 message ChildPresenceDetectionWarningLevel {
-  // Placeholder - fields to be extracted from smali
+  // Wire enum wrapper - see smali for enum values
+  int32 value = 1;
 }
 
 message PerformanceLimitationModeStatus {
-  // Placeholder - fields to be extracted from smali
+  // Wire enum wrapper - see smali for enum values
+  int32 value = 1;
 }
 
 message ExteriorMonitoringStatus {
-  // Placeholder - fields to be extracted from smali
+  // Wire enum wrapper - see smali for enum values
+  int32 value = 1;
 }
 
 message InteriorMonitoringStatus {
-  // Placeholder - fields to be extracted from smali
+  // Wire enum wrapper - see smali for enum values
+  int32 value = 1;
 }
 
 message RemoteUpdateStartStatus {
@@ -1151,7 +1156,8 @@ enum UpdateStatus {
 }
 
 message SohCalibrationPlanned {
-  // Placeholder - fields to be extracted from smali
+  // Wire enum wrapper - see smali for enum values
+  int32 value = 1;
 }
 
 enum DcChargingProfile {
@@ -1182,7 +1188,8 @@ message ChargingScheduleActive {
   }
 
   message ChargingScheduleActiveSchedule {
-    // Placeholder - fields to be extracted from smali
+    double power_values = 1;
+    int64 duration_values = 2;
   }
 }
 
@@ -1191,9 +1198,11 @@ enum ChargingScheduleUseCaseId {
 }
 
 message ScheduleIdStatus {
-  // Placeholder - fields to be extracted from smali
+  // Wire enum wrapper - see smali for enum values
+  int32 value = 1;
 }
 
 message ParkEventPictureTransmissionStatus {
-  // Placeholder - fields to be extracted from smali
+  // Wire enum wrapper - see smali for enum values
+  int32 value = 1;
 }

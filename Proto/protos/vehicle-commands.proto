@@ -496,6 +496,7 @@ message TemperatureConfigure {
     Zone zone = 1 [ json_name = "zone" ];
 
     double temperature_in_celsius = 3 [ json_name = "temp" ];
+    bool active = 4;  // APK Feb 2026
   }
 
   repeated TemperaturePoint temperature_points = 1 [ json_name = "temperaturePoints" ];

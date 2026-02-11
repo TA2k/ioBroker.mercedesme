@@ -18042,7 +18042,7 @@ proto.proto.ChildPresenceDetectionWarningLastEvent.prototype.toObject = function
  */
 proto.proto.ChildPresenceDetectionWarningLastEvent.toObject = function(includeInstance, msg) {
   var f, obj = {
-
+value: jspb.Message.getFieldWithDefault(msg, 1, 0)
   };
 
   if (includeInstance) {
@@ -18079,6 +18079,10 @@ proto.proto.ChildPresenceDetectionWarningLastEvent.deserializeBinaryFromReader =
     }
     var field = reader.getFieldNumber();
     switch (field) {
+    case 1:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setValue(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -18108,6 +18112,31 @@ proto.proto.ChildPresenceDetectionWarningLastEvent.prototype.serializeBinary = f
  */
 proto.proto.ChildPresenceDetectionWarningLastEvent.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = message.getValue();
+  if (f !== 0) {
+    writer.writeInt32(
+      1,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional int32 value = 1;
+ * @return {number}
+ */
+proto.proto.ChildPresenceDetectionWarningLastEvent.prototype.getValue = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ChildPresenceDetectionWarningLastEvent} returns this
+ */
+proto.proto.ChildPresenceDetectionWarningLastEvent.prototype.setValue = function(value) {
+  return jspb.Message.setProto3IntField(this, 1, value);
 };
 
 
@@ -18143,7 +18172,7 @@ proto.proto.ChildPresenceDetectionWarningLevel.prototype.toObject = function(opt
  */
 proto.proto.ChildPresenceDetectionWarningLevel.toObject = function(includeInstance, msg) {
   var f, obj = {
-
+value: jspb.Message.getFieldWithDefault(msg, 1, 0)
   };
 
   if (includeInstance) {
@@ -18180,6 +18209,10 @@ proto.proto.ChildPresenceDetectionWarningLevel.deserializeBinaryFromReader = fun
     }
     var field = reader.getFieldNumber();
     switch (field) {
+    case 1:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setValue(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -18209,6 +18242,31 @@ proto.proto.ChildPresenceDetectionWarningLevel.prototype.serializeBinary = funct
  */
 proto.proto.ChildPresenceDetectionWarningLevel.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = message.getValue();
+  if (f !== 0) {
+    writer.writeInt32(
+      1,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional int32 value = 1;
+ * @return {number}
+ */
+proto.proto.ChildPresenceDetectionWarningLevel.prototype.getValue = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ChildPresenceDetectionWarningLevel} returns this
+ */
+proto.proto.ChildPresenceDetectionWarningLevel.prototype.setValue = function(value) {
+  return jspb.Message.setProto3IntField(this, 1, value);
 };
 
 
@@ -18244,7 +18302,7 @@ proto.proto.PerformanceLimitationModeStatus.prototype.toObject = function(opt_in
  */
 proto.proto.PerformanceLimitationModeStatus.toObject = function(includeInstance, msg) {
   var f, obj = {
-
+value: jspb.Message.getFieldWithDefault(msg, 1, 0)
   };
 
   if (includeInstance) {
@@ -18281,6 +18339,10 @@ proto.proto.PerformanceLimitationModeStatus.deserializeBinaryFromReader = functi
     }
     var field = reader.getFieldNumber();
     switch (field) {
+    case 1:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setValue(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -18310,6 +18372,31 @@ proto.proto.PerformanceLimitationModeStatus.prototype.serializeBinary = function
  */
 proto.proto.PerformanceLimitationModeStatus.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = message.getValue();
+  if (f !== 0) {
+    writer.writeInt32(
+      1,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional int32 value = 1;
+ * @return {number}
+ */
+proto.proto.PerformanceLimitationModeStatus.prototype.getValue = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.PerformanceLimitationModeStatus} returns this
+ */
+proto.proto.PerformanceLimitationModeStatus.prototype.setValue = function(value) {
+  return jspb.Message.setProto3IntField(this, 1, value);
 };
 
 
@@ -18345,7 +18432,7 @@ proto.proto.ExteriorMonitoringStatus.prototype.toObject = function(opt_includeIn
  */
 proto.proto.ExteriorMonitoringStatus.toObject = function(includeInstance, msg) {
   var f, obj = {
-
+value: jspb.Message.getFieldWithDefault(msg, 1, 0)
   };
 
   if (includeInstance) {
@@ -18382,6 +18469,10 @@ proto.proto.ExteriorMonitoringStatus.deserializeBinaryFromReader = function(msg,
     }
     var field = reader.getFieldNumber();
     switch (field) {
+    case 1:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setValue(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -18411,6 +18502,31 @@ proto.proto.ExteriorMonitoringStatus.prototype.serializeBinary = function() {
  */
 proto.proto.ExteriorMonitoringStatus.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = message.getValue();
+  if (f !== 0) {
+    writer.writeInt32(
+      1,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional int32 value = 1;
+ * @return {number}
+ */
+proto.proto.ExteriorMonitoringStatus.prototype.getValue = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ExteriorMonitoringStatus} returns this
+ */
+proto.proto.ExteriorMonitoringStatus.prototype.setValue = function(value) {
+  return jspb.Message.setProto3IntField(this, 1, value);
 };
 
 
@@ -18446,7 +18562,7 @@ proto.proto.InteriorMonitoringStatus.prototype.toObject = function(opt_includeIn
  */
 proto.proto.InteriorMonitoringStatus.toObject = function(includeInstance, msg) {
   var f, obj = {
-
+value: jspb.Message.getFieldWithDefault(msg, 1, 0)
   };
 
   if (includeInstance) {
@@ -18483,6 +18599,10 @@ proto.proto.InteriorMonitoringStatus.deserializeBinaryFromReader = function(msg,
     }
     var field = reader.getFieldNumber();
     switch (field) {
+    case 1:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setValue(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -18512,6 +18632,31 @@ proto.proto.InteriorMonitoringStatus.prototype.serializeBinary = function() {
  */
 proto.proto.InteriorMonitoringStatus.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = message.getValue();
+  if (f !== 0) {
+    writer.writeInt32(
+      1,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional int32 value = 1;
+ * @return {number}
+ */
+proto.proto.InteriorMonitoringStatus.prototype.getValue = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.InteriorMonitoringStatus} returns this
+ */
+proto.proto.InteriorMonitoringStatus.prototype.setValue = function(value) {
+  return jspb.Message.setProto3IntField(this, 1, value);
 };
 
 
@@ -18767,7 +18912,7 @@ proto.proto.SohCalibrationPlanned.prototype.toObject = function(opt_includeInsta
  */
 proto.proto.SohCalibrationPlanned.toObject = function(includeInstance, msg) {
   var f, obj = {
-
+value: jspb.Message.getFieldWithDefault(msg, 1, 0)
   };
 
   if (includeInstance) {
@@ -18804,6 +18949,10 @@ proto.proto.SohCalibrationPlanned.deserializeBinaryFromReader = function(msg, re
     }
     var field = reader.getFieldNumber();
     switch (field) {
+    case 1:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setValue(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -18833,6 +18982,31 @@ proto.proto.SohCalibrationPlanned.prototype.serializeBinary = function() {
  */
 proto.proto.SohCalibrationPlanned.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = message.getValue();
+  if (f !== 0) {
+    writer.writeInt32(
+      1,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional int32 value = 1;
+ * @return {number}
+ */
+proto.proto.SohCalibrationPlanned.prototype.getValue = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.SohCalibrationPlanned} returns this
+ */
+proto.proto.SohCalibrationPlanned.prototype.setValue = function(value) {
+  return jspb.Message.setProto3IntField(this, 1, value);
 };
 
 
@@ -19080,7 +19254,8 @@ proto.proto.ChargingScheduleActive.ChargingScheduleActiveSchedule.prototype.toOb
  */
 proto.proto.ChargingScheduleActive.ChargingScheduleActiveSchedule.toObject = function(includeInstance, msg) {
   var f, obj = {
-
+powerValues: jspb.Message.getFloatingPointFieldWithDefault(msg, 1, 0.0),
+durationValues: jspb.Message.getFieldWithDefault(msg, 2, 0)
   };
 
   if (includeInstance) {
@@ -19117,6 +19292,14 @@ proto.proto.ChargingScheduleActive.ChargingScheduleActiveSchedule.deserializeBin
     }
     var field = reader.getFieldNumber();
     switch (field) {
+    case 1:
+      var value = /** @type {number} */ (reader.readDouble());
+      msg.setPowerValues(value);
+      break;
+    case 2:
+      var value = /** @type {number} */ (reader.readInt64());
+      msg.setDurationValues(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -19146,6 +19329,56 @@ proto.proto.ChargingScheduleActive.ChargingScheduleActiveSchedule.prototype.seri
  */
 proto.proto.ChargingScheduleActive.ChargingScheduleActiveSchedule.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = message.getPowerValues();
+  if (f !== 0.0) {
+    writer.writeDouble(
+      1,
+      f
+    );
+  }
+  f = message.getDurationValues();
+  if (f !== 0) {
+    writer.writeInt64(
+      2,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional double power_values = 1;
+ * @return {number}
+ */
+proto.proto.ChargingScheduleActive.ChargingScheduleActiveSchedule.prototype.getPowerValues = function() {
+  return /** @type {number} */ (jspb.Message.getFloatingPointFieldWithDefault(this, 1, 0.0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ChargingScheduleActive.ChargingScheduleActiveSchedule} returns this
+ */
+proto.proto.ChargingScheduleActive.ChargingScheduleActiveSchedule.prototype.setPowerValues = function(value) {
+  return jspb.Message.setProto3FloatField(this, 1, value);
+};
+
+
+/**
+ * optional int64 duration_values = 2;
+ * @return {number}
+ */
+proto.proto.ChargingScheduleActive.ChargingScheduleActiveSchedule.prototype.getDurationValues = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ChargingScheduleActive.ChargingScheduleActiveSchedule} returns this
+ */
+proto.proto.ChargingScheduleActive.ChargingScheduleActiveSchedule.prototype.setDurationValues = function(value) {
+  return jspb.Message.setProto3IntField(this, 2, value);
 };
 
 
@@ -19365,7 +19598,7 @@ proto.proto.ScheduleIdStatus.prototype.toObject = function(opt_includeInstance) 
  */
 proto.proto.ScheduleIdStatus.toObject = function(includeInstance, msg) {
   var f, obj = {
-
+value: jspb.Message.getFieldWithDefault(msg, 1, 0)
   };
 
   if (includeInstance) {
@@ -19402,6 +19635,10 @@ proto.proto.ScheduleIdStatus.deserializeBinaryFromReader = function(msg, reader)
     }
     var field = reader.getFieldNumber();
     switch (field) {
+    case 1:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setValue(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -19431,6 +19668,31 @@ proto.proto.ScheduleIdStatus.prototype.serializeBinary = function() {
  */
 proto.proto.ScheduleIdStatus.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = message.getValue();
+  if (f !== 0) {
+    writer.writeInt32(
+      1,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional int32 value = 1;
+ * @return {number}
+ */
+proto.proto.ScheduleIdStatus.prototype.getValue = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ScheduleIdStatus} returns this
+ */
+proto.proto.ScheduleIdStatus.prototype.setValue = function(value) {
+  return jspb.Message.setProto3IntField(this, 1, value);
 };
 
 
@@ -19466,7 +19728,7 @@ proto.proto.ParkEventPictureTransmissionStatus.prototype.toObject = function(opt
  */
 proto.proto.ParkEventPictureTransmissionStatus.toObject = function(includeInstance, msg) {
   var f, obj = {
-
+value: jspb.Message.getFieldWithDefault(msg, 1, 0)
   };
 
   if (includeInstance) {
@@ -19503,6 +19765,10 @@ proto.proto.ParkEventPictureTransmissionStatus.deserializeBinaryFromReader = fun
     }
     var field = reader.getFieldNumber();
     switch (field) {
+    case 1:
+      var value = /** @type {number} */ (reader.readInt32());
+      msg.setValue(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -19532,6 +19798,31 @@ proto.proto.ParkEventPictureTransmissionStatus.prototype.serializeBinary = funct
  */
 proto.proto.ParkEventPictureTransmissionStatus.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
+  f = message.getValue();
+  if (f !== 0) {
+    writer.writeInt32(
+      1,
+      f
+    );
+  }
+};
+
+
+/**
+ * optional int32 value = 1;
+ * @return {number}
+ */
+proto.proto.ParkEventPictureTransmissionStatus.prototype.getValue = function() {
+  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 1, 0));
+};
+
+
+/**
+ * @param {number} value
+ * @return {!proto.proto.ParkEventPictureTransmissionStatus} returns this
+ */
+proto.proto.ParkEventPictureTransmissionStatus.prototype.setValue = function(value) {
+  return jspb.Message.setProto3IntField(this, 1, value);
 };
 
 
