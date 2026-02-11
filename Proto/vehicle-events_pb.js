@@ -13017,7 +13017,7 @@ proto.proto.TemperaturePoint.toObject = function(includeInstance, msg) {
 zone: jspb.Message.getFieldWithDefault(msg, 1, ""),
 temperature: jspb.Message.getFloatingPointFieldWithDefault(msg, 2, 0.0),
 temperatureDisplayValue: jspb.Message.getFieldWithDefault(msg, 3, ""),
-active: jspb.Message.getBooleanFieldWithDefault(msg, 4, false)
+active: (f = msg.getActive()) && google_protobuf_wrappers_pb.BoolValue.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -13067,7 +13067,8 @@ proto.proto.TemperaturePoint.deserializeBinaryFromReader = function(msg, reader)
       msg.setTemperatureDisplayValue(value);
       break;
     case 4:
-      var value = /** @type {boolean} */ (reader.readBool());
+      var value = new google_protobuf_wrappers_pb.BoolValue;
+      reader.readMessage(value,google_protobuf_wrappers_pb.BoolValue.deserializeBinaryFromReader);
       msg.setActive(value);
       break;
     default:
@@ -13121,10 +13122,11 @@ proto.proto.TemperaturePoint.serializeBinaryToWriter = function(message, writer)
     );
   }
   f = message.getActive();
-  if (f) {
-    writer.writeBool(
+  if (f != null) {
+    writer.writeMessage(
       4,
-      f
+      f,
+      google_protobuf_wrappers_pb.BoolValue.serializeBinaryToWriter
     );
   }
 };
@@ -13185,20 +13187,39 @@ proto.proto.TemperaturePoint.prototype.setTemperatureDisplayValue = function(val
 
 
 /**
- * optional bool active = 4;
- * @return {boolean}
+ * optional google.protobuf.BoolValue active = 4;
+ * @return {?proto.google.protobuf.BoolValue}
  */
 proto.proto.TemperaturePoint.prototype.getActive = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 4, false));
+  return /** @type{?proto.google.protobuf.BoolValue} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.BoolValue, 4));
 };
 
 
 /**
- * @param {boolean} value
+ * @param {?proto.google.protobuf.BoolValue|undefined} value
+ * @return {!proto.proto.TemperaturePoint} returns this
+*/
+proto.proto.TemperaturePoint.prototype.setActive = function(value) {
+  return jspb.Message.setWrapperField(this, 4, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
  * @return {!proto.proto.TemperaturePoint} returns this
  */
-proto.proto.TemperaturePoint.prototype.setActive = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 4, value);
+proto.proto.TemperaturePoint.prototype.clearActive = function() {
+  return this.setActive(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.TemperaturePoint.prototype.hasActive = function() {
+  return jspb.Message.getField(this, 4) != null;
 };
 
 

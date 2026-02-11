@@ -913,7 +913,7 @@ message TemperaturePoint {
   string zone = 1;
   double temperature = 2;
   string temperature_display_value = 3;
-  bool active = 4;  // APK Feb 2026
+  google.protobuf.BoolValue active = 4;  // APK uses wrapper type
 }
 
 message WeekdayTariffValue {

@@ -121,10 +121,10 @@ function wrapDeserialize(MessageClass) {
       parts.push(`pos=${ctx.pos || '?'}/${ctx.bufLen || bytes.length}`);
       parts.push(`err="${ctx.error || e.message}"`);
 
-      logWarning(parts.join(' '), `${ctx.pos}`);
-      if (ctx.hex) {
-        logWarning(`[protobuf] hex@${ctx.pos}: ${ctx.hex}`, `hex-${ctx.pos}`);
-      }
+      logWarning(parts.join(' '), `${ctx.pos || 0}`);
+      // Log full payload hex for debugging
+      const fullHex = Buffer.from(bytes).toString('hex');
+      logWarning(`[protobuf] full payload (${bytes.length} bytes): ${fullHex}`, `full-${ctx.pos || 0}`);
 
       try {
         return new MessageClass();
