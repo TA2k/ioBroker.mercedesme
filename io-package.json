@@ -1,9 +1,9 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.5.4",
+    "version": "0.5.5",
     "news": {
-      "0.5.4": {
+      "0.5.5": {
         "en": "fix parsing and command sending",
         "de": "parsing und kommando senden",
         "ru": "исправить парсинг и командную отправку",
