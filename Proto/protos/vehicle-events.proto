@@ -858,11 +858,11 @@ message VVRTimeProfile {
   WeeklyProfileScheduleType schedule_type = 12;
 }
 
-// ActionList for VVRTimeProfile - APK uses BOOL_VALUE wrappers
+// ActionList for VVRTimeProfile - server sends primitive bool
 message ActionList {
-  google.protobuf.BoolValue charging = 1;
-  google.protobuf.BoolValue precond = 2;
-  google.protobuf.BoolValue battery_precond = 3;
+  bool charging = 1;
+  bool precond = 2;
+  bool battery_precond = 3;
 }
 
 enum WeeklyProfileScheduleType {
@@ -1115,29 +1115,72 @@ message NextDepartureTimeValue {
   int64 minute = 2;
 }
 
-message ChildPresenceDetectionWarningLastEvent {
-  // Wire enum wrapper - see smali for enum values
-  int32 value = 1;
+enum ChildPresenceDetectionWarningLastEvent {
+  CPD_NO_WARNING_INITIAL = 0;
+  CPD_WARNING_ACTIVE_TEMPERATURE_DECREASE = 1;
+  CPD_WARNING_ACTIVE_TEMPERATURE_INCREASE = 2;
+  CPD_WARNING_ACTIVE_BATTERY_LOW = 3;
+  CPD_WARNING_ACTIVE_ECALL_SOON = 4;
+  CPD_WARNING_ACTIVE_ECALL_TRANSMITTED = 5;
+  CPD_WARNING_DEACTIVATED = 6;
+  CPD_NO_WARNING_NO_EVENT = 7;
+  CPD_WARNING_DELAYED = 8;
+  CPD_WARNING_DEACTIVATED_BATTERY = 9;
+  CPD_WARNING_DEACTIVATED_ERROR = 10;
+  CPD_WARNING_DEACTIVATED_UNLOCK = 11;
+  CPD_WARNING_ACTIVE_ECALL_NOT_AVAILABLE = 12;
+  CPD_WARNING_ACTIVE_ECALL_NOT_AVAILABLE_PUSH_NOTIFICATION = 13;
+  CPD_CAMERA_NOT_AVAILABLE = 14;
 }
 
-message ChildPresenceDetectionWarningLevel {
-  // Wire enum wrapper - see smali for enum values
-  int32 value = 1;
+enum ChildPresenceDetectionWarningLevel {
+  CPD_LEVEL_NO_WARNING = 0;
+  CPD_LEVEL_INITIAL = 1;
+  CPD_LEVEL_ESCALATION = 2;
+  CPD_LEVEL_SILENT_ESCALATION = 3;
+  CPD_LEVEL_DEACTIVATED_ERROR = 4;
+  CPD_LEVEL_ACTIVE_ECALL_SOON = 5;
+  CPD_LEVEL_ACTIVE_ECALL_TRANSMITTED = 6;
+  CPD_LEVEL_ACTIVE_ECALL_NOT_AVAILABLE = 7;
+  CPD_LEVEL_DELAYED = 8;
+  CPD_LEVEL_ACTIVE_NO_ECALL_SIL_ESC = 9;
+  CPD_LEVEL_ACTIVE_NO_ECALL_ESC = 10;
+  CPD_LEVEL_ACTIVE_ECALL_NOT_AVAILABLE_SECOND_STAGE = 11;
 }
 
-message PerformanceLimitationModeStatus {
-  // Wire enum wrapper - see smali for enum values
-  int32 value = 1;
+enum PerformanceLimitationModeStatus {
+  PLM_NO_WARNING = 0;
+  PLM_SVH_EVENT_MANAGED = 1;
+  PLM_REQUESTED = 2;
+  PLM_SUCCESSFUL_REQUESTED = 3;
+  PLM_NOT_AUTHORIZED = 4;
+  PLM_ERROR = 5;
+  PLM_INCAPABLE = 6;
 }
 
-message ExteriorMonitoringStatus {
-  // Wire enum wrapper - see smali for enum values
-  int32 value = 1;
+enum ExteriorMonitoringStatus {
+  EXM_IDLE = 0;
+  EXM_WAKE_UP = 1;
+  EXM_REQUEST_SUBMITTED = 2;
+  EXM_RECORDING = 3;
+  EXM_ANNOUNCE = 4;
+  EXM_UPLOADING = 5;
+  EXM_COMPLETED = 6;
+  EXM_AE_INCAPABLE = 106;
+  EXM_AE_PLAY_PROTECTION_ACTIVE = 110;
 }
 
-message InteriorMonitoringStatus {
-  // Wire enum wrapper - see smali for enum values
-  int32 value = 1;
+enum InteriorMonitoringStatus {
+  INM_IDLE = 0;
+  INM_WAKE_UP = 1;
+  INM_RECORDING = 2;
+  INM_PICTURE_TAKEN = 3;
+  INM_ANNOUNCE = 4;
+  INM_UPLOADING = 5;
+  INM_COMPLETED = 6;
+  INM_MEMORY_FULL = 103;
+  INM_PICTURE_TAKING_DISABLED = 106;
+  INM_PICTURE_TAKING_INTERRUPTED = 110;
 }
 
 message RemoteUpdateStartStatus {
@@ -1155,9 +1198,9 @@ enum UpdateStatus {
   UPDATE_STATUS_FAILED = 4;
 }
 
-message SohCalibrationPlanned {
-  // Wire enum wrapper - see smali for enum values
-  int32 value = 1;
+enum SohCalibrationPlanned {
+  SOH_CALIBRATION_NOT_PLANNED = 0;
+  SOH_CALIBRATION_PLANNED = 1;
 }
 
 enum DcChargingProfile {
@@ -1197,12 +1240,17 @@ enum ChargingScheduleUseCaseId {
   CHARGING_SCHEDULE_USE_CASE_ID_UNKNOWN = 0;
 }
 
-message ScheduleIdStatus {
-  // Wire enum wrapper - see smali for enum values
-  int32 value = 1;
+enum ScheduleIdStatus {
+  SCHEDULE_ID_STATUS_INITIAL = 0;
+  SCHEDULE_ID_STATUS_DELETED = 1;
 }
 
-message ParkEventPictureTransmissionStatus {
-  // Wire enum wrapper - see smali for enum values
-  int32 value = 1;
+enum ParkEventPictureTransmissionStatus {
+  PARK_EVENT_PICTURE_TRANSMISSION_STATUS_IDLE = 0;
+  PARK_EVENT_PICTURE_TRANSMISSION_STATUS_WAKE_UP = 1;
+  PARK_EVENT_PICTURE_TRANSMISSION_STATUS_REQUEST_SUBMITTED = 2;
+  PARK_EVENT_PICTURE_TRANSMISSION_STATUS_RECORDING = 3;
+  PARK_EVENT_PICTURE_TRANSMISSION_STATUS_ANNOUNCE = 4;
+  PARK_EVENT_PICTURE_TRANSMISSION_STATUS_UPLOADING = 5;
+  PARK_EVENT_PICTURE_TRANSMISSION_STATUS_COMPLETED = 6;
 }
