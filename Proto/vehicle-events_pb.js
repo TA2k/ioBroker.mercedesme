@@ -10580,7 +10580,7 @@ locationBasedCharging: jspb.Message.getBooleanFieldWithDefault(msg, 4, false),
 weeklyProfile: jspb.Message.getBooleanFieldWithDefault(msg, 5, false),
 clocktimer: jspb.Message.getBooleanFieldWithDefault(msg, 6, false),
 maxChargingCurrent: jspb.Message.getFieldWithDefault(msg, 7, 0),
-ecoCharging: jspb.Message.getBooleanFieldWithDefault(msg, 9, false)
+ecoCharging: (f = msg.getEcoCharging()) && google_protobuf_wrappers_pb.BoolValue.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -10646,7 +10646,8 @@ proto.proto.ChargeProgramParameters.deserializeBinaryFromReader = function(msg, 
       msg.setMaxChargingCurrent(value);
       break;
     case 9:
-      var value = /** @type {boolean} */ (reader.readBool());
+      var value = new google_protobuf_wrappers_pb.BoolValue;
+      reader.readMessage(value,google_protobuf_wrappers_pb.BoolValue.deserializeBinaryFromReader);
       msg.setEcoCharging(value);
       break;
     default:
@@ -10728,10 +10729,11 @@ proto.proto.ChargeProgramParameters.serializeBinaryToWriter = function(message, 
     );
   }
   f = message.getEcoCharging();
-  if (f) {
-    writer.writeBool(
+  if (f != null) {
+    writer.writeMessage(
       9,
-      f
+      f,
+      google_protobuf_wrappers_pb.BoolValue.serializeBinaryToWriter
     );
   }
 };
@@ -10864,20 +10866,39 @@ proto.proto.ChargeProgramParameters.prototype.setMaxChargingCurrent = function(v
 
 
 /**
- * optional bool eco_charging = 9;
- * @return {boolean}
+ * optional google.protobuf.BoolValue eco_charging = 9;
+ * @return {?proto.google.protobuf.BoolValue}
  */
 proto.proto.ChargeProgramParameters.prototype.getEcoCharging = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 9, false));
+  return /** @type{?proto.google.protobuf.BoolValue} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.BoolValue, 9));
 };
 
 
 /**
- * @param {boolean} value
+ * @param {?proto.google.protobuf.BoolValue|undefined} value
+ * @return {!proto.proto.ChargeProgramParameters} returns this
+*/
+proto.proto.ChargeProgramParameters.prototype.setEcoCharging = function(value) {
+  return jspb.Message.setWrapperField(this, 9, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
  * @return {!proto.proto.ChargeProgramParameters} returns this
  */
-proto.proto.ChargeProgramParameters.prototype.setEcoCharging = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 9, value);
+proto.proto.ChargeProgramParameters.prototype.clearEcoCharging = function() {
+  return this.setEcoCharging(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.ChargeProgramParameters.prototype.hasEcoCharging = function() {
+  return jspb.Message.getField(this, 9) != null;
 };
 
 
@@ -11263,9 +11284,9 @@ proto.proto.VVRTimeProfile.toObject = function(includeInstance, msg) {
 identifier: jspb.Message.getFieldWithDefault(msg, 1, 0),
 daysList: (f = jspb.Message.getRepeatedField(msg, 4)) == null ? undefined : f,
 applicationIdentifier: jspb.Message.getFieldWithDefault(msg, 6, 0),
-hour: jspb.Message.getFieldWithDefault(msg, 7, 0),
-minute: jspb.Message.getFieldWithDefault(msg, 8, 0),
-active: jspb.Message.getBooleanFieldWithDefault(msg, 9, false),
+hour: (f = msg.getHour()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
+minute: (f = msg.getMinute()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
+active: (f = msg.getActive()) && google_protobuf_wrappers_pb.BoolValue.toObject(includeInstance, f),
 isLearnedTime: jspb.Message.getBooleanFieldWithDefault(msg, 10, false),
 actionListList: jspb.Message.toObjectList(msg.getActionListList(),
     proto.proto.ActionList.toObject, includeInstance),
@@ -11321,15 +11342,18 @@ proto.proto.VVRTimeProfile.deserializeBinaryFromReader = function(msg, reader) {
       msg.setApplicationIdentifier(value);
       break;
     case 7:
-      var value = /** @type {number} */ (reader.readInt32());
+      var value = new google_protobuf_wrappers_pb.Int32Value;
+      reader.readMessage(value,google_protobuf_wrappers_pb.Int32Value.deserializeBinaryFromReader);
       msg.setHour(value);
       break;
     case 8:
-      var value = /** @type {number} */ (reader.readInt32());
+      var value = new google_protobuf_wrappers_pb.Int32Value;
+      reader.readMessage(value,google_protobuf_wrappers_pb.Int32Value.deserializeBinaryFromReader);
       msg.setMinute(value);
       break;
     case 9:
-      var value = /** @type {boolean} */ (reader.readBool());
+      var value = new google_protobuf_wrappers_pb.BoolValue;
+      reader.readMessage(value,google_protobuf_wrappers_pb.BoolValue.deserializeBinaryFromReader);
       msg.setActive(value);
       break;
     case 10:
@@ -11396,24 +11420,27 @@ proto.proto.VVRTimeProfile.serializeBinaryToWriter = function(message, writer) {
     );
   }
   f = message.getHour();
-  if (f !== 0) {
-    writer.writeInt32(
+  if (f != null) {
+    writer.writeMessage(
       7,
-      f
+      f,
+      google_protobuf_wrappers_pb.Int32Value.serializeBinaryToWriter
     );
   }
   f = message.getMinute();
-  if (f !== 0) {
-    writer.writeInt32(
+  if (f != null) {
+    writer.writeMessage(
       8,
-      f
+      f,
+      google_protobuf_wrappers_pb.Int32Value.serializeBinaryToWriter
     );
   }
   f = message.getActive();
-  if (f) {
-    writer.writeBool(
+  if (f != null) {
+    writer.writeMessage(
       9,
-      f
+      f,
+      google_protobuf_wrappers_pb.BoolValue.serializeBinaryToWriter
     );
   }
   f = message.getIsLearnedTime();
@@ -11515,56 +11542,113 @@ proto.proto.VVRTimeProfile.prototype.setApplicationIdentifier = function(value) 
 
 
 /**
- * optional int32 hour = 7;
- * @return {number}
+ * optional google.protobuf.Int32Value hour = 7;
+ * @return {?proto.google.protobuf.Int32Value}
  */
 proto.proto.VVRTimeProfile.prototype.getHour = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 7, 0));
+  return /** @type{?proto.google.protobuf.Int32Value} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.Int32Value, 7));
 };
 
 
 /**
- * @param {number} value
+ * @param {?proto.google.protobuf.Int32Value|undefined} value
  * @return {!proto.proto.VVRTimeProfile} returns this
- */
+*/
 proto.proto.VVRTimeProfile.prototype.setHour = function(value) {
-  return jspb.Message.setProto3IntField(this, 7, value);
+  return jspb.Message.setWrapperField(this, 7, value);
 };
 
 
 /**
- * optional int32 minute = 8;
- * @return {number}
- */
-proto.proto.VVRTimeProfile.prototype.getMinute = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 8, 0));
-};
-
-
-/**
- * @param {number} value
+ * Clears the message field making it undefined.
  * @return {!proto.proto.VVRTimeProfile} returns this
  */
-proto.proto.VVRTimeProfile.prototype.setMinute = function(value) {
-  return jspb.Message.setProto3IntField(this, 8, value);
+proto.proto.VVRTimeProfile.prototype.clearHour = function() {
+  return this.setHour(undefined);
 };
 
 
 /**
- * optional bool active = 9;
+ * Returns whether this field is set.
  * @return {boolean}
  */
-proto.proto.VVRTimeProfile.prototype.getActive = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 9, false));
+proto.proto.VVRTimeProfile.prototype.hasHour = function() {
+  return jspb.Message.getField(this, 7) != null;
 };
 
 
 /**
- * @param {boolean} value
+ * optional google.protobuf.Int32Value minute = 8;
+ * @return {?proto.google.protobuf.Int32Value}
+ */
+proto.proto.VVRTimeProfile.prototype.getMinute = function() {
+  return /** @type{?proto.google.protobuf.Int32Value} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.Int32Value, 8));
+};
+
+
+/**
+ * @param {?proto.google.protobuf.Int32Value|undefined} value
+ * @return {!proto.proto.VVRTimeProfile} returns this
+*/
+proto.proto.VVRTimeProfile.prototype.setMinute = function(value) {
+  return jspb.Message.setWrapperField(this, 8, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
  * @return {!proto.proto.VVRTimeProfile} returns this
  */
+proto.proto.VVRTimeProfile.prototype.clearMinute = function() {
+  return this.setMinute(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VVRTimeProfile.prototype.hasMinute = function() {
+  return jspb.Message.getField(this, 8) != null;
+};
+
+
+/**
+ * optional google.protobuf.BoolValue active = 9;
+ * @return {?proto.google.protobuf.BoolValue}
+ */
+proto.proto.VVRTimeProfile.prototype.getActive = function() {
+  return /** @type{?proto.google.protobuf.BoolValue} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.BoolValue, 9));
+};
+
+
+/**
+ * @param {?proto.google.protobuf.BoolValue|undefined} value
+ * @return {!proto.proto.VVRTimeProfile} returns this
+*/
 proto.proto.VVRTimeProfile.prototype.setActive = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 9, value);
+  return jspb.Message.setWrapperField(this, 9, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.VVRTimeProfile} returns this
+ */
+proto.proto.VVRTimeProfile.prototype.clearActive = function() {
+  return this.setActive(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.VVRTimeProfile.prototype.hasActive = function() {
+  return jspb.Message.getField(this, 9) != null;
 };
 
 
@@ -11674,9 +11758,9 @@ proto.proto.ActionList.prototype.toObject = function(opt_includeInstance) {
  */
 proto.proto.ActionList.toObject = function(includeInstance, msg) {
   var f, obj = {
-charging: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
-precond: jspb.Message.getBooleanFieldWithDefault(msg, 2, false),
-batteryPrecond: jspb.Message.getBooleanFieldWithDefault(msg, 3, false)
+charging: (f = msg.getCharging()) && google_protobuf_wrappers_pb.BoolValue.toObject(includeInstance, f),
+precond: (f = msg.getPrecond()) && google_protobuf_wrappers_pb.BoolValue.toObject(includeInstance, f),
+batteryPrecond: (f = msg.getBatteryPrecond()) && google_protobuf_wrappers_pb.BoolValue.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -11714,15 +11798,18 @@ proto.proto.ActionList.deserializeBinaryFromReader = function(msg, reader) {
     var field = reader.getFieldNumber();
     switch (field) {
     case 1:
-      var value = /** @type {boolean} */ (reader.readBool());
+      var value = new google_protobuf_wrappers_pb.BoolValue;
+      reader.readMessage(value,google_protobuf_wrappers_pb.BoolValue.deserializeBinaryFromReader);
       msg.setCharging(value);
       break;
     case 2:
-      var value = /** @type {boolean} */ (reader.readBool());
+      var value = new google_protobuf_wrappers_pb.BoolValue;
+      reader.readMessage(value,google_protobuf_wrappers_pb.BoolValue.deserializeBinaryFromReader);
       msg.setPrecond(value);
       break;
     case 3:
-      var value = /** @type {boolean} */ (reader.readBool());
+      var value = new google_protobuf_wrappers_pb.BoolValue;
+      reader.readMessage(value,google_protobuf_wrappers_pb.BoolValue.deserializeBinaryFromReader);
       msg.setBatteryPrecond(value);
       break;
     default:
@@ -11755,80 +11842,140 @@ proto.proto.ActionList.prototype.serializeBinary = function() {
 proto.proto.ActionList.serializeBinaryToWriter = function(message, writer) {
   var f = undefined;
   f = message.getCharging();
-  if (f) {
-    writer.writeBool(
+  if (f != null) {
+    writer.writeMessage(
       1,
-      f
+      f,
+      google_protobuf_wrappers_pb.BoolValue.serializeBinaryToWriter
     );
   }
   f = message.getPrecond();
-  if (f) {
-    writer.writeBool(
+  if (f != null) {
+    writer.writeMessage(
       2,
-      f
+      f,
+      google_protobuf_wrappers_pb.BoolValue.serializeBinaryToWriter
     );
   }
   f = message.getBatteryPrecond();
-  if (f) {
-    writer.writeBool(
+  if (f != null) {
+    writer.writeMessage(
       3,
-      f
+      f,
+      google_protobuf_wrappers_pb.BoolValue.serializeBinaryToWriter
     );
   }
 };
 
 
 /**
- * optional bool charging = 1;
- * @return {boolean}
+ * optional google.protobuf.BoolValue charging = 1;
+ * @return {?proto.google.protobuf.BoolValue}
  */
 proto.proto.ActionList.prototype.getCharging = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 1, false));
+  return /** @type{?proto.google.protobuf.BoolValue} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.BoolValue, 1));
 };
 
 
 /**
- * @param {boolean} value
+ * @param {?proto.google.protobuf.BoolValue|undefined} value
+ * @return {!proto.proto.ActionList} returns this
+*/
+proto.proto.ActionList.prototype.setCharging = function(value) {
+  return jspb.Message.setWrapperField(this, 1, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
  * @return {!proto.proto.ActionList} returns this
  */
-proto.proto.ActionList.prototype.setCharging = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 1, value);
+proto.proto.ActionList.prototype.clearCharging = function() {
+  return this.setCharging(undefined);
 };
 
 
 /**
- * optional bool precond = 2;
+ * Returns whether this field is set.
  * @return {boolean}
+ */
+proto.proto.ActionList.prototype.hasCharging = function() {
+  return jspb.Message.getField(this, 1) != null;
+};
+
+
+/**
+ * optional google.protobuf.BoolValue precond = 2;
+ * @return {?proto.google.protobuf.BoolValue}
  */
 proto.proto.ActionList.prototype.getPrecond = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 2, false));
+  return /** @type{?proto.google.protobuf.BoolValue} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.BoolValue, 2));
 };
 
 
 /**
- * @param {boolean} value
+ * @param {?proto.google.protobuf.BoolValue|undefined} value
+ * @return {!proto.proto.ActionList} returns this
+*/
+proto.proto.ActionList.prototype.setPrecond = function(value) {
+  return jspb.Message.setWrapperField(this, 2, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
  * @return {!proto.proto.ActionList} returns this
  */
-proto.proto.ActionList.prototype.setPrecond = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 2, value);
+proto.proto.ActionList.prototype.clearPrecond = function() {
+  return this.setPrecond(undefined);
 };
 
 
 /**
- * optional bool battery_precond = 3;
+ * Returns whether this field is set.
  * @return {boolean}
  */
-proto.proto.ActionList.prototype.getBatteryPrecond = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 3, false));
+proto.proto.ActionList.prototype.hasPrecond = function() {
+  return jspb.Message.getField(this, 2) != null;
 };
 
 
 /**
- * @param {boolean} value
+ * optional google.protobuf.BoolValue battery_precond = 3;
+ * @return {?proto.google.protobuf.BoolValue}
+ */
+proto.proto.ActionList.prototype.getBatteryPrecond = function() {
+  return /** @type{?proto.google.protobuf.BoolValue} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.BoolValue, 3));
+};
+
+
+/**
+ * @param {?proto.google.protobuf.BoolValue|undefined} value
+ * @return {!proto.proto.ActionList} returns this
+*/
+proto.proto.ActionList.prototype.setBatteryPrecond = function(value) {
+  return jspb.Message.setWrapperField(this, 3, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
  * @return {!proto.proto.ActionList} returns this
  */
-proto.proto.ActionList.prototype.setBatteryPrecond = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 3, value);
+proto.proto.ActionList.prototype.clearBatteryPrecond = function() {
+  return this.setBatteryPrecond(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.ActionList.prototype.hasBatteryPrecond = function() {
+  return jspb.Message.getField(this, 3) != null;
 };
 
 

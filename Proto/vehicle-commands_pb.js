@@ -1781,7 +1781,7 @@ if (goog.DEBUG && !COMPILED) {
  * @constructor
  */
 proto.proto.ChargingConfigure = function(opt_data) {
-  jspb.Message.initialize(this, opt_data, 0, -1, proto.proto.ChargingConfigure.repeatedFields_, null);
+  jspb.Message.initialize(this, opt_data, 0, -1, null, null);
 };
 goog.inherits(proto.proto.ChargingConfigure, jspb.Message);
 if (goog.DEBUG && !COMPILED) {
@@ -10075,10 +10075,10 @@ precondSeatFrontLeft: jspb.Message.getBooleanFieldWithDefault(msg, 1, false),
 precondSeatFrontRight: jspb.Message.getBooleanFieldWithDefault(msg, 2, false),
 precondSeatRearLeft: jspb.Message.getBooleanFieldWithDefault(msg, 3, false),
 precondSeatRearRight: jspb.Message.getBooleanFieldWithDefault(msg, 4, false),
-frontLeft: jspb.Message.getBooleanFieldWithDefault(msg, 5, false),
-frontRight: jspb.Message.getBooleanFieldWithDefault(msg, 6, false),
-rearLeft: jspb.Message.getBooleanFieldWithDefault(msg, 7, false),
-rearRight: jspb.Message.getBooleanFieldWithDefault(msg, 8, false),
+frontLeft: (f = msg.getFrontLeft()) && google_protobuf_wrappers_pb.BoolValue.toObject(includeInstance, f),
+frontRight: (f = msg.getFrontRight()) && google_protobuf_wrappers_pb.BoolValue.toObject(includeInstance, f),
+rearLeft: (f = msg.getRearLeft()) && google_protobuf_wrappers_pb.BoolValue.toObject(includeInstance, f),
+rearRight: (f = msg.getRearRight()) && google_protobuf_wrappers_pb.BoolValue.toObject(includeInstance, f),
 userProfile: jspb.Message.getFieldWithDefault(msg, 9, "")
   };
 
@@ -10133,19 +10133,23 @@ proto.proto.ZEVPreconditioningConfigureSeats.deserializeBinaryFromReader = funct
       msg.setPrecondSeatRearRight(value);
       break;
     case 5:
-      var value = /** @type {boolean} */ (reader.readBool());
+      var value = new google_protobuf_wrappers_pb.BoolValue;
+      reader.readMessage(value,google_protobuf_wrappers_pb.BoolValue.deserializeBinaryFromReader);
       msg.setFrontLeft(value);
       break;
     case 6:
-      var value = /** @type {boolean} */ (reader.readBool());
+      var value = new google_protobuf_wrappers_pb.BoolValue;
+      reader.readMessage(value,google_protobuf_wrappers_pb.BoolValue.deserializeBinaryFromReader);
       msg.setFrontRight(value);
       break;
     case 7:
-      var value = /** @type {boolean} */ (reader.readBool());
+      var value = new google_protobuf_wrappers_pb.BoolValue;
+      reader.readMessage(value,google_protobuf_wrappers_pb.BoolValue.deserializeBinaryFromReader);
       msg.setRearLeft(value);
       break;
     case 8:
-      var value = /** @type {boolean} */ (reader.readBool());
+      var value = new google_protobuf_wrappers_pb.BoolValue;
+      reader.readMessage(value,google_protobuf_wrappers_pb.BoolValue.deserializeBinaryFromReader);
       msg.setRearRight(value);
       break;
     case 9:
@@ -10210,31 +10214,35 @@ proto.proto.ZEVPreconditioningConfigureSeats.serializeBinaryToWriter = function(
     );
   }
   f = message.getFrontLeft();
-  if (f) {
-    writer.writeBool(
+  if (f != null) {
+    writer.writeMessage(
       5,
-      f
+      f,
+      google_protobuf_wrappers_pb.BoolValue.serializeBinaryToWriter
     );
   }
   f = message.getFrontRight();
-  if (f) {
-    writer.writeBool(
+  if (f != null) {
+    writer.writeMessage(
       6,
-      f
+      f,
+      google_protobuf_wrappers_pb.BoolValue.serializeBinaryToWriter
     );
   }
   f = message.getRearLeft();
-  if (f) {
-    writer.writeBool(
+  if (f != null) {
+    writer.writeMessage(
       7,
-      f
+      f,
+      google_protobuf_wrappers_pb.BoolValue.serializeBinaryToWriter
     );
   }
   f = message.getRearRight();
-  if (f) {
-    writer.writeBool(
+  if (f != null) {
+    writer.writeMessage(
       8,
-      f
+      f,
+      google_protobuf_wrappers_pb.BoolValue.serializeBinaryToWriter
     );
   }
   f = message.getUserProfile();
@@ -10320,74 +10328,150 @@ proto.proto.ZEVPreconditioningConfigureSeats.prototype.setPrecondSeatRearRight =
 
 
 /**
- * optional bool front_left = 5;
- * @return {boolean}
+ * optional google.protobuf.BoolValue front_left = 5;
+ * @return {?proto.google.protobuf.BoolValue}
  */
 proto.proto.ZEVPreconditioningConfigureSeats.prototype.getFrontLeft = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 5, false));
+  return /** @type{?proto.google.protobuf.BoolValue} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.BoolValue, 5));
 };
 
 
 /**
- * @param {boolean} value
+ * @param {?proto.google.protobuf.BoolValue|undefined} value
+ * @return {!proto.proto.ZEVPreconditioningConfigureSeats} returns this
+*/
+proto.proto.ZEVPreconditioningConfigureSeats.prototype.setFrontLeft = function(value) {
+  return jspb.Message.setWrapperField(this, 5, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
  * @return {!proto.proto.ZEVPreconditioningConfigureSeats} returns this
  */
-proto.proto.ZEVPreconditioningConfigureSeats.prototype.setFrontLeft = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 5, value);
+proto.proto.ZEVPreconditioningConfigureSeats.prototype.clearFrontLeft = function() {
+  return this.setFrontLeft(undefined);
 };
 
 
 /**
- * optional bool front_right = 6;
+ * Returns whether this field is set.
  * @return {boolean}
+ */
+proto.proto.ZEVPreconditioningConfigureSeats.prototype.hasFrontLeft = function() {
+  return jspb.Message.getField(this, 5) != null;
+};
+
+
+/**
+ * optional google.protobuf.BoolValue front_right = 6;
+ * @return {?proto.google.protobuf.BoolValue}
  */
 proto.proto.ZEVPreconditioningConfigureSeats.prototype.getFrontRight = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 6, false));
+  return /** @type{?proto.google.protobuf.BoolValue} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.BoolValue, 6));
 };
 
 
 /**
- * @param {boolean} value
+ * @param {?proto.google.protobuf.BoolValue|undefined} value
+ * @return {!proto.proto.ZEVPreconditioningConfigureSeats} returns this
+*/
+proto.proto.ZEVPreconditioningConfigureSeats.prototype.setFrontRight = function(value) {
+  return jspb.Message.setWrapperField(this, 6, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
  * @return {!proto.proto.ZEVPreconditioningConfigureSeats} returns this
  */
-proto.proto.ZEVPreconditioningConfigureSeats.prototype.setFrontRight = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 6, value);
+proto.proto.ZEVPreconditioningConfigureSeats.prototype.clearFrontRight = function() {
+  return this.setFrontRight(undefined);
 };
 
 
 /**
- * optional bool rear_left = 7;
+ * Returns whether this field is set.
  * @return {boolean}
+ */
+proto.proto.ZEVPreconditioningConfigureSeats.prototype.hasFrontRight = function() {
+  return jspb.Message.getField(this, 6) != null;
+};
+
+
+/**
+ * optional google.protobuf.BoolValue rear_left = 7;
+ * @return {?proto.google.protobuf.BoolValue}
  */
 proto.proto.ZEVPreconditioningConfigureSeats.prototype.getRearLeft = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 7, false));
+  return /** @type{?proto.google.protobuf.BoolValue} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.BoolValue, 7));
 };
 
 
 /**
- * @param {boolean} value
+ * @param {?proto.google.protobuf.BoolValue|undefined} value
+ * @return {!proto.proto.ZEVPreconditioningConfigureSeats} returns this
+*/
+proto.proto.ZEVPreconditioningConfigureSeats.prototype.setRearLeft = function(value) {
+  return jspb.Message.setWrapperField(this, 7, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
  * @return {!proto.proto.ZEVPreconditioningConfigureSeats} returns this
  */
-proto.proto.ZEVPreconditioningConfigureSeats.prototype.setRearLeft = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 7, value);
+proto.proto.ZEVPreconditioningConfigureSeats.prototype.clearRearLeft = function() {
+  return this.setRearLeft(undefined);
 };
 
 
 /**
- * optional bool rear_right = 8;
+ * Returns whether this field is set.
  * @return {boolean}
  */
-proto.proto.ZEVPreconditioningConfigureSeats.prototype.getRearRight = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 8, false));
+proto.proto.ZEVPreconditioningConfigureSeats.prototype.hasRearLeft = function() {
+  return jspb.Message.getField(this, 7) != null;
 };
 
 
 /**
- * @param {boolean} value
+ * optional google.protobuf.BoolValue rear_right = 8;
+ * @return {?proto.google.protobuf.BoolValue}
+ */
+proto.proto.ZEVPreconditioningConfigureSeats.prototype.getRearRight = function() {
+  return /** @type{?proto.google.protobuf.BoolValue} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.BoolValue, 8));
+};
+
+
+/**
+ * @param {?proto.google.protobuf.BoolValue|undefined} value
+ * @return {!proto.proto.ZEVPreconditioningConfigureSeats} returns this
+*/
+proto.proto.ZEVPreconditioningConfigureSeats.prototype.setRearRight = function(value) {
+  return jspb.Message.setWrapperField(this, 8, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
  * @return {!proto.proto.ZEVPreconditioningConfigureSeats} returns this
  */
-proto.proto.ZEVPreconditioningConfigureSeats.prototype.setRearRight = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 8, value);
+proto.proto.ZEVPreconditioningConfigureSeats.prototype.clearRearRight = function() {
+  return this.setRearRight(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.ZEVPreconditioningConfigureSeats.prototype.hasRearRight = function() {
+  return jspb.Message.getField(this, 8) != null;
 };
 
 
@@ -11951,7 +12035,7 @@ proto.proto.TemperatureConfigure.toObject = function(includeInstance, msg) {
 temperaturePointsList: jspb.Message.toObjectList(msg.getTemperaturePointsList(),
     proto.proto.TemperatureConfigure.TemperaturePoint.toObject, includeInstance),
 userProfile: jspb.Message.getFieldWithDefault(msg, 2, ""),
-syncZonesToDriver: jspb.Message.getBooleanFieldWithDefault(msg, 3, false)
+syncZonesToDriver: (f = msg.getSyncZonesToDriver()) && google_protobuf_wrappers_pb.BoolValue.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -11998,7 +12082,8 @@ proto.proto.TemperatureConfigure.deserializeBinaryFromReader = function(msg, rea
       msg.setUserProfile(value);
       break;
     case 3:
-      var value = /** @type {boolean} */ (reader.readBool());
+      var value = new google_protobuf_wrappers_pb.BoolValue;
+      reader.readMessage(value,google_protobuf_wrappers_pb.BoolValue.deserializeBinaryFromReader);
       msg.setSyncZonesToDriver(value);
       break;
     default:
@@ -12046,10 +12131,11 @@ proto.proto.TemperatureConfigure.serializeBinaryToWriter = function(message, wri
     );
   }
   f = message.getSyncZonesToDriver();
-  if (f) {
-    writer.writeBool(
+  if (f != null) {
+    writer.writeMessage(
       3,
-      f
+      f,
+      google_protobuf_wrappers_pb.BoolValue.serializeBinaryToWriter
     );
   }
 };
@@ -12089,7 +12175,7 @@ proto.proto.TemperatureConfigure.TemperaturePoint.toObject = function(includeIns
   var f, obj = {
 zone: jspb.Message.getFieldWithDefault(msg, 1, 0),
 temperatureInCelsius: jspb.Message.getFloatingPointFieldWithDefault(msg, 3, 0.0),
-active: jspb.Message.getBooleanFieldWithDefault(msg, 4, false)
+active: (f = msg.getActive()) && google_protobuf_wrappers_pb.BoolValue.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -12135,7 +12221,8 @@ proto.proto.TemperatureConfigure.TemperaturePoint.deserializeBinaryFromReader = 
       msg.setTemperatureInCelsius(value);
       break;
     case 4:
-      var value = /** @type {boolean} */ (reader.readBool());
+      var value = new google_protobuf_wrappers_pb.BoolValue;
+      reader.readMessage(value,google_protobuf_wrappers_pb.BoolValue.deserializeBinaryFromReader);
       msg.setActive(value);
       break;
     default:
@@ -12182,10 +12269,11 @@ proto.proto.TemperatureConfigure.TemperaturePoint.serializeBinaryToWriter = func
     );
   }
   f = message.getActive();
-  if (f) {
-    writer.writeBool(
+  if (f != null) {
+    writer.writeMessage(
       4,
-      f
+      f,
+      google_protobuf_wrappers_pb.BoolValue.serializeBinaryToWriter
     );
   }
 };
@@ -12254,20 +12342,39 @@ proto.proto.TemperatureConfigure.TemperaturePoint.prototype.setTemperatureInCels
 
 
 /**
- * optional bool active = 4;
- * @return {boolean}
+ * optional google.protobuf.BoolValue active = 4;
+ * @return {?proto.google.protobuf.BoolValue}
  */
 proto.proto.TemperatureConfigure.TemperaturePoint.prototype.getActive = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 4, false));
+  return /** @type{?proto.google.protobuf.BoolValue} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.BoolValue, 4));
 };
 
 
 /**
- * @param {boolean} value
+ * @param {?proto.google.protobuf.BoolValue|undefined} value
+ * @return {!proto.proto.TemperatureConfigure.TemperaturePoint} returns this
+*/
+proto.proto.TemperatureConfigure.TemperaturePoint.prototype.setActive = function(value) {
+  return jspb.Message.setWrapperField(this, 4, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
  * @return {!proto.proto.TemperatureConfigure.TemperaturePoint} returns this
  */
-proto.proto.TemperatureConfigure.TemperaturePoint.prototype.setActive = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 4, value);
+proto.proto.TemperatureConfigure.TemperaturePoint.prototype.clearActive = function() {
+  return this.setActive(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.TemperatureConfigure.TemperaturePoint.prototype.hasActive = function() {
+  return jspb.Message.getField(this, 4) != null;
 };
 
 
@@ -12328,20 +12435,39 @@ proto.proto.TemperatureConfigure.prototype.setUserProfile = function(value) {
 
 
 /**
- * optional bool sync_zones_to_driver = 3;
- * @return {boolean}
+ * optional google.protobuf.BoolValue sync_zones_to_driver = 3;
+ * @return {?proto.google.protobuf.BoolValue}
  */
 proto.proto.TemperatureConfigure.prototype.getSyncZonesToDriver = function() {
-  return /** @type {boolean} */ (jspb.Message.getBooleanFieldWithDefault(this, 3, false));
+  return /** @type{?proto.google.protobuf.BoolValue} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.BoolValue, 3));
 };
 
 
 /**
- * @param {boolean} value
+ * @param {?proto.google.protobuf.BoolValue|undefined} value
+ * @return {!proto.proto.TemperatureConfigure} returns this
+*/
+proto.proto.TemperatureConfigure.prototype.setSyncZonesToDriver = function(value) {
+  return jspb.Message.setWrapperField(this, 3, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
  * @return {!proto.proto.TemperatureConfigure} returns this
  */
-proto.proto.TemperatureConfigure.prototype.setSyncZonesToDriver = function(value) {
-  return jspb.Message.setProto3BooleanField(this, 3, value);
+proto.proto.TemperatureConfigure.prototype.clearSyncZonesToDriver = function() {
+  return this.setSyncZonesToDriver(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.TemperatureConfigure.prototype.hasSyncZonesToDriver = function() {
+  return jspb.Message.getField(this, 3) != null;
 };
 
 
@@ -18258,13 +18384,6 @@ proto.proto.RemoteUpdateStart.prototype.setReleasepkgid = function(value) {
 
 
 
-/**
- * List of repeated fields within this message type.
- * @private {!Array<number>}
- * @const
- */
-proto.proto.ChargingConfigure.repeatedFields_ = [4];
-
 
 
 if (jspb.Message.GENERATE_TO_OBJECT) {
@@ -18299,7 +18418,7 @@ proto.proto.ChargingConfigure.toObject = function(includeInstance, msg) {
 action: jspb.Message.getFieldWithDefault(msg, 1, 0),
 dcChargingProfile: jspb.Message.getFieldWithDefault(msg, 2, 0),
 chargingProgram: (f = msg.getChargingProgram()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
-inletIdList: (f = jspb.Message.getRepeatedField(msg, 4)) == null ? undefined : f,
+inletId: (f = msg.getInletId()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
 maxSoc: (f = msg.getMaxSoc()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
 minSoc: (f = msg.getMinSoc()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
 targetSoc: (f = msg.getTargetSoc()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
@@ -18360,10 +18479,9 @@ proto.proto.ChargingConfigure.deserializeBinaryFromReader = function(msg, reader
       msg.setChargingProgram(value);
       break;
     case 4:
-      var values = /** @type {!Array<number>} */ (reader.isDelimited() ? reader.readPackedInt32() : [reader.readInt32()]);
-      for (var i = 0; i < values.length; i++) {
-        msg.addInletId(values[i]);
-      }
+      var value = new google_protobuf_wrappers_pb.Int32Value;
+      reader.readMessage(value,google_protobuf_wrappers_pb.Int32Value.deserializeBinaryFromReader);
+      msg.setInletId(value);
       break;
     case 5:
       var value = new google_protobuf_wrappers_pb.Int32Value;
@@ -18462,11 +18580,12 @@ proto.proto.ChargingConfigure.serializeBinaryToWriter = function(message, writer
       google_protobuf_wrappers_pb.Int32Value.serializeBinaryToWriter
     );
   }
-  f = message.getInletIdList();
-  if (f.length > 0) {
-    writer.writePackedInt32(
+  f = message.getInletId();
+  if (f != null) {
+    writer.writeMessage(
       4,
-      f
+      f,
+      google_protobuf_wrappers_pb.Int32Value.serializeBinaryToWriter
     );
   }
   f = message.getMaxSoc();
@@ -18650,8 +18769,8 @@ proto.proto.ChargingConfigure.ChargeSchedule.toObject = function(includeInstance
   var f, obj = {
 scheduleList: jspb.Message.toObjectList(msg.getScheduleList(),
     proto.proto.ChargingConfigure.ChargeSchedule.ChargeScheduleEntry.toObject, includeInstance),
-startTime: jspb.Message.getFieldWithDefault(msg, 2, 0),
-scheduleId: jspb.Message.getFieldWithDefault(msg, 3, 0),
+startTime: (f = msg.getStartTime()) && google_protobuf_wrappers_pb.Int64Value.toObject(includeInstance, f),
+scheduleId: (f = msg.getScheduleId()) && google_protobuf_wrappers_pb.Int32Value.toObject(includeInstance, f),
 useCaseId: jspb.Message.getFieldWithDefault(msg, 4, 0),
 offlineMode: jspb.Message.getFieldWithDefault(msg, 5, 0)
   };
@@ -18696,11 +18815,13 @@ proto.proto.ChargingConfigure.ChargeSchedule.deserializeBinaryFromReader = funct
       msg.addSchedule(value);
       break;
     case 2:
-      var value = /** @type {number} */ (reader.readInt64());
+      var value = new google_protobuf_wrappers_pb.Int64Value;
+      reader.readMessage(value,google_protobuf_wrappers_pb.Int64Value.deserializeBinaryFromReader);
       msg.setStartTime(value);
       break;
     case 3:
-      var value = /** @type {number} */ (reader.readInt32());
+      var value = new google_protobuf_wrappers_pb.Int32Value;
+      reader.readMessage(value,google_protobuf_wrappers_pb.Int32Value.deserializeBinaryFromReader);
       msg.setScheduleId(value);
       break;
     case 4:
@@ -18749,17 +18870,19 @@ proto.proto.ChargingConfigure.ChargeSchedule.serializeBinaryToWriter = function(
     );
   }
   f = message.getStartTime();
-  if (f !== 0) {
-    writer.writeInt64(
+  if (f != null) {
+    writer.writeMessage(
       2,
-      f
+      f,
+      google_protobuf_wrappers_pb.Int64Value.serializeBinaryToWriter
     );
   }
   f = message.getScheduleId();
-  if (f !== 0) {
-    writer.writeInt32(
+  if (f != null) {
+    writer.writeMessage(
       3,
-      f
+      f,
+      google_protobuf_wrappers_pb.Int32Value.serializeBinaryToWriter
     );
   }
   f = message.getUseCaseId();
@@ -18933,38 +19056,76 @@ proto.proto.ChargingConfigure.ChargeSchedule.prototype.clearScheduleList = funct
 
 
 /**
- * optional int64 start_time = 2;
- * @return {number}
+ * optional google.protobuf.Int64Value start_time = 2;
+ * @return {?proto.google.protobuf.Int64Value}
  */
 proto.proto.ChargingConfigure.ChargeSchedule.prototype.getStartTime = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 2, 0));
+  return /** @type{?proto.google.protobuf.Int64Value} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.Int64Value, 2));
 };
 
 
 /**
- * @param {number} value
+ * @param {?proto.google.protobuf.Int64Value|undefined} value
+ * @return {!proto.proto.ChargingConfigure.ChargeSchedule} returns this
+*/
+proto.proto.ChargingConfigure.ChargeSchedule.prototype.setStartTime = function(value) {
+  return jspb.Message.setWrapperField(this, 2, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
  * @return {!proto.proto.ChargingConfigure.ChargeSchedule} returns this
  */
-proto.proto.ChargingConfigure.ChargeSchedule.prototype.setStartTime = function(value) {
-  return jspb.Message.setProto3IntField(this, 2, value);
+proto.proto.ChargingConfigure.ChargeSchedule.prototype.clearStartTime = function() {
+  return this.setStartTime(undefined);
 };
 
 
 /**
- * optional int32 schedule_id = 3;
- * @return {number}
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.ChargingConfigure.ChargeSchedule.prototype.hasStartTime = function() {
+  return jspb.Message.getField(this, 2) != null;
+};
+
+
+/**
+ * optional google.protobuf.Int32Value schedule_id = 3;
+ * @return {?proto.google.protobuf.Int32Value}
  */
 proto.proto.ChargingConfigure.ChargeSchedule.prototype.getScheduleId = function() {
-  return /** @type {number} */ (jspb.Message.getFieldWithDefault(this, 3, 0));
+  return /** @type{?proto.google.protobuf.Int32Value} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.Int32Value, 3));
 };
 
 
 /**
- * @param {number} value
+ * @param {?proto.google.protobuf.Int32Value|undefined} value
+ * @return {!proto.proto.ChargingConfigure.ChargeSchedule} returns this
+*/
+proto.proto.ChargingConfigure.ChargeSchedule.prototype.setScheduleId = function(value) {
+  return jspb.Message.setWrapperField(this, 3, value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
  * @return {!proto.proto.ChargingConfigure.ChargeSchedule} returns this
  */
-proto.proto.ChargingConfigure.ChargeSchedule.prototype.setScheduleId = function(value) {
-  return jspb.Message.setProto3IntField(this, 3, value);
+proto.proto.ChargingConfigure.ChargeSchedule.prototype.clearScheduleId = function() {
+  return this.setScheduleId(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.ChargingConfigure.ChargeSchedule.prototype.hasScheduleId = function() {
+  return jspb.Message.getField(this, 3) != null;
 };
 
 
@@ -19078,39 +19239,39 @@ proto.proto.ChargingConfigure.prototype.hasChargingProgram = function() {
 
 
 /**
- * repeated int32 inlet_id = 4;
- * @return {!Array<number>}
+ * optional google.protobuf.Int32Value inlet_id = 4;
+ * @return {?proto.google.protobuf.Int32Value}
  */
-proto.proto.ChargingConfigure.prototype.getInletIdList = function() {
-  return /** @type {!Array<number>} */ (jspb.Message.getRepeatedField(this, 4));
+proto.proto.ChargingConfigure.prototype.getInletId = function() {
+  return /** @type{?proto.google.protobuf.Int32Value} */ (
+    jspb.Message.getWrapperField(this, google_protobuf_wrappers_pb.Int32Value, 4));
 };
 
 
 /**
- * @param {!Array<number>} value
+ * @param {?proto.google.protobuf.Int32Value|undefined} value
  * @return {!proto.proto.ChargingConfigure} returns this
- */
-proto.proto.ChargingConfigure.prototype.setInletIdList = function(value) {
-  return jspb.Message.setField(this, 4, value || []);
+*/
+proto.proto.ChargingConfigure.prototype.setInletId = function(value) {
+  return jspb.Message.setWrapperField(this, 4, value);
 };
 
 
 /**
- * @param {number} value
- * @param {number=} opt_index
+ * Clears the message field making it undefined.
  * @return {!proto.proto.ChargingConfigure} returns this
  */
-proto.proto.ChargingConfigure.prototype.addInletId = function(value, opt_index) {
-  return jspb.Message.addToRepeatedField(this, 4, value, opt_index);
+proto.proto.ChargingConfigure.prototype.clearInletId = function() {
+  return this.setInletId(undefined);
 };
 
 
 /**
- * Clears the list making it empty but non-null.
- * @return {!proto.proto.ChargingConfigure} returns this
+ * Returns whether this field is set.
+ * @return {boolean}
  */
-proto.proto.ChargingConfigure.prototype.clearInletIdList = function() {
-  return this.setInletIdList([]);
+proto.proto.ChargingConfigure.prototype.hasInletId = function() {
+  return jspb.Message.getField(this, 4) != null;
 };
 
 

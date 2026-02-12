@@ -792,8 +792,8 @@ message ChargeProgramParameters {
   bool weekly_profile = 5 [ json_name = "weeklyprofile" ];
   bool clockTimer = 6 [ json_name = "clockTimer" ];
   int32 max_charging_current = 7 [ json_name = "MaxChargingCurrent" ];
-  // APK: eco_charging = field 9 (not 8)
-  bool eco_charging = 9 [ json_name = "EcoCharging" ];
+  // APK: eco_charging = field 9, uses BOOL_VALUE wrapper
+  google.protobuf.BoolValue eco_charging = 9 [ json_name = "EcoCharging" ];
 }
 
 // Same as VehicleAPI.AttributeStatus but with slightly different names. The VehicleAPI.AttributeStatus enum values
@@ -843,14 +843,14 @@ message VVRTimeProfile {
   //   12 = External Apps
   int32 application_identifier = 6 [ json_name = "applicationId" ];
 
-  // Hour after midnight range [0, 23]
-  int32 hour = 7 [json_name = "hour" ];
+  // Hour after midnight range [0, 23] - APK uses INT32_VALUE wrapper
+  google.protobuf.Int32Value hour = 7 [json_name = "hour" ];
 
-  // Minute after full hour range [0, 59]
-  int32 minute = 8 [json_name = "min" ];
+  // Minute after full hour range [0, 59] - APK uses INT32_VALUE wrapper
+  google.protobuf.Int32Value minute = 8 [json_name = "min" ];
 
-  // Whether this profile entry is active or not
-  bool active = 9 [json_name = "active" ];
+  // Whether this profile entry is active or not - APK uses BOOL_VALUE wrapper
+  google.protobuf.BoolValue active = 9 [json_name = "active" ];
 
   // Additional fields from APK
   bool is_learned_time = 10;
@@ -858,11 +858,11 @@ message VVRTimeProfile {
   WeeklyProfileScheduleType schedule_type = 12;
 }
 
-// ActionList for VVRTimeProfile
+// ActionList for VVRTimeProfile - APK uses BOOL_VALUE wrappers
 message ActionList {
-  bool charging = 1;
-  bool precond = 2;
-  bool battery_precond = 3;
+  google.protobuf.BoolValue charging = 1;
+  google.protobuf.BoolValue precond = 2;
+  google.protobuf.BoolValue battery_precond = 3;
 }
 
 enum WeeklyProfileScheduleType {

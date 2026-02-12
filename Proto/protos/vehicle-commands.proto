@@ -341,11 +341,11 @@ message ZEVPreconditioningConfigureSeats {
   bool precond_seat_front_right = 2 [deprecated = true, json_name = "precondSeatFrontRight"];
   bool precond_seat_rear_left = 3 [deprecated = true, json_name = "precondSeatRearLeft"];
   bool precond_seat_rear_right = 4 [deprecated = true, json_name = "precondSeatRearRight"];
-  // New APK fields (Feb 2026)
-  bool front_left = 5 [ json_name = "frontLeft" ];
-  bool front_right = 6 [ json_name = "frontRight" ];
-  bool rear_left = 7 [ json_name = "rearLeft" ];
-  bool rear_right = 8 [ json_name = "rearRight" ];
+  // New APK fields (Feb 2026) - APK uses BOOL_VALUE wrappers
+  google.protobuf.BoolValue front_left = 5 [ json_name = "frontLeft" ];
+  google.protobuf.BoolValue front_right = 6 [ json_name = "frontRight" ];
+  google.protobuf.BoolValue rear_left = 7 [ json_name = "rearLeft" ];
+  google.protobuf.BoolValue rear_right = 8 [ json_name = "rearRight" ];
   string user_profile = 9 [ json_name = "userProfile" ];
 }
 
@@ -496,12 +496,12 @@ message TemperatureConfigure {
     Zone zone = 1 [ json_name = "zone" ];
 
     double temperature_in_celsius = 3 [ json_name = "temp" ];
-    bool active = 4;  // APK Feb 2026
+    google.protobuf.BoolValue active = 4;  // APK uses BOOL_VALUE wrapper
   }
 
   repeated TemperaturePoint temperature_points = 1 [ json_name = "temperaturePoints" ];
   string user_profile = 2 [ json_name = "userProfile" ];
-  bool sync_zones_to_driver = 3 [ json_name = "syncZonesToDriver" ];
+  google.protobuf.BoolValue sync_zones_to_driver = 3 [ json_name = "syncZonesToDriver" ];  // APK uses BOOL_VALUE
 }
 
 // Set the weekprofile for the weekly departure time settings
@@ -864,7 +864,7 @@ message ChargingConfigure {
   Action action = 1 [ json_name = "action" ];
   DcChargingProfile dc_charging_profile = 2 [ json_name = "dcChargingProfile" ];
   google.protobuf.Int32Value charging_program = 3 [ json_name = "chargingProgram" ];
-  repeated int32 inlet_id = 4 [ json_name = "inletId" ];
+  google.protobuf.Int32Value inlet_id = 4 [ json_name = "inletId" ];  // APK uses INT32_VALUE wrapper
   google.protobuf.Int32Value max_soc = 5 [ json_name = "maxSoc" ];
   google.protobuf.Int32Value min_soc = 6 [ json_name = "minSoc" ];
   google.protobuf.Int32Value target_soc = 9 [ json_name = "targetSoc" ];
@@ -873,11 +873,11 @@ message ChargingConfigure {
   ChargeSchedule chargeSchedule = 13 [ json_name = "chargeSchedule" ];
   google.protobuf.Int32Value charging_location_id = 14 [ json_name = "chargingLocationId" ];
 
-  // Nested message for charge scheduling
+  // Nested message for charge scheduling - APK uses wrapper types
   message ChargeSchedule {
     repeated ChargeScheduleEntry schedule = 1;
-    int64 start_time = 2;
-    int32 schedule_id = 3;
+    google.protobuf.Int64Value start_time = 2;  // APK uses INT64_VALUE wrapper
+    google.protobuf.Int32Value schedule_id = 3;  // APK uses INT32_VALUE wrapper
     UseCaseId use_case_id = 4;
     OfflineMode offline_mode = 5;
 

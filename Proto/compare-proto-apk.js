@@ -69,7 +69,7 @@ function parseProtoFile(protoPath) {
     return messages;
 }
 
-// Extract fields from message body
+// Extract fields from message body (with types)
 function extractFields(body) {
     const fields = {};
     const lines = body.split('\n');
@@ -81,73 +81,180 @@ function extractFields(body) {
             trimmed.startsWith('reserved') || trimmed.startsWith('option')) continue;
 
         // Match: [repeated] type name = number
-        const fieldMatch = trimmed.match(/^(?:repeated\s+)?(?:map<[^>]+>|[\w.]+)\s+(\w+)\s*=\s*(\d+)/);
+        const fieldMatch = trimmed.match(/^(?:repeated\s+)?(map<[^>]+>|[\w.]+)\s+(\w+)\s*=\s*(\d+)/);
         if (fieldMatch) {
-            fields[fieldMatch[1]] = parseInt(fieldMatch[2]);
+            fields[fieldMatch[2]] = {
+                tag: parseInt(fieldMatch[3]),
+                type: fieldMatch[1]
+            };
         }
     }
 
     return fields;
 }
 
-// Parse Wire ADAPTER smali file - extract fields from encode() method
+// Wire type mappings from ProtoAdapter
+const WIRE_TYPE_MAP = {
+    'BOOL': 'bool',
+    'BOOL_VALUE': 'google.protobuf.BoolValue',
+    'INT32': 'int32',
+    'INT32_VALUE': 'google.protobuf.Int32Value',
+    'INT64': 'int64',
+    'INT64_VALUE': 'google.protobuf.Int64Value',
+    'UINT32': 'uint32',
+    'UINT32_VALUE': 'google.protobuf.UInt32Value',
+    'UINT64': 'uint64',
+    'UINT64_VALUE': 'google.protobuf.UInt64Value',
+    'FLOAT': 'float',
+    'FLOAT_VALUE': 'google.protobuf.FloatValue',
+    'DOUBLE': 'double',
+    'DOUBLE_VALUE': 'google.protobuf.DoubleValue',
+    'STRING': 'string',
+    'STRING_VALUE': 'google.protobuf.StringValue',
+    'BYTES': 'bytes',
+    'BYTES_VALUE': 'google.protobuf.BytesValue',
+};
+
+// Parse Wire ADAPTER smali file - extract fields from decode() method (more reliable for types)
 function parseAdapterSmali(smaliPath) {
     if (!fs.existsSync(smaliPath)) return null;
 
     const content = fs.readFileSync(smaliPath, 'utf8');
     const fields = {};
 
-    // Find encode method with ProtoWriter (forward encode)
-    const encodeMatch = content.match(/\.method public encode\(Lcom\/squareup\/wire\/ProtoWriter;[^)]*\)V[\s\S]*?\.end method/);
-    if (!encodeMatch) return null;
+    // Parse decode() method - it has clear tag->type mapping
+    const decodeMatch = content.match(/\.method public decode\(Lcom\/squareup\/wire\/ProtoReader;\)[^\n]+[\s\S]*?\.end method/);
+    if (decodeMatch) {
+        const decodeBody = decodeMatch[0];
+        const lines = decodeBody.split('\n');
 
-    const encodeBody = encodeMatch[0];
-    const lines = encodeBody.split('\n');
+        let currentTag = null;
 
-    // Strategy: find pattern const/4 -> getter -> encodeWithTag
-    // Pattern: const/4 vX, TAG ... getFieldName() ... encodeWithTag(ProtoWriter)
-    let currentTag = null;
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i];
 
-    for (let i = 0; i < lines.length; i++) {
-        const line = lines[i];
-
-        // Look for const with tag number
-        const constMatch = line.match(/const\/(?:4|16)\s+[vp]\d+,\s*(0x[0-9a-fA-F]+|-?\d+)/);
-        if (constMatch) {
-            let tagNum = constMatch[1];
-            if (tagNum.startsWith('0x')) {
-                tagNum = parseInt(tagNum, 16);
-            } else {
-                tagNum = parseInt(tagNum);
-            }
-            if (tagNum > 0 && tagNum < 100) {
-                currentTag = tagNum;
-            }
-        }
-
-        // Look for getter method just before encodeWithTag
-        const getterMatch = line.match(/invoke-virtual\s+\{[^}]+\},\s*[^;]+;->get(\w+)\(\)/);
-        if (getterMatch && currentTag) {
-            // Check if encodeWithTag(ProtoWriter) follows within 5 lines
-            let hasEncodeWithTag = false;
-            for (let j = i + 1; j < Math.min(i + 6, lines.length); j++) {
-                if (lines[j].includes('encodeWithTag') && lines[j].includes('ProtoWriter')) {
-                    hasEncodeWithTag = true;
-                    break;
+            // Look for if-eq comparisons with tag constants: if-eq v3, v7 where v7 was set to tag
+            // Pattern: const/4 vX, TAG ... if-eq vY, vX
+            const constMatch = line.match(/const\/(?:4|16)\s+([vp]\d+),\s*(0x[0-9a-fA-F]+|-?\d+)/);
+            if (constMatch) {
+                let tagNum = constMatch[2];
+                if (tagNum.startsWith('0x')) {
+                    tagNum = parseInt(tagNum, 16);
+                } else {
+                    tagNum = parseInt(tagNum);
+                }
+                if (tagNum > 0 && tagNum < 100) {
+                    currentTag = tagNum;
                 }
             }
-            if (hasEncodeWithTag) {
-                let fieldName = getterMatch[1];
-                fieldName = fieldName.replace(/([A-Z])/g, '_$1').toLowerCase();
-                if (fieldName.startsWith('_')) fieldName = fieldName.substring(1);
-                fields[fieldName] = { tag: currentTag };
-                currentTag = null; // Reset after use
+
+            // Look for ProtoAdapter type access after if-eq: sget-object ProtoAdapter;->TYPE
+            const typeMatch = line.match(/sget-object\s+[^,]+,\s*Lcom\/squareup\/wire\/ProtoAdapter;->(\w+):/);
+            if (typeMatch && currentTag) {
+                const wireType = typeMatch[1];
+                const protoType = WIRE_TYPE_MAP[wireType] || wireType.toLowerCase();
+
+                // Find field name from constructor call or move instruction
+                // Look backwards for the label/cond that started this block
+                let fieldName = null;
+                for (let j = i - 1; j >= Math.max(0, i - 10); j--) {
+                    // Look for label like :cond_0
+                    if (lines[j].match(/^\s*:cond_\d+/)) {
+                        // Now search forward from label to find move-object with field hint
+                        for (let k = j; k < i; k++) {
+                            const moveMatch = lines[k].match(/move-object\s+([vp]\d+),\s+([vp]\d+)/);
+                            if (moveMatch) {
+                                // Check if there's a constructor reference nearby
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+
+                // Store with tag (we'll match by tag later)
+                if (!fields[`__tag_${currentTag}`]) {
+                    fields[`__tag_${currentTag}`] = { tag: currentTag, type: protoType };
+                }
+                currentTag = null;
             }
         }
+    }
 
-        // Reset on method end or other methods
-        if (line.includes('.end method') || line.includes('.method ')) {
-            currentTag = null;
+    // Parse encode() method to get field names with types
+    // Pattern: sget-object ProtoAdapter->TYPE ... const/4 TAG ... getter ... encodeWithTag
+    const encodeMatch = content.match(/\.method public encode\(Lcom\/squareup\/wire\/ProtoWriter;[^)]*\)V[\s\S]*?\.end method/);
+    if (encodeMatch) {
+        const encodeBody = encodeMatch[0];
+        const lines = encodeBody.split('\n');
+
+        let currentType = null;
+        let currentTag = null;
+
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i];
+
+            // Look for ProtoAdapter type (comes first): sget-object ProtoAdapter;->TYPE
+            const typeMatch = line.match(/sget-object\s+[^,]+,\s*Lcom\/squareup\/wire\/ProtoAdapter;->(\w+):/);
+            if (typeMatch) {
+                const wireType = typeMatch[1];
+                currentType = WIRE_TYPE_MAP[wireType] || wireType.toLowerCase();
+            }
+
+            // Look for const with tag number (comes after type)
+            const constMatch = line.match(/const\/(?:4|16)\s+[vp]\d+,\s*(0x[0-9a-fA-F]+|-?\d+)/);
+            if (constMatch) {
+                let tagNum = constMatch[1];
+                if (tagNum.startsWith('0x')) {
+                    tagNum = parseInt(tagNum, 16);
+                } else {
+                    tagNum = parseInt(tagNum);
+                }
+                if (tagNum > 0 && tagNum < 100) {
+                    currentTag = tagNum;
+                }
+            }
+
+            // Look for getter method followed by encodeWithTag
+            const getterMatch = line.match(/invoke-virtual\s+\{[^}]+\},\s*[^;]+;->get(\w+)\(\)/);
+            if (getterMatch) {
+                // Check if encodeWithTag follows within 5 lines
+                let hasEncodeWithTag = false;
+                for (let j = i + 1; j < Math.min(i + 6, lines.length); j++) {
+                    if (lines[j].includes('encodeWithTag')) {
+                        hasEncodeWithTag = true;
+                        break;
+                    }
+                }
+                if (hasEncodeWithTag && currentTag) {
+                    let fieldName = getterMatch[1];
+                    fieldName = fieldName.replace(/([A-Z])/g, '_$1').toLowerCase();
+                    if (fieldName.startsWith('_')) fieldName = fieldName.substring(1);
+
+                    // Store field with tag and type
+                    fields[fieldName] = {
+                        tag: currentTag,
+                        type: currentType
+                    };
+
+                    // Reset for next field
+                    currentTag = null;
+                    currentType = null;
+                }
+            }
+
+            // Reset on method end
+            if (line.includes('.end method')) {
+                currentTag = null;
+                currentType = null;
+            }
+        }
+    }
+
+    // Remove temporary __tag_ entries
+    for (const key of Object.keys(fields)) {
+        if (key.startsWith('__tag_')) {
+            delete fields[key];
         }
     }
 
@@ -221,12 +328,15 @@ function listAllSmaliMessages(smaliDirs) {
     return Array.from(messages);
 }
 
-// Compare and print results
+// Compare and print results (including type comparison)
 function compare(protoName, protoFields, smaliFields) {
-    const results = { matches: [], mismatches: [], missingInProto: [], missingInSmali: [] };
+    const results = { matches: [], mismatches: [], typeMismatches: [], missingInProto: [], missingInSmali: [] };
 
     if (!smaliFields || Object.keys(smaliFields).length === 0) {
-        results.missingInSmali = Object.entries(protoFields).map(([f, t]) => ({ field: f, tag: t }));
+        results.missingInSmali = Object.entries(protoFields).map(([f, data]) => ({
+            field: f,
+            tag: typeof data === 'object' ? data.tag : data
+        }));
         return results;
     }
 
@@ -235,28 +345,36 @@ function compare(protoName, protoFields, smaliFields) {
     const smaliNorm = {};
     for (const [name, data] of Object.entries(smaliFields)) {
         const tag = typeof data === 'object' ? data.tag : data;
-        smaliNorm[normalize(name)] = { name, tag, type: data.type };
+        const type = typeof data === 'object' ? data.type : null;
+        smaliNorm[normalize(name)] = { name, tag, type };
     }
 
     const protoNorm = {};
-    for (const [name, tag] of Object.entries(protoFields)) {
-        protoNorm[normalize(name)] = { name, tag };
+    for (const [name, data] of Object.entries(protoFields)) {
+        const tag = typeof data === 'object' ? data.tag : data;
+        const type = typeof data === 'object' ? data.type : null;
+        protoNorm[normalize(name)] = { name, tag, type };
     }
 
     for (const [norm, proto] of Object.entries(protoNorm)) {
         const smali = smaliNorm[norm];
         if (smali) {
-            if (proto.tag === smali.tag) {
-                results.matches.push({ field: proto.name, tag: proto.tag });
-            } else {
+            if (proto.tag !== smali.tag) {
                 results.mismatches.push({
                     field: proto.name, protoTag: proto.tag,
                     smaliTag: smali.tag, smaliName: smali.name
                 });
+            } else if (smali.type && proto.type && !typesMatch(proto.type, smali.type)) {
+                results.typeMismatches.push({
+                    field: proto.name, tag: proto.tag,
+                    protoType: proto.type, smaliType: smali.type
+                });
+            } else {
+                results.matches.push({ field: proto.name, tag: proto.tag, type: proto.type });
             }
             delete smaliNorm[norm];
         } else {
-            results.missingInSmali.push({ field: proto.name, tag: proto.tag });
+            results.missingInSmali.push({ field: proto.name, tag: proto.tag, type: proto.type });
         }
     }
 
@@ -267,8 +385,36 @@ function compare(protoName, protoFields, smaliFields) {
     return results;
 }
 
+// Check if proto type matches smali type
+function typesMatch(protoType, smaliType) {
+    if (!protoType || !smaliType) return true; // Can't compare if missing
+
+    // Normalize types for comparison
+    const normalize = t => t.toLowerCase().replace(/^google\.protobuf\./, '').replace('value', '_value');
+
+    const pNorm = normalize(protoType);
+    const sNorm = normalize(smaliType);
+
+    // Direct match
+    if (pNorm === sNorm) return true;
+
+    // Wrapper type matching: bool vs bool_value
+    if (pNorm + '_value' === sNorm) return false; // Proto has primitive, APK has wrapper
+    if (pNorm === sNorm + '_value') return false; // Proto has wrapper, APK has primitive
+
+    // Same base type
+    if (pNorm.replace('_value', '') === sNorm.replace('_value', '')) {
+        // Both are same base but one is wrapper
+        return pNorm.includes('_value') === sNorm.includes('_value');
+    }
+
+    return true; // Unknown types, assume match
+}
+
 function printResults(name, results, verbose) {
-    const hasIssues = results.mismatches.length > 0 || results.missingInProto.length > 0;
+    const hasIssues = results.mismatches.length > 0 ||
+                      results.typeMismatches.length > 0 ||
+                      results.missingInProto.length > 0;
 
     if (!hasIssues && !verbose) return false;
 
@@ -282,17 +428,24 @@ function printResults(name, results, verbose) {
         }
     }
 
+    if (results.typeMismatches.length > 0) {
+        console.log('\n[TYPE MISMATCH] Type differences:');
+        for (const m of results.typeMismatches) {
+            console.log(`  ${m.field} (tag=${m.tag}): proto=${m.protoType}, APK=${m.smaliType}`);
+        }
+    }
+
     if (results.missingInProto.length > 0) {
         console.log('\n[MISSING IN PROTO] Fields in APK:');
         for (const m of results.missingInProto) {
-            console.log(`  ${m.field} = ${m.tag}`);
+            console.log(`  ${m.field} = ${m.tag}${m.type ? ` (${m.type})` : ''}`);
         }
     }
 
     if (verbose && results.missingInSmali.length > 0) {
         console.log('\n[MISSING IN APK] Fields in proto:');
         for (const m of results.missingInSmali) {
-            console.log(`  ${m.field} = ${m.tag}`);
+            console.log(`  ${m.field} = ${m.tag}${m.type ? ` (${m.type})` : ''}`);
         }
     }
 
