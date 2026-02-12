@@ -792,8 +792,8 @@ message ChargeProgramParameters {
   bool weekly_profile = 5 [ json_name = "weeklyprofile" ];
   bool clockTimer = 6 [ json_name = "clockTimer" ];
   int32 max_charging_current = 7 [ json_name = "MaxChargingCurrent" ];
-  // APK: eco_charging = field 9, uses BOOL_VALUE wrapper
-  google.protobuf.BoolValue eco_charging = 9 [ json_name = "EcoCharging" ];
+  // Server sendet bool field=8 (Original mbapi-proto), NICHT BoolValue field=9 (APK)
+  bool eco_charging = 8 [ json_name = "EcoCharging" ];
 }
 
 // Same as VehicleAPI.AttributeStatus but with slightly different names. The VehicleAPI.AttributeStatus enum values
@@ -830,29 +830,31 @@ message WeeklyProfileValue {
   int32 max_number_of_time_profiles_user = 8 [ json_name = "maxNumberOfTimeProfilesUser" ];
 }
 
-// VVRTimeProfile - field tags from Mercedes APK (Feb 2026)
+// VVRTimeProfile - KORRIGIERT: Server sendet primitive Typen mit Original-Feldnummern
+// APK definiert Wrapper-Typen (Int32Value, BoolValue) mit anderen Feldnummern (7,8,9)
+// aber der Server sendet int32/bool mit Feldnummern 2,3,5 - siehe .docu/mbapi-proto/Proto/
 message VVRTimeProfile {
   // unique id of this time profile entry
   int32 identifier = 1 [ json_name = "id" ];
 
+  // Hour after midnight range [0, 23] - Server sendet int32, NICHT Int32Value!
+  int32 hour = 2 [json_name = "hour" ];
+
+  // Minute after full hour range [0, 59] - Server sendet int32, NICHT Int32Value!
+  int32 minute = 3 [json_name = "min" ];
+
   // Days for which the above time should be applied
   repeated TimeProfileDay days = 4 [json_name = "day" ];
+
+  // Whether this profile entry is active or not - Server sendet bool, NICHT BoolValue!
+  bool active = 5 [json_name = "active" ];
 
   // If a timeProfile is changed or added the respective applicationId must be provided by SDK
   //   11 = Internal Apps
   //   12 = External Apps
   int32 application_identifier = 6 [ json_name = "applicationId" ];
 
-  // Hour after midnight range [0, 23] - APK uses INT32_VALUE wrapper
-  google.protobuf.Int32Value hour = 7 [json_name = "hour" ];
-
-  // Minute after full hour range [0, 59] - APK uses INT32_VALUE wrapper
-  google.protobuf.Int32Value minute = 8 [json_name = "min" ];
-
-  // Whether this profile entry is active or not - APK uses BOOL_VALUE wrapper
-  google.protobuf.BoolValue active = 9 [json_name = "active" ];
-
-  // Additional fields from APK
+  // Additional fields from APK (werden vom Server nicht gesendet, verursachen keine Parse-Fehler)
   bool is_learned_time = 10;
   repeated ActionList action_list = 11;
   WeeklyProfileScheduleType schedule_type = 12;

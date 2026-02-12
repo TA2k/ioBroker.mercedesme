@@ -1829,7 +1829,10 @@ class Mercedesme extends utils.Adapter {
     }
     this.wsHeartbeatTimeout = setTimeout(() => {
       this.log.info("No Data since " + this.config.reconnectDelay + " seconds. Lost WebSocket connection.");
-      this.scheduleReconnect();
+      // Call connectWS directly to avoid double delay (scheduleReconnect adds another delay)
+      this.safeCloseWs();
+      this.log.info("Reconnect WebSocket. Reconnects Today: " + this.wsReconnectCounter);
+      this.connectWS();
     }, this.config.reconnectDelay * 1000);
   }
 
@@ -1849,10 +1852,9 @@ class Mercedesme extends utils.Adapter {
 
   // Schedule reconnect after disconnect
   scheduleReconnect() {
-    this.wsReconnectCounter++;
-    this.log.info("Reconnect WebSocket. Reconnects Today: " + this.wsReconnectCounter);
     this.safeCloseWs();
     setTimeout(() => {
+      this.log.info("Scheduled Reconnect WebSocket. Reconnects Today: " + this.wsReconnectCounter);
       this.connectWS();
     }, this.config.reconnectDelay * 1000);
   }
