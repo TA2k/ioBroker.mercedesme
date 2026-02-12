@@ -1995,7 +1995,7 @@ class Mercedesme extends utils.Adapter {
       clearInterval(this.reconnectInterval);
       this.resetHeartbeatTimeout();
 
-      // Start client-side ping interval to keep connection alive (every 25 seconds)
+      // Start client-side ping interval to keep connection alive (every 6 seconds like APK)
       if (this.wsPingInterval) {
         clearInterval(this.wsPingInterval);
       }
@@ -2006,7 +2006,7 @@ class Mercedesme extends utils.Adapter {
           // Masked ping frame: opcode 9, mask bit set, 0 payload
           this.wsSocket.write(Buffer.concat([Buffer.from([0x89, 0x80]), mask]));
         }
-      }, 25000);
+      }, 6000);
 
       let buffer = Buffer.alloc(0);
 
