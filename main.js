@@ -52,8 +52,6 @@ class Mercedesme extends utils.Adapter {
     this.wsHeartbeatTimeout = null;
     this.wsPingInterval = null;
     this.wsReconnectCounter = 0;
-
-    this.reconnectInterval = null;
     this.xSession = uuidv4();
     this.xTracking = uuidv4();
     this.deviceuuid = uuidv4();
@@ -389,7 +387,6 @@ class Mercedesme extends utils.Adapter {
   onUnload(callback) {
     try {
       clearInterval(this.refreshTokenInterval);
-      clearInterval(this.reconnectInterval);
       clearTimeout(this.retryTimeout);
       clearTimeout(this.reLoginTimeout);
       clearTimeout(this.wsHeartbeatTimeout);
@@ -1827,13 +1824,12 @@ class Mercedesme extends utils.Adapter {
     if (this.wsHeartbeatTimeout) {
       clearTimeout(this.wsHeartbeatTimeout);
     }
+    //wait 60s for heartbeat response, if not received trigger reconnect 
     this.wsHeartbeatTimeout = setTimeout(() => {
-      this.log.info("No Data since " + this.config.reconnectDelay + " seconds. Lost WebSocket connection.");
-      // Call connectWS directly to avoid double delay (scheduleReconnect adds another delay)
+      this.log.debug(`Heartbeat timeout after 60s - triggering reconnect`);
       this.safeCloseWs();
-      this.log.info("Reconnect WebSocket. Reconnects Today: " + this.wsReconnectCounter);
       this.connectWS();
-    }, this.config.reconnectDelay * 1000);
+    },60 * 1000);
   }
 
   // Cleanup WebSocket connection state
@@ -1851,12 +1847,14 @@ class Mercedesme extends utils.Adapter {
   }
 
   // Schedule reconnect after disconnect
-  scheduleReconnect() {
+  scheduleReconnect(reason) {
     this.safeCloseWs();
+    const delay = this.config.reconnectDelay || 300;
+    this.log.debug(`Scheduling reconnect in ${delay}s (reason: ${reason || "unknown"})`);
     setTimeout(() => {
-      this.log.info("Scheduled Reconnect WebSocket. Reconnects Today: " + this.wsReconnectCounter);
+      this.log.debug(`Reconnect timer fired (reason: ${reason || "unknown"})`);
       this.connectWS();
-    }, this.config.reconnectDelay * 1000);
+    }, delay * 1000);
   }
 
   // WebSocket frame sending (masked as per RFC 6455)
@@ -1931,16 +1929,18 @@ class Mercedesme extends utils.Adapter {
 
   connectWS() {
     this.wsReconnectCounter++;
-    clearInterval(this.wsPingInterval);
-    clearInterval(this.reconnectInterval);
+    this.log.info("Connecting to WebSocket. Reconnects Today: " + this.wsReconnectCounter);
 
-    this.reconnectInterval = setInterval(
-      () => {
-        this.log.info("Try to reconnect");
-        this.connectWS();
-      },
-      5 * 60 * 1000,
-    ); // 5min
+    // Clean up any existing connection and timers
+    this.safeCloseWs();
+    if (this.wsPingInterval) {
+      clearInterval(this.wsPingInterval);
+      this.wsPingInterval = null;
+    }
+    if (this.wsHeartbeatTimeout) {
+      clearTimeout(this.wsHeartbeatTimeout);
+      this.wsHeartbeatTimeout = null;
+    }
 
     // Generate WebSocket key
     const wsKey = crypto.randomBytes(16).toString("base64");
@@ -1987,12 +1987,10 @@ class Mercedesme extends utils.Adapter {
 
     const req = https.request(options);
 
-    req.on("upgrade", (res, socket, head) => {
+    req.on("upgrade", (res, socket) => {
       this.log.debug("WebSocket connected");
-      this.log.silly(head.toString("hex"));
       this.wsSocket = socket;
       this.setState("info.connection", true, true);
-      clearInterval(this.reconnectInterval);
       this.resetHeartbeatTimeout();
 
       // Start client-side ping interval to keep connection alive (every 6 seconds like APK)
@@ -2046,19 +2044,18 @@ class Mercedesme extends utils.Adapter {
       socket.on("end", () => {
         this.log.info("WebSocket connection ended");
         this.cleanupWsConnection();
-        this.scheduleReconnect();
+        this.scheduleReconnect("socket-end");
       });
 
       socket.on("error", (err) => {
         this.log.error(`WebSocket socket error: ${err.message}`);
         this.cleanupWsConnection();
-        this.scheduleReconnect();
+        this.scheduleReconnect("socket-error");
       });
 
       socket.on("close", () => {
         this.log.debug("WebSocket socket closed");
         this.cleanupWsConnection();
-        // Reconnect is handled by "end" event
       });
     });
 
@@ -2084,11 +2081,8 @@ class Mercedesme extends utils.Adapter {
 
   async handleWsMessage(data) {
     this.log.silly("WS Message Length: " + data.length);
-    // Reset heartbeat on every message (instead of ping/pong)
+    // Reset heartbeat on every message
     this.resetHeartbeatTimeout();
-    if (this.reconnectInterval) {
-      clearInterval(this.reconnectInterval);
-    }
 
     try {
       // Log raw data for debugging protobuf issues
