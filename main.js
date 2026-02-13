@@ -2006,6 +2006,18 @@ class Mercedesme extends utils.Adapter {
         }
       }, 6000);
 
+      // Send keep-alive protobuf message every 5 minutes to keep session active
+      if (this.wsKeepAliveInterval) {
+        clearInterval(this.wsKeepAliveInterval);
+      }
+      this.wsKeepAliveInterval = setInterval(() => {
+        if (this.wsSocket) {
+          this.log.debug("Sending keep-alive message");
+          const clientMessage = new Client.ClientMessage();
+          this.sendWsFrame(clientMessage.serializeBinary());
+        }
+      }, 5 * 60 * 1000);
+
       let buffer = Buffer.alloc(0);
 
       socket.on("data", (data) => {
