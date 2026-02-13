@@ -1824,7 +1824,7 @@ class Mercedesme extends utils.Adapter {
     if (this.wsHeartbeatTimeout) {
       clearTimeout(this.wsHeartbeatTimeout);
     }
-    //wait 60s for heartbeat response, if not received trigger reconnect 
+    //wait 60s for heartbeat response, if not received trigger reconnect
     this.wsHeartbeatTimeout = setTimeout(() => {
       this.log.debug(`Heartbeat timeout after 60s - triggering reconnect`);
       this.safeCloseWs();
@@ -1839,6 +1839,10 @@ class Mercedesme extends utils.Adapter {
     if (this.wsPingInterval) {
       clearInterval(this.wsPingInterval);
       this.wsPingInterval = null;
+    }
+    if (this.wsKeepAliveInterval) {
+      clearInterval(this.wsKeepAliveInterval);
+      this.wsKeepAliveInterval = null;
     }
     if (this.wsHeartbeatTimeout) {
       clearTimeout(this.wsHeartbeatTimeout);
@@ -1936,6 +1940,10 @@ class Mercedesme extends utils.Adapter {
     if (this.wsPingInterval) {
       clearInterval(this.wsPingInterval);
       this.wsPingInterval = null;
+    }
+    if (this.wsKeepAliveInterval) {
+      clearInterval(this.wsKeepAliveInterval);
+      this.wsKeepAliveInterval = null;
     }
     if (this.wsHeartbeatTimeout) {
       clearTimeout(this.wsHeartbeatTimeout);
