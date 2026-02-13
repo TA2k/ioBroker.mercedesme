@@ -2042,12 +2042,20 @@ class Mercedesme extends utils.Adapter {
       });
 
       socket.on("end", () => {
+        if (!this.wsSocket) {
+          this.log.debug("Ignoring end event from old socket");
+          return;
+        }
         this.log.info("WebSocket connection ended");
         this.cleanupWsConnection();
         this.scheduleReconnect("socket-end");
       });
 
       socket.on("error", (err) => {
+        if (!this.wsSocket) {
+          this.log.debug("Ignoring error event from old socket");
+          return;
+        }
         this.log.error(`WebSocket socket error: ${err.message}`);
         this.cleanupWsConnection();
         this.scheduleReconnect("socket-error");
@@ -2055,6 +2063,10 @@ class Mercedesme extends utils.Adapter {
 
       socket.on("close", () => {
         this.log.debug("WebSocket socket closed");
+        if (!this.wsSocket) {
+          this.log.debug("Ignoring close event from old socket");
+          return;
+        }
         this.cleanupWsConnection();
       });
     });
