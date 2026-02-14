@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.5.5",
+    "version": "0.5.6-beta.0",
     "news": {
+      "0.5.6-beta.0": {
+        "en": "add api refresh after websocked block\n",
+        "de": "api aktualisieren nach websocked block\n",
+        "ru": "добавить обновление api после блокировки\n",
+        "pt": "adicionar api atualizar após o bloco websocked\n",
+        "nl": "api-verversing toevoegen na websocked blok\n",
+        "fr": "ajouter api rafraîchissement après bloc websocked\n",
+        "it": "aggiungere api rinfrescare dopo il blocco websocked\n",
+        "es": "añadir un refresco de api después de bloques websocked\n",
+        "pl": "dodaj odświeżenie api po bloku websocked\n",
+        "uk": "add api оновлення після websocked блок\n",
+        "zh-cn": "网络锁定块后添加 api 刷新\n"
+      },
       "0.5.5": {
         "en": "fix parsing and command sending",
         "de": "parsing und kommando senden",
@@ -69,19 +82,6 @@
         "zh-cn": "更改令牌刷新机制"
       },
       "0.3.8-beta.2": {
-        "en": "change token refresh mechanism",
-        "de": "wechseln sie den auffrischungsmechanismus",
-        "ru": "изменение механизма обновления маркера",
-        "pt": "mudar o mecanismo de atualização do token",
-        "nl": "tokenverversingsmechanisme wijzigen",
-        "fr": "mécanisme de rafraîchissement du jeton de changement",
-        "it": "cambiare meccanismo di aggiornamento token",
-        "es": "cambio de mecanismo de actualización token",
-        "pl": "zmienić mechanizm odświeżania symboli",
-        "uk": "зміна механізму освіження токени",
-        "zh-cn": "更改令牌刷新机制"
-      },
-      "0.3.8-beta.1": {
         "en": "change token refresh mechanism",
         "de": "wechseln sie den auffrischungsmechanismus",
         "ru": "изменение механизма обновления маркера",
