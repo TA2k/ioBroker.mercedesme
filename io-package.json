@@ -177,9 +177,7 @@
     "disableSocket": false,
     "isAdapter": false,
     "ciam": "",
-    "resetAccess": false,
-    "reconnectDelay": 210,
-    "onDemandRefresh": false
+    "resetAccess": false
   },
   "objects": [],
   "instanceObjects": [

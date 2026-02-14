@@ -52,6 +52,11 @@ class Mercedesme extends utils.Adapter {
     this.wsHeartbeatTimeout = null;
     this.wsPingInterval = null;
     this.wsReconnectCounter = 0;
+    this.accountBlocked = false;
+    this.accountBlockedSince = null;
+    this.restPollingInterval = null;
+    this.unblockCheckInterval = null;
+    this.lastReconnectAttempt = null;
     this.xSession = uuidv4();
     this.xTracking = uuidv4();
     this.deviceuuid = uuidv4();
@@ -390,6 +395,8 @@ class Mercedesme extends utils.Adapter {
       clearTimeout(this.retryTimeout);
       clearTimeout(this.reLoginTimeout);
       clearTimeout(this.wsHeartbeatTimeout);
+      this.stopRestPolling();
+      this.stopUnblockChecker();
 
       callback();
     } catch (e) {
@@ -497,10 +504,9 @@ class Mercedesme extends utils.Adapter {
             }
           }
           if (id.indexOf("refresh") !== -1 && state.val) {
-            this.log.info("Manual refresh triggered");
+            this.log.info("Manual refresh triggered via REST API");
             this.setState(id, false, true);
-            this.cleanupWsConnection();
-            this.connectWS();
+            this.fetchVehicleStatusViaRest();
           }
         }
       } else {
@@ -1864,19 +1870,170 @@ class Mercedesme extends utils.Adapter {
     }
   }
 
-  // Schedule reconnect after disconnect
+  // Schedule reconnect after disconnect (like HA: exponential backoff, start 10s, max 120s)
   scheduleReconnect(reason) {
     this.safeCloseWs();
-    if (this.config.onDemandRefresh) {
-      this.log.info(`WebSocket closed (${reason}). On-demand mode active - use remote.refresh to reconnect`);
-      return;
-    }
-    const delay = this.config.reconnectDelay || 300;
+    // Exponential backoff: 10, 20, 40, 80, 120, 120...
+    const delay = Math.min(10 * Math.pow(2, this.wsReconnectCounter), 120);
     this.log.info(`Scheduling reconnect in ${delay}s (reason: ${reason || "unknown"})`);
     setTimeout(() => {
-      this.log.debug(`Reconnect timer fired (reason: ${reason || "unknown"})`);
       this.connectWS();
     }, delay * 1000);
+  }
+
+  // Handle account blocked (429)
+  handleAccountBlocked() {
+    if (!this.accountBlocked) {
+      this.accountBlocked = true;
+      this.accountBlockedSince = new Date();
+      this.log.info(
+        `HTTP 429: Account blocked until 0:00 UTC (limit ~100-150 reconnects/day). ` +
+        `Today: ${this.wsReconnectCounter} reconnects. Switching to REST polling every 3 minutes.`
+      );
+    }
+    this.cleanupWsConnection();
+    this.startRestPolling();
+    this.startUnblockChecker();
+  }
+
+  // Start REST API polling as fallback when WebSocket is blocked
+  startRestPolling() {
+    if (this.restPollingInterval) {
+      clearInterval(this.restPollingInterval);
+    }
+    this.log.info("Starting REST API polling (every 3 minutes)");
+    // Initial fetch
+    this.fetchVehicleStatusViaRest();
+    // Then every 3 minutes
+    this.restPollingInterval = setInterval(() => {
+      this.fetchVehicleStatusViaRest();
+    }, 3 * 60 * 1000);
+  }
+
+  // Stop REST polling
+  stopRestPolling() {
+    if (this.restPollingInterval) {
+      clearInterval(this.restPollingInterval);
+      this.restPollingInterval = null;
+      this.log.info("Stopped REST API polling");
+    }
+  }
+
+  // Fetch vehicle status via Widget REST API
+  async fetchVehicleStatusViaRest() {
+    const headers = this.getBaseHeader();
+    headers.Authorization = this.atoken;
+
+    for (const vin of this.vinArray) {
+      try {
+        const url = `https://widget.emea-prod.mobilesdk.mercedes-benz.com/v1/vehicle/${vin}/vehicleattributes`;
+        this.log.debug(`Fetching vehicle status via REST for ${vin}`);
+
+        const response = await axios({
+          method: "get",
+          url: url,
+          headers: headers,
+          responseType: "arraybuffer",
+          timeout: 30000,
+        });
+
+        if (response.status === 200 && response.data) {
+          const message = VehicleEvents.VEPUpdate.deserializeBinary(response.data).toObject();
+          if (message) {
+            this.log.debug("REST API: Received vehicle status update");
+            await this.json2iob.parse(vin + ".state", message, { preferedArrayName: "name" });
+          }
+        }
+      } catch (error) {
+        if (error.response && error.response.status === 429) {
+          this.log.debug("REST API also rate limited - will retry in 3 minutes");
+        } else {
+          this.log.debug(`REST API error for ${vin}: ${error.message}`);
+        }
+      }
+    }
+  }
+
+  // Start periodic unblock check (every 5 minutes like HA)
+  startUnblockChecker() {
+    if (this.unblockCheckInterval) {
+      clearInterval(this.unblockCheckInterval);
+    }
+    this.lastReconnectAttempt = null;
+
+    // Log when reconnect will be attempted
+    const now = new Date();
+    const midnightUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1, 0, 0, 0));
+    const msUntilMidnight = midnightUTC.getTime() - now.getTime();
+    this.log.info(`Will attempt reconnect after 0:00 UTC (in ${Math.round(msUntilMidnight / 60000)} minutes)`);
+
+    this.unblockCheckInterval = setInterval(() => {
+      this.checkUnblock();
+    }, 5 * 60 * 1000);
+  }
+
+  // Check if we should try to reconnect (like HA _should_trigger_backup_reload)
+  shouldTryReconnect() {
+    const now = Date.now();
+
+    // Must be blocked for at least 5 minutes
+    if (now - this.accountBlockedSince.getTime() < 5 * 60 * 1000) {
+      return false;
+    }
+
+    const nowUTC = new Date();
+    const hourUTC = nowUTC.getUTCHours();
+    const minuteUTC = nowUTC.getUTCMinutes();
+
+    // Guaranteed reconnect after midnight UTC (00:00 - 00:30 window)
+    if (hourUTC === 0 && minuteUTC <= 30) {
+      // Check if we already tried today after midnight
+      if (this.lastReconnectAttempt) {
+        const lastAttemptUTC = new Date(this.lastReconnectAttempt);
+        if (
+          lastAttemptUTC.getUTCDate() === nowUTC.getUTCDate() &&
+          lastAttemptUTC.getUTCHours() === 0 &&
+          lastAttemptUTC.getUTCMinutes() <= 30
+        ) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    // Every 30 minutes, but only if at least 30 min since last attempt
+    if (this.lastReconnectAttempt) {
+      if (now - this.lastReconnectAttempt < 30 * 60 * 1000) {
+        return false;
+      }
+    }
+
+    // 30-minute intervals (:00, :30) with 5-minute window
+    if (minuteUTC <= 5 || (minuteUTC >= 25 && minuteUTC <= 35)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  // Check if we should try to reconnect
+  checkUnblock() {
+    if (!this.accountBlocked) return;
+
+    if (this.shouldTryReconnect()) {
+      this.log.info("Attempting WebSocket reconnect");
+      this.lastReconnectAttempt = Date.now();
+      this.stopRestPolling();
+      this.connectWS();
+    }
+  }
+
+  // Stop unblock checker
+  stopUnblockChecker() {
+    if (this.unblockCheckInterval) {
+      clearInterval(this.unblockCheckInterval);
+      this.unblockCheckInterval = null;
+    }
   }
 
   // WebSocket frame sending (masked as per RFC 6455)
@@ -2013,6 +2170,13 @@ class Mercedesme extends utils.Adapter {
       this.log.debug("WebSocket connected");
       this.wsSocket = socket;
       this.setState("info.connection", true, true);
+      // Reset blocked status on successful connection
+      if (this.accountBlocked) {
+        this.log.info("WebSocket reconnected successfully - account unblocked");
+        this.accountBlocked = false;
+        this.accountBlockedSince = null;
+        this.stopRestPolling();
+      }
       this.resetHeartbeatTimeout();
 
       // Start client-side ping interval to keep connection alive (every 6 seconds like APK)
@@ -2095,7 +2259,7 @@ class Mercedesme extends utils.Adapter {
 
     req.on("response", (res) => {
       if (res.statusCode === 429) {
-        this.log.warn("HTTP 429: Too many requests for today. Account blocked until 0:00.");
+        this.handleAccountBlocked();
       } else if (res.statusCode === 403) {
         this.log.warn("HTTP 403: Forbidden. Refreshing token...");
         this.refreshToken(true).catch(() => this.log.error("Refresh Token Failed"));
