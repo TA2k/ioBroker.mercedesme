@@ -496,6 +496,12 @@ class Mercedesme extends utils.Adapter {
               this.setState(vin + ".commands.AUXHEAT_START.start", true, false);
             }
           }
+          if (id.indexOf("refresh") !== -1 && state.val) {
+            this.log.info("Manual refresh triggered");
+            this.setState(id, false, true);
+            this.cleanupWsConnection();
+            this.connectWS();
+          }
         }
       } else {
         //ACK Values
@@ -1024,6 +1030,18 @@ class Mercedesme extends utils.Adapter {
           role: "switch.lock.window",
           write: true,
           read: true,
+        },
+        native: {},
+      });
+      await this.setObjectNotExistsAsync(element + ".remote.refresh", {
+        type: "state",
+        common: {
+          name: "Trigger refresh - reconnects WebSocket to get latest data",
+          type: "boolean",
+          role: "button",
+          write: true,
+          read: true,
+          def: false,
         },
         native: {},
       });
@@ -1826,10 +1844,10 @@ class Mercedesme extends utils.Adapter {
     }
     //wait 60s for heartbeat response, if not received trigger reconnect
     this.wsHeartbeatTimeout = setTimeout(() => {
-      this.log.debug(`Heartbeat timeout after 60s - triggering reconnect`);
-      this.safeCloseWs();
-      this.connectWS();
-    },60 * 1000);
+      this.log.info("Heartbeat timeout after 60s - triggering reconnect");
+      this.cleanupWsConnection();
+      this.scheduleReconnect("heartbeat-timeout");
+    }, 60 * 1000);
   }
 
   // Cleanup WebSocket connection state
@@ -1840,10 +1858,6 @@ class Mercedesme extends utils.Adapter {
       clearInterval(this.wsPingInterval);
       this.wsPingInterval = null;
     }
-    if (this.wsKeepAliveInterval) {
-      clearInterval(this.wsKeepAliveInterval);
-      this.wsKeepAliveInterval = null;
-    }
     if (this.wsHeartbeatTimeout) {
       clearTimeout(this.wsHeartbeatTimeout);
       this.wsHeartbeatTimeout = null;
@@ -1853,8 +1867,12 @@ class Mercedesme extends utils.Adapter {
   // Schedule reconnect after disconnect
   scheduleReconnect(reason) {
     this.safeCloseWs();
+    if (this.config.onDemandRefresh) {
+      this.log.info(`WebSocket closed (${reason}). On-demand mode active - use remote.refresh to reconnect`);
+      return;
+    }
     const delay = this.config.reconnectDelay || 300;
-    this.log.debug(`Scheduling reconnect in ${delay}s (reason: ${reason || "unknown"})`);
+    this.log.info(`Scheduling reconnect in ${delay}s (reason: ${reason || "unknown"})`);
     setTimeout(() => {
       this.log.debug(`Reconnect timer fired (reason: ${reason || "unknown"})`);
       this.connectWS();
@@ -1941,10 +1959,6 @@ class Mercedesme extends utils.Adapter {
       clearInterval(this.wsPingInterval);
       this.wsPingInterval = null;
     }
-    if (this.wsKeepAliveInterval) {
-      clearInterval(this.wsKeepAliveInterval);
-      this.wsKeepAliveInterval = null;
-    }
     if (this.wsHeartbeatTimeout) {
       clearTimeout(this.wsHeartbeatTimeout);
       this.wsHeartbeatTimeout = null;
@@ -2007,24 +2021,12 @@ class Mercedesme extends utils.Adapter {
       }
       this.wsPingInterval = setInterval(() => {
         if (this.wsSocket) {
-          this.log.debug("Sending ping to server");
+          this.log.silly("Sending ping to server");
           const mask = crypto.randomBytes(4);
           // Masked ping frame: opcode 9, mask bit set, 0 payload
           this.wsSocket.write(Buffer.concat([Buffer.from([0x89, 0x80]), mask]));
         }
       }, 6000);
-
-      // Send keep-alive protobuf message every 5 minutes to keep session active
-      if (this.wsKeepAliveInterval) {
-        clearInterval(this.wsKeepAliveInterval);
-      }
-      this.wsKeepAliveInterval = setInterval(() => {
-        if (this.wsSocket) {
-          this.log.debug("Sending keep-alive message");
-          const clientMessage = new Client.ClientMessage();
-          this.sendWsFrame(clientMessage.serializeBinary());
-        }
-      }, 5 * 60 * 1000);
 
       let buffer = Buffer.alloc(0);
 
@@ -2039,12 +2041,12 @@ class Mercedesme extends utils.Adapter {
             // Binary frame
             this.handleWsMessage(frame.payload);
           } else if (frame.opcode === 8) {
-            // Close frame - immediately clear wsSocket to prevent writes
+            // Close frame from server - cleanup first to prevent end/close handlers from triggering
             const code = frame.payload.length >= 2 ? frame.payload.readUInt16BE(0) : 1000;
             this.log.info(`WebSocket closed by server - code: ${code}`);
-            this.wsSocket = null;
-            this.setState("info.connection", false, true);
+            this.cleanupWsConnection();
             socket.end();
+            this.scheduleReconnect("server-close-" + code);
           } else if (frame.opcode === 9) {
             // Ping - send masked pong (RFC 6455 requires client frames to be masked)
             this.log.debug("Received ping from server, sending pong");
@@ -2053,7 +2055,7 @@ class Mercedesme extends utils.Adapter {
             socket.write(Buffer.concat([Buffer.from([0x8a, 0x80]), mask]));
           } else if (frame.opcode === 10) {
             // Pong response - also reset heartbeat as this is valid activity
-            this.log.debug("Received pong from server");
+            this.log.silly("Received pong from server");
             this.resetHeartbeatTimeout();
           }
 

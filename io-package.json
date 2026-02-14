@@ -178,7 +178,8 @@
     "isAdapter": false,
     "ciam": "",
     "resetAccess": false,
-    "reconnectDelay": 210
+    "reconnectDelay": 210,
+    "onDemandRefresh": false
   },
   "objects": [],
   "instanceObjects": [
