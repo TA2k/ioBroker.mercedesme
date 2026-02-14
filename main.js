@@ -6,10 +6,10 @@
  */
 
 const utils = require("@iobroker/adapter-core");
-const { v4: uuidv4 } = require("uuid");
 const axios = require("axios").default;
 const https = require("https");
 const crypto = require("crypto");
+const uuidv4 = () => crypto.randomUUID();
 const Json2iob = require("json2iob");
 const qs = require("qs");
 const { CookieJar } = require("tough-cookie");

@@ -13,8 +13,7 @@
     "http-cookie-agent": "^7.0.3",
     "json2iob": "^2.6.22",
     "qs": "^6.14.2",
-    "tough-cookie": "^6.0.0",
-    "uuid": "^13.0.0"
+    "tough-cookie": "^6.0.0"
   },
   "deprecated": false,
   "description": "Mercedes me adapter for ioBroker",
