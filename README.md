@@ -13,6 +13,20 @@
 
 Mercedes me adapter for ioBroker
 
+### Empfehlung: Zweitnutzer erstellen
+
+Es wird empfohlen einen separaten Mercedes me Zweitnutzer fuer ioBroker zu erstellen. Mercedes begrenzt die Anzahl der Verbindungen pro Tag (~100-150). Bei Ueberschreitung wird der Account bis Mitternacht UTC gesperrt (HTTP 429).
+
+Mit einem Zweitnutzer:
+
+- Wird der Hauptnutzer in der Mercedes me App nicht beeintraechtigt
+- Kann der Adapter unabhaengig arbeiten
+- Bleibt die App auf dem Handy voll funktionsfaehig
+
+Den Zweitnutzer in der Mercedes me App als "Nutzer" (nicht Hauptnutzer) zum Fahrzeug einladen.
+
+### Bedienung
+
 Unter commands das commando auf klappen und den button neben start drücken wenn das command available ist.
 
 Remote sind vorgefertige Remote Befehle
