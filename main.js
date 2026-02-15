@@ -1939,9 +1939,9 @@ class Mercedesme extends utils.Adapter {
 
         if (response.status === 200 && response.data) {
           const message = VehicleEvents.VEPUpdate.deserializeBinary(response.data).toObject();
-          if (message) {
-            this.log.debug("REST API: Received vehicle status update");
-            await this.Json2iob.parse(vin + ".state", message, { preferedArrayName: "name" });
+          if (message && message.attributesMap) {
+            this.log.debug(`REST API: Received ${message.attributesMap.length} attributes for ${vin}`);
+            await this.processVepAttributes(vin, message.attributesMap);
           }
         }
       } catch (error) {
@@ -1949,6 +1949,70 @@ class Mercedesme extends utils.Adapter {
           this.log.debug("REST API also rate limited - will retry in 3 minutes");
         } else {
           this.log.debug(`REST API error for ${vin}: ${error.message}`);
+        }
+      }
+    }
+  }
+
+  // Process VEP attributes (shared by WebSocket and REST API)
+  async processVepAttributes(vin, attributesMap) {
+    for (const element of attributesMap) {
+      if (!this.vinStates[vin] || !this.vinStates[vin].includes(element[0])) {
+        await this.extendObjectAsync(vin + ".state." + element[0], {
+          type: "channel",
+          common: {
+            name: element[0],
+            write: false,
+            read: true,
+          },
+          native: {},
+        });
+        if (this.vinStates[vin]) {
+          this.vinStates[vin].push(element[0]);
+        } else {
+          this.vinStates[vin] = [element[0]];
+        }
+      }
+      for (const state of Object.keys(element[1])) {
+        const value = element[1][state];
+        if (value === undefined || value === null) {
+          continue;
+        }
+        if (
+          state === "displayValue" ||
+          state === "status" ||
+          state === "changed" ||
+          state === "boolValue" ||
+          state === "doubleValue" ||
+          state === "intValue" ||
+          state === "nilValue" ||
+          state === "stringValue" ||
+          state === "unsupportedValue" ||
+          value
+        ) {
+          if (!this.vinStates[vin] || !this.vinStates[vin].includes(element[0] + state)) {
+            await this.extendObjectAsync(vin + ".state." + element[0] + "." + state, {
+              type: "state",
+              common: {
+                name: state,
+                role: this.getRole(element[1][state], false),
+                type: typeof element[1][state],
+                write: false,
+                read: true,
+              },
+              native: {},
+            });
+            if (this.vinStates[vin]) {
+              this.vinStates[vin].push(element[0] + state);
+            } else {
+              this.vinStates[vin] = [element[0] + state];
+            }
+          }
+          let stateValue = element[1][state];
+          if (typeof stateValue === "object") {
+            stateValue = JSON.stringify(stateValue);
+          }
+          await this.setStateAsync(vin + ".state." + element[0] + "." + state, stateValue, true);
         }
       }
     }
@@ -2378,77 +2442,8 @@ class Mercedesme extends utils.Adapter {
 
         for (const update of message.vepupdates.updatesMap) {
           const vin = update[0];
-
           this.log.debug("update for " + vin + ": " + message.vepupdates.sequenceNumber);
-          const adapter = this;
-
-          for (const element of update[1].attributesMap) {
-            if (!this.vinStates[vin] || !this.vinStates[vin].includes(element[0])) {
-              await adapter.extendObjectAsync(vin + ".state." + element[0], {
-                type: "channel",
-                common: {
-                  name: element[0],
-                  write: false,
-                  read: true,
-                },
-                native: {},
-              });
-              if (this.vinStates[vin]) {
-                this.vinStates[vin].push(element[0]);
-              } else {
-                this.vinStates[vin] = [element[0]];
-              }
-            }
-            // const definedFields = Object.keys(element[1]).filter(
-            //   (k) => element[1][k] !== undefined && element[1][k] !== null,
-            // );
-            // this.log.debug(`write ${definedFields.length} fields to ${element[0]}: ${definedFields.join(", ")}`);
-            for (const state of Object.keys(element[1])) {
-              const value = element[1][state];
-              // Skip undefined/null values (happens with oneof fields)
-              if (value === undefined || value === null) {
-                continue;
-              }
-              if (
-                state === "displayValue" ||
-                state === "status" ||
-                state === "changed" ||
-                state === "boolValue" ||
-                state === "doubleValue" ||
-                state === "intValue" ||
-                state === "nilValue" ||
-                state === "stringValue" ||
-                state === "unsupportedValue" ||
-                value
-              ) {
-                if (!this.vinStates[vin] || !this.vinStates[vin].includes(element[0] + state)) {
-                  await adapter.extendObjectAsync(vin + ".state." + element[0] + "." + state, {
-                    type: "state",
-                    common: {
-                      name: state,
-                      role: this.getRole(element[1][state], false),
-                      type: typeof element[1][state],
-                      write: false,
-                      read: true,
-                    },
-                    native: {},
-                  });
-                  if (this.vinStates[vin]) {
-                    this.vinStates[vin].push(element[0] + state);
-                  } else {
-                    this.vinStates[vin] = [element[0] + state];
-                  }
-                }
-                let value = element[1][state];
-                if (typeof value === "object") {
-                  value = JSON.stringify(value);
-                }
-
-                await adapter.setStateAsync(vin + ".state." + element[0] + "." + state, value, true);
-              }
-            }
-            this.log.silly("write done");
-          }
+          await this.processVepAttributes(vin, update[1].attributesMap);
         }
       }
     } catch (error) {
