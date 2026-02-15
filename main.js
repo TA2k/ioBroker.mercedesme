@@ -1941,7 +1941,7 @@ class Mercedesme extends utils.Adapter {
           const message = VehicleEvents.VEPUpdate.deserializeBinary(response.data).toObject();
           if (message) {
             this.log.debug("REST API: Received vehicle status update");
-            await this.json2iob.parse(vin + ".state", message, { preferedArrayName: "name" });
+            await this.Json2iob.parse(vin + ".state", message, { preferedArrayName: "name" });
           }
         }
       } catch (error) {
