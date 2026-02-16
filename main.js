@@ -57,6 +57,9 @@ class Mercedesme extends utils.Adapter {
     this.restPollingInterval = null;
     this.unblockCheckInterval = null;
     this.lastReconnectAttempt = null;
+    this.apiOnlyMode = false;
+    this.apiOnlyInterval = null;
+    this.pendingCommand = null;
     this.xSession = uuidv4();
     this.xTracking = uuidv4();
     this.deviceuuid = uuidv4();
@@ -350,8 +353,17 @@ class Mercedesme extends utils.Adapter {
             this.getUserInformation().catch(() => {
               this.log.error("Error getting user infos");
             });
-            this.log.info("Start Websocket Connection");
-            this.connectWS();
+
+            // Check if API Only mode is enabled
+            if (this.config.apiOnly) {
+              this.apiOnlyMode = true;
+              const interval = parseInt(this.config.apiOnlyInterval) || 5;
+              this.log.info(`API Only mode enabled - polling every ${interval} minutes (no WebSocket for status)`);
+              this.startApiOnlyPolling(interval);
+            } else {
+              this.log.info("Start Websocket Connection");
+              this.connectWS();
+            }
           })
           .catch(() => {
             this.log.error("Error getting Vehicles");
@@ -397,6 +409,7 @@ class Mercedesme extends utils.Adapter {
       clearTimeout(this.wsHeartbeatTimeout);
       this.stopRestPolling();
       this.stopUnblockChecker();
+      this.stopApiOnlyPolling();
 
       callback();
     } catch (e) {
@@ -458,7 +471,15 @@ class Mercedesme extends utils.Adapter {
             clientMessage.setCommandrequest(command);
             clientMessage.setTrackingId(uuidv4());
             this.log.debug(JSON.stringify(clientMessage.toObject()));
-            this.sendWsFrame(clientMessage.serializeBinary());
+
+            // In API Only mode, connect WebSocket for command if not connected
+            if (this.apiOnlyMode && !this.wsSocket) {
+              this.log.info("API Only mode: Connecting WebSocket for command " + commandId);
+              this.pendingCommand = clientMessage.serializeBinary();
+              this.connectWS();
+            } else {
+              this.sendWsFrame(clientMessage.serializeBinary());
+            }
             return;
           } catch (error) {
             this.log.error("Cannot start " + commandId);
@@ -1873,9 +1894,16 @@ class Mercedesme extends utils.Adapter {
   // Schedule reconnect after disconnect (like HA: exponential backoff, start 10s, max 120s)
   scheduleReconnect(reason) {
     this.safeCloseWs();
+
+    // In API Only mode, don't reconnect WebSocket automatically
+    if (this.apiOnlyMode) {
+      this.log.debug(`WebSocket closed (${reason}) - API Only mode, no reconnect`);
+      return;
+    }
+
     // Exponential backoff: 10, 20, 40, 80, 120, 120...
     // const delay = Math.min(10 * Math.pow(2, this.wsReconnectCounter), 120);
-    const delay=10;
+    const delay = 10;
     this.log.info(`Scheduling reconnect in ${delay}s (reason: ${reason || "unknown"})`);
     setTimeout(() => {
       this.connectWS();
@@ -1894,6 +1922,27 @@ class Mercedesme extends utils.Adapter {
     this.cleanupWsConnection();
     this.startRestPolling();
     this.startUnblockChecker();
+  }
+
+  // Start API Only mode polling (user-configurable interval)
+  startApiOnlyPolling(intervalMinutes) {
+    if (this.apiOnlyInterval) {
+      clearInterval(this.apiOnlyInterval);
+    }
+    // Initial fetch
+    this.fetchVehicleStatusViaRest();
+    // Then at configured interval
+    this.apiOnlyInterval = setInterval(() => {
+      this.fetchVehicleStatusViaRest();
+    }, intervalMinutes * 60 * 1000);
+  }
+
+  // Stop API Only polling
+  stopApiOnlyPolling() {
+    if (this.apiOnlyInterval) {
+      clearInterval(this.apiOnlyInterval);
+      this.apiOnlyInterval = null;
+    }
   }
 
   // Start REST API polling as fallback when WebSocket is blocked
@@ -2396,6 +2445,13 @@ class Mercedesme extends utils.Adapter {
         const clientMessage = new Client.ClientMessage();
         clientMessage.setApptwinPendingCommandsResponse(ackResponse);
         this.sendWsFrame(clientMessage.serializeBinary());
+
+        // Send pending command if in API Only mode
+        if (this.pendingCommand) {
+          this.log.info("Sending pending command after WebSocket ready");
+          this.sendWsFrame(this.pendingCommand);
+          this.pendingCommand = null;
+        }
       }
       if (message.serviceStatusUpdates) {
         this.log.debug("serviceStatusUpdates: " + JSON.stringify(message.serviceStatusUpdates));

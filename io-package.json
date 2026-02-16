@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.6.0",
+    "version": "0.6.1",
     "news": {
+      "0.6.1": {
+        "en": "add api refresh every 3 min after websocked block\nadd api only update mode",
+        "de": "api aktualisieren alle 3 min nach websocked block\napi nur update mode",
+        "ru": "добавляйте обновление api каждые 3 минуты после блокировки веб-сайта\nдобавить только режим обновления api",
+        "pt": "adicionar api atualizar a cada 3 min após websocked bloco\nadicionar somente o modo de atualização do api",
+        "nl": "voeg om de 3 minuten api refresh toe na websocked blok\nalleen api-updatemodus toevoegen",
+        "fr": "ajouter api rafraîchissement toutes les 3 min après le bloc websocked\najouter le mode de mise à jour api seulement",
+        "it": "aggiungere api rinfrescare ogni 3 minuti dopo il blocco websocked\naggiungere api solo modalità di aggiornamento",
+        "es": "añadir api refrescar cada 3 min después de bloque websocked\nañadir api sólo modo de actualización",
+        "pl": "dodaj odświeżenie api co 3 min po bloku websocked\ndodaj tylko tryb aktualizacji api",
+        "uk": "add api оновлення кожен 3 хв після websocked block\nadd api тільки режим оновлення",
+        "zh-cn": "在网锁块后每3分钟添加 api 刷新一次\n仅添加 api 更新模式"
+      },
       "0.6.0": {
         "en": "add api refresh every 3 min after websocked block",
         "de": "api aktualisieren alle 3 min nach websocked block",
@@ -80,19 +93,6 @@
         "pl": "naprawić przepływ logowania",
         "uk": "фіксувати потік логіна",
         "zh-cn": "固定登录流量"
-      },
-      "0.3.8": {
-        "en": "change token refresh mechanism",
-        "de": "wechseln sie den auffrischungsmechanismus",
-        "ru": "изменение механизма обновления маркера",
-        "pt": "mudar o mecanismo de atualização do token",
-        "nl": "tokenverversingsmechanisme wijzigen",
-        "fr": "mécanisme de rafraîchissement du jeton de changement",
-        "it": "cambiare meccanismo di aggiornamento token",
-        "es": "cambio de mecanismo de actualización token",
-        "pl": "zmienić mechanizm odświeżania symboli",
-        "uk": "зміна механізму освіження токени",
-        "zh-cn": "更改令牌刷新机制"
       }
     },
     "titleLang": {
@@ -177,7 +177,9 @@
     "disableSocket": false,
     "isAdapter": false,
     "ciam": "",
-    "resetAccess": false
+    "resetAccess": false,
+    "apiOnly": false,
+    "apiOnlyInterval": 5
   },
   "objects": [],
   "instanceObjects": [
