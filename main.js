@@ -1874,7 +1874,8 @@ class Mercedesme extends utils.Adapter {
   scheduleReconnect(reason) {
     this.safeCloseWs();
     // Exponential backoff: 10, 20, 40, 80, 120, 120...
-    const delay = Math.min(10 * Math.pow(2, this.wsReconnectCounter), 120);
+    // const delay = Math.min(10 * Math.pow(2, this.wsReconnectCounter), 120);
+    const delay=10;
     this.log.info(`Scheduling reconnect in ${delay}s (reason: ${reason || "unknown"})`);
     setTimeout(() => {
       this.connectWS();
@@ -1887,8 +1888,7 @@ class Mercedesme extends utils.Adapter {
       this.accountBlocked = true;
       this.accountBlockedSince = new Date();
       this.log.info(
-        `HTTP 429: Account blocked until 0:00 UTC (limit ~100-150 reconnects/day). ` +
-        `Today: ${this.wsReconnectCounter} reconnects. Switching to REST polling every 3 minutes.`
+        `No Streaming reconnecteds left until 0:00 UTC (limit ~100-150 reconnects/day). Today: ${this.wsReconnectCounter} reconnects. Switching to API Update every 3 minutes.`
       );
     }
     this.cleanupWsConnection();
@@ -1915,7 +1915,7 @@ class Mercedesme extends utils.Adapter {
     if (this.restPollingInterval) {
       clearInterval(this.restPollingInterval);
       this.restPollingInterval = null;
-      this.log.info("Stopped REST API polling");
+      this.log.info("Websocket successfully. Stopping REST API polling");
     }
   }
 
@@ -1942,13 +1942,15 @@ class Mercedesme extends utils.Adapter {
           if (message && message.attributesMap) {
             this.log.debug(`REST API: Received ${message.attributesMap.length} attributes for ${vin}`);
             await this.processVepAttributes(vin, message.attributesMap);
+          } else {
+            this.log.debug(`REST API: No attributes in response for ${vin}`);
           }
         }
       } catch (error) {
         if (error.response && error.response.status === 429) {
-          this.log.debug("REST API also rate limited - will retry in 3 minutes");
+          this.log.warn("REST API also rate limited - will retry in 3 minutes");
         } else {
-          this.log.debug(`REST API error for ${vin}: ${error.message}`);
+          this.log.error(`REST API error for ${vin}: ${error.message}`);
         }
       }
     }
@@ -2070,10 +2072,15 @@ class Mercedesme extends utils.Adapter {
       if (now - this.lastReconnectAttempt < 30 * 60 * 1000) {
         return false;
       }
+    } else {
+      // First attempt - wait at least 30 min after block
+      if (now - this.accountBlockedSince.getTime() < 30 * 60 * 1000) {
+        return false;
+      }
     }
 
     // 30-minute intervals (:00, :30) with 5-minute window
-    if (minuteUTC <= 5 || (minuteUTC >= 25 && minuteUTC <= 35)) {
+    if (minuteUTC <= 5 || (minuteUTC >= 30 && minuteUTC <= 35)) {
       return true;
     }
 
