@@ -33,9 +33,8 @@ Remote sind vorgefertige Remote Befehle
 
 
 ## Changelog
-### 0.5.6-beta.0 (2026-02-14)
-- add api refresh after websocked block
--
+### 0.6.0 (2026-02-16)
+- add api refresh every 3 min after websocked block
 
 ### 0.5.5 (2026-02-09)
 - fix parsing and command sending
