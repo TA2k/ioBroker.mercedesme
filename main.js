@@ -53,10 +53,8 @@ class Mercedesme extends utils.Adapter {
     this.wsPingInterval = null;
     this.wsReconnectCounter = 0;
     this.accountBlocked = false;
-    this.accountBlockedSince = null;
     this.restPollingInterval = null;
-    this.unblockCheckInterval = null;
-    this.lastReconnectAttempt = null;
+    this.reconnectInterval = null;
     this.apiOnlyMode = false;
     this.apiOnlyInterval = null;
     this.pendingCommand = null;
@@ -407,8 +405,8 @@ class Mercedesme extends utils.Adapter {
       clearTimeout(this.retryTimeout);
       clearTimeout(this.reLoginTimeout);
       clearTimeout(this.wsHeartbeatTimeout);
+      clearInterval(this.reconnectInterval);
       this.stopRestPolling();
-      this.stopUnblockChecker();
       this.stopApiOnlyPolling();
 
       callback();
@@ -1912,16 +1910,20 @@ class Mercedesme extends utils.Adapter {
 
   // Handle account blocked (429)
   handleAccountBlocked() {
-    if (!this.accountBlocked) {
-      this.accountBlocked = true;
-      this.accountBlockedSince = new Date();
-      this.log.info(
-        `No Streaming reconnecteds left until 0:00 UTC (limit ~100-150 reconnects/day). Today: ${this.wsReconnectCounter} reconnects. Switching to API Update every 3 minutes.`
-      );
-    }
+    if (this.accountBlocked) return; // Already blocked
+
+    this.accountBlocked = true;
+    this.log.info(
+      `Streaming Reconnections  (~100-150 reconnects/day) used for today (${this.wsReconnectCounter} reconnects). Update via API Call every 3 minutes activated`
+    );
     this.cleanupWsConnection();
     this.startRestPolling();
-    this.startUnblockChecker();
+
+    // Try reconnect every 30 minutes until successful
+    this.reconnectInterval = setInterval(() => {
+      this.log.info("Attempting WebSocket reconnect");
+      this.connectWS();
+    }, 30 * 60 * 1000);
   }
 
   // Start API Only mode polling (user-configurable interval)
@@ -1947,8 +1949,9 @@ class Mercedesme extends utils.Adapter {
 
   // Start REST API polling as fallback when WebSocket is blocked
   startRestPolling() {
+    // Don't restart if already running
     if (this.restPollingInterval) {
-      clearInterval(this.restPollingInterval);
+      return;
     }
     this.log.info("Starting REST API polling (every 3 minutes)");
     // Initial fetch
@@ -2066,93 +2069,6 @@ class Mercedesme extends utils.Adapter {
           await this.setStateAsync(vin + ".state." + element[0] + "." + state, stateValue, true);
         }
       }
-    }
-  }
-
-  // Start periodic unblock check (every 5 minutes like HA)
-  startUnblockChecker() {
-    if (this.unblockCheckInterval) {
-      clearInterval(this.unblockCheckInterval);
-    }
-    this.lastReconnectAttempt = null;
-
-    // Log when reconnect will be attempted
-    const now = new Date();
-    const midnightUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1, 0, 0, 0));
-    const msUntilMidnight = midnightUTC.getTime() - now.getTime();
-    this.log.info(`Will attempt reconnect after 0:00 UTC (in ${Math.round(msUntilMidnight / 60000)} minutes)`);
-
-    this.unblockCheckInterval = setInterval(() => {
-      this.checkUnblock();
-    }, 5 * 60 * 1000);
-  }
-
-  // Check if we should try to reconnect (like HA _should_trigger_backup_reload)
-  shouldTryReconnect() {
-    const now = Date.now();
-
-    // Must be blocked for at least 5 minutes
-    if (now - this.accountBlockedSince.getTime() < 5 * 60 * 1000) {
-      return false;
-    }
-
-    const nowUTC = new Date();
-    const hourUTC = nowUTC.getUTCHours();
-    const minuteUTC = nowUTC.getUTCMinutes();
-
-    // Guaranteed reconnect after midnight UTC (00:00 - 00:30 window)
-    if (hourUTC === 0 && minuteUTC <= 30) {
-      // Check if we already tried today after midnight
-      if (this.lastReconnectAttempt) {
-        const lastAttemptUTC = new Date(this.lastReconnectAttempt);
-        if (
-          lastAttemptUTC.getUTCDate() === nowUTC.getUTCDate() &&
-          lastAttemptUTC.getUTCHours() === 0 &&
-          lastAttemptUTC.getUTCMinutes() <= 30
-        ) {
-          return false;
-        }
-      }
-      return true;
-    }
-
-    // Every 30 minutes, but only if at least 30 min since last attempt
-    if (this.lastReconnectAttempt) {
-      if (now - this.lastReconnectAttempt < 30 * 60 * 1000) {
-        return false;
-      }
-    } else {
-      // First attempt - wait at least 30 min after block
-      if (now - this.accountBlockedSince.getTime() < 30 * 60 * 1000) {
-        return false;
-      }
-    }
-
-    // 30-minute intervals (:00, :30) with 5-minute window
-    if (minuteUTC <= 5 || (minuteUTC >= 30 && minuteUTC <= 35)) {
-      return true;
-    }
-
-    return false;
-  }
-
-  // Check if we should try to reconnect
-  checkUnblock() {
-    if (!this.accountBlocked) return;
-
-    if (this.shouldTryReconnect()) {
-      this.log.info("Attempting WebSocket reconnect");
-      this.lastReconnectAttempt = Date.now();
-      this.stopRestPolling();
-      this.connectWS();
-    }
-  }
-
-  // Stop unblock checker
-  stopUnblockChecker() {
-    if (this.unblockCheckInterval) {
-      clearInterval(this.unblockCheckInterval);
-      this.unblockCheckInterval = null;
     }
   }
 
@@ -2294,8 +2210,11 @@ class Mercedesme extends utils.Adapter {
       if (this.accountBlocked) {
         this.log.info("WebSocket reconnected successfully - account unblocked");
         this.accountBlocked = false;
-        this.accountBlockedSince = null;
         this.stopRestPolling();
+        if (this.reconnectInterval) {
+          clearInterval(this.reconnectInterval);
+          this.reconnectInterval = null;
+        }
       }
       this.resetHeartbeatTimeout();
 
