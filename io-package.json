@@ -1,9 +1,9 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.6.1",
+    "version": "0.6.2",
     "news": {
-      "0.6.1": {
+      "0.6.2": {
         "en": "add api refresh every 3 min after websocked block\nadd api only update mode",
         "de": "api aktualisieren alle 3 min nach websocked block\napi nur update mode",
         "ru": "добавляйте обновление api каждые 3 минуты после блокировки веб-сайта\nдобавить только режим обновления api",
