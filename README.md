@@ -33,7 +33,7 @@ Remote sind vorgefertige Remote Befehle
 
 
 ## Changelog
-### 0.6.2 (2026-02-16)
+### 0.6.3 (2026-02-16)
 - add api refresh every 3 min after websocked block
 - add api only update mode
 

@@ -1877,7 +1877,10 @@ class Mercedesme extends utils.Adapter {
 
   // Cleanup WebSocket connection state
   cleanupWsConnection() {
-    this.setState("info.connection", false, true);
+    // In API Only mode, connection is still "true" because REST API works
+    if (!this.apiOnlyMode) {
+      this.setState("info.connection", false, true);
+    }
     this.wsSocket = null;
     if (this.wsPingInterval) {
       clearInterval(this.wsPingInterval);
@@ -2305,12 +2308,16 @@ class Mercedesme extends utils.Adapter {
       } else {
         this.log.error(`WebSocket upgrade failed: HTTP ${res.statusCode}`);
       }
-      this.setState("info.connection", false, true);
+      if (!this.apiOnlyMode) {
+        this.setState("info.connection", false, true);
+      }
     });
 
     req.on("error", (err) => {
       this.log.error(`WebSocket connection error: ${err.message}`);
-      this.setState("info.connection", false, true);
+      if (!this.apiOnlyMode) {
+        this.setState("info.connection", false, true);
+      }
     });
 
     req.end();

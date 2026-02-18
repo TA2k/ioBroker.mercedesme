@@ -1,11 +1,11 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.6.2",
+    "version": "0.6.3",
     "news": {
-      "0.6.2": {
+      "0.6.3": {
         "en": "add api refresh every 3 min after websocked block\nadd api only update mode",
-        "de": "api aktualisieren alle 3 min nach websocked block\napi nur update mode",
+        "de": "API only Modus hinzugefügt. Damit kann man nur Via API aktualisieren anstatt über Websocket. Api aktualisieren alle 3 min nach websocked block",
         "ru": "добавляйте обновление api каждые 3 минуты после блокировки веб-сайта\nдобавить только режим обновления api",
         "pt": "adicionar api atualizar a cada 3 min após websocked bloco\nadicionar somente o modo de atualização do api",
         "nl": "voeg om de 3 minuten api refresh toe na websocked blok\nalleen api-updatemodus toevoegen",
