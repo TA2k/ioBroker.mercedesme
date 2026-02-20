@@ -1505,7 +1505,7 @@ class Mercedesme extends utils.Adapter {
         this.log.debug("setRefreshToken: " + token.refresh_token);
         this.setState("auth.refresh_token", token.refresh_token, true);
       }
-      if (reconnect) {
+      if (reconnect && !this.apiOnlyMode) {
         this.log.debug("Reconnect after refresh token. Count: " + this.wsReconnectCounter);
         this.safeCloseWs();
         setTimeout(() => {
@@ -1523,7 +1523,7 @@ class Mercedesme extends utils.Adapter {
         await this.setState("auth.refresh_token", "", true);
         try {
           await this.loginNew();
-          if (reconnect) {
+          if (reconnect && !this.apiOnlyMode) {
             this.log.debug("Reconnect after full relogin. Count: " + this.wsReconnectCounter);
             this.safeCloseWs();
             setTimeout(() => {
@@ -1916,10 +1916,17 @@ class Mercedesme extends utils.Adapter {
     if (this.accountBlocked) return; // Already blocked
 
     this.accountBlocked = true;
-    this.log.info(
-      `Streaming Reconnections  (~100-150 reconnects/day) used for today (${this.wsReconnectCounter} reconnects). Update via API Call every 3 minutes activated`
-    );
     this.cleanupWsConnection();
+
+    // In API Only mode, just log - no reconnect attempts needed
+    if (this.apiOnlyMode) {
+      this.log.info("HTTP 429 for command WebSocket - will retry on next command");
+      return;
+    }
+
+    this.log.info(
+      `HTTP 429: Reconnect limit reached (${this.wsReconnectCounter} today). REST polling + reconnect every 30min.`
+    );
     this.startRestPolling();
 
     // Try reconnect every 30 minutes until successful
