@@ -1913,32 +1913,42 @@ class Mercedesme extends utils.Adapter {
 
   // Handle account blocked (429)
   handleAccountBlocked() {
-    if (this.accountBlocked) return; // Already blocked
+    this.log.debug(`handleAccountBlocked called. apiOnlyMode=${this.apiOnlyMode}, accountBlocked=${this.accountBlocked}`);
 
-    this.accountBlocked = true;
-    this.cleanupWsConnection();
-
-    // In API Only mode, just log - no reconnect attempts needed
+    // In API Only mode, don't set blocked status - just log and close connection
     if (this.apiOnlyMode) {
-      this.log.info("HTTP 429 for command WebSocket - will retry on next command");
+      this.log.info("HTTP 429 for command WebSocket - command failed, try again later");
+      this.cleanupWsConnection();
       return;
     }
 
+    if (this.accountBlocked) {
+      this.log.debug("handleAccountBlocked: already blocked, skipping");
+      return;
+    }
+
+    this.accountBlocked = true;
+    this.log.info(`HTTP 429: Account blocked. Setting accountBlocked=true`);
+    this.cleanupWsConnection();
+
     this.log.info(
-      `HTTP 429: Reconnect limit reached (${this.wsReconnectCounter} today). REST polling + reconnect every 30min.`
+      `HTTP 429: Reconnect limit reached (${this.wsReconnectCounter} today). Starting REST polling + reconnect every 30min.`
     );
+    this.log.debug("Starting restPollingInterval (3 min)");
     this.startRestPolling();
 
-    // Try reconnect every 30 minutes until successful
+    this.log.debug("Starting reconnectInterval (30 min)");
     this.reconnectInterval = setInterval(() => {
-      this.log.info("Attempting WebSocket reconnect");
+      this.log.info("Attempting WebSocket reconnect (30min interval)");
       this.connectWS();
     }, 30 * 60 * 1000);
   }
 
   // Start API Only mode polling (user-configurable interval)
   startApiOnlyPolling(intervalMinutes) {
+    this.log.debug(`startApiOnlyPolling called with interval=${intervalMinutes} min`);
     if (this.apiOnlyInterval) {
+      this.log.debug("Clearing existing apiOnlyInterval");
       clearInterval(this.apiOnlyInterval);
     }
     // Initial fetch
@@ -1947,6 +1957,7 @@ class Mercedesme extends utils.Adapter {
     this.apiOnlyInterval = setInterval(() => {
       this.fetchVehicleStatusViaRest();
     }, intervalMinutes * 60 * 1000);
+    this.log.debug("apiOnlyInterval started");
   }
 
   // Stop API Only polling
@@ -1959,8 +1970,10 @@ class Mercedesme extends utils.Adapter {
 
   // Start REST API polling as fallback when WebSocket is blocked
   startRestPolling() {
+    this.log.debug(`startRestPolling called. apiOnlyMode=${this.apiOnlyMode}, existing interval=${!!this.restPollingInterval}`);
     // Don't restart if already running
     if (this.restPollingInterval) {
+      this.log.debug("restPollingInterval already running, skipping");
       return;
     }
     this.log.info("Starting REST API polling (every 3 minutes)");
@@ -1970,6 +1983,7 @@ class Mercedesme extends utils.Adapter {
     this.restPollingInterval = setInterval(() => {
       this.fetchVehicleStatusViaRest();
     }, 3 * 60 * 1000);
+    this.log.debug("restPollingInterval started");
   }
 
   // Stop REST polling
@@ -2213,15 +2227,17 @@ class Mercedesme extends utils.Adapter {
     const req = https.request(options);
 
     req.on("upgrade", (res, socket) => {
-      this.log.debug("WebSocket connected");
+      this.log.info("WebSocket connected successfully");
       this.wsSocket = socket;
       this.setState("info.connection", true, true);
       // Reset blocked status on successful connection
       if (this.accountBlocked) {
-        this.log.info("WebSocket reconnected successfully - account unblocked");
+        this.log.info("WebSocket reconnected - clearing accountBlocked and stopping intervals");
         this.accountBlocked = false;
+        this.log.debug("Stopping restPollingInterval");
         this.stopRestPolling();
         if (this.reconnectInterval) {
+          this.log.debug("Stopping reconnectInterval");
           clearInterval(this.reconnectInterval);
           this.reconnectInterval = null;
         }
