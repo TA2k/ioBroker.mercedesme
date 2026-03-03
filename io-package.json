@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.6.3",
+    "version": "0.7.0-beta.0",
     "news": {
+      "0.7.0-beta.0": {
+        "en": "make api only mode default",
+        "de": "api nur modus standard",
+        "ru": "make api only mode по умолчанию",
+        "pt": "make api only mode default",
+        "nl": "api alleen standaardmodus maken",
+        "fr": "faire le mode api uniquement par défaut",
+        "it": "fare api solo modalità predefinita",
+        "es": "hacer api sólo modo predeterminado",
+        "pl": "dokonać domyślnego trybu api",
+        "uk": "зробити api тільки режим за замовчуванням",
+        "zh-cn": "只默认 api 模式"
+      },
       "0.6.3": {
         "en": "add api refresh every 3 min after websocked block\nadd api only update mode",
         "de": "API only Modus hinzugefügt. Damit kann man nur Via API aktualisieren anstatt über Websocket. Api aktualisieren alle 3 min nach websocked block",
@@ -80,19 +93,6 @@
         "pl": "naprawić wysyłanie zdalnego polecenia",
         "uk": "фіксувати надсилання віддалених команд",
         "zh-cn": "修复远程命令发送"
-      },
-      "0.3.9": {
-        "en": "fix login flow",
-        "de": "fehlerbehebung",
-        "ru": "фиксировать логиновый поток",
-        "pt": "corrigir fluxo de login",
-        "nl": "fix login stroom",
-        "fr": "correction du flux de connexion",
-        "it": "correzione del flusso di login",
-        "es": "corrección de flujo de inicio",
-        "pl": "naprawić przepływ logowania",
-        "uk": "фіксувати потік логіна",
-        "zh-cn": "固定登录流量"
       }
     },
     "titleLang": {
