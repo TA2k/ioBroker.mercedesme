@@ -178,8 +178,8 @@
     "isAdapter": false,
     "ciam": "",
     "resetAccess": false,
-    "apiOnly": false,
-    "apiOnlyInterval": 5
+    "pollingInterval": 5,
+    "realtimeWebSocket": false
   },
   "objects": [],
   "instanceObjects": [

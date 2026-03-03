@@ -55,8 +55,8 @@ class Mercedesme extends utils.Adapter {
     this.accountBlocked = false;
     this.restPollingInterval = null;
     this.reconnectInterval = null;
-    this.apiOnlyMode = false;
-    this.apiOnlyInterval = null;
+    this.pollingMode = true; // Default: API polling instead of WebSocket realtime
+    this.pollingInterval = null;
     this.pendingCommand = null;
     this.xSession = uuidv4();
     this.xTracking = uuidv4();
@@ -352,15 +352,17 @@ class Mercedesme extends utils.Adapter {
               this.log.error("Error getting user infos");
             });
 
-            // Check if API Only mode is enabled
-            if (this.config.apiOnly) {
-              this.apiOnlyMode = true;
-              const interval = parseInt(this.config.apiOnlyInterval) || 5;
-              this.log.info(`API Only mode enabled - polling every ${interval} minutes (no WebSocket for status)`);
-              this.startApiOnlyPolling(interval);
-            } else {
-              this.log.info("Start Websocket Connection");
+            // Check connection mode: WebSocket realtime (optional) or API polling (default)
+            const interval = parseInt(this.config.pollingInterval) || 5;
+            if (this.config.realtimeWebSocket) {
+              this.pollingMode = false;
+              this.log.info("WebSocket realtime mode enabled - faster updates but may hit rate limits");
               this.connectWS();
+            } else {
+              this.pollingMode = true;
+              this.log.info(`Polling mode enabled - updates every ${interval} minutes (WebSocket only for commands)`);
+              this.setState("info.connection", true, true); // REST API connection works
+              this.startPolling(interval);
             }
           })
           .catch(() => {
@@ -407,7 +409,7 @@ class Mercedesme extends utils.Adapter {
       clearTimeout(this.wsHeartbeatTimeout);
       clearInterval(this.reconnectInterval);
       this.stopRestPolling();
-      this.stopApiOnlyPolling();
+      this.stopPolling();
 
       callback();
     } catch (e) {
@@ -470,9 +472,13 @@ class Mercedesme extends utils.Adapter {
             clientMessage.setTrackingId(uuidv4());
             this.log.debug(JSON.stringify(clientMessage.toObject()));
 
-            // In API Only mode, connect WebSocket for command if not connected
-            if (this.apiOnlyMode && !this.wsSocket) {
-              this.log.info("API Only mode: Connecting WebSocket for command " + commandId);
+            // Connect WebSocket for command if not connected
+            // This handles both:
+            // 1. API Only mode: WebSocket is only used for commands, not for status updates
+            // 2. Normal mode with 429 fallback: WebSocket was closed due to rate limit, REST polling active
+            // In both cases we need to establish WebSocket connection before sending command
+            if (!this.wsSocket) {
+              this.log.info("WebSocket not connected - connecting for command " + commandId);
               this.pendingCommand = clientMessage.serializeBinary();
               this.connectWS();
             } else {
@@ -1505,7 +1511,7 @@ class Mercedesme extends utils.Adapter {
         this.log.debug("setRefreshToken: " + token.refresh_token);
         this.setState("auth.refresh_token", token.refresh_token, true);
       }
-      if (reconnect && !this.apiOnlyMode) {
+      if (reconnect && !this.pollingMode) {
         this.log.debug("Reconnect after refresh token. Count: " + this.wsReconnectCounter);
         this.safeCloseWs();
         setTimeout(() => {
@@ -1523,7 +1529,7 @@ class Mercedesme extends utils.Adapter {
         await this.setState("auth.refresh_token", "", true);
         try {
           await this.loginNew();
-          if (reconnect && !this.apiOnlyMode) {
+          if (reconnect && !this.pollingMode) {
             this.log.debug("Reconnect after full relogin. Count: " + this.wsReconnectCounter);
             this.safeCloseWs();
             setTimeout(() => {
@@ -1878,7 +1884,7 @@ class Mercedesme extends utils.Adapter {
   // Cleanup WebSocket connection state
   cleanupWsConnection() {
     // In API Only mode, connection is still "true" because REST API works
-    if (!this.apiOnlyMode) {
+    if (!this.pollingMode) {
       this.setState("info.connection", false, true);
     }
     this.wsSocket = null;
@@ -1896,9 +1902,9 @@ class Mercedesme extends utils.Adapter {
   scheduleReconnect(reason) {
     this.safeCloseWs();
 
-    // In API Only mode, don't reconnect WebSocket automatically
-    if (this.apiOnlyMode) {
-      this.log.debug(`WebSocket closed (${reason}) - API Only mode, no reconnect`);
+    // In polling mode, don't reconnect WebSocket automatically (only used for commands on-demand)
+    if (this.pollingMode) {
+      this.log.debug(`WebSocket closed (${reason}) - polling mode, no auto-reconnect`);
       return;
     }
 
@@ -1913,10 +1919,11 @@ class Mercedesme extends utils.Adapter {
 
   // Handle account blocked (429)
   handleAccountBlocked() {
-    this.log.debug(`handleAccountBlocked called. apiOnlyMode=${this.apiOnlyMode}, accountBlocked=${this.accountBlocked}`);
+    this.log.debug(`handleAccountBlocked called. pollingMode=${this.pollingMode}, accountBlocked=${this.accountBlocked}`);
 
-    // In API Only mode, don't set blocked status - just log and close connection
-    if (this.apiOnlyMode) {
+    // In polling mode, don't set blocked status - just log and close connection
+    // Status updates still work via REST API, only this command failed
+    if (this.pollingMode) {
       this.log.info("HTTP 429 for command WebSocket - command failed, try again later");
       this.cleanupWsConnection();
       return;
@@ -1944,33 +1951,33 @@ class Mercedesme extends utils.Adapter {
     }, 30 * 60 * 1000);
   }
 
-  // Start API Only mode polling (user-configurable interval)
-  startApiOnlyPolling(intervalMinutes) {
-    this.log.debug(`startApiOnlyPolling called with interval=${intervalMinutes} min`);
-    if (this.apiOnlyInterval) {
-      this.log.debug("Clearing existing apiOnlyInterval");
-      clearInterval(this.apiOnlyInterval);
+  // Start polling mode (REST API status updates at configurable interval)
+  startPolling(intervalMinutes) {
+    this.log.debug(`startPolling called with interval=${intervalMinutes} min`);
+    if (this.pollingInterval) {
+      this.log.debug("Clearing existing pollingInterval");
+      clearInterval(this.pollingInterval);
     }
     // Initial fetch
     this.fetchVehicleStatusViaRest();
     // Then at configured interval
-    this.apiOnlyInterval = setInterval(() => {
+    this.pollingInterval = setInterval(() => {
       this.fetchVehicleStatusViaRest();
     }, intervalMinutes * 60 * 1000);
-    this.log.debug("apiOnlyInterval started");
+    this.log.debug("pollingInterval started");
   }
 
-  // Stop API Only polling
-  stopApiOnlyPolling() {
-    if (this.apiOnlyInterval) {
-      clearInterval(this.apiOnlyInterval);
-      this.apiOnlyInterval = null;
+  // Stop polling
+  stopPolling() {
+    if (this.pollingInterval) {
+      clearInterval(this.pollingInterval);
+      this.pollingInterval = null;
     }
   }
 
   // Start REST API polling as fallback when WebSocket is blocked
   startRestPolling() {
-    this.log.debug(`startRestPolling called. apiOnlyMode=${this.apiOnlyMode}, existing interval=${!!this.restPollingInterval}`);
+    this.log.debug(`startRestPolling called. pollingMode=${this.pollingMode}, existing interval=${!!this.restPollingInterval}`);
     // Don't restart if already running
     if (this.restPollingInterval) {
       this.log.debug("restPollingInterval already running, skipping");
@@ -2331,14 +2338,14 @@ class Mercedesme extends utils.Adapter {
       } else {
         this.log.error(`WebSocket upgrade failed: HTTP ${res.statusCode}`);
       }
-      if (!this.apiOnlyMode) {
+      if (!this.pollingMode) {
         this.setState("info.connection", false, true);
       }
     });
 
     req.on("error", (err) => {
       this.log.error(`WebSocket connection error: ${err.message}`);
-      if (!this.apiOnlyMode) {
+      if (!this.pollingMode) {
         this.setState("info.connection", false, true);
       }
     });

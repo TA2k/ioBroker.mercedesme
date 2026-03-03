@@ -100,13 +100,13 @@
         </div>
       </div>
       <div class="row">
-        <div class="col s3">
-          <input class="value" id="apiOnly" type="checkbox" />
-          <label class="translate" for="apiOnly">API Only Modus statt live stream (WebSocket nur für Remote Befehle) verhindert 429 Rate limit</label>
-        </div>
         <div class="input-field col col s2">
-          <input class="value" id="apiOnlyInterval" type="number" min="1" max="60" />
-          <label for="apiOnlyInterval" class="translate">API Intervall (Minuten)</label>
+          <input class="value" id="pollingInterval" type="number" min="1" max="60" />
+          <label for="pollingInterval" class="translate">Polling Intervall (Minuten)</label>
+        </div>
+        <div class="col s4">
+          <input class="value" id="realtimeWebSocket" type="checkbox" />
+          <label class="translate" for="realtimeWebSocket">WebSocket Echtzeit-Modus (schnellere Updates, kann aber 429 Rate Limit verursachen und Remote Befehle blockieren)</label>
         </div>
       </div>
       <div class="row">
