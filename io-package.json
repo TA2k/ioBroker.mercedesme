@@ -1,11 +1,24 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.7.0-beta.0",
+    "version": "0.7.0",
     "news": {
+      "0.7.0": {
+        "en": "make api only mode default. use websocket for remote controls only",
+        "de": "API only Modus als standard. Websocket nur für Remote-Steuerung verwenden",
+        "ru": "по умолчанию только режим api. используйте websocket только для удаленного управления",
+        "pt": "make api only mode default. usar somente o websocket para controles remotos",
+        "nl": "make api only mode default. websocket alleen voor afstandsbedieningen gebruiken",
+        "fr": "faire le mode api seulement par défaut. utiliser websocket uniquement pour les télécommandes",
+        "it": "fare api solo modo predefinito. utilizzare websocket solo per i comandi remoti",
+        "es": "hacer api sólo modo predeterminado. use websocket para controles remotos solamente",
+        "pl": "dokonać domyślnego trybu api. używać gniazda do zdalnego sterowania",
+        "uk": "використовуйте лише режим за замовчуванням. використовувати websocket для дистанційного керування тільки",
+        "zh-cn": "使 api 只默认模式。 仅对远程控制使用 websocket"
+      },
       "0.7.0-beta.0": {
         "en": "make api only mode default",
-        "de": "api nur modus standard",
+        "de": "api-only Modus als standard",
         "ru": "make api only mode по умолчанию",
         "pt": "make api only mode default",
         "nl": "api alleen standaardmodus maken",
@@ -80,19 +93,6 @@
         "pl": "poprawić parsowanie zdarzeń",
         "uk": "поліпшення проведення заходів",
         "zh-cn": "改进事件分析"
-      },
-      "0.4.1": {
-        "en": "fix remote command sending",
-        "de": "remote-befehl senden gefixt",
-        "ru": "отправить удаленную команду",
-        "pt": "corrigir o envio do comando remoto",
-        "nl": "fix remote commando verzenden",
-        "fr": "correction de l'envoi de commande distante",
-        "it": "correggere l'invio di comando remoto",
-        "es": "fijar comando remoto enviar",
-        "pl": "naprawić wysyłanie zdalnego polecenia",
-        "uk": "фіксувати надсилання віддалених команд",
-        "zh-cn": "修复远程命令发送"
       }
     },
     "titleLang": {
