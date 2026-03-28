@@ -9,8 +9,8 @@
  * Example: node compare-proto-apk.js ChargingScheduleActive
  */
 
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 
 const PROTO_DIR = path.join(__dirname, 'protos');
 const APK_BASE_DIR = path.join(__dirname, '..', '.docu', 'mercedesapk.out', 'unknown',

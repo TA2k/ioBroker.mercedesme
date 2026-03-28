@@ -7,8 +7,8 @@
 
 const utils = require("@iobroker/adapter-core");
 const axios = require("axios").default;
-const https = require("https");
-const crypto = require("crypto");
+const https = require("node:https");
+const crypto = require("node:crypto");
 const uuidv4 = () => crypto.randomUUID();
 const Json2iob = require("json2iob");
 const qs = require("qs");
