@@ -78,7 +78,7 @@ class Mercedesme extends utils.Adapter {
     this.appVersion = "1.93.1"; //original 1.63.1 but higher versions prevent version check
     this.osName = "android";
     this.osVersion = "14";
-    this.sdkVersion = "3.96.1"; //orginal 3.26.1 but higher versions prevent version check
+    this.sdkVersion = "4.4.2"; // APK real value - Mercedes validates this, 3.96.1 returns 418
     // Built like APK: {appName} v{appVersion}, {osName} {osVersion}, SDK {sdkVersion}
     this.userAgent = `${this.appName} v${this.appVersion}, ${this.osName} ${this.osVersion}, SDK ${this.sdkVersion}`;
     // Browser user-agent for login flow (parsed by UAParser on Mercedes side)

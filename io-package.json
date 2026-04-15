@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.7.0",
+    "version": "0.7.1",
     "news": {
+      "0.7.1": {
+        "en": "fix vehicle fetching",
+        "de": "fix fahrzeug-feeding",
+        "ru": "ремонт транспортного средства",
+        "pt": "corrigir a obtenção do veículo",
+        "nl": "fix voertuig ophalen",
+        "fr": "fixer la récupération du véhicule",
+        "it": "fissaggio veicolo di fissaggio",
+        "es": "reparación de vehículos",
+        "pl": "ustawić pobieranie pojazdu",
+        "uk": "фіксувати зчеплення транспортного засобу",
+        "zh-cn": "车辆回收"
+      },
       "0.7.0": {
         "en": "make api only mode default. use websocket for remote controls only",
         "de": "API only Modus als standard. Websocket nur für Remote-Steuerung verwenden",
@@ -80,19 +93,6 @@
         "pl": "naprawić parsowanie i wysyłanie poleceń",
         "uk": "фіксувати посилку та відправку команд",
         "zh-cn": "修补解析和命令发送"
-      },
-      "0.4.2": {
-        "en": "improve event parsing",
-        "de": "verbessern sie die eventparsing",
-        "ru": "улучшение парсинга событий",
-        "pt": "melhorar a análise de eventos",
-        "nl": "evenement parsing verbeteren",
-        "fr": "améliorer l'analyse des événements",
-        "it": "migliorare la parificazione degli eventi",
-        "es": "mejorar la preparación de eventos",
-        "pl": "poprawić parsowanie zdarzeń",
-        "uk": "поліпшення проведення заходів",
-        "zh-cn": "改进事件分析"
       }
     },
     "titleLang": {
