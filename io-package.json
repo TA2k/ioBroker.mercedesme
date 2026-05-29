@@ -141,7 +141,6 @@
     "compact": true,
     "connectionType": "cloud",
     "dataSource": "push",
-    "materialize": true,
     "plugins": {
       "sentry": {
         "dsn": "https://b5af79b8000149148826a2266de14281@sentry.iobroker.net/69"
@@ -149,14 +148,17 @@
     },
     "dependencies": [
       {
-        "js-controller": ">=3.2.0"
+        "js-controller": ">=6.0.11"
       }
     ],
     "globalDependencies": [
       {
         "admin": ">=5.2.28"
       }
-    ]
+    ],
+    "adminUI": {
+      "config": "materialize"
+    }
   },
   "native": {
     "mail": "",
