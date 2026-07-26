@@ -36,6 +36,12 @@ Remote contains predefined remote commands.
 This adapter uses Sentry libraries to automatically report exceptions and code errors to the developers. For more details and for information how to disable the error reporting see [Sentry-Plugin Documentation](https://github.com/ioBroker/plugin-sentry#plugin-sentry)! Sentry reporting is used starting with js-controller 3.0.
 
 ## Changelog
+### 0.7.2 (2026-07-26)
+
+- handle passkey setup prompt during CIAM login
+- fix HTTP 401 login for existing users (removed encryptedNative)
+- add HTTP status debug logs across the login flow and a 401 verification hint
+
 ### 0.7.1 (2026-04-15)
 
 - fix vehicle fetching
