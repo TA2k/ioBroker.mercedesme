@@ -1736,7 +1736,7 @@ class Mercedesme extends utils.Adapter {
         if (status === 401) {
           this.log.error(
             "HTTP 401 beim Login: Mercedes hat den Login abgelehnt. Bitte verifizieren Sie Ihren Account manuell " +
-              "unter https://id.mercedes-benz.com/ciam/auth/login und versuchen Sie es danach erneut.",
+              "unter https://shop.mercedes-benz.com/de-de/connectb2b und versuchen Sie es danach erneut.",
           );
         }
         this.log.error(error);
