@@ -1740,7 +1740,11 @@ class Mercedesme extends utils.Adapter {
           );
         }
         this.log.error(error);
-        error.response && this.log.error(JSON.stringify(error.response.data));
+        if (error.response && error.response.data !== undefined) {
+          const raw =
+            typeof error.response.data === "string" ? error.response.data : JSON.stringify(error.response.data);
+          this.log.error("Raw response body: " + raw);
+        }
       });
 
     // Decline the passkey setup prompt if the account gets offered one (like Mercedes web app / HA)
