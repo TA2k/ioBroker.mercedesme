@@ -88,6 +88,7 @@ class Mercedesme extends utils.Adapter {
     this.Json2iob = new Json2iob(this);
     this.vinStates = {};
     const jar = new CookieJar();
+    this.jar = jar;
 
     // Safe WebSocket close helper
     this.safeCloseWs = () => {
@@ -1600,10 +1601,12 @@ class Mercedesme extends utils.Adapter {
       },
     })
       .then((response) => {
+        this.log.debug("authorization.oauth2 OK (HTTP " + response.status + ")");
         this.log.debug(JSON.stringify(response.data));
         //extract paramter resume from url
         const url = response.request.res.responseUrl;
         const parameters = qs.parse(url.split("?")[1]);
+        this.log.debug("resume parameter extracted: " + (parameters.resume ? "yes" : "NO"));
         return parameters.resume;
       })
       .catch(async (error) => {
@@ -1668,10 +1671,14 @@ class Mercedesme extends utils.Adapter {
         browserVersion: "145.0.7632.26",
         osName: "Android",
       },
-    }).catch((error) => {
-      this.log.error("Not able to get ua page");
-      this.log.error(error);
-    });
+    })
+      .then((response) => {
+        this.log.debug("ciam/auth/ua OK (HTTP " + response.status + ")");
+      })
+      .catch((error) => {
+        this.log.error("Not able to get ua page" + (error.response ? " (HTTP " + error.response.status + ")" : ""));
+        this.log.error(error);
+      });
     await this.requestClient({
       method: "post",
       maxBodyLength: Infinity,
@@ -1689,14 +1696,16 @@ class Mercedesme extends utils.Adapter {
       },
     })
       .then((response) => {
-        this.log.debug(JSON.stringify(response.data));
+        this.log.debug("login/user OK (HTTP " + response.status + "): " + JSON.stringify(response.data));
       })
       .catch((error) => {
-        this.log.error("Not able to get userlogin page");
+        this.log.error("Not able to get userlogin page" + (error.response ? " (HTTP " + error.response.status + ")" : ""));
         this.log.error(error);
+        error.response && this.log.error(JSON.stringify(error.response.data));
       });
     //generate random 32 char string
     const rid = this.generateRandomString(32);
+    this.log.debug("Login step /ciam/auth/login/pass (submitting password)");
     let preLoginData = await this.requestClient({
       method: "post",
       maxBodyLength: Infinity,
@@ -1717,11 +1726,19 @@ class Mercedesme extends utils.Adapter {
       },
     })
       .then((response) => {
-        this.log.debug(JSON.stringify(response.data));
+        this.log.debug("login/pass OK (HTTP " + response.status + "): " + JSON.stringify(response.data));
+        this.log.debug("login/pass result: " + (response.data && response.data.result));
         return response.data;
       })
       .catch((error) => {
-        this.log.error("Not able to get user password page");
+        const status = error.response ? error.response.status : "no response";
+        this.log.error("Not able to get user password page (HTTP " + status + ")");
+        if (status === 401) {
+          this.log.error(
+            "HTTP 401 beim Login: Mercedes hat den Login abgelehnt. Bitte verifizieren Sie Ihren Account manuell " +
+              "unter https://id.mercedes-benz.com/ciam/auth/login und versuchen Sie es danach erneut.",
+          );
+        }
         this.log.error(error);
         error.response && this.log.error(JSON.stringify(error.response.data));
       });
@@ -1762,19 +1779,21 @@ class Mercedesme extends utils.Adapter {
       data: { token: preLoginData.token },
     })
       .then((response) => {
-        this.log.error(JSON.stringify(response.data));
+        this.log.debug("resume step returned HTTP " + response.status + " (expected redirect to rismycar://)");
+        this.log.debug(JSON.stringify(response.data));
       })
       .catch((error) => {
         const code = "";
         if (error.message && error.message.includes("Unsupported protocol")) {
           if (error.config) {
-            this.log.debug(JSON.stringify(error.config.url));
+            this.log.debug("resume redirect caught: " + JSON.stringify(error.config.url));
             const parameters = qs.parse(error.request._options.path.split("?")[1]);
-            this.log.debug(JSON.stringify(parameters));
+            this.log.debug("authorization code extracted: " + (parameters.code ? "yes" : "NO"));
             return parameters.code;
           }
           return code;
         }
+        this.log.error("resume step failed" + (error.response ? " (HTTP " + error.response.status + ")" : ""));
         this.log.error(error);
         error.response && this.log.error(JSON.stringify(error.response.data));
       });
@@ -1811,11 +1830,19 @@ class Mercedesme extends utils.Adapter {
       },
     })
       .then((response) => {
-        this.log.debug(JSON.stringify(response.status));
+        this.log.debug("token.oauth2 OK (HTTP " + response.status + ")");
         this.log.debug(JSON.stringify(response.data));
         this.session = response.data;
         this.atoken = response.data.access_token;
         this.rtoken = response.data.refresh_token;
+        this.log.debug(
+          "Token received: access_token=" +
+            (response.data.access_token ? "yes" : "NO") +
+            ", refresh_token=" +
+            (response.data.refresh_token ? "yes" : "NO") +
+            ", expires_in=" +
+            response.data.expires_in,
+        );
         this.setState("auth.access_token", response.data.access_token, true);
         this.setState("auth.refresh_token", response.data.refresh_token, true);
         this.setState("auth.loginNonce", "", true);
@@ -1823,7 +1850,7 @@ class Mercedesme extends utils.Adapter {
         return;
       })
       .catch((error) => {
-        this.log.error("Token fetching error");
+        this.log.error("Token fetching error" + (error.response ? " (HTTP " + error.response.status + ")" : ""));
         this.log.error(error);
         error.response && this.log.error(JSON.stringify(error.response.data));
       });
