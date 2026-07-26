@@ -7,39 +7,39 @@
     "url": "https://github.com/TA2k/ioBroker.mercedesme/issues"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^3.3.2",
-    "axios": "^1.13.6",
+    "@iobroker/adapter-core": "^3.4.3",
+    "axios": "^1.18.1",
     "google-protobuf": "^3.21.4",
-    "http-cookie-agent": "^7.0.3",
-    "json2iob": "^2.6.22",
-    "qs": "^6.15.0",
-    "tough-cookie": "^6.0.0"
+    "http-cookie-agent": "^8.0.0",
+    "json2iob": "^2.6.25",
+    "qs": "^6.15.3",
+    "tough-cookie": "^6.0.2"
   },
-  "deprecated": false,
   "description": "Mercedes me adapter for ioBroker",
   "devDependencies": {
-    "@alcalzone/release-script": "^5.1.1",
-    "@alcalzone/release-script-plugin-iobroker": "^5.1.2",
-    "@alcalzone/release-script-plugin-license": "^5.1.1",
-    "@alcalzone/release-script-plugin-manual-review": "^5.1.1",
-    "@eslint/eslintrc": "^3.3.4",
+    "@alcalzone/release-script": "^5.2.1",
+    "@alcalzone/release-script-plugin-iobroker": "^5.2.0",
+    "@alcalzone/release-script-plugin-license": "^5.2.0",
+    "@alcalzone/release-script-plugin-manual-review": "^5.2.0",
+    "@eslint/eslintrc": "^3.3.6",
     "@eslint/js": "^10.0.1",
-    "@iobroker/testing": "^5.2.2",
-    "@tsconfig/node20": "^20.1.9",
-    "@types/node": "^25.3.3",
-    "eslint": "^10.0.2",
-    "globals": "^17.4.0",
-    "typescript": "~5.9.3"
+    "@iobroker/testing": "^5.3.0",
+    "@tsconfig/node22": "^22.0.5",
+    "@types/node": "^22.20.1",
+    "eslint": "^10.8.0",
+    "globals": "^17.7.0",
+    "typescript": "~7.0.2"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "homepage": "https://github.com/TA2k/ioBroker.mercedesme",
   "keywords": [
     "mercedes",
     "mercedes me",
     "mercedes benz",
-    "daimler"
+    "daimler",
+    "ioBroker"
   ],
   "license": "MIT",
   "main": "main.js",

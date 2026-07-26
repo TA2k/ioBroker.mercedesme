@@ -13,6 +13,11 @@ on:
       - "v[0-9]+.[0-9]+.[0-9]+-**"
   pull_request: {}
 
+# Cancel previous PR/branch runs when a new commit is pushed
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   # Performs quick checks before the expensive test runs
   check-and-lint:
@@ -35,7 +40,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node-version: [24.x, 20.x, 22.x]
+        node-version: [24.x, 26.x, 22.x]
         os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:

@@ -29,19 +29,6 @@
         "uk": "використовуйте лише режим за замовчуванням. використовувати websocket для дистанційного керування тільки",
         "zh-cn": "使 api 只默认模式。 仅对远程控制使用 websocket"
       },
-      "0.7.0-beta.0": {
-        "en": "make api only mode default",
-        "de": "api-only Modus als standard",
-        "ru": "make api only mode по умолчанию",
-        "pt": "make api only mode default",
-        "nl": "api alleen standaardmodus maken",
-        "fr": "faire le mode api uniquement par défaut",
-        "it": "fare api solo modalità predefinita",
-        "es": "hacer api sólo modo predeterminado",
-        "pl": "dokonać domyślnego trybu api",
-        "uk": "зробити api тільки режим за замовчуванням",
-        "zh-cn": "只默认 api 模式"
-      },
       "0.6.3": {
         "en": "add api refresh every 3 min after websocked block\nadd api only update mode",
         "de": "API only Modus hinzugefügt. Damit kann man nur Via API aktualisieren anstatt über Websocket. Api aktualisieren alle 3 min nach websocked block",
@@ -68,19 +55,6 @@
         "uk": "add api оновлення кожен 3 хв після websocked block",
         "zh-cn": "在网锁块后每3分钟添加 api 刷新一次"
       },
-      "0.5.6-beta.0": {
-        "en": "add api refresh after websocked block\n",
-        "de": "api aktualisieren nach websocked block\n",
-        "ru": "добавить обновление api после блокировки\n",
-        "pt": "adicionar api atualizar após o bloco websocked\n",
-        "nl": "api-verversing toevoegen na websocked blok\n",
-        "fr": "ajouter api rafraîchissement après bloc websocked\n",
-        "it": "aggiungere api rinfrescare dopo il blocco websocked\n",
-        "es": "añadir un refresco de api después de bloques websocked\n",
-        "pl": "dodaj odświeżenie api po bloku websocked\n",
-        "uk": "add api оновлення після websocked блок\n",
-        "zh-cn": "网络锁定块后添加 api 刷新\n"
-      },
       "0.5.5": {
         "en": "fix parsing and command sending",
         "de": "parsing und kommando senden",
@@ -105,6 +79,7 @@
       "it": "Mercedes me",
       "es": "Mercedes me",
       "pl": "Mercedes me",
+      "uk": "Mercedes me",
       "zh-cn": "梅赛德斯我"
     },
     "desc": {
@@ -117,6 +92,7 @@
       "it": "Mercedes me adattatore per ioBroker",
       "es": "Mercedes me adapta para ioBroker",
       "pl": "Adapter Mercedes me do ioBroker",
+      "uk": "Адаптер Mercedes me для ioBroker",
       "zh-cn": "梅赛德斯适用于ioBroker的适配器"
     },
     "authors": [
@@ -128,9 +104,12 @@
       "mercedes benz",
       "daimler"
     ],
-    "license": "MIT",
+    "licenseInformation": {
+      "license": "MIT",
+      "type": "free"
+    },
+    "tier": 3,
     "platform": "Javascript/Node.js",
-    "main": "main.js",
     "icon": "mercedesme.png",
     "enabled": true,
     "extIcon": "https://raw.githubusercontent.com/TA2k/ioBroker.mercedesme/master/admin/mercedesme.png",
@@ -141,7 +120,9 @@
     "compact": true,
     "connectionType": "cloud",
     "dataSource": "push",
-    "materialize": true,
+    "adminUI": {
+      "config": "materialize"
+    },
     "plugins": {
       "sentry": {
         "dsn": "https://b5af79b8000149148826a2266de14281@sentry.iobroker.net/69"
@@ -149,12 +130,12 @@
     },
     "dependencies": [
       {
-        "js-controller": ">=3.2.0"
+        "js-controller": ">=6.0.11"
       }
     ],
     "globalDependencies": [
       {
-        "admin": ">=5.2.28"
+        "admin": ">=7.6.20"
       }
     ]
   },
@@ -181,6 +162,8 @@
     "pollingInterval": 5,
     "realtimeWebSocket": false
   },
+  "protectedNative": ["password", "pin", "apiKey"],
+  "encryptedNative": ["password", "pin", "apiKey"],
   "objects": [],
   "instanceObjects": [
     {
