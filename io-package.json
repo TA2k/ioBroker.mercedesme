@@ -163,7 +163,6 @@
     "realtimeWebSocket": false
   },
   "protectedNative": ["password", "pin", "apiKey"],
-  "encryptedNative": ["password", "pin", "apiKey"],
   "objects": [],
   "instanceObjects": [
     {
