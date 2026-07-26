@@ -1726,6 +1726,14 @@ class Mercedesme extends utils.Adapter {
         error.response && this.log.error(JSON.stringify(error.response.data));
       });
 
+    // Decline the passkey setup prompt if the account gets offered one (like Mercedes web app / HA)
+    // Mercedes added a passkey prompt to the CIAM flow: /ciam/auth/login/pass then returns
+    // { uid, passkeyDemoEnabled: true } instead of result=RESUME2OIDCP, which breaks the login.
+    if (preLoginData && preLoginData.passkeyDemoEnabled) {
+      this.log.debug("Passkey setup prompt detected - declining to continue password login");
+      preLoginData = await this.disablePasskeyDemo(rid);
+    }
+
     // Check if legal terms acceptance is required
     if (preLoginData && preLoginData.result === "GOTO_LOGIN_LEGAL_TEXTS") {
       this.log.info("Legal terms acceptance required");
@@ -1819,6 +1827,43 @@ class Mercedesme extends utils.Adapter {
         this.log.error(error);
         error.response && this.log.error(JSON.stringify(error.response.data));
       });
+  }
+
+  async disablePasskeyDemo(rid) {
+    this.log.debug("Declining passkey setup prompt");
+
+    const response = await this.requestClient({
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "https://id.mercedes-benz.com/ciam/auth/disablePasskeyDemo",
+      headers: {
+        accept: "application/json, text/plain, */*",
+        "content-type": "application/json",
+        origin: "https://id.mercedes-benz.com",
+        "accept-language": "de-DE,de;q=0.9",
+        "user-agent": this.browserUserAgent,
+        referer: "https://id.mercedes-benz.com/ciam/auth/login",
+      },
+      data: {
+        username: this.config.mail,
+        password: this.config.password,
+        rememberMe: false,
+        rid: rid,
+        disablePasskeyDemo: true,
+      },
+    })
+      .then((response) => {
+        this.log.debug("Passkey prompt skip response: " + JSON.stringify(response.data));
+        return response.data;
+      })
+      .catch((error) => {
+        this.log.error("Passkey prompt skip failed");
+        this.log.error(error);
+        error.response && this.log.error(JSON.stringify(error.response.data));
+        throw error;
+      });
+
+    return response;
   }
 
   async submitLegalConsent(homeCountry, consentCountry) {
