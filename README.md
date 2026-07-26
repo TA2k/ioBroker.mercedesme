@@ -38,9 +38,7 @@ This adapter uses Sentry libraries to automatically report exceptions and code e
 ## Changelog
 ### 0.7.2 (2026-07-26)
 
-- handle passkey setup prompt during CIAM login
-- fix HTTP 401 login for existing users (removed encryptedNative)
-- add HTTP status debug logs across the login flow and a 401 verification hint
+- fix Login
 
 ### 0.7.1 (2026-04-15)
 

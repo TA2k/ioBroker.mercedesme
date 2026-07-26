@@ -4,17 +4,17 @@
     "version": "0.7.2",
     "news": {
       "0.7.2": {
-        "en": "handle passkey prompt during login, fix 401 login for existing users, add login debug logs",
-        "de": "Passkey-Abfrage beim Login behandeln, 401-Login für bestehende Nutzer beheben, Login-Debug-Logs ergänzen",
-        "ru": "обработка запроса passkey при входе, исправление ошибки 401 для существующих пользователей, отладочные логи входа",
-        "pt": "tratar o pedido de passkey no login, corrigir o login 401 para utilizadores existentes, adicionar logs de depuração",
-        "nl": "passkey-prompt bij login afhandelen, 401-login voor bestaande gebruikers oplossen, login-debuglogs toevoegen",
-        "fr": "gérer l'invite passkey lors de la connexion, corriger la connexion 401 pour les utilisateurs existants, ajouter des journaux de débogage",
-        "it": "gestire il prompt passkey al login, correggere il login 401 per gli utenti esistenti, aggiungere log di debug",
-        "es": "gestionar el aviso de passkey al iniciar sesión, corregir el error 401 para usuarios existentes, añadir registros de depuración",
-        "pl": "obsługa monitu passkey przy logowaniu, naprawa błędu 401 dla istniejących użytkowników, dodanie logów debugowania",
-        "uk": "обробка запиту passkey під час входу, виправлення помилки 401 для наявних користувачів, додавання журналів налагодження",
-        "zh-cn": "处理登录时的通行密钥提示，修复现有用户的 401 登录问题，添加登录调试日志"
+        "en": "fix Login",
+        "de": "Login repariert",
+        "ru": "исправлен вход",
+        "pt": "corrigir Login",
+        "nl": "Login gerepareerd",
+        "fr": "correction de la connexion",
+        "it": "correzione del Login",
+        "es": "corregir el inicio de sesión",
+        "pl": "naprawiono logowanie",
+        "uk": "виправлено вхід",
+        "zh-cn": "修复登录"
       },
       "0.7.1": {
         "en": "fix vehicle fetching",
