@@ -24,11 +24,14 @@ protobufPatch.apply();
 const VehicleCommands = require("./Proto/vehicle-commands_pb");
 const VehicleEvents = require("./Proto/vehicle-events_pb");
 const Client = require("./Proto/client_pb");
+const { normalizeVsuCar } = require("./Proto/vsu-helper");
 
 // Wrap message classes for additional error recovery
 protobufPatch.wrapDeserialize(VehicleEvents.PushMessage);
 protobufPatch.wrapDeserialize(VehicleEvents.VEPUpdates);
 protobufPatch.wrapDeserialize(VehicleEvents.VEPUpdate);
+protobufPatch.wrapDeserialize(VehicleEvents.VehicleStatusUpdates);
+protobufPatch.wrapDeserialize(VehicleEvents.VehicleStatusUpdate);
 class Mercedesme extends utils.Adapter {
   /**
    * @param {Partial<ioBroker.AdapterOptions>} [options={}]
@@ -78,7 +81,7 @@ class Mercedesme extends utils.Adapter {
     this.appVersion = "1.93.1"; //original 1.63.1 but higher versions prevent version check
     this.osName = "android";
     this.osVersion = "14";
-    this.sdkVersion = "4.4.2"; // APK real value - Mercedes validates this, 3.96.1 returns 418
+    this.sdkVersion = "4.12.0"; // APK 1.69.0 real value (mbappfamily RIS_SDK_VERSION). >=4.10 triggers VSU (VehicleStatusUpdate) instead of vepUpdate
     // Built like APK: {appName} v{appVersion}, {osName} {osVersion}, SDK {sdkVersion}
     this.userAgent = `${this.appName} v${this.appVersion}, ${this.osName} ${this.osVersion}, SDK ${this.sdkVersion}`;
     // Browser user-agent for login flow (parsed by UAParser on Mercedes side)
@@ -2539,6 +2542,25 @@ class Mercedesme extends utils.Adapter {
           const vin = update[0];
           this.log.debug("update for " + vin + ": " + message.vepupdates.sequenceNumber);
           await this.processVepAttributes(vin, update[1].attributesMap);
+        }
+      }
+      // VSU (VehicleStatusUpdate) - typed message sent by Mercedes for RIS SDK >= 4.10.0.
+      // Normalized into the legacy attributesMap shape so processVepAttributes stays unchanged.
+      if (message.vehicleStatusUpdates) {
+        this.log.silly(JSON.stringify(message.vehicleStatusUpdates));
+        this.log.debug("Received VehicleStatusUpdate (VSU)");
+        this.currentSequenceNumber = message.vehicleStatusUpdates.sequenceNumber;
+        const ackCommand = new Client.AcknowledgeVehicleStatusUpdates();
+        ackCommand.setSequenceNumber(message.vehicleStatusUpdates.sequenceNumber);
+        const clientMessage = new Client.ClientMessage();
+        clientMessage.setAcknowledgeVehicleStatusUpdates(ackCommand);
+        this.sendWsFrame(clientMessage.serializeBinary());
+
+        for (const update of message.vehicleStatusUpdates.vehicleStatusUpdatesMap) {
+          const vin = update[0];
+          this.log.debug("VSU update for " + vin + ": " + message.vehicleStatusUpdates.sequenceNumber);
+          const normalized = normalizeVsuCar(vin, update[1]);
+          await this.processVepAttributes(vin, normalized.attributesMap);
         }
       }
     } catch (error) {

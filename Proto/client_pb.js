@@ -87,7 +87,7 @@ if (goog.DEBUG && !COMPILED) {
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.proto.ClientMessage.oneofGroups_ = [[2,3,4,6,7,9,13,10,11,12,14,15,16,17,18,19,20,21,22,23,26]];
+proto.proto.ClientMessage.oneofGroups_ = [[2,3,4,6,7,9,13,10,11,12,14,15,16,17,18,19,20,21,22,23,26,28]];
 
 /**
  * @enum {number}
@@ -114,7 +114,8 @@ proto.proto.ClientMessage.MsgCase = {
   APPTWIN_PENDING_COMMANDS_RESPONSE: 21,
   ACKNOWLEDGE_VEP_UPDATES_BY_VIN: 22,
   ACKNOWLEDGE_ASSIGNED_VEHICLES: 23,
-  ACKNOWLEDGE_DATA_CHANGE_EVENT: 26
+  ACKNOWLEDGE_DATA_CHANGE_EVENT: 26,
+  ACKNOWLEDGE_VEHICLE_STATUS_UPDATES: 28
 };
 
 /**
@@ -176,7 +177,8 @@ logout: (f = msg.getLogout()) && proto.proto.Logout.toObject(includeInstance, f)
 apptwinPendingCommandsResponse: (f = msg.getApptwinPendingCommandsResponse()) && vehicleapi_pb.AppTwinPendingCommandsResponse.toObject(includeInstance, f),
 acknowledgeVepUpdatesByVin: (f = msg.getAcknowledgeVepUpdatesByVin()) && vehicle$events_pb.AcknowledgeVEPUpdatesByVIN.toObject(includeInstance, f),
 acknowledgeAssignedVehicles: (f = msg.getAcknowledgeAssignedVehicles()) && protos_pb.AcknowledgeAssignedVehicles.toObject(includeInstance, f),
-acknowledgeDataChangeEvent: (f = msg.getAcknowledgeDataChangeEvent()) && vehicle$events_pb.AcknowledgeDataChangeEvent.toObject(includeInstance, f)
+acknowledgeDataChangeEvent: (f = msg.getAcknowledgeDataChangeEvent()) && vehicle$events_pb.AcknowledgeDataChangeEvent.toObject(includeInstance, f),
+acknowledgeVehicleStatusUpdates: (f = msg.getAcknowledgeVehicleStatusUpdates()) && vehicle$events_pb.AcknowledgeVehicleStatusUpdates.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -321,6 +323,11 @@ proto.proto.ClientMessage.deserializeBinaryFromReader = function(msg, reader) {
       var value = new vehicle$events_pb.AcknowledgeDataChangeEvent;
       reader.readMessage(value,vehicle$events_pb.AcknowledgeDataChangeEvent.deserializeBinaryFromReader);
       msg.setAcknowledgeDataChangeEvent(value);
+      break;
+    case 28:
+      var value = new vehicle$events_pb.AcknowledgeVehicleStatusUpdates;
+      reader.readMessage(value,vehicle$events_pb.AcknowledgeVehicleStatusUpdates.deserializeBinaryFromReader);
+      msg.setAcknowledgeVehicleStatusUpdates(value);
       break;
     default:
       reader.skipField();
@@ -524,6 +531,14 @@ proto.proto.ClientMessage.serializeBinaryToWriter = function(message, writer) {
       26,
       f,
       vehicle$events_pb.AcknowledgeDataChangeEvent.serializeBinaryToWriter
+    );
+  }
+  f = message.getAcknowledgeVehicleStatusUpdates();
+  if (f != null) {
+    writer.writeMessage(
+      28,
+      f,
+      vehicle$events_pb.AcknowledgeVehicleStatusUpdates.serializeBinaryToWriter
     );
   }
 };
@@ -1321,6 +1336,43 @@ proto.proto.ClientMessage.prototype.clearAcknowledgeDataChangeEvent = function()
  */
 proto.proto.ClientMessage.prototype.hasAcknowledgeDataChangeEvent = function() {
   return jspb.Message.getField(this, 26) != null;
+};
+
+
+/**
+ * optional AcknowledgeVehicleStatusUpdates acknowledge_vehicle_status_updates = 28;
+ * @return {?proto.proto.AcknowledgeVehicleStatusUpdates}
+ */
+proto.proto.ClientMessage.prototype.getAcknowledgeVehicleStatusUpdates = function() {
+  return /** @type{?proto.proto.AcknowledgeVehicleStatusUpdates} */ (
+    jspb.Message.getWrapperField(this, vehicle$events_pb.AcknowledgeVehicleStatusUpdates, 28));
+};
+
+
+/**
+ * @param {?proto.proto.AcknowledgeVehicleStatusUpdates|undefined} value
+ * @return {!proto.proto.ClientMessage} returns this
+*/
+proto.proto.ClientMessage.prototype.setAcknowledgeVehicleStatusUpdates = function(value) {
+  return jspb.Message.setOneofWrapperField(this, 28, proto.proto.ClientMessage.oneofGroups_[0], value);
+};
+
+
+/**
+ * Clears the message field making it undefined.
+ * @return {!proto.proto.ClientMessage} returns this
+ */
+proto.proto.ClientMessage.prototype.clearAcknowledgeVehicleStatusUpdates = function() {
+  return this.setAcknowledgeVehicleStatusUpdates(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {boolean}
+ */
+proto.proto.ClientMessage.prototype.hasAcknowledgeVehicleStatusUpdates = function() {
+  return jspb.Message.getField(this, 28) != null;
 };
 
 

@@ -28,6 +28,7 @@
     "@types/node": "^22.20.1",
     "eslint": "^10.8.0",
     "globals": "^17.7.0",
+    "protoc-gen-js": "^3.21.4-4",
     "typescript": "~7.0.2"
   },
   "engines": {
@@ -58,7 +59,7 @@
     "test:unit": "mocha test/unit --exit",
     "release": "release-script --all"
   },
-  "version": "0.7.2",
+  "version": "0.8.0",
   "files": [
     "admin{,/!(src)/**}/!(tsconfig|tsconfig.*|.eslintrc).{json,json5}",
     "admin{,/!(src)/**}/*.{html,css,png,svg,jpg,js}",

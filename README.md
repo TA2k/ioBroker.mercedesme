@@ -36,6 +36,10 @@ Remote contains predefined remote commands.
 This adapter uses Sentry libraries to automatically report exceptions and code errors to the developers. For more details and for information how to disable the error reporting see [Sentry-Plugin Documentation](https://github.com/ioBroker/plugin-sentry#plugin-sentry)! Sentry reporting is used starting with js-controller 3.0.
 
 ## Changelog
+### 0.8.0 (2026-07-27)
+
+- support new VehicleStatusUpdate message format (RIS SDK 4.12)
+
 ### 0.7.2 (2026-07-26)
 
 - fix Login

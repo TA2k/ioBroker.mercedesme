@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "mercedesme",
-    "version": "0.7.2",
+    "version": "0.8.0",
     "news": {
+      "0.8.0": {
+        "en": "support new VehicleStatusUpdate message format",
+        "de": "Unterstützung für das neue VehicleStatusUpdate-Nachrichtenformat",
+        "ru": "поддержка нового формата сообщений VehicleStatusUpdate",
+        "pt": "suporte ao novo formato de mensagem VehicleStatusUpdate",
+        "nl": "ondersteuning voor het nieuwe VehicleStatusUpdate-berichtformaat",
+        "fr": "prise en charge du nouveau format de message VehicleStatusUpdate",
+        "it": "supporto per il nuovo formato di messaggio VehicleStatusUpdate",
+        "es": "soporte para el nuevo formato de mensaje VehicleStatusUpdate",
+        "pl": "obsługa nowego formatu wiadomości VehicleStatusUpdate",
+        "uk": "підтримка нового формату повідомлень VehicleStatusUpdate",
+        "zh-cn": "支持新的 VehicleStatusUpdate 消息格式"
+      },
       "0.7.2": {
         "en": "fix Login",
         "de": "Login repariert",
