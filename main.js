@@ -2100,10 +2100,13 @@ class Mercedesme extends utils.Adapter {
         });
 
         if (response.status === 200 && response.data) {
-          const message = VehicleEvents.VEPUpdate.deserializeBinary(response.data).toObject();
-          if (message && message.attributesMap) {
-            this.log.debug(`REST API: Received ${message.attributesMap.length} attributes for ${vin}`);
-            await this.processVepAttributes(vin, message.attributesMap);
+          const buf = Buffer.from(response.data);
+          // Widget endpoint returns a single VehicleStatusUpdate (VSU) for RIS SDK >= 4.10.
+          const vsu = VehicleEvents.VehicleStatusUpdate.deserializeBinary(buf).toObject();
+          if (vsu && vsu.finOrVin) {
+            const attributesMap = normalizeVsuCar(vin, vsu).attributesMap;
+            this.log.debug(`REST API: Received ${attributesMap.length} attributes for ${vin}`);
+            await this.processVepAttributes(vin, attributesMap);
           } else {
             this.log.debug(`REST API: No attributes in response for ${vin}`);
           }
