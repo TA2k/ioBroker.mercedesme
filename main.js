@@ -46,6 +46,7 @@ class Mercedesme extends utils.Adapter {
     this.on("unload", this.onUnload.bind(this));
 
     this.vinArray = [];
+    this.fleetVins = [];
     this.refreshTokenInterval = null;
     this.retryTimeout = null;
     this.tenant = "";
@@ -823,7 +824,11 @@ class Mercedesme extends utils.Adapter {
           if (body.assignedVehicles.length === 0) {
             this.log.warn("No vehicles found");
           }
-          const vehicles = body.assignedVehicles.concat(body.fleets);
+          // Company fleet vehicles are nested one level deeper: body.fleets[].bookedVehicles[]
+          // (the fleet objects themselves have no fin/vin). Flatten them into the vehicle list.
+          const fleetVehicles = (body.fleets || []).flatMap((fleet) => fleet.bookedVehicles || []);
+          this.fleetVins = fleetVehicles.map((element) => element.vin || element.fin).filter(Boolean);
+          const vehicles = body.assignedVehicles.concat(fleetVehicles);
           this.log.info("Found " + vehicles.length + " vehicles");
           for (const element of vehicles) {
             if ((element.fin && element.fin !== "null") || (element.vin && element.vin !== "null")) {
@@ -2469,7 +2474,9 @@ class Mercedesme extends utils.Adapter {
       }
       if (message.assignedVehicles) {
         this.log.debug(JSON.stringify(message.assignedVehicles));
-        this.vinArray = message.assignedVehicles.vinsList;
+        // assignedVehicles.vinsList does not include company fleet vehicles, so keep the
+        // fleetVins (from getVehicles) or the REST poll would stop querying them.
+        this.vinArray = [...new Set((message.assignedVehicles.vinsList || []).concat(this.fleetVins || []))];
         const ackCommand = new Client.AcknowledgeAssignedVehicles();
         const clientMessage = new Client.ClientMessage();
         clientMessage.setAcknowledgeAssignedVehicles(ackCommand);
