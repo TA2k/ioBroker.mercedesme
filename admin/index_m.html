@@ -110,6 +110,16 @@
         </div>
       </div>
       <div class="row">
+        <div class="input-field col col s3">
+          <input class="value" id="wsReconnectDelay" type="number" min="10" max="3600" />
+          <label for="wsReconnectDelay" class="translate">WebSocket Reconnect-Verzögerung (Sekunden)</label>
+        </div>
+        <div class="input-field col col s3">
+          <input class="value" id="wsBlockedReconnectInterval" type="number" min="5" max="240" />
+          <label for="wsBlockedReconnectInterval" class="translate">Reconnect-Intervall nach 429-Block (Minuten)</label>
+        </div>
+      </div>
+      <div class="row">
         <div class="input-field col col s4">
           <input class="value" id="tank" type="text" />
           <label for="tank" class="translate"

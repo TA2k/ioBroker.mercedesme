@@ -361,7 +361,18 @@ class Mercedesme extends utils.Adapter {
             const interval = parseInt(this.config.pollingInterval) || 5;
             if (this.config.realtimeWebSocket) {
               this.pollingMode = false;
+              const reconnectDelay = parseInt(this.config.wsReconnectDelay) || 10;
               this.log.info("WebSocket realtime mode enabled - faster updates but may hit rate limits");
+              // Mercedes closes the WS ~every 15 min and blocks the account (HTTP 429) after
+              // ~66 reconnects/day. Warn if the configured delay cannot stay under that limit.
+              const reconnectsPerDay = Math.floor((24 * 60 * 60) / (15 * 60 + reconnectDelay));
+              if (reconnectsPerDay > 60) {
+                this.log.warn(
+                  `WebSocket reconnect delay is ${reconnectDelay}s -> ~${reconnectsPerDay} reconnects/day, ` +
+                    `which risks an HTTP 429 account block. Increase 'WebSocket Reconnect-Verzögerung' ` +
+                    `(e.g. 300s) or use polling mode to stay under the daily limit.`,
+                );
+              }
               this.connectWS();
             } else {
               this.pollingMode = true;
@@ -1992,9 +2003,10 @@ class Mercedesme extends utils.Adapter {
       return;
     }
 
-    // Exponential backoff: 10, 20, 40, 80, 120, 120...
-    // const delay = Math.min(10 * Math.pow(2, this.wsReconnectCounter), 120);
-    const delay = 10;
+    // Reconnect delay in seconds (configurable). Mercedes closes the WS with 1001
+    // roughly every 15 min; a low delay means ~66 reconnects/day -> HTTP 429 block.
+    // Raise wsReconnectDelay to reduce daily reconnects and avoid the rate limit.
+    const delay = parseInt(this.config.wsReconnectDelay) || 10;
     this.log.info(`Scheduling reconnect in ${delay}s (reason: ${reason || "unknown"})`);
     setTimeout(() => {
       this.connectWS();
@@ -2022,17 +2034,21 @@ class Mercedesme extends utils.Adapter {
     this.log.info(`HTTP 429: Account blocked. Setting accountBlocked=true`);
     this.cleanupWsConnection();
 
+    const blockedReconnectMin = parseInt(this.config.wsBlockedReconnectInterval) || 30;
     this.log.info(
-      `HTTP 429: Reconnect limit reached (${this.wsReconnectCounter} today). Starting REST polling + reconnect every 30min.`
+      `HTTP 429: Reconnect limit reached (${this.wsReconnectCounter} today). Starting REST polling + reconnect every ${blockedReconnectMin}min.`
     );
     this.log.debug("Starting restPollingInterval (3 min)");
     this.startRestPolling();
 
-    this.log.debug("Starting reconnectInterval (30 min)");
-    this.reconnectInterval = setInterval(() => {
-      this.log.info("Attempting WebSocket reconnect (30min interval)");
-      this.connectWS();
-    }, 30 * 60 * 1000);
+    this.log.debug(`Starting reconnectInterval (${blockedReconnectMin} min)`);
+    this.reconnectInterval = setInterval(
+      () => {
+        this.log.info(`Attempting WebSocket reconnect (${blockedReconnectMin}min interval)`);
+        this.connectWS();
+      },
+      blockedReconnectMin * 60 * 1000,
+    );
   }
 
   // Start polling mode (REST API status updates at configurable interval)
