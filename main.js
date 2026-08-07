@@ -32,6 +32,11 @@ protobufPatch.wrapDeserialize(VehicleEvents.VEPUpdates);
 protobufPatch.wrapDeserialize(VehicleEvents.VEPUpdate);
 protobufPatch.wrapDeserialize(VehicleEvents.VehicleStatusUpdates);
 protobufPatch.wrapDeserialize(VehicleEvents.VehicleStatusUpdate);
+
+// Max full-relogin attempts after an HTTP 429 account block (like HA mbapi2020
+// MAX_RELOGIN_ATTEMPTS). A fresh login lifts the block immediately, while a plain
+// reconnect with the blocked token just 429s again.
+const MAX_RELOGIN_AFTER_429 = 3;
 class Mercedesme extends utils.Adapter {
   /**
    * @param {Partial<ioBroker.AdapterOptions>} [options={}]
@@ -57,6 +62,8 @@ class Mercedesme extends utils.Adapter {
     this.wsPingInterval = null;
     this.wsReconnectCounter = 0;
     this.accountBlocked = false;
+    this.relogin429Attempts = 0;
+    this.recovering429 = false;
     this.restPollingInterval = null;
     this.reconnectInterval = null;
     this.pollingMode = true; // Default: API polling instead of WebSocket realtime
@@ -2031,6 +2038,7 @@ class Mercedesme extends utils.Adapter {
     }
 
     this.accountBlocked = true;
+    this.relogin429Attempts = 0;
     this.log.info(`HTTP 429: Account blocked. Setting accountBlocked=true`);
     this.cleanupWsConnection();
 
@@ -2041,14 +2049,56 @@ class Mercedesme extends utils.Adapter {
     this.log.debug("Starting restPollingInterval (3 min)");
     this.startRestPolling();
 
+    // A plain reconnect keeps the blocked token and 429s again. A fresh full login
+    // lifts the block immediately (like HA mbapi2020 INITIATE_RELOGIN_AFTER_429), so
+    // try that right away and on every interval tick until the budget is used up.
+    this.reconnectAfter429("429-block");
+
     this.log.debug(`Starting reconnectInterval (${blockedReconnectMin} min)`);
-    this.reconnectInterval = setInterval(
-      () => {
-        this.log.info(`Attempting WebSocket reconnect (${blockedReconnectMin}min interval)`);
+    this.reconnectInterval = setInterval(() => {
+      this.log.info(`Attempting WebSocket reconnect (${blockedReconnectMin}min interval)`);
+      this.reconnectAfter429("interval");
+    }, blockedReconnectMin * 60 * 1000);
+  }
+
+  // Recover from an HTTP 429 block. A fresh full login (new tokens) lifts the block
+  // right away, whereas reconnecting with the blocked token 429s again. Mirrors HA
+  // mbapi2020: relogin up to MAX_RELOGIN_AFTER_429 times, then fall back to a plain
+  // reconnect while REST polling keeps status updates flowing. relogin429Attempts is
+  // reset to 0 only once the WebSocket actually connects (upgrade handler).
+  async reconnectAfter429(reason) {
+    if (this.recovering429) {
+      this.log.debug(`reconnectAfter429 (${reason}) skipped - recovery already running`);
+      return;
+    }
+    this.recovering429 = true;
+    try {
+      if (this.relogin429Attempts >= MAX_RELOGIN_AFTER_429) {
+        // Relogin budget exhausted - reconnect with the current token as a last resort.
+        this.log.debug(`Relogin budget used (${this.relogin429Attempts}/${MAX_RELOGIN_AFTER_429}), plain reconnect`);
         this.connectWS();
-      },
-      blockedReconnectMin * 60 * 1000,
-    );
+        return;
+      }
+
+      this.relogin429Attempts++;
+      this.log.info(`429 recovery: full relogin with stored credentials (attempt ${this.relogin429Attempts}/${MAX_RELOGIN_AFTER_429})`);
+      // Clear tokens so loginNew() runs the full flow instead of a refresh.
+      this.atoken = "";
+      this.rtoken = "";
+      await this.loginNew();
+
+      if (this.atoken) {
+        this.log.info("429 recovery: relogin successful, reconnecting WebSocket");
+        this.safeCloseWs();
+        this.connectWS();
+      } else {
+        this.log.warn(`429 recovery: relogin produced no token (attempt ${this.relogin429Attempts}/${MAX_RELOGIN_AFTER_429})`);
+      }
+    } catch (error) {
+      this.log.warn(`429 recovery: relogin failed (attempt ${this.relogin429Attempts}/${MAX_RELOGIN_AFTER_429}): ${error.message}`);
+    } finally {
+      this.recovering429 = false;
+    }
   }
 
   // Start polling mode (REST API status updates at configurable interval)
@@ -2344,6 +2394,7 @@ class Mercedesme extends utils.Adapter {
       if (this.accountBlocked) {
         this.log.info("WebSocket reconnected - clearing accountBlocked and stopping intervals");
         this.accountBlocked = false;
+        this.relogin429Attempts = 0;
         this.log.debug("Stopping restPollingInterval");
         this.stopRestPolling();
         if (this.reconnectInterval) {
